@@ -1,0 +1,17 @@
+FONT - 
+https://fonts.google.com/specimen/Playfair+Display (FOR JUMBOTRON) 
+https://fonts.google.com/specimen/Poppins?query=popp (FOR EVERYTHING ELSE) poppins and sans serif
+
+Components - 
+countdown to day 
+photo of mr and mrs 
+photo carousel
+groomsmen and bridesmaids 
+RSV button
+registry link
+book for hotel
+map of place (https://www.npmjs.com/package/google-maps-react)
+
+3 columns with icon for date, ceremony and reception 
+https://zyro.com/preview/kenzie
+
