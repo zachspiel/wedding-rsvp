@@ -40,7 +40,7 @@ const Footer = (): JSX.Element => {
         <Group className={classes.links}>
           <Anchor<"a">
             color="dimmed"
-            href={""}
+            href="#whenAndWhere"
             onClick={(event) => event.preventDefault()}
             size="sm"
           >
@@ -48,7 +48,7 @@ const Footer = (): JSX.Element => {
           </Anchor>
           <Anchor<"a">
             color="dimmed"
-            href={""}
+            href="#gallery"
             onClick={(event) => event.preventDefault()}
             size="sm"
           >
@@ -56,7 +56,7 @@ const Footer = (): JSX.Element => {
           </Anchor>
           <Anchor<"a">
             color="dimmed"
-            href={""}
+            href="#guestBook"
             onClick={(event) => event.preventDefault()}
             size="sm"
           >
@@ -64,7 +64,7 @@ const Footer = (): JSX.Element => {
           </Anchor>
           <Anchor<"a">
             color="dimmed"
-            href={""}
+            href="#rsvp"
             onClick={(event) => event.preventDefault()}
             size="sm"
           >

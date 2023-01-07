@@ -15,7 +15,7 @@ export interface Captions {
 }
 
 const Gallery = (): JSX.Element => {
-  const [displayAdminView, setDisplayAdminView] = useState(true);
+  const [displayAdminView, setDisplayAdminView] = useState(false);
 
   const { isSignedIn } = useSignInStatus();
   const theme = useMantineTheme();
@@ -75,6 +75,7 @@ const Gallery = (): JSX.Element => {
         sx={(theme) => ({ fontFamily: `Poppins, sans-serif` })}
         weight={900}
         align="left"
+        id="gallery"
       >
         Gallery
       </Title>

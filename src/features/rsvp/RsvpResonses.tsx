@@ -1,8 +1,10 @@
 import React from "react";
-import { Badge, Card, Flex, Group, Text, Title } from "@mantine/core";
+import { ActionIcon, Badge, Card, Flex, Group, Text, Title } from "@mantine/core";
 import { ref, onValue } from "firebase/database";
 import { database } from "../database/database";
 import { RsvpResonse } from "./RsvpForm";
+import csvDownload from 'json-to-csv-export';
+import { IconDownload } from "@tabler/icons";
 
 const RsvpResonses = (): JSX.Element => {
   const [responses, setResponses] = React.useState<RsvpResonse[]>([]);
@@ -18,6 +20,17 @@ const RsvpResonses = (): JSX.Element => {
     });
   }, []);
 
+  const exportToCsv = (): void => {
+    const dataToConvert = {
+      data: responses,
+      filename: 'rsvps',
+      delimiter: ',',
+      headers: ['Attending', "Created At", "Email", "Message", "Song Request"]
+    }
+
+    csvDownload(dataToConvert);
+  }
+
   return (
     <>
       <Title
@@ -31,12 +44,13 @@ const RsvpResonses = (): JSX.Element => {
         {responses.length} Responses
       </Title>
       <Flex>
-        <Text sx={{ marginRight: "0.5rem" }}>{totalYesses} Yesses</Text>{" "}
-        <Text>{responses.length - totalYesses} Nos</Text>
+        <Text sx={{ marginRight: "0.5rem" }}>{totalYesses} Yes</Text>{" "}
+        <Text>{responses.length - totalYesses} No</Text>
+        <ActionIcon variant="filled" onClick={(): void => exportToCsv()} sx={{marginLeft: "0.5rem"}}><IconDownload size={16} /></ActionIcon>
       </Flex>
       {responses.map((response, index) => {
         return (
-          <Card shadow="sm" p="lg" radius="md" withBorder>
+          <Card shadow="sm" p="lg" radius="md" withBorder key={index}>
             <Group position="apart" mt="md" mb="xs">
               <Text weight={500}>{response.email}</Text>
 
@@ -47,7 +61,9 @@ const RsvpResonses = (): JSX.Element => {
                 <Badge color="red">{response.attending}</Badge>
               )}
             </Group>
-
+            <Text size="sm" color="dimmed">
+              {response.songRequest ?? ""}
+            </Text>
             <Text size="sm" color="dimmed">
               {response.message}
             </Text>

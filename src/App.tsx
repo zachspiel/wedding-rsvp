@@ -44,9 +44,9 @@ function App() {
     <>
       <Navbar
         links={[
-          { link: "", label: "WHEN & WHERE" },
-          { link: "", label: "GALLERY" },
-          { link: "", label: "GUEST BOOK" },
+          { link: "#whenAndWhere", label: "WHEN & WHERE" },
+          { link: "#gallery", label: "GALLERY" },
+          { link: "#guestBook", label: "GUEST BOOK" },
           { link: "#rsvp", label: "RSVP" },
         ]}
       />

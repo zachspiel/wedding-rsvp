@@ -18,6 +18,7 @@ export interface GuestMessage {
   email: string;
   message: string;
   createdAt?: string;
+  editedAt?: string;
 }
 
 const GuestBook = (): JSX.Element => {
@@ -117,7 +118,7 @@ const GuestBook = (): JSX.Element => {
           </form>
 
           {messages.map((message, index) => (
-            <GuestBookMessage message={message} key={index} />
+            <GuestBookMessage key={index} index={index} messages={messages}/>
           ))}
         </SimpleGrid>
       </Container>

@@ -22,6 +22,7 @@ const WhenAndWhere = (): JSX.Element => {
               sx={(theme) => ({ fontFamily: `Poppins, sans-serif` })}
               weight={900}
               align="left"
+              id="whenAndWhere"
             >
               When & Where
             </Title>
