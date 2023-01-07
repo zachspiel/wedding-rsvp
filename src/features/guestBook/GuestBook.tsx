@@ -58,15 +58,18 @@ const GuestBook = (): JSX.Element => {
   };
 
   return (
-    <Container sx={{ backgroundColor: "#f7f7f7"}} fluid>
-      <Container sx={{padding: "0"}}>
-        <SimpleGrid cols={1} sx={{paddingBottom: "5rem"}}>
+    <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
+      <Container sx={{ padding: "0" }}>
+        <SimpleGrid cols={1} sx={{ paddingBottom: "5rem" }}>
           <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
             <SimpleGrid cols={1}>
               <Title
                 order={2}
                 size="h1"
-                sx={(theme) => ({ fontFamily: `Poppins, sans-serif`, paddingTop: "2rem" })}
+                sx={(theme) => ({
+                  fontFamily: `Poppins, sans-serif`,
+                  paddingTop: "2rem",
+                })}
                 weight={900}
                 align="left"
                 id="guestBook"
@@ -111,7 +114,7 @@ const GuestBook = (): JSX.Element => {
           </form>
 
           {messages.map((message, index) => (
-            <GuestBookMessage key={index} index={index} messages={messages}/>
+            <GuestBookMessage key={index} index={index} messages={messages} />
           ))}
         </SimpleGrid>
       </Container>

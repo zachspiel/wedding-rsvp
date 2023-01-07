@@ -28,7 +28,7 @@ export interface RsvpResonse {
 
 const RsvpForm = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
-  const {isAdminViewEnabled} = useAdminView();
+  const { isAdminViewEnabled } = useAdminView();
 
   const form = useForm({
     initialValues: {
@@ -64,7 +64,10 @@ const RsvpForm = (): JSX.Element => {
 
   return (
     <>
-      <form onSubmit={form.onSubmit(() => registerGuest(form.values))}>
+      <form
+        onSubmit={form.onSubmit(() => registerGuest(form.values))}
+        style={{ paddingBottom: "5rem" }}
+      >
         <Title
           order={2}
           size="h1"

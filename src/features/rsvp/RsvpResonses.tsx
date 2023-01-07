@@ -3,7 +3,7 @@ import { ActionIcon, Badge, Card, Flex, Group, Text, Title } from "@mantine/core
 import { ref, onValue } from "firebase/database";
 import { database } from "../database/database";
 import { RsvpResonse } from "./RsvpForm";
-import csvDownload from 'json-to-csv-export';
+import csvDownload from "json-to-csv-export";
 import { IconDownload } from "@tabler/icons";
 
 const RsvpResonses = (): JSX.Element => {
@@ -23,13 +23,13 @@ const RsvpResonses = (): JSX.Element => {
   const exportToCsv = (): void => {
     const dataToConvert = {
       data: responses,
-      filename: 'rsvps',
-      delimiter: ',',
-      headers: ['Attending', "Created At", "Email", "Message", "Song Request"]
-    }
+      filename: "rsvps",
+      delimiter: ",",
+      headers: ["Attending", "Created At", "Email", "Message", "Song Request"],
+    };
 
     csvDownload(dataToConvert);
-  }
+  };
 
   return (
     <>
@@ -46,7 +46,13 @@ const RsvpResonses = (): JSX.Element => {
       <Flex>
         <Text sx={{ marginRight: "0.5rem" }}>{totalYesses} Yes</Text>{" "}
         <Text>{responses.length - totalYesses} No</Text>
-        <ActionIcon variant="filled" onClick={(): void => exportToCsv()} sx={{marginLeft: "0.5rem"}}><IconDownload size={16} /></ActionIcon>
+        <ActionIcon
+          variant="filled"
+          onClick={(): void => exportToCsv()}
+          sx={{ marginLeft: "0.5rem" }}
+        >
+          <IconDownload size={16} />
+        </ActionIcon>
       </Flex>
       {responses.map((response, index) => {
         return (

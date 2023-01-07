@@ -7,7 +7,6 @@ import { onValue, ref } from "firebase/database";
 import { listAll, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../database/database";
 import GalleryImage from "./GalleryImage";
-import useSignInStatus from "../../hooks/signInStatus";
 import UploadImages from "./UploadImages";
 import useAdminView from "../../hooks/adminView";
 
@@ -16,8 +15,7 @@ export interface Captions {
 }
 
 const Gallery = (): JSX.Element => {
-  const {isAdminViewEnabled, toggleIsAdminViewEnabled} = useAdminView();
-  const { isSignedIn } = useSignInStatus();
+  const { isAdminViewEnabled } = useAdminView();
   const theme = useMantineTheme();
   const [captions, setCaptions] = useState<Captions>({});
   const [images, setAvailableImages] = useState<string[]>([]);
@@ -78,7 +76,7 @@ const Gallery = (): JSX.Element => {
         id="gallery"
       >
         Gallery
-      </Title>     
+      </Title>
 
       {isAdminViewEnabled && <UploadImages />}
 

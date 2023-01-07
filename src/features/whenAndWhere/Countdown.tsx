@@ -19,7 +19,12 @@ const WeddingCountdown = (): JSX.Element => {
     completed,
   }: CountdownRenderProps) => {
     return (
-      <Flex justify={mobile ? "flex-start" : "center"} wrap="wrap" sx={{paddingBottom: "5rem"}} gap="md">
+      <Flex
+        justify={mobile ? "flex-start" : "center"}
+        wrap="wrap"
+        sx={{ paddingBottom: "5rem" }}
+        gap="md"
+      >
         <Container
           sx={{
             border: "none",

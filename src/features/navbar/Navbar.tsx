@@ -28,7 +28,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface HeaderSimpleProps {
-  links: { link: string; label: string, variant?: "link" | "text" | "gradient" }[];
+  links: { link: string; label: string; variant?: "link" | "text" | "gradient" }[];
 }
 
 const Navbar = ({ links }: HeaderSimpleProps): JSX.Element => {
@@ -39,6 +39,7 @@ const Navbar = ({ links }: HeaderSimpleProps): JSX.Element => {
       key={`${link.label}-${index}`}
       href={link.link}
       size="sm"
+      id={link.label}
       variant={link.variant ?? "text"}
     >
       {link.label}
@@ -48,9 +49,7 @@ const Navbar = ({ links }: HeaderSimpleProps): JSX.Element => {
   return (
     <Header height={80} className={classes.container}>
       <Container className={classes.header}>
-        <Group spacing={25}>
-          {items}
-        </Group>
+        <Group spacing={25}>{items}</Group>
       </Container>
     </Header>
   );

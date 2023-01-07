@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { createStyles, Paper, Group, Text, Flex, TextInput, Button } from "@mantine/core";
+import { createStyles, Group, Text, Flex, TextInput, Button, Card } from "@mantine/core";
 import { GuestMessage } from "./GuestBook";
 import { useForm } from "@mantine/form";
 import { ref, set } from "firebase/database";
 import { database } from "../database/database";
 import { showNotification } from "@mantine/notifications";
+import { IconTrash } from "@tabler/icons";
 
 interface Props {
   index: number;
@@ -29,7 +30,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const GuestBookMessage = (props: Props): JSX.Element => {
-  const {index, messages} = props;
+  const { index, messages } = props;
   const guestBookEntry = messages[index];
 
   const [isEditing, setIsEditing] = useState(false);
@@ -48,18 +49,18 @@ const GuestBookMessage = (props: Props): JSX.Element => {
     updatedMessages[index] = {
       ...updatedMessages[index],
       message: updatedMessage,
-      editedAt: new Date().toISOString()
-    }
+      editedAt: new Date().toISOString(),
+    };
 
-    const guestBookRef = ref(database, "guestBook/" );
+    const guestBookRef = ref(database, "guestBook/");
 
     try {
-      set(guestBookRef, [...updatedMessages]); 
+      set(guestBookRef, [...updatedMessages]);
       showNotification({
         message: `Successfully updated!`,
         color: "green",
       });
-    } catch(error) {
+    } catch (error) {
       showNotification({
         message: `${error}`,
         color: "red",
@@ -67,11 +68,11 @@ const GuestBookMessage = (props: Props): JSX.Element => {
     }
 
     setIsEditing(false);
-  }
+  };
 
   return (
-    <Paper withBorder radius="md" className={classes.comment}>
-      <Group className={classes.body}>
+    <Card shadow="sm" p="lg" radius="md" withBorder>
+      <Group position="apart" mt="md" mb="xs">
         {!isEditing && (
           <div className={classes.content} style={{ fontFamily: `Poppins, sans-serif` }}>
             "{guestBookEntry.message}"
@@ -85,7 +86,11 @@ const GuestBookMessage = (props: Props): JSX.Element => {
               {...form.getInputProps("message")}
             />
             <Group position="left" mt="xl">
-              <Button size="md" onClick={(): void => setIsEditing(false)} variant="subtle">
+              <Button
+                size="md"
+                onClick={(): void => setIsEditing(false)}
+                variant="subtle"
+              >
                 Cancel
               </Button>
               <Button type="submit" size="md" onClick={(): void => console.log("111")}>
@@ -94,6 +99,10 @@ const GuestBookMessage = (props: Props): JSX.Element => {
             </Group>
           </form>
         )}
+
+        <Text color="dimmed">
+          <IconTrash size={20} />
+        </Text>
       </Group>
       <Group>
         <div>
@@ -107,7 +116,7 @@ const GuestBookMessage = (props: Props): JSX.Element => {
           </Flex>
         </div>
       </Group>
-    </Paper>
+    </Card>
   );
 };
 

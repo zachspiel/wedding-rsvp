@@ -1,4 +1,4 @@
 export type AdminContextType = {
-    isAdminViewEnabled: boolean;
-    toggleIsAdminViewEnabled: () => void;
-}
+  isAdminViewEnabled: boolean;
+  toggleIsAdminViewEnabled: () => void;
+};
