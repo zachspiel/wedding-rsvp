@@ -12,8 +12,9 @@ const useStyles = createStyles((theme) => ({
     backgroundAttachment: "fixed",
 
     "@media (max-width: 520px)": {
-      paddingTop: 80,
-      paddingBottom: 50,
+      paddingTop: 100,
+      paddingBottom: 20,
+      backgroundSize: "contain",
     },
   },
 
@@ -35,12 +36,7 @@ const useStyles = createStyles((theme) => ({
 
     "@media (max-width: 520px)": {
       fontSize: 28,
-      textAlign: "left",
     },
-  },
-
-  highlight: {
-    color: theme.colors[theme.primaryColor][4],
   },
 
   description: {
@@ -50,7 +46,6 @@ const useStyles = createStyles((theme) => ({
 
     "@media (max-width: 520px)": {
       fontSize: theme.fontSizes.md,
-      textAlign: "left",
     },
   },
 }));

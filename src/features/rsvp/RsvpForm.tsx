@@ -15,6 +15,7 @@ import { database } from "../database/database";
 import { showNotification } from "@mantine/notifications";
 import useSignInStatus from "../../hooks/signInStatus";
 import RsvpResonses from "./RsvpResonses";
+import useAdminView from "../../hooks/adminView";
 
 export interface RsvpResonse {
   name: string;
@@ -27,6 +28,8 @@ export interface RsvpResonse {
 
 const RsvpForm = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
+  const {isAdminViewEnabled} = useAdminView();
+
   const form = useForm({
     initialValues: {
       name: "",
@@ -131,7 +134,7 @@ const RsvpForm = (): JSX.Element => {
           </Button>
         </Group>
       </form>
-      {isSignedIn && <RsvpResonses />}
+      {isSignedIn && isAdminViewEnabled && <RsvpResonses />}
     </>
   );
 };

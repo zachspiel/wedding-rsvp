@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import { Carousel } from "@mantine/carousel";
-import { Switch, Title, useMantineTheme } from "@mantine/core";
+import { Title, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { onValue, ref } from "firebase/database";
 import { listAll, ref as storageRef } from "firebase/storage";
@@ -9,14 +9,14 @@ import { database, storage } from "../database/database";
 import GalleryImage from "./GalleryImage";
 import useSignInStatus from "../../hooks/signInStatus";
 import UploadImages from "./UploadImages";
+import useAdminView from "../../hooks/adminView";
 
 export interface Captions {
   [key: string]: string;
 }
 
 const Gallery = (): JSX.Element => {
-  const [displayAdminView, setDisplayAdminView] = useState(false);
-
+  const {isAdminViewEnabled, toggleIsAdminViewEnabled} = useAdminView();
   const { isSignedIn } = useSignInStatus();
   const theme = useMantineTheme();
   const [captions, setCaptions] = useState<Captions>({});
@@ -51,7 +51,7 @@ const Gallery = (): JSX.Element => {
   }, []);
 
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
-  const availableImages = displayAdminView
+  const availableImages = isAdminViewEnabled
     ? images
     : images.filter((image) => enabledImages.includes(image));
   const slides = availableImages.map((item) => (
@@ -60,7 +60,7 @@ const Gallery = (): JSX.Element => {
         <GalleryImage
           image={item}
           caption={captions[item.replace(".", "")] ?? ""}
-          displayAdminView={displayAdminView}
+          displayAdminView={isAdminViewEnabled}
           enabledImages={enabledImages}
         />
       }
@@ -78,18 +78,9 @@ const Gallery = (): JSX.Element => {
         id="gallery"
       >
         Gallery
-      </Title>
+      </Title>     
 
-      {isSignedIn && (
-        <Switch
-          label="Admin view"
-          sx={{ marginTop: "10px", marginRight: "0.5rem" }}
-          checked={displayAdminView}
-          onChange={(e): void => setDisplayAdminView(e.currentTarget.checked)}
-        />
-      )}
-
-      {displayAdminView && <UploadImages />}
+      {isAdminViewEnabled && <UploadImages />}
 
       <Carousel
         slideSize="50%"

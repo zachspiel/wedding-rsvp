@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, List, SimpleGrid, Title } from "@mantine/core";
-import FlowerImage from "../common/FlowerImage";
 import {
   IconBuildingCottage,
   IconCalendarEvent,
@@ -12,14 +11,13 @@ import Map from "./Map";
 
 const WhenAndWhere = (): JSX.Element => {
   return (
-    <>
-      <Container sx={{ backgroundColor: "#f7f7f7", padding: "5rem" }} fluid>
-        <Container>
+    <Container sx={{ backgroundColor: "#f7f7f7"}} fluid>
+      <Container sx={{padding: "0"}}>
           <SimpleGrid cols={1}>
             <Title
               order={2}
               size="h1"
-              sx={(theme) => ({ fontFamily: `Poppins, sans-serif` })}
+              sx={(theme) => ({ fontFamily: `Poppins, sans-serif`, paddingTop: "2rem" })}
               weight={900}
               align="left"
               id="whenAndWhere"
@@ -51,10 +49,8 @@ const WhenAndWhere = (): JSX.Element => {
             <Map />
             <WeddingCountdown />
           </SimpleGrid>
-        </Container>
       </Container>
-      <FlowerImage />
-    </>
+    </Container>
   );
 };
 

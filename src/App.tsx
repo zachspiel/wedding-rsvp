@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import React from "react";
 import "./App.css";
 import { Container, SimpleGrid } from "@mantine/core";
@@ -14,9 +13,13 @@ import { weddingDateString } from "./features/easterEggs/strings";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./features/database/database";
 import { showNotification } from "@mantine/notifications";
+import useAdminView from "./hooks/adminView";
+import AdminViewToggle from "./features/common/AdminViewToggle";
+import useSignInStatus from "./hooks/signInStatus";
 
 function App() {
   const { REACT_APP_EMAIL, REACT_APP_PASS } = process.env;
+  const {isSignedIn} = useSignInStatus();
 
   React.useEffect(() => {
     console.log(weddingDateString);
@@ -47,19 +50,11 @@ function App() {
           { link: "#whenAndWhere", label: "WHEN & WHERE" },
           { link: "#gallery", label: "GALLERY" },
           { link: "#guestBook", label: "GUEST BOOK" },
-          { link: "#rsvp", label: "RSVP" },
+          { link: "#rsvp", label: "RSVP"},
         ]}
       />
       <Jumbotron />
       <WhenAndWhere />
-      <Container>
-        <SimpleGrid cols={1}>
-          <Gallery />
-        </SimpleGrid>
-      </Container>
-
-      <GuestBook />
-
       <FlowerImage />
 
       <Container>
@@ -67,7 +62,17 @@ function App() {
           <RsvpForm />
         </SimpleGrid>
       </Container>
+      <GuestBook />
 
+      <FlowerImage />
+
+      <Container>
+        <SimpleGrid cols={1}>
+          <Gallery />
+        </SimpleGrid>
+      </Container>
+
+      {isSignedIn && <AdminViewToggle />}
       <Footer />
     </>
   );

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { createStyles, Paper, Group, Text, Flex, TextInput, Button, ActionIcon } from "@mantine/core";
+import { createStyles, Paper, Group, Text, Flex, TextInput, Button } from "@mantine/core";
 import { GuestMessage } from "./GuestBook";
-import { IconPencil } from "@tabler/icons";
 import { useForm } from "@mantine/form";
-import { ref, push, set } from "firebase/database";
+import { ref, set } from "firebase/database";
 import { database } from "../database/database";
 import { showNotification } from "@mantine/notifications";
 

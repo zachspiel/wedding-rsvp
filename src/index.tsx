@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import SignInStatusProvider from "./context/SignInStatus";
+import AdminViewProvider from "./context/AdminView";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -13,7 +14,9 @@ root.render(
     <MantineProvider withNormalizeCSS withGlobalStyles>
       <NotificationsProvider position="top-right">
         <SignInStatusProvider>
-          <App />
+          <AdminViewProvider>
+            <App />
+          </AdminViewProvider>
         </SignInStatusProvider>
       </NotificationsProvider>
     </MantineProvider>
