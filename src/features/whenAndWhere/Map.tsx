@@ -6,24 +6,22 @@ const containerStyle = {
   height: "400px",
 };
 
-const center = {
-  lat: 33.470537886567875,
-  lng: -111.7427867022771,
+const WRIGHT_HOUSE_LOCATION = {
+  lat: 33.42279057560783,
+  lng: -111.84529613067069,
 };
 
+console.log(process.env)
 const Map = (): JSX.Element => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyC-YodCYGgMEEu6PUz4w82GI4gmHxgkft4",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY ?? "",
   });
 
   return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+    <GoogleMap mapContainerStyle={containerStyle} center={WRIGHT_HOUSE_LOCATION} zoom={15}>
       <Marker
-        position={{
-          lat: 33.470537886567875,
-          lng: -111.7427867022771,
-        }}
+        position={WRIGHT_HOUSE_LOCATION}
       />
     </GoogleMap>
   ) : (
