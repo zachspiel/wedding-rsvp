@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  Button,
-  Container,
-  Group,
-  SimpleGrid,
-  Textarea,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, Container, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { ref, push, set, onValue } from "firebase/database";
 import { database } from "../database/database";
 import GuestBookMessage from "./GuestBookMessage";
+import SectionTitle from "../common/SectionTitle";
 
 export interface GuestMessage {
   name: string;
@@ -60,22 +53,10 @@ const GuestBook = (): JSX.Element => {
   return (
     <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
       <Container sx={{ padding: "0" }}>
-        <SimpleGrid cols={1} sx={{ paddingBottom: "5rem" }}>
+        <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
           <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
             <SimpleGrid cols={1}>
-              <Title
-                order={2}
-                size="h1"
-                sx={(theme) => ({
-                  fontFamily: `Poppins, sans-serif`,
-                  paddingTop: "2rem",
-                })}
-                weight={900}
-                align="left"
-                id="guestBook"
-              >
-                Guest Book
-              </Title>
+              <SectionTitle title="Guest Book" id="guestBook" />
 
               <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
                 <TextInput

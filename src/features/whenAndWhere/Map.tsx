@@ -11,7 +11,6 @@ const WRIGHT_HOUSE_LOCATION = {
   lng: -111.84529613067069,
 };
 
-console.log(process.env)
 const Map = (): JSX.Element => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -19,10 +18,12 @@ const Map = (): JSX.Element => {
   });
 
   return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={WRIGHT_HOUSE_LOCATION} zoom={15}>
-      <Marker
-        position={WRIGHT_HOUSE_LOCATION}
-      />
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={WRIGHT_HOUSE_LOCATION}
+      zoom={15}
+    >
+      <Marker position={WRIGHT_HOUSE_LOCATION} />
     </GoogleMap>
   ) : (
     <></>

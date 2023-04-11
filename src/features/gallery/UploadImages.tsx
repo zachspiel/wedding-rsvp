@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Group, FileButton, Button } from "@mantine/core";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../database/database";
-import { showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 
 const UploadImages = (): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleUpload = async () => {
-    showNotification({
+    notifications.show({
       message: "Uploading image(s)...",
       color: "blue",
     });
@@ -33,15 +33,14 @@ const UploadImages = (): JSX.Element => {
           );
 
           if (percent === 100) {
-            console.log("here");
-            showNotification({
+            notifications.show({
               message: "Successfully uploaded image.",
               color: "green",
             });
           }
         },
         (err) =>
-          showNotification({
+          notifications.show({
             message: err.message,
             color: "red",
           })

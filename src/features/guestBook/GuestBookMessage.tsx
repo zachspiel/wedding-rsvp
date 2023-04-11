@@ -4,7 +4,7 @@ import { GuestMessage } from "./GuestBook";
 import { useForm } from "@mantine/form";
 import { ref, set } from "firebase/database";
 import { database } from "../database/database";
-import { showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 import { IconTrash } from "@tabler/icons";
 
 interface Props {
@@ -56,12 +56,12 @@ const GuestBookMessage = (props: Props): JSX.Element => {
 
     try {
       set(guestBookRef, [...updatedMessages]);
-      showNotification({
+      notifications.show({
         message: `Successfully updated!`,
         color: "green",
       });
     } catch (error) {
-      showNotification({
+      notifications.show({
         message: `${error}`,
         color: "red",
       });
@@ -93,7 +93,7 @@ const GuestBookMessage = (props: Props): JSX.Element => {
               >
                 Cancel
               </Button>
-              <Button type="submit" size="md" onClick={(): void => console.log("111")}>
+              <Button type="submit" size="md">
                 Save
               </Button>
             </Group>

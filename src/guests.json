@@ -1,0 +1,409 @@
+{
+  "guest_groups": [
+    {
+      "id": 75433905,
+      "uuid": "4fc5b5b7-d654-4a68-bf3c-f92332d71d0c",
+      "wedding_account_id": 2671841,
+      "email_address": "s.rannells@yahoo.com",
+      "home_phone": null,
+      "mobile_phone": null,
+      "address_1": null,
+      "address_2": null,
+      "city": null,
+      "state_province": null,
+      "postal_code": null,
+      "country_code": "US",
+      "affiliation": "PARTNER_FRIEND",
+      "tier": "A",
+      "invitation_sent": false,
+      "invited": true,
+      "save_the_date_sent": false,
+      "envelope_recipient": "Wyatt Leupp",
+      "envelope_recipient_override": null,
+      "addressing_style": "SEMI_FORMAL",
+      "addressing_variation": {
+        "custom": "Wyatt Leupp",
+        "traditional": "Wyatt Leupp",
+        "semi_formal": "Wyatt Leupp",
+        "casual": "Wyatt Leupp"
+      },
+      "guests": [
+        {
+          "id": 138922565,
+          "guest_group_id": 75433905,
+          "relationship_type": "PRIMARY",
+          "prefix": null,
+          "first_name": "Wyatt",
+          "middle_name": null,
+          "family_name": "Leupp",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316139613,
+              "event_id": 2563439,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            },
+            {
+              "id": 316140525,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            }
+          ]
+        }
+      ],
+      "rsvp_question_answers": [],
+      "collect_addresses_message_sent_at": null,
+      "collect_address_copied_at": null
+    },
+    {
+      "id": 75433762,
+      "uuid": "b6441265-8628-4e82-b4ba-3ba7c981cdc2",
+      "wedding_account_id": 2671841,
+      "email_address": "jaffa_cake_lover@yahoo.com",
+      "home_phone": null,
+      "mobile_phone": null,
+      "address_1": null,
+      "address_2": null,
+      "city": null,
+      "state_province": null,
+      "postal_code": null,
+      "country_code": "US",
+      "affiliation": "PARTNER_WEDDING_PARTY",
+      "tier": "A",
+      "invitation_sent": false,
+      "invited": true,
+      "save_the_date_sent": false,
+      "envelope_recipient": "Brielle Mckeever and Chris ???",
+      "envelope_recipient_override": null,
+      "addressing_style": "SEMI_FORMAL",
+      "addressing_variation": {
+        "custom": "Brielle Mckeever and Chris ???",
+        "traditional": "Brielle Mckeever and Chris ???",
+        "semi_formal": "Brielle Mckeever and Chris ???",
+        "casual": "Brielle Mckeever and Chris ???"
+      },
+      "guests": [
+        {
+          "id": 138922289,
+          "guest_group_id": 75433762,
+          "relationship_type": "PRIMARY",
+          "prefix": null,
+          "first_name": "Brielle",
+          "middle_name": null,
+          "family_name": "Mckeever",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316140518,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            }
+          ]
+        },
+        {
+          "id": 138922290,
+          "guest_group_id": 75433762,
+          "relationship_type": "PARTNER",
+          "prefix": null,
+          "first_name": "Chris",
+          "middle_name": null,
+          "family_name": "???",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316140517,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            }
+          ]
+        }
+      ],
+      "rsvp_question_answers": [],
+      "collect_addresses_message_sent_at": null,
+      "collect_address_copied_at": null
+    },
+    {
+      "id": 75433701,
+      "uuid": "4abb91b4-fc21-47b2-bd1f-dd83cdf6494c",
+      "wedding_account_id": 2671841,
+      "email_address": null,
+      "home_phone": null,
+      "mobile_phone": null,
+      "address_1": null,
+      "address_2": null,
+      "city": null,
+      "state_province": null,
+      "postal_code": null,
+      "country_code": "US",
+      "affiliation": "UNKNOWN",
+      "tier": "A",
+      "invitation_sent": false,
+      "invited": true,
+      "save_the_date_sent": false,
+      "envelope_recipient": "Zachary Spielberger and Sedona Rannells",
+      "envelope_recipient_override": null,
+      "addressing_style": "SEMI_FORMAL",
+      "addressing_variation": {
+        "custom": "Zachary Spielberger and Sedona Rannells",
+        "traditional": "Zachary Spielberger and Sedona Rannells",
+        "semi_formal": "Zachary Spielberger and Sedona Rannells",
+        "casual": "Zachary Spielberger and Sedona Rannells"
+      },
+      "guests": [
+        {
+          "id": 138922176,
+          "guest_group_id": 75433701,
+          "relationship_type": "PRIMARY",
+          "prefix": null,
+          "first_name": "Zachary",
+          "middle_name": null,
+          "family_name": "Spielberger",
+          "suffix": null,
+          "printed_name": null,
+          "source": "GL_ONBOARDING",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316140520,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            }
+          ]
+        },
+        {
+          "id": 138922177,
+          "guest_group_id": 75433701,
+          "relationship_type": "PARTNER",
+          "prefix": null,
+          "first_name": "Sedona",
+          "middle_name": null,
+          "family_name": "Rannells",
+          "suffix": null,
+          "printed_name": null,
+          "source": "GL_ONBOARDING",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316140519,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "NO_RESPONSE",
+              "rsvp_at": null
+            }
+          ]
+        }
+      ],
+      "rsvp_question_answers": [],
+      "collect_addresses_message_sent_at": null,
+      "collect_address_copied_at": null
+    },
+    {
+      "id": 75433875,
+      "uuid": "b8136af2-cd23-44a3-8ae4-7f7f67104f80",
+      "wedding_account_id": 2671841,
+      "email_address": "zps9@nau.edu",
+      "home_phone": null,
+      "mobile_phone": null,
+      "address_1": null,
+      "address_2": null,
+      "city": null,
+      "state_province": null,
+      "postal_code": null,
+      "country_code": "US",
+      "affiliation": "PRIMARY_FAMILY_FRIEND",
+      "tier": "A",
+      "invitation_sent": false,
+      "invited": true,
+      "save_the_date_sent": false,
+      "envelope_recipient": "The Wright Family",
+      "envelope_recipient_override": null,
+      "addressing_style": "SEMI_FORMAL",
+      "addressing_variation": {
+        "custom": "The Wrights",
+        "traditional": "Brandon Wright and Laura Wright\nBaby Bitch\nEllie Wright",
+        "semi_formal": "The Wright Family",
+        "casual": "The Wrights"
+      },
+      "guests": [
+        {
+          "id": 138922497,
+          "guest_group_id": 75433875,
+          "relationship_type": "PRIMARY",
+          "prefix": null,
+          "first_name": "Brandon",
+          "middle_name": null,
+          "family_name": "Wright",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316139463,
+              "event_id": 2563439,
+              "meal_option_id": null,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.204Z"
+            },
+            {
+              "id": 316140524,
+              "event_id": 2704288,
+              "meal_option_id": 740157,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.204Z"
+            }
+          ]
+        },
+        {
+          "id": 138922498,
+          "guest_group_id": 75433875,
+          "relationship_type": "PARTNER",
+          "prefix": null,
+          "first_name": "Laura",
+          "middle_name": null,
+          "family_name": "Wright",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316139464,
+              "event_id": 2563439,
+              "meal_option_id": null,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.210Z"
+            },
+            {
+              "id": 316140523,
+              "event_id": 2704288,
+              "meal_option_id": 740157,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.210Z"
+            }
+          ]
+        },
+        {
+          "id": 138922500,
+          "guest_group_id": 75433875,
+          "relationship_type": "CHILD",
+          "prefix": null,
+          "first_name": "Baby",
+          "middle_name": null,
+          "family_name": "Bitch",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316139466,
+              "event_id": 2563439,
+              "meal_option_id": null,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.220Z"
+            },
+            {
+              "id": 316140521,
+              "event_id": 2704288,
+              "meal_option_id": null,
+              "rsvp_type": "DECLINED",
+              "rsvp_at": "2023-03-16T02:17:25.220Z"
+            }
+          ]
+        },
+        {
+          "id": 138922499,
+          "guest_group_id": 75433875,
+          "relationship_type": "CHILD",
+          "prefix": null,
+          "first_name": "Ellie",
+          "middle_name": null,
+          "family_name": "Wright",
+          "suffix": null,
+          "printed_name": null,
+          "source": "MANUAL",
+          "rsvp": "NO_RESPONSE",
+          "event_invitations": [
+            {
+              "id": 316139465,
+              "event_id": 2563439,
+              "meal_option_id": null,
+              "rsvp_type": "DECLINED",
+              "rsvp_at": "2023-03-16T02:17:25.223Z"
+            },
+            {
+              "id": 316140522,
+              "event_id": 2704288,
+              "meal_option_id": 740157,
+              "rsvp_type": "ATTENDING",
+              "rsvp_at": "2023-03-16T02:17:25.223Z"
+            }
+          ]
+        }
+      ],
+      "rsvp_question_answers": [
+        {
+          "rsvp_question_id": 903836,
+          "question": "Leave a note for the couple.",
+          "answer": "Fuck you"
+        }
+      ],
+      "collect_addresses_message_sent_at": null,
+      "collect_address_copied_at": null
+    }
+  ],
+  "facets": [
+    {
+      "key": "INVITED",
+      "label": "By Invited Status",
+      "buckets": [{ "key": "TRUE", "label": "Definitely Invited", "count": 9 }]
+    },
+    {
+      "key": "CONTACT_INFO",
+      "label": "By Missing Information",
+      "buckets": [
+        { "key": "MAILING_ADDRESS_MISSING", "label": "Missing Address", "count": 4 },
+        { "key": "EMAIL_MISSING", "label": "Missing Email", "count": 1 },
+        { "key": "MOBILE_MISSING", "label": "Missing Mobile", "count": 4 }
+      ]
+    },
+    {
+      "key": "RELATIONSHIP",
+      "label": "By Relationship To You",
+      "buckets": [
+        { "key": "PARTNER_FRIEND", "label": "Friends", "count": 1 },
+        { "key": "PARTNER_WEDDING_PARTY", "label": "Wedding Party", "count": 2 },
+        { "key": "UNKNOWN", "label": "Unknown", "count": 2 },
+        { "key": "PRIMARY_FAMILY_FRIEND", "label": "Family Friends", "count": 4 }
+      ]
+    }
+  ],
+  "selected_facet_bucket_keys": {},
+  "global_stats": [
+    { "key": "invited_guests", "label": "Definitely Invited", "value": 9 },
+    { "key": "guests", "label": "In List", "value": 9 },
+    { "key": "addresses_missing", "label": "Missing Addresses", "value": 4 },
+    { "key": "adults", "label": "Adults", "value": 7 },
+    { "key": "children", "label": "Children", "value": 2 }
+  ]
+}

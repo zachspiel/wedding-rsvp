@@ -1,22 +1,35 @@
 import React from "react";
+import { Container, SimpleGrid, Text, Title } from "@mantine/core";
 
 const Registry = (): JSX.Element => {
   return (
-    <div style={{ width: "200px", margin: "0 auto" }}>
-      <a
-        href="http://www.honeyfund.com/wedding/spielberger-rannells-10-12-2024"
-        style={{
-          textAlign: "left",
-          background: "url(http://www.honeyfund.com/share/honeyfund3.png) no-repeat",
-          display: "block",
-          width: "200px",
-          height: "100px",
-          textIndent: "-9999em",
-        }}
-      >
-        Visit our honeyfund at Honeyfund.com, the free honeymoon registry
-      </a>
-    </div>
+    <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
+      <Container sx={{ padding: "0" }}>
+        <SimpleGrid cols={1}>
+          <Title
+            order={2}
+            size="h1"
+            sx={(theme) => ({ fontFamily: `Poppins, sans-serif` })}
+            weight={900}
+            align="left"
+            id="registry"
+          >
+            Registry
+          </Title>
+
+          <Text>
+            We are so grateful to have you share in our special day. Your presence is our
+            gift!
+          </Text>
+          <Text>
+            We're lucky to already have a home full of everything we need. If you wish to
+            contribute beyond your attendance, we will be accepting contributions to our
+            honeymoon and first home fund at our reception following the ceremony.
+          </Text>
+          <Text>Thanks for visiting and we can't wait to see you on our big day!</Text>
+        </SimpleGrid>
+      </Container>
+    </Container>
   );
 };
 

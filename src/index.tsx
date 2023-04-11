@@ -3,22 +3,42 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { MantineProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import SignInStatusProvider from "./context/SignInStatus";
 import AdminViewProvider from "./context/AdminView";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import TrackRsvps from "./pages/trackRsvps/TrackRsvps";
+import GuestList from "./pages/manageGuestList/GuestList";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/guestList",
+    element: <GuestList />,
+  },
+  {
+    path: "/rsvps",
+    element: <TrackRsvps />,
+  },
+]);
+
 root.render(
   <React.StrictMode>
     <MantineProvider withNormalizeCSS withGlobalStyles>
-      <NotificationsProvider position="top-right">
-        <SignInStatusProvider>
-          <AdminViewProvider>
-            <App />
-          </AdminViewProvider>
-        </SignInStatusProvider>
-      </NotificationsProvider>
+      <Notifications position="top-right" />
+      <SignInStatusProvider>
+        <AdminViewProvider>
+          <RouterProvider router={router} />
+        </AdminViewProvider>
+      </SignInStatusProvider>
     </MantineProvider>
   </React.StrictMode>
 );

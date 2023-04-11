@@ -1,57 +1,118 @@
 import React from "react";
-import { createStyles, Header, Container, Group, Anchor } from "@mantine/core";
+import {
+  Anchor,
+  Center,
+  Container,
+  createStyles,
+  Group,
+  Menu,
+} from "@mantine/core";
 import roses from "../../images/blush-rose.png";
+import useSignInStatus from "../../hooks/signInStatus";
+import { IconChevronDown } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
-  container: {
+  navbar: {
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
+    }`,
     backgroundImage: `url(${roses})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
 
-  header: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
+  footer: {
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
+    }`,
+    backgroundImage: `url(${roses})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    position: "fixed",
+    width: "100%",
+    bottom: "0",
   },
 
-  linkActive: {
-    "&, &:hover": {
-      backgroundColor: theme.fn.variant({
-        variant: "light",
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: "light", color: theme.primaryColor }).color,
+  inner: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
+  },
+
+  links: {
+    [theme.fn.smallerThan("xs")]: {
+      marginTop: theme.spacing.md,
+    },
+  },
+
+  guestListDropdown: {
+    [theme.fn.smallerThan("md")]: {
+      display: "none",
     },
   },
 }));
 
-interface HeaderSimpleProps {
-  links: { link: string; label: string; variant?: "link" | "text" | "gradient" }[];
+interface Props {
+  showHome?: boolean;
+  footer?: boolean;
 }
 
-const Navbar = ({ links }: HeaderSimpleProps): JSX.Element => {
+const Navbar = (props: Props): JSX.Element => {
   const { classes } = useStyles();
+  const { isSignedIn } = useSignInStatus();
 
-  const items = links.map((link, index) => (
-    <Anchor
-      key={`${link.label}-${index}`}
-      href={link.link}
-      size="sm"
-      id={link.label}
-      variant={link.variant ?? "text"}
-    >
-      {link.label}
-    </Anchor>
-  ));
+  const createAnchor = (label: string, link: string): JSX.Element => {
+    return (
+      <Anchor<"a"> color="dimmed" href={link} size="sm">
+        {label}
+      </Anchor>
+    );
+  };
 
   return (
-    <Header height={80} className={classes.container}>
-      <Container className={classes.header}>
-        <Group spacing={25}>{items}</Group>
+    <div className={props.footer ? classes.footer : classes.navbar}>
+      <Container className={classes.inner}>
+        <Group className={classes.links}>
+          {props.showHome && createAnchor("HOME", "/")}
+          {createAnchor("WHEN & WHERE", "#whenAndWhere")}
+          {createAnchor("RSVP", "#rsvp")}
+          {createAnchor("GUEST BOOK", "#guestBook")}
+          {createAnchor("GALLERY", "#gallery")}
+
+          {isSignedIn && (
+            <Menu trigger="hover" withinPortal>
+              <Menu.Target>
+                <Anchor<"a">
+                  color="dimmed"
+                  size="sm"
+                  href="/guestList"
+                  className={classes.guestListDropdown}
+                >
+                  <Center>
+                    GUEST LIST
+                    <IconChevronDown size="0.8rem" stroke={1.5} />
+                  </Center>
+                </Anchor>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item>
+                  <Anchor<"a"> color="dimmed" href="/guestList" size="sm">
+                    MANAGE GUEST LIST
+                  </Anchor>
+                </Menu.Item>
+                <Menu.Item>
+                  <Anchor<"a"> color="dimmed" href="/rsvps" size="sm">
+                    TRACK RSVPs
+                  </Anchor>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          )}
+        </Group>
       </Container>
-    </Header>
+    </div>
   );
 };
 

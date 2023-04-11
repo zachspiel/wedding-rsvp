@@ -1,20 +1,21 @@
 import React from "react";
 import { createStyles, Overlay, Container, Title, Text } from "@mantine/core";
-import engagement from "../../images/engagement.jpg";
+import jumbotronImage from "../../images/jumbotron.jpg";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: "relative",
     paddingTop: 700,
     paddingBottom: 100,
-    backgroundImage: `url(${engagement})`,
+    backgroundImage: `url(${jumbotronImage})`,
     backgroundSize: "cover",
     backgroundAttachment: "fixed",
 
-    "@media (max-width: 520px)": {
+    [theme.fn.smallerThan("md")]: {
       paddingTop: 100,
       paddingBottom: 20,
       backgroundSize: "contain",
+      backgroundPositionY: "65px",
     },
   },
 
@@ -80,7 +81,7 @@ const Jumbotron = (): JSX.Element => {
           className={classes.description}
           sx={(theme) => ({ fontFamily: `Poppins, sans-serif` })}
         >
-          10.12.24
+          10.26.24
         </Text>
       </div>
     </div>

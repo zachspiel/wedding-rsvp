@@ -1,6 +1,6 @@
 import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 import { IconPencil } from "@tabler/icons";
 import { ref, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
@@ -35,13 +35,13 @@ const EditImage = (props: Props): JSX.Element => {
       const path = image.replace(".", "");
       set(ref(database, "admin/captions/" + path), updatedCaption);
       set(ref(database, "admin/enabledImages/"), updatedImages);
-      showNotification({
+      notifications.show({
         message: `Successfully updated!`,
         color: "green",
       });
       setOpened(false);
     } catch (error) {
-      showNotification({
+      notifications.show({
         message: `${error}`,
         color: "red",
       });
@@ -49,14 +49,14 @@ const EditImage = (props: Props): JSX.Element => {
   };
 
   const onSuccessfulDelete = (): void => {
-    showNotification({
+    notifications.show({
       message: "Successfully deleted image.",
       color: "green",
     });
   };
 
   const onDeletionError = (): void => {
-    showNotification({
+    notifications.show({
       message: "Error while deleting image. Try again later.",
       color: "red",
     });
