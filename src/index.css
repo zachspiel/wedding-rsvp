@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Brittany";
-  src: url("./fonts/BrittanySignature.ttf") format("truetype");
+  src: url("./assets/fonts/BrittanySignature.ttf") format("truetype");
 }
 
 body {

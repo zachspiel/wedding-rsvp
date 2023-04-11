@@ -16,7 +16,7 @@
     "@mantine/form": "^6.0.2",
     "@mantine/hooks": "^6.0.2",
     "@mantine/modals": "^6.0.2",
-    "@mantine/notifications": "^6.0.2",
+    "@mantine/notifications": "^6.0.7",
     "@mantine/tiptap": "^6.0.2",
     "@react-google-maps/api": "^2.17.1",
     "@tabler/icons": "^1.118.0",
@@ -42,13 +42,8 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.4",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -63,6 +58,15 @@
     ]
   },
   "devDependencies": {
-    "@types/react-json-to-csv": "^1.0.0"
+    "@types/react-json-to-csv": "^1.0.0",
+    "@types/uuid": "^9.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.7"
   }
 }

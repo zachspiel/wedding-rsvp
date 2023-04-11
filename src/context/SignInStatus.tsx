@@ -1,11 +1,12 @@
+import React from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
-import { auth } from "../features/database/database";
+import { auth } from "../database/database";
 import { FcProps } from "../types/fcProps";
 import { SignInStatusContextType } from "../types/SignInStatusContext";
 
 export const SignInStatusContext = createContext<SignInStatusContextType | undefined>(
-  undefined
+  undefined,
 );
 
 const SignInStatusProvider = (props: FcProps): JSX.Element => {

@@ -1,3 +1,4 @@
+import React from "react";
 import { createContext, useState } from "react";
 import { AdminContextType } from "../types/AdminContextType";
 import { FcProps } from "../types/fcProps";
