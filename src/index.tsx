@@ -3,24 +3,24 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { MantineProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import SignInStatusProvider from "./context/SignInStatus";
 import AdminViewProvider from "./context/AdminView";
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+
 root.render(
   <React.StrictMode>
     <MantineProvider withNormalizeCSS withGlobalStyles>
-      <NotificationsProvider position="top-right">
-        <SignInStatusProvider>
-          <AdminViewProvider>
-            <App />
-          </AdminViewProvider>
-        </SignInStatusProvider>
-      </NotificationsProvider>
+      <Notifications position="top-right" />
+      <SignInStatusProvider>
+        <AdminViewProvider>
+          <App />
+        </AdminViewProvider>
+      </SignInStatusProvider>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function
