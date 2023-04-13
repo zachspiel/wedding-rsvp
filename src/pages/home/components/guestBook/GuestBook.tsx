@@ -1,15 +1,23 @@
 import React from "react";
 import { Button, Container, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ref, push, set, onValue } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 import { database } from "../../../../database/database";
 import GuestBookMessage from "./GuestBookMessage";
 import SectionTitle from "../../../../components/common/SectionTitle";
+import { v4 as uuidv4 } from "uuid";
+import {
+  showCustomFailureNotification,
+  showSuccessNotification,
+} from "../../../../components/notifications/notifications";
+import { saveNewMessageLocally } from "./util";
 
 export interface GuestMessage {
+  id: string;
   name: string;
   email: string;
   message: string;
+  isVisible: boolean;
   createdAt?: string;
   editedAt?: string;
 }
@@ -18,18 +26,21 @@ const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
 
   React.useEffect(() => {
-    const messagesRef = ref(database, "guestBook/");
+    const messagesRef = ref(database, "guestBookNew/");
     onValue(messagesRef, (snapshot) => {
-      const data = snapshot.val();
+      const data = snapshot.val() ?? {};
+      console.log(data);
       setMessages(Object.values(data));
     });
   }, []);
 
   const form = useForm({
     initialValues: {
+      id: uuidv4(),
       name: "",
       email: "",
       message: "",
+      isVisible: true,
     },
     validate: {
       name: (value) => value.trim().length < 2,
@@ -38,15 +49,21 @@ const GuestBook = (): JSX.Element => {
     },
   });
 
-  const saveMessage = ({ name, email, message }: GuestMessage): void => {
-    const postListRef = ref(database, "guestBook");
-    const newPostRef = push(postListRef);
-    set(newPostRef, {
-      name,
-      email,
-      message,
-      createdAt: new Date().toISOString(),
-    });
+  const saveMessage = (): void => {
+    const { id } = form.values;
+    console.log(id);
+    const newMessageRef = ref(database, `guestBookNew/${id}`);
+    set(newMessageRef, { ...form.values, createdAt: new Date().toISOString() })
+      .then(() => {
+        showSuccessNotification("Successfully signed guest book 🖊️!");
+        saveNewMessageLocally(id);
+      })
+      .catch(() => {
+        showCustomFailureNotification(
+          "An error occured while signing the guest book. Please try again later!",
+        );
+      });
+
     form.reset();
   };
 
@@ -54,7 +71,7 @@ const GuestBook = (): JSX.Element => {
     <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
       <Container sx={{ padding: "0" }}>
         <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
-          <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
+          <form onSubmit={form.onSubmit(() => saveMessage())}>
             <SimpleGrid cols={1}>
               <SectionTitle title="Guest Book" id="guestBook" />
 
@@ -94,9 +111,11 @@ const GuestBook = (): JSX.Element => {
             </SimpleGrid>
           </form>
 
-          {messages.map((message, index) => (
-            <GuestBookMessage key={index} index={index} messages={messages} />
-          ))}
+          {messages
+            .filter((message) => message.isVisible)
+            .map((message) => (
+              <GuestBookMessage key={message.id} message={message} />
+            ))}
         </SimpleGrid>
       </Container>
     </Container>

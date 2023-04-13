@@ -2,7 +2,7 @@ import React from "react";
 import { weddingDateString } from "./components/easterEggs";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./database/database";
-import { createBrowserRouter, RouterProvider, useLocation } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GuestList from "./pages/guestList/GuestList";
 import TrackRsvps from "./pages/rsvps/TrackRsvps";
 import Home from "./pages/home/Home";
@@ -29,7 +29,6 @@ const router = createBrowserRouter([
 
 function App(): JSX.Element {
   const { REACT_APP_EMAIL, REACT_APP_PASS } = process.env;
-  const location = useLocation();
 
   React.useEffect(() => {
     console.log(weddingDateString);
@@ -47,9 +46,9 @@ function App(): JSX.Element {
 
   return (
     <>
-      <Navbar showHome={location.pathname.length > 0} />
+      <Navbar />
       <RouterProvider router={router} />
-      <Navbar footer />
+      <Navbar />
     </>
   );
 }

@@ -4,10 +4,10 @@ import AdminViewToggle from "../../components/common/AdminViewToggle";
 import FlowerImage from "../../components/common/FlowerImage";
 import Gallery from "./components/gallery/Gallery";
 import GuestBook from "./components/guestBook/GuestBook";
-import RsvpForm from "./components/guestRsvpForm/GuestRsvpForm";
 import WhenAndWhere from "./components/whenAndWhere/WhenAndWhere";
 import useSignInStatus from "../../hooks/signInStatus";
 import Jumbotron from "./components/Jumbotron";
+import RsvpSection from "./components/guestRsvpForm/RsvpSection";
 
 const Home = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
@@ -20,7 +20,7 @@ const Home = (): JSX.Element => {
 
       <Container>
         <SimpleGrid cols={1}>
-          <RsvpForm />
+          <RsvpSection />
         </SimpleGrid>
       </Container>
 

@@ -1,15 +1,27 @@
 import React, { useState } from "react";
-import { createStyles, Group, Text, Flex, TextInput, Button, Card } from "@mantine/core";
+import {
+  createStyles,
+  Group,
+  Text,
+  Flex,
+  Button,
+  Card,
+  Textarea,
+  ActionIcon,
+} from "@mantine/core";
 import { GuestMessage } from "./GuestBook";
 import { useForm } from "@mantine/form";
 import { ref, set } from "firebase/database";
 import { database } from "../../../../database/database";
-import { notifications } from "@mantine/notifications";
-import { IconTrash } from "@tabler/icons";
+import { IconPencil, IconTrash } from "@tabler/icons";
+import { getLocalMessages } from "./util";
+import {
+  showCustomFailureNotification,
+  showSuccessNotification,
+} from "../../../../components/notifications/notifications";
 
 interface Props {
-  index: number;
-  messages: GuestMessage[];
+  message: GuestMessage;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -30,89 +42,110 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const GuestBookMessage = (props: Props): JSX.Element => {
-  const { index, messages } = props;
-  const guestBookEntry = messages[index];
-
+  const { message } = props;
+  const localMessages = getLocalMessages();
+  const isEditable = localMessages.includes(message.id);
   const [isEditing, setIsEditing] = useState(false);
   const { classes } = useStyles();
 
   const form = useForm({
-    initialValues: { message: guestBookEntry.message },
+    initialValues: message,
 
     validate: {
       message: (value) => value.length === 0,
     },
   });
 
-  const updateMessage = (updatedMessage: string): void => {
-    const updatedMessages = messages.map((message) => message);
-    updatedMessages[index] = {
-      ...updatedMessages[index],
-      message: updatedMessage,
+  const updateMessage = (updatedEntry: string): void => {
+    let updatedMessage = [message].map((item) => item)[0];
+
+    updatedMessage = {
+      ...updatedMessage,
+      message: updatedEntry,
       editedAt: new Date().toISOString(),
     };
 
-    const guestBookRef = ref(database, "guestBook/");
+    const messageRef = ref(database, `guestBookNew/${message.id}`);
 
-    try {
-      set(guestBookRef, [...updatedMessages]);
-      notifications.show({
-        message: `Successfully updated!`,
-        color: "green",
+    set(messageRef, updatedMessage)
+      .then(() => {
+        showSuccessNotification("Successfully updated the message!");
+      })
+      .catch(() => {
+        showCustomFailureNotification(
+          "An error occured while updating the message. Please try again later.",
+        );
       });
-    } catch (error) {
-      notifications.show({
-        message: `${error}`,
-        color: "red",
-      });
-    }
 
     setIsEditing(false);
   };
 
+  const deleteMessage = (): void => {
+    const messageRef = ref(database, `guestBookNew/${message.id}`);
+
+    set(messageRef, { ...message, isVisible: false })
+      .then(() => {
+        showSuccessNotification("Successfully deleted the message!");
+      })
+      .catch(() => {
+        showCustomFailureNotification(
+          "An error occured while deleting the message. Please try again later.",
+        );
+      });
+  };
+
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
-      <Group position="apart" mt="md" mb="xs">
-        {!isEditing && (
+      {!isEditing && (
+        <Group position="apart" mt="md" mb="xs">
           <div className={classes.content} style={{ fontFamily: `Poppins, sans-serif` }}>
-            {`"${guestBookEntry.message}"`}
+            {`"${message.message}"`}
           </div>
-        )}
-        {isEditing && (
-          <form onSubmit={form.onSubmit(() => updateMessage(form.values.message))}>
-            <TextInput
-              placeholder="Enter message"
-              required
-              {...form.getInputProps("message")}
-            />
-            <Group position="left" mt="xl">
-              <Button
-                size="md"
-                onClick={(): void => setIsEditing(false)}
-                variant="subtle"
-              >
-                Cancel
-              </Button>
-              <Button type="submit" size="md">
-                Save
-              </Button>
-            </Group>
-          </form>
-        )}
 
-        <Text color="dimmed">
-          <IconTrash size={20} />
-        </Text>
-      </Group>
+          {isEditable && (
+            <ActionIcon onClick={deleteMessage}>
+              <IconTrash size={20} onClick={deleteMessage} />
+            </ActionIcon>
+          )}
+        </Group>
+      )}
+
+      {isEditing && (
+        <form onSubmit={form.onSubmit(() => updateMessage(form.values.message))}>
+          <Textarea
+            mt="md"
+            label="Message"
+            placeholder="Leave a message"
+            maxRows={10}
+            minRows={5}
+            autosize
+            required
+            name="message"
+            {...form.getInputProps("message")}
+          />
+
+          <Group position="right" mt="md">
+            <Button size="md" onClick={(): void => setIsEditing(false)} variant="subtle">
+              Cancel
+            </Button>
+            <Button type="submit" size="md">
+              Save
+            </Button>
+          </Group>
+        </form>
+      )}
       <Group>
         <div>
           <Flex>
             <Text size="xs" color="dimmed">
-              by {guestBookEntry.name} -{" "}
-              {new Date(guestBookEntry.createdAt ?? "").toDateString()}
+              by {message.name} - {new Date(message.createdAt ?? "").toDateString()}
             </Text>
 
-            {/*<IconPencil size={16} style={{ marginLeft: "0.5rem" }} onClick={(): void => setIsEditing(!isEditing)}/>*/}
+            {isEditable && (
+              <ActionIcon onClick={(): void => setIsEditing(!isEditing)}>
+                <IconPencil size={16} style={{ marginLeft: "0.5rem" }} />
+              </ActionIcon>
+            )}
           </Flex>
         </div>
       </Group>

@@ -16,4 +16,16 @@ const showFailureNotification = (): void => {
   });
 };
 
-export { showSuccessNotification, showFailureNotification };
+const showCustomFailureNotification = (message: string): void => {
+  notifications.show({
+    title: "Error",
+    message,
+    color: "red",
+  });
+};
+
+export {
+  showSuccessNotification,
+  showFailureNotification,
+  showCustomFailureNotification,
+};
