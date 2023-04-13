@@ -6,6 +6,11 @@
   src: url("./assets/fonts/BrittanySignature.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Seasons";
+  src: url("./assets/fonts/TheSeasons.otf") format("opentype");
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",

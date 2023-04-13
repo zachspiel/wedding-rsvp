@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Carousel } from "@mantine/carousel";
-import { useMantineTheme } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { onValue, ref } from "firebase/database";
 import { listAll, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../../../database/database";
@@ -16,7 +14,6 @@ export interface Captions {
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const theme = useMantineTheme();
   const [captions, setCaptions] = useState<Captions>({});
   const [images, setAvailableImages] = useState<string[]>([]);
   const [enabledImages, setEnabledImges] = useState<string[]>([]);
@@ -48,7 +45,6 @@ const Gallery = (): JSX.Element => {
     });
   }, []);
 
-  const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
   const availableImages = isAdminViewEnabled
     ? images
     : images.filter((image) => enabledImages.includes(image));
@@ -78,7 +74,7 @@ const Gallery = (): JSX.Element => {
         pb="xl"
         align="start"
         withIndicators
-        slidesToScroll={mobile ? 1 : 2}
+        slidesToScroll={1}
       >
         {slides}
       </Carousel>
