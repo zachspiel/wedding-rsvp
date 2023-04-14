@@ -1,14 +1,22 @@
 import React from "react";
-import { Button, Divider, Group as MGroup, Radio, Text } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Divider,
+  Flex,
+  Group as MGroup,
+  Stepper,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { ref, set } from "@firebase/database";
 import { database } from "../../../../database/database";
 import { Group, RsvpResonse } from "../../../../types/Guest";
-import { useForm } from "@mantine/form";
-import {
-  showFailureNotification,
-  showSuccessNotification,
-} from "../../../../components/notifications/notifications";
+import { isEmail, isNotEmpty, useForm } from "@mantine/form";
+import { showFailureNotification } from "../../../../components/notifications/notifications";
 import MailingAddressForm from "../../../guestList/components/AddGuestForm/MailingAddressForm";
+import UnknownGuestInput from "./UnknownGuestInput";
+import RsvpSelection from "./RsvpSelection";
 
 interface Props {
   selectedGroup: Group;
@@ -16,85 +24,134 @@ interface Props {
 
 const RsvpForm = (props: Props): JSX.Element => {
   const { selectedGroup } = props;
+  const [currentStep, setCurrentStep] = React.useState(0);
 
   const form = useForm<Group>({
     initialValues: selectedGroup,
-
     validate: {
-      address1: (value) => (value.length === 0 ? "Address cannot be empty" : null),
-      city: (value) => (value.length === 0 ? "City cannot be empty" : null),
-      state: (value) => (value.length === 0 ? "State cannot be empty" : null),
-      postal: (value) => (value.length === 0 ? "Zip Code cannot be empty" : null),
-      phone: (value) => (value.length === 0 ? "Phone cannot be empty" : null),
-      email: (value) => {
-        if (value.length === 0) {
-          return "Email cannot be empty";
-        } else if (!/^\S+@\S+$/.test(value)) {
-          return "Invalid email";
-        }
+      address1: isNotEmpty("Address cannot be empty"),
+      city: isNotEmpty("City cannot be empty"),
+      state: isNotEmpty("State cannot be empty"),
+      postal: isNotEmpty("Zip Code cannot be empty"),
+      country: isNotEmpty("Country cannot be empty"),
+      phone: isNotEmpty("Phone cannot be empty"),
+      email: isEmail("Email is not valid"),
+      guests: {
+        firstName: (value, values, path) =>
+          isNameInvalid(value, values, path) ? "Please enter a first name" : null,
+        lastName: (value, values, path) =>
+          isNameInvalid(value, values, path) ? "Please enter a last name" : null,
       },
     },
   });
 
   React.useEffect(() => {
-    const group = [selectedGroup].map((group) => group)[0];
-    group.guests = group.guests.map((guest) => {
-      return {
-        ...guest,
-        rsvp:
-          guest.rsvp === RsvpResonse.NO_RESPONSE
-            ? RsvpResonse.ACCEPTED
-            : RsvpResonse.DECLINED,
-      };
+    form.values.guests.forEach((guest, guestIndex) => {
+      if (guest.rsvp === RsvpResonse.NO_RESPONSE) {
+        form.setFieldValue(`guests.${guestIndex}.rsvp`, RsvpResonse.ACCEPTED);
+      }
     });
+  }, []);
 
-    form.setValues(group);
-    form.validate();
-    form.resetDirty();
-  }, [selectedGroup]);
+  const isNameInvalid = (value: string, group: Group, path: string): boolean => {
+    const index = Number(path.split(".")[1]);
+
+    if (group.guests[index].rsvp === RsvpResonse.ACCEPTED) {
+      return value.length === 0;
+    }
+
+    return false;
+  };
 
   const handleSubmit = (): void => {
     const groupRef = ref(database, `groups/${selectedGroup.id}`);
 
+    form.values.guests.forEach((guest, index) => {
+      if (guest.nameUnknown && guest.rsvp === RsvpResonse.ACCEPTED) {
+        form.setFieldValue(`guests.${index}.nameUnknown`, false);
+      }
+    });
+
     set(groupRef, { ...form.values })
       .then(() => {
-        showSuccessNotification("Your response has been saved successfully!");
+        nextStep();
       })
       .catch(() => {
         showFailureNotification();
       });
   };
 
+  const nextStep = (): void =>
+    setCurrentStep((current) => {
+      if (
+        (current === 0 && !form.isValid("guests")) ||
+        (current !== 0 && form.validate().hasErrors)
+      ) {
+        return current;
+      }
+      return current < 3 ? current + 1 : current;
+    });
+
+  const prevStep = (): void => {
+    setCurrentStep((current) => (current > 0 ? current - 1 : current));
+  };
+
   return (
     <>
-      {selectedGroup.guests.map((guest, guestIndex) => (
-        <>
-          <Divider my="sm" />
-          <MGroup position="apart">
-            <Text>
-              {guest.firstName} {guest.lastName}
-            </Text>
-            <Radio.Group
-              name={`rsvp-${guestIndex}`}
-              {...form.getInputProps(`guests.${guestIndex}.rsvp`)}
-            >
-              <MGroup mt="xs">
-                <Radio value={RsvpResonse.ACCEPTED} label="Will Attend" />
-                <Radio value={RsvpResonse.DECLINED} label="Will Not Attend" />
+      <Stepper active={currentStep} breakpoint="sm">
+        <Stepper.Step label="RSVP">
+          {form.values.guests.map((guest, guestIndex) => (
+            <Flex direction="column" key={guestIndex}>
+              <Divider my="sm" />
+              <MGroup position="apart">
+                <Text>
+                  {guest.nameUnknown && "Guest name unknown"}
+                  {!guest.nameUnknown && `${guest.firstName} ${guest.lastName}`}
+                </Text>
+                <RsvpSelection form={form} guestIndex={guestIndex} />
               </MGroup>
-            </Radio.Group>
-          </MGroup>
+              {guest.nameUnknown &&
+                form.values.guests[guestIndex].rsvp === RsvpResonse.ACCEPTED && (
+                  <UnknownGuestInput form={form} index={guestIndex} />
+                )}
+              {guestIndex === Object.keys(form.values.guests).length - 1 && (
+                <Divider my="sm" key={`divider-bottom-${guestIndex}`} />
+              )}
+            </Flex>
+          ))}
+        </Stepper.Step>
 
-          <MailingAddressForm form={form} />
-          {guestIndex === selectedGroup.guests.length - 1 && (
-            <Divider my="sm" key="divider-bottom" />
-          )}
-        </>
-      ))}
-      <MGroup position="right" mb="lg">
-        <Button onClick={handleSubmit} disabled={!form.isValid()}>
-          Save
-        </Button>
+        <Stepper.Step label="Contact Information">
+          <MailingAddressForm form={form} openTabsByDefault />
+        </Stepper.Step>
+
+        <Stepper.Step label="Additional Information">
+          <TextInput
+            label="Dietary Restrictions"
+            placeholder="Please enter any dietary restrictions"
+            {...form.getInputProps("dietaryRestrictions")}
+          />
+        </Stepper.Step>
+        <Stepper.Completed>
+          <Alert title="Success!" color="teal" variant="filled">
+            Your reservation has been completed successfully, feel free to come back here
+            and edit it anytime before the wedding!
+          </Alert>
+        </Stepper.Completed>
+      </Stepper>
+
+      <MGroup position="right" mt="xl">
+        {currentStep > 0 && currentStep < 3 && (
+          <Button variant="default" onClick={prevStep}>
+            Back
+          </Button>
+        )}
+        {currentStep < 2 && <Button onClick={nextStep}>Next step</Button>}
+        {currentStep === 2 && (
+          <Button onClick={handleSubmit} disabled={!form.isValid()}>
+            Save
+          </Button>
+        )}
       </MGroup>
     </>
   );

@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons";
 import WeddingCountdown from "./Countdown";
 import Map from "./Map";
+import SectionTitle from "../../../../components/common/SectionTitle";
 
 const WhenAndWhere = (): JSX.Element => {
   const createListItem = (label: string, icon: TablerIcon): JSX.Element => {
@@ -24,20 +25,8 @@ const WhenAndWhere = (): JSX.Element => {
   return (
     <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
       <Container sx={{ padding: "0" }}>
-        <SimpleGrid cols={1}>
-          <Title
-            order={2}
-            size="h1"
-            sx={(theme): Record<string, string> => ({
-              fontFamily: `Poppins, sans-serif`,
-              paddingTop: "2rem",
-            })}
-            weight={900}
-            align="left"
-            id="whenAndWhere"
-          >
-            When & Where
-          </Title>
+        <SimpleGrid cols={1} pt="lg">
+          <SectionTitle id="whenAndWhere" title="When and Where" />
           <List spacing="xs" size="sm" center>
             {createListItem("October 26th, 2024", IconCalendarEvent)}
             {createListItem("The Wright House", IconBuildingCottage)}

@@ -35,6 +35,9 @@ const SearchForGuest = (): JSX.Element => {
   }, []);
 
   const getSearchResults = (): void => {
+    setSelectedGroup(undefined);
+    setSearchResults([]);
+
     const filteredResults = groups.filter(
       (group) =>
         group.guests.filter((guest) => guestMatchesSearch(searchValue, guest)).length > 0,
@@ -61,32 +64,45 @@ const SearchForGuest = (): JSX.Element => {
           required
           placeholder="First and Last name"
           description="Ex. Zachary Spielberger (not The Spielberger Family or Dr. & Mr. Spielberger)"
+          onKeyPress={(e): void => {
+            if (e.key === "Enter") {
+              getSearchResults();
+            }
+          }}
         />
         <Button mt={error ? 0 : "lg"} onClick={getSearchResults}>
           Continue
         </Button>
       </MGroup>
-      {searchResults.length > 0 && (
+      {selectedGroup === undefined && searchResults.length > 0 && (
         <Text>Select your info below or try searching again.</Text>
       )}
       {selectedGroup === undefined &&
         searchResults.map((group, index) => (
-          <>
-            <Divider my="sm" key={`divider-${index}`} />
+          <Flex direction="column" key={group.id}>
+            <Divider my="sm" />
             <MGroup position="apart" key={`group-${index}`}>
               <Flex direction="column">
                 {group.guests.map((guest, guestIndex) => (
                   <Text key={`group-${index}-guest-${guestIndex}`}>
+                    {guest.nameUnknown && "Guest name unknown"}
                     {guest.firstName} {guest.lastName}
                   </Text>
                 ))}
               </Flex>
-              <Button onClick={(): void => setSelectedGroup(group)}>Select</Button>
+              <Button
+                onClick={(): void => {
+                  setSelectedGroup(group);
+                  setSearchValue("");
+                }}
+              >
+                Select
+              </Button>
             </MGroup>
             {index === Object.keys(searchResults).length - 1 && (
               <Divider my="sm" key={`divider-bottom-${index}`} />
             )}
-          </>
+          </Flex>
         ))}
       {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
     </>

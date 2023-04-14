@@ -78,7 +78,6 @@ const Navbar = (props: Props): JSX.Element => {
             <Menu trigger="hover" withinPortal>
               <Menu.Target>
                 <Anchor<"a">
-                  color="dimmed"
                   size="sm"
                   href="/guestList"
                   className={classes.guestListDropdown}
@@ -91,12 +90,12 @@ const Navbar = (props: Props): JSX.Element => {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item>
-                  <Anchor<"a"> color="dimmed" href="/guestList" size="sm">
+                  <Anchor<"a"> href="/guestList" size="sm">
                     MANAGE GUEST LIST
                   </Anchor>
                 </Menu.Item>
                 <Menu.Item>
-                  <Anchor<"a"> color="dimmed" href="/rsvps" size="sm">
+                  <Anchor<"a"> href="/rsvps" size="sm">
                     TRACK RSVPs
                   </Anchor>
                 </Menu.Item>

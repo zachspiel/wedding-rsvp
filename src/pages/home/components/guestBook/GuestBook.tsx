@@ -29,7 +29,6 @@ const GuestBook = (): JSX.Element => {
     const messagesRef = ref(database, "guestBookNew/");
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val() ?? {};
-      console.log(data);
       setMessages(Object.values(data));
     });
   }, []);
@@ -51,7 +50,6 @@ const GuestBook = (): JSX.Element => {
 
   const saveMessage = (): void => {
     const { id } = form.values;
-    console.log(id);
     const newMessageRef = ref(database, `guestBookNew/${id}`);
     set(newMessageRef, { ...form.values, createdAt: new Date().toISOString() })
       .then(() => {

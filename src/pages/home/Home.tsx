@@ -18,19 +18,23 @@ const Home = (): JSX.Element => {
       <WhenAndWhere />
       <FlowerImage />
 
-      <Container>
-        <SimpleGrid cols={1}>
-          <RsvpSection />
-        </SimpleGrid>
+      <Container fluid>
+        <Container sx={{ padding: "0" }}>
+          <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
+            <RsvpSection />
+          </SimpleGrid>
+        </Container>
       </Container>
 
       <GuestBook />
       <FlowerImage />
 
-      <Container>
-        <SimpleGrid cols={1}>
-          <Gallery />
-        </SimpleGrid>
+      <Container fluid>
+        <Container sx={{ padding: "0" }}>
+          <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
+            <Gallery />
+          </SimpleGrid>
+        </Container>
       </Container>
 
       {isSignedIn && <AdminViewToggle />}

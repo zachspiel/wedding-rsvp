@@ -12,6 +12,7 @@ const GuestsColumn = (props: Props): JSX.Element => {
   const secondaryGuests = guests.slice(1);
   const listItems = secondaryGuests.map((guest, index) => (
     <List.Item key={index}>
+      {guest.nameUnknown && "Guest"}
       {guest.firstName} {guest.lastName}
     </List.Item>
   ));
