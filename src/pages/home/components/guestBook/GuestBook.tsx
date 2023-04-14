@@ -26,7 +26,7 @@ const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
 
   React.useEffect(() => {
-    const messagesRef = ref(database, "guestBookNew/");
+    const messagesRef = ref(database, "guestBook/");
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val() ?? {};
       setMessages(Object.values(data));
@@ -50,10 +50,10 @@ const GuestBook = (): JSX.Element => {
 
   const saveMessage = (): void => {
     const { id } = form.values;
-    const newMessageRef = ref(database, `guestBookNew/${id}`);
+    const newMessageRef = ref(database, `guestBook/${id}`);
     set(newMessageRef, { ...form.values, createdAt: new Date().toISOString() })
       .then(() => {
-        showSuccessNotification("Successfully signed guest book 🖊️!");
+        showSuccessNotification("Successfully signed the guest book!");
         saveNewMessageLocally(id);
       })
       .catch(() => {
