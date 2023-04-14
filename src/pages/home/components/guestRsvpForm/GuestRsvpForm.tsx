@@ -129,6 +129,7 @@ const RsvpForm = (props: Props): JSX.Element => {
           <TextInput
             label="Dietary Restrictions"
             placeholder="Please enter any dietary restrictions"
+            {...form.getInputProps("dietaryRestrictions")}
           />
         </Stepper.Step>
         <Stepper.Completed>
