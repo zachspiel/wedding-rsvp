@@ -6,13 +6,16 @@ import { countries } from "./countries";
 
 interface Props {
   form: UseFormReturnType<Group>;
+  openTabsByDefault?: boolean;
 }
 
 const MailingAddressForm = (props: Props): JSX.Element => {
-  const { form } = props;
+  const { form, openTabsByDefault } = props;
+  const openAllTabs = openTabsByDefault ?? false;
+  const defaultValue = openAllTabs ? ["mailing", "contact"] : ["mailing"];
 
   return (
-    <Accordion defaultValue="mailing" variant="separated" mt="xl">
+    <Accordion defaultValue={defaultValue} variant="separated" mt="xl" multiple>
       <Accordion.Item value="mailing">
         <Accordion.Control>Mailing Address</Accordion.Control>
         <Accordion.Panel>

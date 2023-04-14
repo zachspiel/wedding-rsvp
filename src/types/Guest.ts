@@ -13,6 +13,7 @@ export interface Group {
   invited: boolean;
   message: string;
   saveTheDateSent: boolean;
+  dietaryRestrictions: string;
   guests: Guest[];
 }
 
@@ -20,6 +21,7 @@ export interface Guest {
   title: string;
   firstName: string;
   lastName: string;
+  nameUnknown: boolean;
   rsvp: RsvpResonse;
   relationshipType: RelationshipType;
 }

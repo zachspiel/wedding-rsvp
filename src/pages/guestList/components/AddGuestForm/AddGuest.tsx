@@ -15,19 +15,19 @@ import MailingAddressForm from "./MailingAddressForm";
 import { ref, set } from "@firebase/database";
 import GuestAffiliationSelection from "./GuestAffiliationSelection";
 import { useDisclosure } from "@mantine/hooks";
-import { v4 as uuidv4 } from "uuid";
 import {
   showSuccessNotification,
   showFailureNotification,
 } from "../../../../components/notifications/notifications";
 import { database } from "../../../../database/database";
 import {
-  RsvpResonse,
   RelationshipType,
-  GuestAffiliation,
   Group,
+  GuestAffiliation,
+  RsvpResonse,
 } from "../../../../types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
+import { v4 as uuidv4 } from "uuid";
 
 const DEFAULT_GROUP: Group = {
   id: uuidv4(),
@@ -38,6 +38,7 @@ const DEFAULT_GROUP: Group = {
       title: "",
       firstName: "",
       lastName: "",
+      nameUnknown: false,
       rsvp: RsvpResonse.NO_RESPONSE,
       relationshipType: RelationshipType.PRIMARY,
     },
@@ -50,6 +51,7 @@ const DEFAULT_GROUP: Group = {
   postal: "",
   country: "",
   message: "",
+  dietaryRestrictions: "",
   invited: true,
   inviteSent: false,
   saveTheDateSent: false,
@@ -64,11 +66,20 @@ const AddGuest = (): JSX.Element => {
     initialValues: DEFAULT_GROUP,
     validate: {
       guests: {
-        firstName: (value: string) => value.length < 2,
-        lastName: (value: string) => value.length < 2,
+        firstName: (value, group, path) => isNameInvalid(value, group, path),
+        lastName: (value, group, path) => isNameInvalid(value, group, path),
       },
     },
   });
+
+  const isNameInvalid = (value: string, values: Group, path: string): boolean => {
+    const index = Number(path.split(".")[1]);
+    if (!values.guests[index].nameUnknown) {
+      return value.length === 0;
+    }
+
+    return false;
+  };
 
   React.useEffect(() => {
     if (groupType === "single") {

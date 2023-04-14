@@ -23,7 +23,6 @@ interface Props {
 const GuestInput = (props: Props): JSX.Element => {
   const { form, groupType, index } = props;
   const { CHILD, PARTNER, PRIMARY } = RelationshipType;
-  const [nameUnknown, setNameUnknown] = React.useState(false);
   const { guests } = form.values;
   const guest = guests[index];
   const firstChildInGroupIndex = guests.findIndex(
@@ -56,7 +55,7 @@ const GuestInput = (props: Props): JSX.Element => {
               placeholder="Select..."
               name="title"
               allowDeselect
-              disabled={nameUnknown}
+              disabled={guest.nameUnknown}
               data={[
                 { value: "Mr.", label: "Mr." },
                 { value: "Mrs.", label: "Mrs." },
@@ -73,8 +72,8 @@ const GuestInput = (props: Props): JSX.Element => {
         <Grid.Col span={4}>
           <TextInput
             label={index === 0 ? "First Name" : ""}
-            placeholder={nameUnknown ? "" : "First Name"}
-            disabled={nameUnknown}
+            placeholder={guest.nameUnknown ? "" : "First Name"}
+            disabled={guest.nameUnknown}
             name="firstName"
             required
             {...form.getInputProps(`guests.${index}.firstName`)}
@@ -83,8 +82,8 @@ const GuestInput = (props: Props): JSX.Element => {
         <Grid.Col span={4}>
           <TextInput
             label={index === 0 ? "Last Name" : ""}
-            placeholder={nameUnknown ? "" : "Last Name"}
-            disabled={nameUnknown}
+            placeholder={guest.nameUnknown ? "" : "Last Name"}
+            disabled={guest.nameUnknown}
             name="lastName"
             required
             {...form.getInputProps(`guests.${index}.lastName`)}
@@ -114,7 +113,7 @@ const GuestInput = (props: Props): JSX.Element => {
         <Switch
           mt="lg"
           label="Name Unknown"
-          onChange={(event): void => setNameUnknown(event.currentTarget.checked)}
+          {...form.getInputProps(`guests.${index}.nameUnknown`)}
         />
       )}
       {index === guests.length - 1 && groupType === "family" && (
