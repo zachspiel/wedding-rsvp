@@ -43,7 +43,7 @@ const GalleryImage = (props: Props): JSX.Element => {
     getDownloadURL(pathReference).then((url) => {
       setUrl(url);
     });
-  }, [image]);
+  }, []);
 
   const getStatusIcon = (): JSX.Element => {
     return enabledImages.includes(image) ? (
