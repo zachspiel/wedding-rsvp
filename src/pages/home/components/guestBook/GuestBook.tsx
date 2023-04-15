@@ -57,7 +57,7 @@ const GuestBook = (): JSX.Element => {
     const newMessageRef = ref(database, `guestBook/${id}`);
     set(newMessageRef, { ...form.values, createdAt: new Date().toISOString() })
       .then(() => {
-        showSuccessNotification("Successfully signed guest book 🖊️!");
+        showSuccessNotification("Successfully signed guest book!");
         setLocalMessages([...localMessages, id]);
       })
       .catch(() => {
