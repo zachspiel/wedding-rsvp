@@ -65,7 +65,7 @@ const GuestBookMessage = (props: Props): JSX.Element => {
       editedAt: new Date().toISOString(),
     };
 
-    const messageRef = ref(database, `guestBookNew/${message.id}`);
+    const messageRef = ref(database, `guestBook/${message.id}`);
 
     set(messageRef, updatedMessage)
       .then(() => {
@@ -81,7 +81,7 @@ const GuestBookMessage = (props: Props): JSX.Element => {
   };
 
   const deleteMessage = (): void => {
-    const messageRef = ref(database, `guestBookNew/${message.id}`);
+    const messageRef = ref(database, `guestBook/${message.id}`);
 
     set(messageRef, { ...message, isVisible: false })
       .then(() => {
