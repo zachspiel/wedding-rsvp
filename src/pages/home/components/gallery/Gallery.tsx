@@ -25,7 +25,7 @@ const Gallery = (): JSX.Element => {
     listAll(imagesRef).then((result) => {
       setAvailableImages(result.items.map((item) => item.name));
     });
-  }, [imagesRef]);
+  }, []);
 
   React.useEffect(() => {
     onValue(captionsRef, (snapshot) => {

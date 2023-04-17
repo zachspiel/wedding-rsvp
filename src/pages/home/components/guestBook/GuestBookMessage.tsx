@@ -1,27 +1,13 @@
 import React, { useState } from "react";
-import {
-  createStyles,
-  Group,
-  Text,
-  Flex,
-  Button,
-  Card,
-  Textarea,
-  ActionIcon,
-} from "@mantine/core";
+import { createStyles, Group, Text, Flex, Card, ActionIcon } from "@mantine/core";
 import { GuestMessage } from "./GuestBook";
-import { useForm } from "@mantine/form";
-import { ref, set } from "firebase/database";
-import { database } from "../../../../database/database";
-import { IconPencil, IconTrash } from "@tabler/icons";
-import { getLocalMessages } from "./util";
-import {
-  showCustomFailureNotification,
-  showSuccessNotification,
-} from "../../../../components/notifications/notifications";
+import { IconPencil } from "@tabler/icons";
+import EditMessage from "./components/EditMessage";
+import DeleteMessageButton from "./components/DeleteMessageButton";
 
 interface Props {
   message: GuestMessage;
+  localMessages: string[];
 }
 
 const useStyles = createStyles((theme) => ({
@@ -42,57 +28,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const GuestBookMessage = (props: Props): JSX.Element => {
-  const { message } = props;
-  const localMessages = getLocalMessages();
+  const { message, localMessages } = props;
   const isEditable = localMessages.includes(message.id);
   const [isEditing, setIsEditing] = useState(false);
   const { classes } = useStyles();
-
-  const form = useForm({
-    initialValues: message,
-
-    validate: {
-      message: (value) => value.length === 0,
-    },
-  });
-
-  const updateMessage = (updatedEntry: string): void => {
-    let updatedMessage = [message].map((item) => item)[0];
-
-    updatedMessage = {
-      ...updatedMessage,
-      message: updatedEntry,
-      editedAt: new Date().toISOString(),
-    };
-
-    const messageRef = ref(database, `guestBook/${message.id}`);
-
-    set(messageRef, updatedMessage)
-      .then(() => {
-        showSuccessNotification("Successfully updated the message!");
-      })
-      .catch(() => {
-        showCustomFailureNotification(
-          "An error occured while updating the message. Please try again later.",
-        );
-      });
-
-    setIsEditing(false);
-  };
-
-  const deleteMessage = (): void => {
-    const messageRef = ref(database, `guestBook/${message.id}`);
-
-    set(messageRef, { ...message, isVisible: false })
-      .then(() => {
-        showSuccessNotification("Successfully deleted the message!");
-      })
-      .catch(() => {
-        showCustomFailureNotification(
-          "An error occured while deleting the message. Please try again later.",
-        );
-      });
-  };
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -103,49 +42,27 @@ const GuestBookMessage = (props: Props): JSX.Element => {
           </div>
 
           {isEditable && (
-            <ActionIcon onClick={deleteMessage}>
-              <IconTrash size={20} onClick={deleteMessage} />
-            </ActionIcon>
+            <Flex>
+              <ActionIcon onClick={(): void => setIsEditing(!isEditing)} mr="md">
+                <IconPencil size={20} />
+              </ActionIcon>
+
+              <DeleteMessageButton message={message} />
+            </Flex>
           )}
         </Group>
       )}
 
       {isEditing && (
-        <form onSubmit={form.onSubmit(() => updateMessage(form.values.message))}>
-          <Textarea
-            mt="md"
-            label="Message"
-            placeholder="Leave a message"
-            maxRows={10}
-            minRows={5}
-            autosize
-            required
-            name="message"
-            {...form.getInputProps("message")}
-          />
-
-          <Group position="right" mt="md">
-            <Button size="md" onClick={(): void => setIsEditing(false)} variant="subtle">
-              Cancel
-            </Button>
-            <Button type="submit" size="md">
-              Save
-            </Button>
-          </Group>
-        </form>
+        <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
       )}
+
       <Group>
         <div>
           <Flex>
             <Text size="xs" color="dimmed">
-              by {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
             </Text>
-
-            {isEditable && (
-              <ActionIcon onClick={(): void => setIsEditing(!isEditing)}>
-                <IconPencil size={16} style={{ marginLeft: "0.5rem" }} />
-              </ActionIcon>
-            )}
           </Flex>
         </div>
       </Group>

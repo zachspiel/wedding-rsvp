@@ -17,7 +17,7 @@ const FirebaseImage = (props: Props): JSX.Element => {
     getDownloadURL(pathReference).then((url) => {
       setUrl(url);
     });
-  }, [image]);
+  }, []);
 
   return (
     <>

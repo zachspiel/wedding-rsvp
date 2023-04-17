@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Container, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { ref, set, onValue } from "firebase/database";
 import { database } from "../../../../database/database";
 import GuestBookMessage from "./GuestBookMessage";
@@ -10,7 +10,7 @@ import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "../../../../components/notifications/notifications";
-import { saveNewMessageLocally } from "./util";
+import { useLocalStorage } from "usehooks-ts";
 
 export interface GuestMessage {
   id: string;
@@ -24,6 +24,10 @@ export interface GuestMessage {
 
 const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
+  const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
+    "guestMessages",
+    [],
+  );
 
   React.useEffect(() => {
     const messagesRef = ref(database, "guestBook/");
@@ -42,9 +46,9 @@ const GuestBook = (): JSX.Element => {
       isVisible: true,
     },
     validate: {
-      name: (value) => value.trim().length < 2,
-      email: (value) => !/^\S+@\S+$/.test(value),
-      message: (value) => value.trim().length < 2,
+      name: isNotEmpty("Please enter your name to sign the guest book."),
+      email: isEmail("Please enter a valid email."),
+      message: isNotEmpty("Please enter a message to sign the guest book."),
     },
   });
 
@@ -53,8 +57,8 @@ const GuestBook = (): JSX.Element => {
     const newMessageRef = ref(database, `guestBook/${id}`);
     set(newMessageRef, { ...form.values, createdAt: new Date().toISOString() })
       .then(() => {
-        showSuccessNotification("Successfully signed the guest book!");
-        saveNewMessageLocally(id);
+        showSuccessNotification("Successfully signed guest book!");
+        setLocalMessages([...localMessages, id]);
       })
       .catch(() => {
         showCustomFailureNotification(
@@ -97,6 +101,7 @@ const GuestBook = (): JSX.Element => {
                 maxRows={10}
                 minRows={5}
                 autosize
+                required
                 name="message"
                 {...form.getInputProps("message")}
               />
@@ -112,7 +117,11 @@ const GuestBook = (): JSX.Element => {
           {messages
             .filter((message) => message.isVisible)
             .map((message) => (
-              <GuestBookMessage key={message.id} message={message} />
+              <GuestBookMessage
+                key={message.id}
+                message={message}
+                localMessages={localMessages}
+              />
             ))}
         </SimpleGrid>
       </Container>
