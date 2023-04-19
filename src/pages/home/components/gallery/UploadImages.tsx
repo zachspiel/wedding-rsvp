@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Group, FileButton, Button } from "@mantine/core";
-import { ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../../database/database";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage, database } from "../../../../database/database";
 import { notifications } from "@mantine/notifications";
 import {
   showSuccessNotification,
   showFailureNotification,
 } from "../../../../components/notifications/notifications";
+import { Photo } from "../../../../types/Photo";
+import { v4 as uuid4 } from "uuid";
+import { set, ref as databaseRef } from "firebase/database";
 
 const UploadImages = (): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
@@ -38,11 +41,27 @@ const UploadImages = (): JSX.Element => {
 
           if (percent === 100) {
             showSuccessNotification("Successfully uploaded image.");
+
+            getDownloadURL(storageRef).then((url) => {
+              savePhotoToDatabase(file.name, url);
+            });
           }
         },
         (err) => showFailureNotification(),
       );
     }
+  };
+
+  const savePhotoToDatabase = (filename: string, downloadUrl: string): void => {
+    const newPhoto: Photo = {
+      id: uuid4(),
+      caption: filename,
+      isVisible: false,
+      filePath: `/gallery/${filename}`,
+      downloadUrl: downloadUrl,
+    };
+
+    set(databaseRef(database, `photos/${newPhoto.id}`), newPhoto);
   };
 
   React.useEffect(() => {

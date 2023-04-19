@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Carousel } from "@mantine/carousel";
 import { onValue, ref } from "firebase/database";
-import { listAll, ref as storageRef } from "firebase/storage";
-import { database, storage } from "../../../../database/database";
+import { database } from "../../../../database/database";
 import GalleryImage from "./GalleryImage";
 import UploadImages from "./UploadImages";
 import useAdminView from "../../../../hooks/adminView";
 import SectionTitle from "../../../../components/common/SectionTitle";
+import { Photo } from "../../../../types/Photo";
 
 export interface Captions {
   [key: string]: string;
@@ -14,51 +14,24 @@ export interface Captions {
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const [captions, setCaptions] = useState<Captions>({});
-  const [images, setAvailableImages] = useState<string[]>([]);
-  const [enabledImages, setEnabledImges] = useState<string[]>([]);
-  const captionsRef = ref(database, "admin/captions/");
-  const enabledImagesRef = ref(database, "admin/enabledImages/");
-  const imagesRef = storageRef(storage, "gallery/");
+  const [photos, setPhotos] = React.useState<Photo[]>([]);
 
   React.useEffect(() => {
-    listAll(imagesRef).then((result) => {
-      setAvailableImages(result.items.map((item) => item.name));
-    });
-  }, []);
-
-  React.useEffect(() => {
-    onValue(captionsRef, (snapshot) => {
+    onValue(ref(database, "photos"), (snapshot) => {
       const data = snapshot.val();
       if (data !== null) {
-        setCaptions(data);
-      }
-    });
-  }, []);
-
-  React.useEffect(() => {
-    onValue(enabledImagesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data !== null) {
-        setEnabledImges(data);
+        setPhotos(Object.values(data));
       }
     });
   }, []);
 
   const availableImages = isAdminViewEnabled
-    ? images
-    : images.filter((image) => enabledImages.includes(image));
+    ? photos
+    : photos.filter((image) => image.isVisible);
 
   const slides = availableImages.map((item) => (
-    <Carousel.Slide key={item}>
-      {
-        <GalleryImage
-          image={item}
-          caption={captions[item.replace(".", "")] ?? ""}
-          displayAdminView={isAdminViewEnabled}
-          enabledImages={enabledImages}
-        />
-      }
+    <Carousel.Slide key={item.id}>
+      <GalleryImage image={item} displayAdminView={isAdminViewEnabled} />
     </Carousel.Slide>
   ));
 

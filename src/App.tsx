@@ -1,6 +1,6 @@
 import React from "react";
 import { weddingDateString } from "./components/easterEggs";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "./database/database";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GuestList from "./pages/guestList/GuestList";
@@ -41,6 +41,8 @@ function App(): JSX.Element {
         .catch((error) => {
           showFailureNotification();
         });
+    } else {
+      signOut(auth);
     }
   }, []);
 
