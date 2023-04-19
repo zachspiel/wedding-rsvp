@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { ActionIcon, createStyles, Flex, Paper, Title } from "@mantine/core";
-import { getDownloadURL, ref } from "firebase/storage";
-import { storage } from "../../../../database/database";
-import { IconEye, IconEyeOff } from "@tabler/icons";
+import React from "react";
+import { createStyles, Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons";
 import EditImage from "./EditImage";
+import { Photo } from "../../../../types/Photo";
+import { ref, set } from "firebase/database";
+import { database } from "../../../../database/database";
+import {
+  showFailureNotification,
+  showSuccessNotification,
+} from "../../../../components/notifications/notifications";
 
 interface Props {
-  image: string;
-  caption: string;
+  image: Photo;
   displayAdminView: boolean;
-  enabledImages: string[];
 }
 
 const useStyles = createStyles((theme) => ({
@@ -34,23 +37,21 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const GalleryImage = (props: Props): JSX.Element => {
-  const { image, caption, displayAdminView, enabledImages } = props;
-  const [url, setUrl] = useState("");
+  const { image, displayAdminView } = props;
+  const theme = useMantineTheme();
+  const [checked, setChecked] = React.useState(image.isVisible);
   const { classes } = useStyles();
 
-  React.useEffect(() => {
-    const pathReference = ref(storage, `gallery/${image}`);
-    getDownloadURL(pathReference).then((url) => {
-      setUrl(url);
-    });
-  }, []);
+  const toggleVisibility = (isVisible: boolean): void => {
+    const successMessage = isVisible ? "public" : "hidden";
 
-  const getStatusIcon = (): JSX.Element => {
-    return enabledImages.includes(image) ? (
-      <IconEye size={16} />
-    ) : (
-      <IconEyeOff size={16} />
-    );
+    set(ref(database, `photos/${image.id}/isVisible`), isVisible)
+      .then(() => {
+        showSuccessNotification(`Image visibility is now  ${successMessage}`);
+      })
+      .catch(() => {
+        showFailureNotification();
+      });
   };
 
   return (
@@ -58,25 +59,42 @@ const GalleryImage = (props: Props): JSX.Element => {
       shadow="md"
       p="xl"
       radius="md"
-      sx={{ backgroundImage: `url(${url})` }}
+      sx={{ backgroundImage: `url(${image.downloadUrl})` }}
       className={classes.card}
     >
-      <Flex wrap="wrap">
+      <Flex wrap="wrap" w="100%">
         {displayAdminView && (
-          <ActionIcon
-            variant="filled"
-            color="blue"
-            sx={{ marginTop: "15px", marginRight: "0.5rem" }}
-          >
-            {getStatusIcon()}
-          </ActionIcon>
+          <Switch
+            checked={checked}
+            onChange={(event): void => {
+              toggleVisibility(event.currentTarget.checked);
+              setChecked(event.currentTarget.checked);
+            }}
+            color="teal"
+            size="md"
+            mt="md"
+            mr="md"
+            thumbIcon={
+              checked ? (
+                <IconCheck
+                  size="0.8rem"
+                  color={theme.colors.teal[theme.fn.primaryShade()]}
+                  stroke={3}
+                />
+              ) : (
+                <IconX
+                  size="0.8rem"
+                  color={theme.colors.red[theme.fn.primaryShade()]}
+                  stroke={3}
+                />
+              )
+            }
+          />
         )}
         <Title order={3} className={classes.title}>
-          {caption}
+          {image.caption}
         </Title>
-        {displayAdminView && (
-          <EditImage caption={caption} image={image} enabledImages={enabledImages} />
-        )}
+        {displayAdminView && <EditImage image={image} />}
       </Flex>
     </Paper>
   );

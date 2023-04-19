@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, Container, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { ref, set, onValue } from "firebase/database";
 import { database } from "../../../../database/database";
@@ -95,7 +95,6 @@ const GuestBook = (): JSX.Element => {
               </SimpleGrid>
 
               <Textarea
-                mt="md"
                 label="Message"
                 placeholder="Leave a message"
                 maxRows={10}
@@ -106,11 +105,11 @@ const GuestBook = (): JSX.Element => {
                 {...form.getInputProps("message")}
               />
 
-              <Group position="left" mt="xl">
+              <span>
                 <Button type="submit" size="md">
                   Sign guest book
                 </Button>
-              </Group>
+              </span>
             </SimpleGrid>
           </form>
 

@@ -1,52 +1,51 @@
 import React, { useState } from "react";
 import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { isNotEmpty, useForm } from "@mantine/form";
 import { IconPencil } from "@tabler/icons";
-import { ref, set } from "firebase/database";
+import { ref, remove, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../../../database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "../../../../components/notifications/notifications";
+import { Photo } from "../../../../types/Photo";
 
 interface Props {
-  image: string;
-  caption: string;
-  enabledImages: string[];
+  image: Photo;
 }
 
 const EditImage = (props: Props): JSX.Element => {
-  const { image, caption, enabledImages } = props;
+  const { image } = props;
   const [opened, setOpened] = useState(false);
-  const isEnabled = enabledImages.includes(image);
 
   const form = useForm({
-    initialValues: { image, caption, isEnabled },
+    initialValues: { ...image },
 
     validate: {
-      image: (value) => image.length === 0,
+      caption: isNotEmpty("Please enter a caption"),
     },
   });
 
-  const updateCaption = (updatedCaption: string): void => {
-    try {
-      const updatedImages = isEnabled
-        ? enabledImages.filter((file) => file !== image)
-        : [...enabledImages, image];
-
-      const path = image.replace(".", "");
-      set(ref(database, "admin/captions/" + path), updatedCaption);
-      set(ref(database, "admin/enabledImages/"), updatedImages);
-      showSuccessNotification("Successfully updated!");
-      setOpened(false);
-    } catch (error) {
-      showFailureNotification();
-    }
+  const handleSubmit = (): void => {
+    set(ref(database, `photos/${image.id}`), { ...form.values })
+      .then(() => {
+        showSuccessNotification("Successfully updated image!");
+        setOpened(false);
+      })
+      .catch(() => {
+        showFailureNotification();
+      });
   };
 
   const onSuccessfulDelete = (): void => {
-    showSuccessNotification("Successfully deleted image!");
+    remove(ref(database, `photos/${image.id}`))
+      .then(() => {
+        showSuccessNotification("Successfully deleted image!");
+      })
+      .catch(() => {
+        showFailureNotification();
+      });
   };
 
   const onDeletionError = (): void => {
@@ -54,7 +53,7 @@ const EditImage = (props: Props): JSX.Element => {
   };
 
   const deleteImage = (): void => {
-    const imageRef = storageRef(storage, "gallery/" + image);
+    const imageRef = storageRef(storage, image.filePath);
     deleteObject(imageRef)
       .then(() => {
         onSuccessfulDelete();
@@ -81,7 +80,7 @@ const EditImage = (props: Props): JSX.Element => {
         title={`Edit ${image}`}
         withCloseButton
       >
-        <form onSubmit={form.onSubmit((values) => updateCaption(values.caption))}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             placeholder="Caption"
             label="Caption"
@@ -91,8 +90,8 @@ const EditImage = (props: Props): JSX.Element => {
           <Switch
             sx={{ marginTop: "0.5rem" }}
             label="Is publicly visible"
-            checked={form.values.isEnabled}
-            {...form.getInputProps("isEnabled")}
+            checked={form.values.isVisible}
+            {...form.getInputProps("isVisible")}
           />
 
           <Group position="right" mt="md">
