@@ -4,12 +4,12 @@ import { isNotEmpty, useForm } from "@mantine/form";
 import { IconPencil } from "@tabler/icons";
 import { ref, remove, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
-import { database, storage } from "../../../../database/database";
+import { database, storage } from "../../../database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
-} from "../../../../components/notifications/notifications";
-import { Photo } from "../../../../types/Photo";
+} from "../../../components/notifications/notifications";
+import { Photo } from "../../../types/Photo";
 
 interface Props {
   image: Photo;

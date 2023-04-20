@@ -5,8 +5,8 @@ import { ref, set } from "firebase/database";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
-} from "../../../../../components/notifications/notifications";
-import { database } from "../../../../../database/database";
+} from "../../../../components/notifications/notifications";
+import { database } from "../../../../database/database";
 import { GuestMessage } from "../GuestBook";
 
 interface Props {

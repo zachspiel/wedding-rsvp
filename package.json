@@ -9,7 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
+    " ": "^11.10.5",
     "@mantine/carousel": "^6.0.2",
     "@mantine/core": "^6.0.2",
     "@mantine/dates": "^6.0.2",

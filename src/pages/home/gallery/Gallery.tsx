@@ -1,12 +1,12 @@
 import React from "react";
 import { Carousel } from "@mantine/carousel";
 import { onValue, ref } from "firebase/database";
-import { database } from "../../../../database/database";
+import { database } from "../../../database/database";
 import GalleryImage from "./GalleryImage";
 import UploadImages from "./UploadImages";
-import useAdminView from "../../../../hooks/adminView";
-import SectionTitle from "../../../../components/common/SectionTitle";
-import { Photo } from "../../../../types/Photo";
+import useAdminView from "../../../hooks/adminView";
+import SectionTitle from "../../../components/common/SectionTitle";
+import { Photo } from "../../../types/Photo";
 
 export interface Captions {
   [key: string]: string;
