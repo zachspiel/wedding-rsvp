@@ -8,6 +8,7 @@ import WhenAndWhere from "./components/whenAndWhere/WhenAndWhere";
 import useSignInStatus from "../../hooks/signInStatus";
 import Jumbotron from "./components/Jumbotron";
 import RsvpSection from "./components/guestRsvpForm/RsvpSection";
+import Registry from "./components/Registry";
 
 const Home = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
@@ -36,6 +37,8 @@ const Home = (): JSX.Element => {
           </SimpleGrid>
         </Container>
       </Container>
+
+      <Registry />
 
       {isSignedIn && <AdminViewToggle />}
     </>
