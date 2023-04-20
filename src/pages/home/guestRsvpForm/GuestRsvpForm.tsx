@@ -10,13 +10,14 @@ import {
   TextInput,
 } from "@mantine/core";
 import { ref, set } from "@firebase/database";
-import { database } from "../../../../database/database";
-import { Group, RsvpResonse } from "../../../../types/Guest";
+import { analytics, database } from "../../../database/database";
+import { Group, RsvpResonse } from "../../../types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import { showFailureNotification } from "../../../../components/notifications/notifications";
-import MailingAddressForm from "../../../guestList/components/AddGuestForm/MailingAddressForm";
+import { showFailureNotification } from "../../../components/notifications/notifications";
+import MailingAddressForm from "../../guestList/components/AddGuestForm/MailingAddressForm";
 import UnknownGuestInput from "./UnknownGuestInput";
 import RsvpSelection from "./RsvpSelection";
+import { logEvent } from "firebase/analytics";
 
 interface Props {
   selectedGroup: Group;
@@ -74,6 +75,10 @@ const RsvpForm = (props: Props): JSX.Element => {
 
     set(groupRef, { ...form.values })
       .then(() => {
+        logEvent(analytics, "rsvp_form_complete", {
+          original: selectedGroup,
+          updated: form.values,
+        });
         nextStep();
       })
       .catch(() => {

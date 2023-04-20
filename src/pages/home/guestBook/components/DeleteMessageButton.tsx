@@ -6,8 +6,8 @@ import { ref, set } from "firebase/database";
 import {
   showSuccessNotification,
   showCustomFailureNotification,
-} from "../../../../../components/notifications/notifications";
-import { database } from "../../../../../database/database";
+} from "../../../../components/notifications/notifications";
+import { database } from "../../../../database/database";
 import { IconTrash } from "@tabler/icons";
 
 interface Props {

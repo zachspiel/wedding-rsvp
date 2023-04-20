@@ -2,14 +2,14 @@ import React from "react";
 import { Button, Container, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { ref, set, onValue } from "firebase/database";
-import { database } from "../../../../database/database";
+import { database } from "../../../database/database";
 import GuestBookMessage from "./GuestBookMessage";
-import SectionTitle from "../../../../components/common/SectionTitle";
+import SectionTitle from "../../../components/common/SectionTitle";
 import { v4 as uuidv4 } from "uuid";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
-} from "../../../../components/notifications/notifications";
+} from "../../../components/notifications/notifications";
 import { useLocalStorage } from "usehooks-ts";
 
 export interface GuestMessage {

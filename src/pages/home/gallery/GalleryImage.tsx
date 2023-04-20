@@ -2,13 +2,13 @@ import React from "react";
 import { createStyles, Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons";
 import EditImage from "./EditImage";
-import { Photo } from "../../../../types/Photo";
+import { Photo } from "../../../types/Photo";
 import { ref, set } from "firebase/database";
-import { database } from "../../../../database/database";
+import { database } from "../../../database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
-} from "../../../../components/notifications/notifications";
+} from "../../../components/notifications/notifications";
 
 interface Props {
   image: Photo;

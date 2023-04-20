@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Group, FileButton, Button } from "@mantine/core";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage, database } from "../../../../database/database";
+import { storage, database } from "../../../database/database";
 import { notifications } from "@mantine/notifications";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../../components/notifications/notifications";
-import { Photo } from "../../../../types/Photo";
+} from "../../../components/notifications/notifications";
+import { Photo } from "../../../types/Photo";
 import { v4 as uuid4 } from "uuid";
 import { set, ref as databaseRef } from "firebase/database";
 

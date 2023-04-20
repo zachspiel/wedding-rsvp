@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Image, SimpleGrid, Text } from "@mantine/core";
-import SectionTitle from "../../../components/common/SectionTitle";
-import logo from "../../../assets/images/The Spielbergers Wedding Logo.png";
+import SectionTitle from "../../components/common/SectionTitle";
+import logo from "../../assets/images/The Spielbergers Wedding Logo.png";
 
 const Registry = (): JSX.Element => {
   return (

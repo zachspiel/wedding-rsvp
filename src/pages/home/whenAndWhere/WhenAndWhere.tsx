@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons";
 import WeddingCountdown from "./Countdown";
 import Map from "./Map";
-import SectionTitle from "../../../../components/common/SectionTitle";
+import SectionTitle from "../../../components/common/SectionTitle";
 import { useMediaQuery } from "@mantine/hooks";
 
 const WhenAndWhere = (): JSX.Element => {

@@ -2,13 +2,13 @@ import React from "react";
 import { Container, SimpleGrid } from "@mantine/core";
 import AdminViewToggle from "../../components/common/AdminViewToggle";
 import FlowerImage from "../../components/common/FlowerImage";
-import Gallery from "./components/gallery/Gallery";
-import GuestBook from "./components/guestBook/GuestBook";
-import WhenAndWhere from "./components/whenAndWhere/WhenAndWhere";
 import useSignInStatus from "../../hooks/signInStatus";
-import Jumbotron from "./components/Jumbotron";
-import RsvpSection from "./components/guestRsvpForm/RsvpSection";
-import Registry from "./components/Registry";
+import Gallery from "./gallery/Gallery";
+import GuestBook from "./guestBook/GuestBook";
+import RsvpSection from "./guestRsvpForm/RsvpSection";
+import Jumbotron from "./Jumbotron";
+import Registry from "./Registry";
+import WhenAndWhere from "./whenAndWhere/WhenAndWhere";
 
 const Home = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();

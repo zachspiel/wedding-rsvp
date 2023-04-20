@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Divider, Flex, Group as MGroup, Text, TextInput } from "@mantine/core";
-import { Group, Guest } from "../../../../types/Guest";
+import { Group, Guest } from "../../../types/Guest";
 import { onValue, ref } from "firebase/database";
-import { database } from "../../../../database/database";
+import { analytics, database } from "../../../database/database";
 import RsvpForm from "./GuestRsvpForm";
+import { logEvent } from "firebase/analytics";
 
 const guestMatchesSearch = (searchValue: string, guest: Guest): boolean => {
   const firstName = searchValue.split(" ")?.[0]?.toLowerCase() ?? "";
@@ -50,6 +51,11 @@ const SearchForGuest = (): JSX.Element => {
     } else {
       setError(undefined);
     }
+
+    logEvent(analytics, "rsvp_form_search", {
+      searchValue: searchValue,
+      totalResults: filteredResults.length,
+    });
 
     setSearchResults(filteredResults);
   };
