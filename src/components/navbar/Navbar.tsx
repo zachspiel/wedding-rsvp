@@ -73,6 +73,7 @@ const Navbar = (props: Props): JSX.Element => {
           {createAnchor("RSVP", "#rsvp")}
           {createAnchor("GUEST BOOK", "#guestBook")}
           {createAnchor("GALLERY", "#gallery")}
+          {createAnchor("REGISTRY", "#registry")}
 
           {isSignedIn && (
             <Menu trigger="hover" withinPortal>
