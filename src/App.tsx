@@ -4,9 +4,7 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "./database/database";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GuestList from "./pages/guestList/GuestList";
-import TrackRsvps from "./pages/rsvps/TrackRsvps";
 import Home from "./pages/home/Home";
-import Navbar from "./components/navbar/Navbar";
 import {
   showFailureNotification,
   showSuccessNotification,
@@ -20,10 +18,6 @@ const router = createBrowserRouter([
   {
     path: "/guestList",
     element: <GuestList />,
-  },
-  {
-    path: "/rsvps",
-    element: <TrackRsvps />,
   },
 ]);
 
@@ -46,13 +40,7 @@ function App(): JSX.Element {
     }
   }, []);
 
-  return (
-    <>
-      <Navbar />
-      <RouterProvider router={router} />
-      <Navbar />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

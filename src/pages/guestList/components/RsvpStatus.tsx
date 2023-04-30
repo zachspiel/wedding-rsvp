@@ -18,6 +18,7 @@ const RsvpStatus = (props: Props): JSX.Element => {
   return (
     <MGroup position="apart" sx={{ paddingBottom: "3rem" }}>
       <Text>
+        {guest.nameUnknown && "Guest"}
         {guest.firstName} {guest.lastName}
       </Text>
       <Select

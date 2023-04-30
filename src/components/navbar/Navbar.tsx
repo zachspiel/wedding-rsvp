@@ -64,16 +64,27 @@ const Navbar = (props: Props): JSX.Element => {
     );
   };
 
-  return (
-    <div className={props.footer ? classes.footer : classes.navbar}>
-      <Container className={classes.inner}>
-        <Group className={classes.links}>
-          {props.showHome && createAnchor("HOME", "/")}
+  const createAnchors = (): JSX.Element | undefined => {
+    if (!props.showHome) {
+      return (
+        <>
           {createAnchor("WHEN & WHERE", "#whenAndWhere")}
           {createAnchor("RSVP", "#rsvp")}
           {createAnchor("GUEST BOOK", "#guestBook")}
           {createAnchor("GALLERY", "#gallery")}
           {createAnchor("REGISTRY", "#registry")}
+        </>
+      );
+    }
+  };
+
+  return (
+    <div className={props.footer ? classes.footer : classes.navbar}>
+      <Container className={classes.inner}>
+        <Group className={classes.links}>
+          {props.showHome && createAnchor("HOME", "/")}
+
+          {createAnchors()}
 
           {isSignedIn && (
             <Menu trigger="hover" withinPortal>
@@ -81,6 +92,7 @@ const Navbar = (props: Props): JSX.Element => {
                 <Anchor<"a">
                   size="sm"
                   href="/guestList"
+                  color="dimmed"
                   className={classes.guestListDropdown}
                 >
                   <Center>
@@ -91,12 +103,12 @@ const Navbar = (props: Props): JSX.Element => {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item>
-                  <Anchor<"a"> href="/guestList" size="sm">
+                  <Anchor<"a"> href="/guestList" size="sm" color="dimmed">
                     MANAGE GUEST LIST
                   </Anchor>
                 </Menu.Item>
                 <Menu.Item>
-                  <Anchor<"a"> href="/rsvps" size="sm">
+                  <Anchor<"a"> href="/rsvps" size="sm" color="dimmed">
                     TRACK RSVPs
                   </Anchor>
                 </Menu.Item>

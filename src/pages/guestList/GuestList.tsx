@@ -1,92 +1,123 @@
 import React from "react";
 import { onValue, ref } from "@firebase/database";
 import { Group } from "../../types/Guest";
-import { Container, Group as MGroup, Modal, SimpleGrid, Table } from "@mantine/core";
+import {
+  Container,
+  Group as MGroup,
+  Modal,
+  ScrollArea,
+  SimpleGrid,
+  Switch,
+  Table,
+  TextInput,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import SectionTitle from "../../components/common/SectionTitle";
 import { database } from "../../database/database";
-import ActionColumn from "./components/columns/ActionColumn";
-import AddressColumn from "./components/columns/AddressColumn";
-import EmailMobileColumn from "./components/columns/EmailMobileColumn";
-import GuestsColumn from "./components/columns/GuestsColumn";
-import InvitedColumn from "./components/columns/InvitedColumn";
 import EditGuest from "./components/EditGuest";
-import Filters from "./components/Filters";
 import Summary from "./components/Summary";
-import AddGuest from "./components/AddGuestForm/AddGuest";
+import AddGuest from "./addGuestForm/AddGuest";
+import Navbar from "../../components/navbar/Navbar";
+import TableRow from "./table/TableRow";
+import { IconSearch } from "@tabler/icons";
+import { filterGroups } from "./table/tableUtils";
+import FilterSelection from "./filters/FilterSelection";
 
 const GuestList = (): JSX.Element => {
   const [groups, setGroups] = React.useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = React.useState<Group>();
   const [opened, { open, close }] = useDisclosure(false);
+  const [showRsvpStatus, setShowRsvpStatus] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const [filters, setFilters] = React.useState<string[]>([]);
 
-  const rows = groups.map((group, index) => (
-    <tr key={group.guests[0].firstName}>
-      <td>
-        <GuestsColumn guests={group.guests} affiliation={group.affiliation} />
-      </td>
-      <td>{index}</td>
-      <td>
-        <EmailMobileColumn email={group.email} phone={group.phone} />
-      </td>
-      <td>
-        <AddressColumn group={group} />
-      </td>
-      <td>
-        <InvitedColumn groups={Object.values(groups)} index={index} />
-      </td>
-      <td>
-        <ActionColumn
-          groups={Object.values(groups)}
-          groupIndex={index}
-          onEdit={(): void => openModal(group)}
-        />
-      </td>
-    </tr>
-  ));
-
-  const openModal = (group: Group): void => {
-    setSelectedGroup(group);
-    open();
-  };
+  const filteredGroups = React.useMemo(
+    () => filterGroups(groups, search, filters),
+    [search, filters, groups],
+  );
 
   React.useEffect(() => {
-    const guestsRef = ref(database, "groups/");
-    onValue(guestsRef, (snapshot) => {
+    const groupsRef = ref(database, "groups/");
+    onValue(groupsRef, (snapshot) => {
       const data = snapshot.val() ?? {};
       const groupData = Object.values(data);
       setGroups(groupData as Group[]);
     });
   }, []);
 
+  const openModal = (group: Group): void => {
+    setSelectedGroup(group);
+    open();
+  };
+
+  const rows = filteredGroups.map((group) => (
+    <TableRow
+      key={group.id}
+      group={group}
+      showRsvpStatus={showRsvpStatus}
+      openModal={openModal}
+    />
+  ));
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const { value } = event.currentTarget;
+    setSearch(value);
+  };
+
+  const handleFilterChange = (updatedFilters: string[]): void => {
+    setFilters(updatedFilters);
+  };
+
   return (
-    <Container>
-      <SimpleGrid cols={1} pb="xl">
-        <MGroup position="apart">
-          <SectionTitle title="All Guests" id="allGuests" />
-          <AddGuest />
-        </MGroup>
-        <Summary groups={Object.values(groups)} />
-        <MGroup>
-          <Filters groups={Object.values(groups)} />
-        </MGroup>
-        <Table verticalSpacing="md" highlightOnHover>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>No.</th>
-              <th>Email & Mobile</th>
-              <th>Mailing Address</th>
-              <th>Invited?</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
-        <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
-          {selectedGroup && <EditGuest group={selectedGroup} close={close} />}
-        </Modal>
-      </SimpleGrid>
-    </Container>
+    <>
+      <Navbar showHome />
+      <Container>
+        <SimpleGrid cols={1} pb="xl">
+          <MGroup position="apart">
+            <SectionTitle title="All Guests" id="allGuests" />
+            <AddGuest />
+          </MGroup>
+          <Summary groups={groups} />
+          <MGroup position="apart">
+            <FilterSelection
+              groups={groups}
+              filters={filters}
+              setFilters={handleFilterChange}
+            />
+            <Switch
+              label="Show RSVP Status"
+              checked={showRsvpStatus}
+              onChange={(e): void => setShowRsvpStatus(e.currentTarget.checked)}
+            />
+          </MGroup>
+          <ScrollArea>
+            <TextInput
+              placeholder="Search by any field"
+              mb="md"
+              icon={<IconSearch size="0.9rem" stroke={1.5} />}
+              value={search}
+              onChange={handleSearchChange}
+            />
+            <Table highlightOnHover>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email & Mobile</th>
+                  <th>Mailing Address</th>
+                  {showRsvpStatus && <th>RSVP Status</th>}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </Table>
+          </ScrollArea>
+          <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
+            {selectedGroup && <EditGuest group={selectedGroup} close={close} />}
+          </Modal>
+        </SimpleGrid>
+      </Container>
+      <Navbar showHome footer />
+    </>
   );
 };
 

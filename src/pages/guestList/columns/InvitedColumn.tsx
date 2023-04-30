@@ -1,23 +1,22 @@
 import React from "react";
 import { Group as MGroup, Radio } from "@mantine/core";
 import { ref, set } from "@firebase/database";
-import { Group } from "../../../../types/Guest";
-import { database } from "../../../../database/database";
+import { Group } from "../../../types/Guest";
+import { database } from "../../../database/database";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../../components/notifications/notifications";
+} from "../../../components/notifications/notifications";
 
 interface Props {
-  groups: Group[];
-  index: number;
+  group: Group;
 }
 
 const InvitedColumn = (props: Props): JSX.Element => {
-  const { groups, index } = props;
+  const { group } = props;
 
   const handleChange = (value: string): void => {
-    const updatedGroup = [groups[index]].map((group) => group)[0];
+    const updatedGroup = [group].map((group) => group)[0];
     updatedGroup.invited = value === "definitely";
 
     const groupRef = ref(database, `groups/${updatedGroup.id}`);
@@ -33,9 +32,9 @@ const InvitedColumn = (props: Props): JSX.Element => {
 
   return (
     <Radio.Group
-      name={`invited-${index}`}
+      name={`invited-${group.id}`}
       mt="lg"
-      value={groups[index].invited ? "definitely" : "maybe"}
+      value={group.invited ? "definitely" : "maybe"}
       onChange={handleChange}
     >
       <MGroup>

@@ -7,7 +7,7 @@ interface Props {
   guests: Guest[];
 }
 
-const RsvpStatus = (props: Props): JSX.Element => {
+const RsvpStatusColumn = (props: Props): JSX.Element => {
   const { guests } = props;
 
   return (
@@ -22,4 +22,4 @@ const RsvpStatus = (props: Props): JSX.Element => {
   );
 };
 
-export default RsvpStatus;
+export default RsvpStatusColumn;
