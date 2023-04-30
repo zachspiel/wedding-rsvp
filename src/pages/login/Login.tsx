@@ -8,6 +8,7 @@ import {
   showFailureNotification,
 } from "../../components/notifications/notifications";
 import { useNavigate } from "react-router";
+import Navbar from "../../components/navbar/Navbar";
 
 interface LoginForm {
   email: string;
@@ -39,39 +40,43 @@ const Login = (): JSX.Element => {
   };
 
   return (
-    <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={(theme): Record<string, string | number> => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-          fontWeight: 900,
-        })}
-      >
-        Hello 👋, please login below
-      </Title>
+    <>
+      <Navbar showHome />
+      <Container size={420} my={40}>
+        <Title
+          align="center"
+          sx={(theme): Record<string, string | number> => ({
+            fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+            fontWeight: 900,
+          })}
+        >
+          Hello 👋, please login below
+        </Title>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <TextInput
-            label="Email"
-            placeholder="Your email"
-            required
-            {...form.getInputProps("email")}
-          />
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            required
-            mt="md"
-            {...form.getInputProps("password")}
-          />
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <TextInput
+              label="Email"
+              placeholder="Your email"
+              required
+              {...form.getInputProps("email")}
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              required
+              mt="md"
+              {...form.getInputProps("password")}
+            />
 
-          <Button fullWidth mt="xl" type="submit">
-            Sign in
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+            <Button fullWidth mt="xl" type="submit">
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+      <Navbar showHome footer />
+    </>
   );
 };
 
