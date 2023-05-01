@@ -1,27 +1,26 @@
 import React from "react";
 import { ActionIcon, Button, Group as MGroup, Modal, Text } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons";
-import { Group } from "../../../../types/Guest";
+import { Group } from "../../../types/Guest";
 import { ref, remove } from "@firebase/database";
 import { useDisclosure } from "@mantine/hooks";
-import { database } from "../../../../database/database";
+import { database } from "../../../database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
-} from "../../../../components/notifications/notifications";
+} from "../../../components/notifications/notifications";
 
 interface Props {
-  groups: Group[];
-  groupIndex: number;
+  group: Group;
   onEdit: () => void;
 }
 
 const ActionColumn = (props: Props): JSX.Element => {
-  const { groups, groupIndex, onEdit } = props;
+  const { group, onEdit } = props;
   const [opened, { open, close }] = useDisclosure(false);
 
   const handleDelete = (): void => {
-    const groupRef = ref(database, `groups/${groups[groupIndex].id}`);
+    const groupRef = ref(database, `groups/${group.id}`);
     remove(groupRef)
       .then(() => {
         showSuccessNotification("Successfully deleted guest 🎉");
@@ -43,7 +42,7 @@ const ActionColumn = (props: Props): JSX.Element => {
         </ActionIcon>
       </MGroup>
       <Modal opened={opened} onClose={close} centered>
-        <Text>This will permanently delete this guest. Do you wish to continue?</Text>
+        <Text>This will permanently delete this group. Do you wish to continue?</Text>
         <MGroup align="flex-end" position="right" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel

@@ -9,9 +9,9 @@ import {
   showSuccessNotification,
   showFailureNotification,
 } from "../../../components/notifications/notifications";
-import GuestAffiliationSelection from "./AddGuestForm/GuestAffiliationSelection";
-import GuestInput from "./AddGuestForm/GuestInput";
-import MailingAddressForm from "./AddGuestForm/MailingAddressForm";
+import GuestAffiliationSelection from "../addGuestForm/GuestAffiliationSelection";
+import GuestInput from "../addGuestForm/GuestInput";
+import MailingAddressForm from "../../../components/form/MailingAddressForm";
 
 interface Props {
   group: Group;
@@ -20,7 +20,9 @@ interface Props {
 
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
-  const [isInvited, setIsInvited] = React.useState("definitely");
+  const [isInvited, setIsInvited] = React.useState(
+    group.invited ? "definitely" : "maybe",
+  );
 
   const form = useForm<Group>({
     initialValues: group,
@@ -32,13 +34,15 @@ const EditGuest = (props: Props): JSX.Element => {
     },
   });
 
-  React.useEffect(() => {
-    form.setFieldValue("invited", isInvited === "definitely");
-  }, [isInvited]);
+  const handleInvitedChange = (value: string): void => {
+    setIsInvited(value);
+    form.setFieldValue("invited", value === "definitely");
+  };
 
   const handleSubmit = (): void => {
     set(ref(database, "groups/" + group.id), {
       ...form.values,
+      isInvited: isInvited === "definitely",
     })
       .then(() => {
         showSuccessNotification("Successfully updated guest");
@@ -75,7 +79,7 @@ const EditGuest = (props: Props): JSX.Element => {
             label="Invited?"
             mt="lg"
             value={isInvited}
-            onChange={setIsInvited}
+            onChange={handleInvitedChange}
           >
             <MGroup>
               <Radio value="definitely" label="Definitely" />

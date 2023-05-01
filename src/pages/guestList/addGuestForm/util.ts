@@ -1,5 +1,5 @@
 import { UseFormReturnType } from "@mantine/form";
-import { RsvpResonse, RelationshipType, Group } from "../../../../types/Guest";
+import { RsvpResonse, RelationshipType, Group } from "../../../types/Guest";
 
 const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
   form.insertListItem(

@@ -14,7 +14,7 @@ import { analytics, database } from "../../../database/database";
 import { Group, RsvpResonse } from "../../../types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { showFailureNotification } from "../../../components/notifications/notifications";
-import MailingAddressForm from "../../guestList/components/AddGuestForm/MailingAddressForm";
+import MailingAddressForm from "../../../components/form/MailingAddressForm";
 import UnknownGuestInput from "./UnknownGuestInput";
 import RsvpSelection from "./RsvpSelection";
 import { logEvent } from "firebase/analytics";

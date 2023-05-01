@@ -9,7 +9,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Group, RelationshipType } from "../../../../types/Guest";
+import { Group, RelationshipType } from "../../../types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons";
 import { addChildToGuests, addPartnerToGuests } from "./util";
@@ -34,15 +34,7 @@ const GuestInput = (props: Props): JSX.Element => {
   return (
     <>
       {firstChildInGroupIndex === index && (
-        <Title
-          order={4}
-          size="h3"
-          sx={(theme): Record<string, string> => ({ fontFamily: `Poppins, sans-serif` })}
-          weight={900}
-          align="left"
-          id="rsvp"
-          mt="lg"
-        >
+        <Title order={4} size="h3" weight={900} align="left" id="rsvp" mt="lg">
           Children
         </Title>
       )}
