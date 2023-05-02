@@ -9,14 +9,15 @@ import RsvpSection from "./guestRsvpForm/RsvpSection";
 import Jumbotron from "./Jumbotron";
 import Registry from "./Registry";
 import WhenAndWhere from "./whenAndWhere/WhenAndWhere";
-import Navbar from "../../components/navbar/Navbar";
+import ResponsiveHeader from "../../components/navbar/Navbar";
+import Footer from "../../components/navbar/Footer";
 
 const Home = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
 
   return (
     <>
-      <Navbar />
+      <ResponsiveHeader />
       <Jumbotron />
       <WhenAndWhere />
       <FlowerImage />
@@ -44,7 +45,7 @@ const Home = (): JSX.Element => {
 
       {isSignedIn && <AdminViewToggle />}
 
-      <Navbar />
+      <Footer />
     </>
   );
 };

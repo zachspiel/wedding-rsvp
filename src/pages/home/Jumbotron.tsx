@@ -21,7 +21,6 @@ const useStyles = createStyles((theme) => ({
 
   inner: {
     position: "relative",
-    zIndex: 1,
   },
 
   title: {
@@ -55,7 +54,7 @@ const Jumbotron = (): JSX.Element => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
-      <Overlay color="#000" opacity={0.45} zIndex={1} />
+      <Overlay color="#000" opacity={0.45} zIndex={0} />
 
       <div className={classes.inner}>
         <Title

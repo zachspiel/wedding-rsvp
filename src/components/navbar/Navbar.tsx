@@ -1,123 +1,158 @@
 import React from "react";
-import { Anchor, Center, Container, createStyles, Group, Menu } from "@mantine/core";
-import roses from "../../assets/images/blush-rose.png";
+import {
+  createStyles,
+  Header,
+  Container,
+  Group,
+  Burger,
+  Paper,
+  Transition,
+  rem,
+  Image,
+  Button,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import logo from "../../assets/images/The Spielbergers Wedding Logo Variant.png";
 import useSignInStatus from "../../hooks/signInStatus";
-import { IconChevronDown } from "@tabler/icons";
+import { auth } from "../../database/database";
+import { MenuItem, links } from "./links";
+
+const HEADER_HEIGHT = rem(60);
+
+interface Props {
+  showHome?: boolean;
+}
 
 const useStyles = createStyles((theme) => ({
-  navbar: {
-    borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
-    }`,
-    backgroundImage: `url(${roses})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  root: {
+    position: "relative",
+    zIndex: 1,
   },
 
-  footer: {
-    borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
-    }`,
-    backgroundImage: `url(${roses})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    position: "fixed",
-    width: "100%",
-    bottom: "0",
-  },
+  dropdown: {
+    position: "absolute",
+    top: HEADER_HEIGHT,
+    left: 0,
+    right: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: "hidden",
 
-  inner: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
-  },
-
-  links: {
-    [theme.fn.smallerThan("xs")]: {
-      marginTop: theme.spacing.md,
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
     },
   },
 
-  guestListDropdown: {
-    [theme.fn.smallerThan("md")]: {
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "100%",
+  },
+
+  links: {
+    [theme.fn.smallerThan("sm")]: {
       display: "none",
+    },
+  },
+
+  burger: {
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
+
+  link: {
+    display: "block",
+    lineHeight: 1,
+    padding: `${rem(8)} ${rem(12)}`,
+    borderRadius: theme.radius.sm,
+    textDecoration: "none",
+    color: theme.colors.pink[4],
+    fontSize: theme.fontSizes.sm,
+    fontWeight: 500,
+
+    "&:hover": {
+      backgroundColor: theme.colors.pink[0],
+    },
+
+    [theme.fn.smallerThan("sm")]: {
+      borderRadius: 0,
+      padding: theme.spacing.md,
+    },
+  },
+
+  rsvpLink: {
+    backgroundColor: theme.colors.pink[3],
+    color: "#ffffff",
+    "&:hover": {
+      backgroundColor: theme.colors.pink[2],
+      color: "#ffffff",
     },
   },
 }));
 
-interface Props {
-  showHome?: boolean;
-  footer?: boolean;
-}
-
 const Navbar = (props: Props): JSX.Element => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
   const { isSignedIn } = useSignInStatus();
 
-  const createAnchor = (label: string, link: string): JSX.Element => {
+  const [opened, { toggle, close }] = useDisclosure(false);
+  const createMenuItem = (menuItem: MenuItem): JSX.Element => {
     return (
-      <Anchor<"a"> color="dimmed" href={link} size="sm">
-        {label}
-      </Anchor>
+      <a
+        key={menuItem.label}
+        href={menuItem.link}
+        className={cx(
+          classes.link,
+          menuItem.className,
+          menuItem.label === "RSVP" ? classes.rsvpLink : undefined,
+        )}
+        onClick={close}
+      >
+        {menuItem.label}
+      </a>
     );
   };
 
-  const createAnchors = (): JSX.Element | undefined => {
-    if (!props.showHome) {
-      return (
-        <>
-          {createAnchor("WHEN & WHERE", "#whenAndWhere")}
-          {createAnchor("RSVP", "#rsvp")}
-          {createAnchor("GUEST BOOK", "#guestBook")}
-          {createAnchor("GALLERY", "#gallery")}
-          {createAnchor("REGISTRY", "#registry")}
-        </>
-      );
+  const menuItems = React.useMemo(() => {
+    const elements = links.map(createMenuItem);
+
+    if (isSignedIn) {
+      elements.push(createMenuItem({ label: "Guest List", link: "/guestList" }));
     }
-  };
+
+    if (props.showHome) {
+      elements.unshift(createMenuItem({ label: "Home", link: "/" }));
+    }
+
+    return elements;
+  }, [links, isSignedIn]);
 
   return (
-    <div className={props.footer ? classes.footer : classes.navbar}>
-      <Container className={classes.inner}>
-        <Group className={classes.links}>
-          {props.showHome && createAnchor("HOME", "/")}
-
-          {createAnchors()}
-
+    <Header height={HEADER_HEIGHT} className={classes.root}>
+      <Container className={classes.header} sx={{ maxWidth: "100%" }}>
+        <Image src={logo} width={56} height={56} alt="The Spielbergers Wedding Logo" />
+        <Group spacing={5} className={classes.links}>
+          {menuItems}
           {isSignedIn && (
-            <Menu trigger="hover" withinPortal>
-              <Menu.Target>
-                <Anchor<"a">
-                  size="sm"
-                  href="/guestList"
-                  color="dimmed"
-                  className={classes.guestListDropdown}
-                >
-                  <Center>
-                    GUEST LIST
-                    <IconChevronDown size="0.8rem" stroke={1.5} />
-                  </Center>
-                </Anchor>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>
-                  <Anchor<"a"> href="/guestList" size="sm" color="dimmed">
-                    MANAGE GUEST LIST
-                  </Anchor>
-                </Menu.Item>
-                <Menu.Item>
-                  <Anchor<"a"> href="/rsvps" size="sm" color="dimmed">
-                    TRACK RSVPs
-                  </Anchor>
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+            <Button color="pink" onClick={(): Promise<void> => auth.signOut()}>
+              Sign out
+            </Button>
           )}
         </Group>
+
+        <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
+
+        <Transition transition="pop-top-right" duration={200} mounted={opened}>
+          {(styles): JSX.Element => (
+            <Paper className={classes.dropdown} withBorder style={styles}>
+              {menuItems}
+            </Paper>
+          )}
+        </Transition>
       </Container>
-    </div>
+    </Header>
   );
 };
 
