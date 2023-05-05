@@ -1,6 +1,6 @@
 import React from "react";
 import { createStyles, Overlay, Container, Title, Text } from "@mantine/core";
-import jumbotronImage from "../../assets/images/jumbotron.jpg";
+import jumbotronImage from "../../assets/images/jumbotron.webp";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {

@@ -48,6 +48,8 @@ const Gallery = (): JSX.Element => {
         align="start"
         withIndicators
         slidesToScroll={1}
+        nextControlLabel="Next gallery image"
+        previousControlLabel="Previous gallery image"
       >
         {slides}
       </Carousel>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, List, SimpleGrid, Title, useMantineTheme } from "@mantine/core";
+import { Container, List, SimpleGrid, Text } from "@mantine/core";
 import {
   IconBuildingCottage,
   IconCalendarEvent,
@@ -10,18 +10,14 @@ import {
 import WeddingCountdown from "./Countdown";
 import Map from "./Map";
 import SectionTitle from "../../../components/common/SectionTitle";
-import { useMediaQuery } from "@mantine/hooks";
 
 const WhenAndWhere = (): JSX.Element => {
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
-
   const createListItem = (label: string, icon: TablerIcon): JSX.Element => {
     return (
-      <List.Item icon={icon({ strokeWidth: "0.75" })}>
-        <Title order={isMobile ? 4 : 2} weight={300}>
+      <List.Item icon={icon({ strokeWidth: "1" })}>
+        <Text fz="xl" weight={400}>
           {label}
-        </Title>
+        </Text>
       </List.Item>
     );
   };

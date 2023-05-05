@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
 const Footer = (): JSX.Element => {
   const { classes } = useStyles();
   const items = links.map((link) => (
-    <Anchor<"a"> color="dimmed" key={link.label} href={link.link} size="sm">
+    <Anchor<"a"> color="dimmed" key={link.label} href={link.link} size="md">
       {link.label}
     </Anchor>
   ));

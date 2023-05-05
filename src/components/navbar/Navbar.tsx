@@ -10,6 +10,7 @@ import {
   rem,
   Image,
   Button,
+  Anchor,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../assets/images/The Spielbergers Wedding Logo Variant.png";
@@ -68,13 +69,13 @@ const useStyles = createStyles((theme) => ({
     lineHeight: 1,
     padding: `${rem(8)} ${rem(12)}`,
     borderRadius: theme.radius.sm,
-    textDecoration: "none",
-    color: theme.colors.pink[4],
-    fontSize: theme.fontSizes.sm,
+    color: theme.colors.gray[7],
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
 
     "&:hover": {
       backgroundColor: theme.colors.pink[0],
+      textDecoration: "none",
     },
 
     [theme.fn.smallerThan("sm")]: {
@@ -88,7 +89,6 @@ const useStyles = createStyles((theme) => ({
     color: "#ffffff",
     "&:hover": {
       backgroundColor: theme.colors.pink[2],
-      color: "#ffffff",
     },
   },
 }));
@@ -100,18 +100,18 @@ const Navbar = (props: Props): JSX.Element => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const createMenuItem = (menuItem: MenuItem): JSX.Element => {
     return (
-      <a
-        key={menuItem.label}
+      <Anchor<"a">
         href={menuItem.link}
+        key={menuItem.label}
+        onClick={close}
         className={cx(
           classes.link,
           menuItem.className,
           menuItem.label === "RSVP" ? classes.rsvpLink : undefined,
         )}
-        onClick={close}
       >
         {menuItem.label}
-      </a>
+      </Anchor>
     );
   };
 
