@@ -11,7 +11,7 @@ const useStyles = createStyles((theme) => ({
       backgroundAttachment: "fixed",
     },
     [theme.fn.largerThan("md")]: {
-      paddingTop: 700,
+      paddingTop: 750,
       paddingBottom: 100,
       backgroundSize: "cover",
     },
@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
       backgroundPositionY: "65px",
     },
     [theme.fn.smallerThan("md")]: {
-      paddingTop: 200,
+      paddingTop: 250,
       paddingBottom: 20,
       backgroundSize: "cover",
     },

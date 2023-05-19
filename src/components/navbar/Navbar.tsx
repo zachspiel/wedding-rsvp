@@ -56,7 +56,7 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.largerThan("sm")]: {
       justifyContent: "center",
     },
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       justifyContent: "space-between",
     },
     alignItems: "center",
@@ -96,10 +96,10 @@ const useStyles = createStyles((theme) => ({
   },
 
   rsvpLink: {
-    backgroundColor: theme.colors.pink[3],
+    backgroundColor: theme.colors.pink[4],
     color: "#ffffff",
     "&:hover": {
-      backgroundColor: theme.colors.pink[2],
+      backgroundColor: theme.colors.pink[3],
     },
   },
 }));
