@@ -8,15 +8,15 @@ import {
   Paper,
   Transition,
   rem,
-  Image,
   Button,
   Anchor,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import logo from "../../assets/images/The Spielbergers Wedding Logo Variant.png";
 import useSignInStatus from "../../hooks/signInStatus";
 import { auth } from "../../database/database";
 import { MenuItem, links } from "./links";
+import roses from "../../assets/images/blush-rose.png";
+import Logo from "./Logo";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -28,6 +28,12 @@ const useStyles = createStyles((theme) => ({
   root: {
     position: "relative",
     zIndex: 1,
+
+    [theme.fn.largerThan("sm")]: {
+      backgroundImage: `url(${roses})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    },
   },
 
   dropdown: {
@@ -47,7 +53,12 @@ const useStyles = createStyles((theme) => ({
 
   header: {
     display: "flex",
-    justifyContent: "space-between",
+    [theme.fn.largerThan("sm")]: {
+      justifyContent: "center",
+    },
+    [theme.fn.smallerThan("md")]: {
+      justifyContent: "space-between",
+    },
     alignItems: "center",
     height: "100%",
   },
@@ -132,7 +143,7 @@ const Navbar = (props: Props): JSX.Element => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header} sx={{ maxWidth: "100%" }}>
-        <Image src={logo} width={56} height={56} alt="The Spielbergers Wedding Logo" />
+        <Logo />
         <Group spacing={5} className={classes.links}>
           {menuItems}
           {isSignedIn && (

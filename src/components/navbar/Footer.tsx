@@ -1,26 +1,34 @@
 import React from "react";
-import { createStyles, Container, Group, Anchor, rem, Image } from "@mantine/core";
-import logo from "../../assets/images/The Spielbergers Wedding Logo Variant.png";
+import { createStyles, Container, Group, Anchor, rem } from "@mantine/core";
 import { links } from "./links";
+import roses from "../../assets/images/blush-rose.png";
+import Logo from "./Logo";
 
 const useStyles = createStyles((theme) => ({
   footer: {
     borderTop: `${rem(1)} solid ${theme.colors.gray[2]}`,
+    [theme.fn.largerThan("sm")]: {
+      backgroundImage: `url(${roses})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    },
   },
 
   inner: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingTop: theme.spacing.xl,
     paddingBottom: theme.spacing.xl,
 
-    [theme.fn.smallerThan("xs")]: {
+    [theme.fn.smallerThan("md")]: {
       flexDirection: "column",
     },
   },
 
   links: {
+    justifyContent: "center",
+    textAlign: "center",
     [theme.fn.smallerThan("xs")]: {
       marginTop: theme.spacing.md,
     },
@@ -38,7 +46,7 @@ const Footer = (): JSX.Element => {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <Image src={logo} width={56} height={56} alt="The Spielbergers Wedding Logo" />
+        <Logo />
         <Group className={classes.links}>{items}</Group>
       </Container>
     </div>

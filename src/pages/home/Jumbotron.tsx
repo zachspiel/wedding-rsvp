@@ -5,17 +5,26 @@ import jumbotronImage from "../../assets/images/jumbotron.webp";
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: "relative",
-    paddingTop: 700,
-    paddingBottom: 100,
     backgroundImage: `url(${jumbotronImage})`,
-    backgroundSize: "cover",
-    backgroundAttachment: "fixed",
 
-    [theme.fn.smallerThan("md")]: {
-      paddingTop: 100,
+    [theme.fn.largerThan("lg")]: {
+      backgroundAttachment: "fixed",
+    },
+    [theme.fn.largerThan("md")]: {
+      paddingTop: 700,
+      paddingBottom: 100,
+      backgroundSize: "cover",
+    },
+    [theme.breakpoints.md]: {
+      paddingTop: 400,
       paddingBottom: 20,
       backgroundSize: "contain",
       backgroundPositionY: "65px",
+    },
+    [theme.fn.smallerThan("md")]: {
+      paddingTop: 200,
+      paddingBottom: 20,
+      backgroundSize: "cover",
     },
   },
 
@@ -32,8 +41,6 @@ const useStyles = createStyles((theme) => ({
     color: theme.white,
     marginBottom: theme.spacing.xs,
     textAlign: "center",
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-
     "@media (max-width: 520px)": {
       fontSize: 28,
     },
@@ -63,7 +70,7 @@ const Jumbotron = (): JSX.Element => {
             fontFamily: `Brittany, sans-serif`,
           })}
         >
-          {`We're Getting Married!`}
+          {"We're Getting Married!"}
         </Title>
 
         <Container size={640}>

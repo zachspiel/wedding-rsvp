@@ -14,10 +14,8 @@ import SectionTitle from "../../../components/common/SectionTitle";
 const WhenAndWhere = (): JSX.Element => {
   const createListItem = (label: string, icon: TablerIcon): JSX.Element => {
     return (
-      <List.Item icon={icon({ strokeWidth: "1" })}>
-        <Text fz="xl" weight={400}>
-          {label}
-        </Text>
+      <List.Item icon={icon({ strokeWidth: "1.3" })}>
+        <Text fz="lg">{label}</Text>
       </List.Item>
     );
   };
@@ -26,7 +24,7 @@ const WhenAndWhere = (): JSX.Element => {
     <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
       <Container sx={{ padding: "0" }}>
         <SimpleGrid cols={1} pt="lg">
-          <SectionTitle id="whenAndWhere" title="When and Where" />
+          <SectionTitle id="whenAndWhere" title="When & Where" />
           <List spacing="xs" size="sm" center>
             {createListItem("October 26th, 2024", IconCalendarEvent)}
             {createListItem("The Wright House", IconBuildingCottage)}
