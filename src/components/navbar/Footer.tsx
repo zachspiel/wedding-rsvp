@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, Container, Group, Anchor, rem } from "@mantine/core";
 import { links } from "./links";
-import roses from "../../assets/images/blush-rose.png";
+import roses from "../../assets/images/blush-rose.webp";
 import Logo from "./Logo";
 
 const useStyles = createStyles((theme) => ({

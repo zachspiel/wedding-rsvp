@@ -15,7 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import useSignInStatus from "../../hooks/signInStatus";
 import { auth } from "../../database/database";
 import { MenuItem, links } from "./links";
-import roses from "../../assets/images/blush-rose.png";
+import roses from "../../assets/images/blush-rose.webp";
 import Logo from "./Logo";
 
 const HEADER_HEIGHT = rem(60);

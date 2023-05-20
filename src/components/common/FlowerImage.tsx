@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "@mantine/core";
-import flowers from "../../assets/images/green-flower.png";
+import flowers from "../../assets/images/green-flower.webp";
 
 const FlowerImage = (): JSX.Element => {
   return (
