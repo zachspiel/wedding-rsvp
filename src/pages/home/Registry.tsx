@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Image, SimpleGrid, Text } from "@mantine/core";
 import SectionTitle from "../../components/common/SectionTitle";
-import logo from "../../assets/images/The Spielbergers Wedding Logo.png";
+import logo from "../../assets/images/The-Spielbergers-Wedding-Logo-Variant.webp";
 
 const Registry = (): JSX.Element => {
   return (
@@ -15,12 +15,13 @@ const Registry = (): JSX.Element => {
               our gift!
             </Text>
             <Text weight={500} mb="sm">
-              {`We're lucky to already have a home full of everything we need. If you wish to
-            contribute beyond your attendance, we will be accepting contributions to our
-            honeymoon and first home fund at our reception following the ceremony.`}
+              We&apos;re lucky to already have a home full of everything we need. If you
+              wish to contribute beyond your attendance, we will be accepting
+              contributions to our honeymoon and first home fund at our reception
+              following the ceremony.
             </Text>
             <Text weight={500}>
-              {`Thanks for visiting and we can't wait to see you on our big day!`}
+              Thanks for visiting and we can&apos;t wait to see you on our big day!
             </Text>
             <Card.Section>
               <Image

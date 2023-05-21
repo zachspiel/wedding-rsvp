@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Flex, Title, useMantineTheme } from "@mantine/core";
+import { Container, Flex, Text, useMantineTheme } from "@mantine/core";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -23,12 +23,12 @@ const WeddingCountdown = (): JSX.Element => {
           backgroundColor: " #FFF",
         }}
       >
-        <Title order={4} weight={300} align="center">
+        <Text fz="lg" fw={300} align="center">
           {value}
-        </Title>
-        <Title order={4} align="center">
+        </Text>
+        <Text fz="lg" fw={700} align="center">
           {title}
-        </Title>
+        </Text>
       </Container>
     );
   };

@@ -9,6 +9,8 @@ import {
 } from "../../components/notifications/notifications";
 import { useNavigate } from "react-router";
 import Navbar from "../../components/navbar/Navbar";
+import useSignInStatus from "../../hooks/signInStatus";
+import Footer from "../../components/navbar/Footer";
 
 interface LoginForm {
   email: string;
@@ -17,6 +19,14 @@ interface LoginForm {
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
+  const { isSignedIn } = useSignInStatus();
+
+  React.useEffect(() => {
+    if (isSignedIn) {
+      navigate("/");
+    }
+  }, []);
+
   const form = useForm<LoginForm>({
     initialValues: {
       email: "",
@@ -75,7 +85,7 @@ const Login = (): JSX.Element => {
           </form>
         </Paper>
       </Container>
-      <Navbar showHome footer />
+      <Footer />
     </>
   );
 };

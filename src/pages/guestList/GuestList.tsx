@@ -22,6 +22,7 @@ import TableRow from "./table/TableRow";
 import { IconSearch } from "@tabler/icons";
 import { filterGroups } from "./table/tableUtils";
 import FilterSelection from "./filters/FilterSelection";
+import Footer from "../../components/navbar/Footer";
 
 const GuestList = (): JSX.Element => {
   const [groups, setGroups] = React.useState<Group[]>([]);
@@ -116,7 +117,7 @@ const GuestList = (): JSX.Element => {
           </Modal>
         </SimpleGrid>
       </Container>
-      <Navbar showHome footer />
+      <Footer />
     </>
   );
 };

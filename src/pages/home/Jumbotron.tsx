@@ -1,27 +1,35 @@
 import React from "react";
 import { createStyles, Overlay, Container, Title, Text } from "@mantine/core";
-import jumbotronImage from "../../assets/images/jumbotron.jpg";
+import jumbotronImage from "../../assets/images/jumbotron.webp";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: "relative",
-    paddingTop: 700,
-    paddingBottom: 100,
     backgroundImage: `url(${jumbotronImage})`,
-    backgroundSize: "cover",
-    backgroundAttachment: "fixed",
 
-    [theme.fn.smallerThan("md")]: {
-      paddingTop: 100,
+    [theme.fn.largerThan("lg")]: {
+      backgroundAttachment: "fixed",
+    },
+    [theme.fn.largerThan("md")]: {
+      paddingTop: 750,
+      paddingBottom: 100,
+      backgroundSize: "cover",
+    },
+    [theme.breakpoints.md]: {
+      paddingTop: 400,
       paddingBottom: 20,
       backgroundSize: "contain",
       backgroundPositionY: "65px",
+    },
+    [theme.fn.smallerThan("md")]: {
+      paddingTop: 250,
+      paddingBottom: 20,
+      backgroundSize: "cover",
     },
   },
 
   inner: {
     position: "relative",
-    zIndex: 1,
   },
 
   title: {
@@ -33,8 +41,6 @@ const useStyles = createStyles((theme) => ({
     color: theme.white,
     marginBottom: theme.spacing.xs,
     textAlign: "center",
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-
     "@media (max-width: 520px)": {
       fontSize: 28,
     },
@@ -55,7 +61,7 @@ const Jumbotron = (): JSX.Element => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
-      <Overlay color="#000" opacity={0.45} zIndex={1} />
+      <Overlay color="#000" opacity={0.45} zIndex={0} />
 
       <div className={classes.inner}>
         <Title
@@ -64,7 +70,7 @@ const Jumbotron = (): JSX.Element => {
             fontFamily: `Brittany, sans-serif`,
           })}
         >
-          {`We're Getting Married!`}
+          {"We're Getting Married!"}
         </Title>
 
         <Container size={640}>
