@@ -11,9 +11,14 @@ import Registry from "./Registry";
 import WhenAndWhere from "./whenAndWhere/WhenAndWhere";
 import ResponsiveHeader from "../../components/navbar/Navbar";
 import Footer from "../../components/navbar/Footer";
+import { weddingDateString } from "../../components/easterEggs";
 
 const Home = (): JSX.Element => {
   const { isSignedIn } = useSignInStatus();
+
+  React.useEffect(() => {
+    console.log(weddingDateString);
+  }, []);
 
   return (
     <>
