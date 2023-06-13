@@ -77,7 +77,7 @@ const EditImage = (props: Props): JSX.Element => {
       <Modal
         opened={opened}
         onClose={(): void => setOpened(false)}
-        title={`Edit ${image}`}
+        title={`Edit ${image.caption}`}
         withCloseButton
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>

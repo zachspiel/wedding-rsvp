@@ -9,15 +9,16 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { ref, set } from "@firebase/database";
+import { ref } from "@firebase/database";
 import { analytics, database } from "../../../database/database";
 import { Group, RsvpResonse } from "../../../types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import { showFailureNotification } from "../../../components/notifications/notifications";
 import MailingAddressForm from "../../../components/form/MailingAddressForm";
-import UnknownGuestInput from "./UnknownGuestInput";
-import RsvpSelection from "./RsvpSelection";
+import UnknownGuestInput from "./components/UnknownGuestInput";
+import RsvpSelection from "./components/RsvpSelectionInput";
 import { logEvent } from "firebase/analytics";
+import { set } from "firebase/database";
+import { showFailureNotification } from "../../../components/notifications/notifications";
 
 interface Props {
   selectedGroup: Group;
@@ -67,11 +68,15 @@ const RsvpForm = (props: Props): JSX.Element => {
   const handleSubmit = (): void => {
     const groupRef = ref(database, `groups/${selectedGroup.id}`);
 
-    form.values.guests.forEach((guest, index) => {
+    const updatedGuests = form.values.guests.map((guest) => {
       if (guest.nameUnknown && guest.rsvp === RsvpResonse.ACCEPTED) {
-        form.setFieldValue(`guests.${index}.nameUnknown`, false);
+        return { ...guest, nameUnknown: false };
       }
+
+      return guest;
     });
+
+    form.setValues({ guests: updatedGuests });
 
     set(groupRef, { ...form.values })
       .then(() => {
@@ -120,7 +125,7 @@ const RsvpForm = (props: Props): JSX.Element => {
                   <UnknownGuestInput form={form} index={guestIndex} />
                 )}
               {guestIndex === Object.keys(form.values.guests).length - 1 && (
-                <Divider my="sm" key={`divider-bottom-${guestIndex}`} />
+                <Divider my="sm" />
               )}
             </Flex>
           ))}
@@ -137,6 +142,7 @@ const RsvpForm = (props: Props): JSX.Element => {
             {...form.getInputProps("dietaryRestrictions")}
           />
         </Stepper.Step>
+
         <Stepper.Completed>
           <Alert title="Success!" color="teal" variant="filled">
             Your reservation has been completed successfully, feel free to come back here

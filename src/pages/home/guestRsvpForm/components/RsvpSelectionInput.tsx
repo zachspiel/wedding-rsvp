@@ -1,7 +1,7 @@
 import React from "react";
 import { Group as MGroup, Radio } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { RsvpResonse, Group } from "../../../types/Guest";
+import { RsvpResonse, Group } from "../../../../types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;
