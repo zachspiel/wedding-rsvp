@@ -5,9 +5,10 @@ import { Group } from "../../../types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
 import { ref, onValue } from "firebase/database";
-import { database } from "../../../database/database";
+import { analytics, database } from "../../../database/database";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
+import { logEvent } from "firebase/analytics";
 
 const RsvpSection = (): JSX.Element => {
   const [error, setError] = React.useState<string>();
@@ -42,10 +43,10 @@ const RsvpSection = (): JSX.Element => {
       setError(undefined);
     }
 
-    // logEvent(analytics, "rsvp_form_search", {
-    //   searchValue: { firstName, lastName },
-    //   totalResults: filteredResults.length,
-    // });
+    logEvent(analytics, "rsvp_form_search", {
+      searchValue: { firstName, lastName },
+      totalResults: filteredResults.length,
+    });
 
     setSearchResults(filteredResults);
   };

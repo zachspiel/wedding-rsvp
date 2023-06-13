@@ -22,9 +22,10 @@ const Searchbar = (props: Props): JSX.Element => {
 
   return (
     <form
-      onSubmit={form.onSubmit(() =>
-        getSearchResults(form.values.firstName, form.values.lastName),
-      )}
+      onSubmit={form.onSubmit(() => {
+        getSearchResults(form.values.firstName, form.values.lastName);
+        form.reset();
+      })}
     >
       <MGroup pb="lg">
         <TextInput
