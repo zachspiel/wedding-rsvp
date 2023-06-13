@@ -37,7 +37,7 @@ const RsvpSection = (): JSX.Element => {
 
     if (filteredResults.length === 0) {
       setError(
-        "Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.",
+        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
       );
     } else {
       setError(undefined);
@@ -60,10 +60,16 @@ const RsvpSection = (): JSX.Element => {
                 RSVP for your entire group on the next page.`}
       </Text>
 
-      <Searchbar hasError={error !== undefined} getSearchResults={getSearchResults} />
+      <Searchbar getSearchResults={getSearchResults} />
 
       {selectedGroup === undefined && searchResults.length > 0 && (
         <Text>Select your info below or try searching again.</Text>
+      )}
+
+      {error !== undefined && (
+        <Text color="red" fz="sm">
+          {error}
+        </Text>
       )}
 
       {selectedGroup === undefined &&

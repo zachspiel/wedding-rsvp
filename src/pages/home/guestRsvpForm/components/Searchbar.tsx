@@ -3,12 +3,11 @@ import { Button, Group as MGroup, TextInput } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
 
 interface Props {
-  hasError: boolean;
   getSearchResults: (firstName: string, lastName: string) => void;
 }
 
 const Searchbar = (props: Props): JSX.Element => {
-  const { hasError, getSearchResults } = props;
+  const { getSearchResults } = props;
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -40,7 +39,7 @@ const Searchbar = (props: Props): JSX.Element => {
           {...form.getInputProps("lastName")}
         />
 
-        <Button mt={hasError ? 0 : "lg"} type="submit" disabled={!form.isValid()}>
+        <Button mt="lg" type="submit" disabled={!form.isValid()}>
           Search
         </Button>
       </MGroup>

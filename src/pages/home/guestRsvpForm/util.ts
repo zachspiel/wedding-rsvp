@@ -15,7 +15,7 @@ const guestMatchesSearch = (
   }
 
   return (
-    guestFirstName.includes(firstNameLowerCase) ||
+    guestFirstName.includes(firstNameLowerCase) &&
     guestLastName.includes(lastNameLowerCase)
   );
 };
