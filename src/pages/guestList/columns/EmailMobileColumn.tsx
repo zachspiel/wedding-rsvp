@@ -9,11 +9,12 @@ interface Props {
 const EmailMobileColumn = (props: Props): JSX.Element => {
   const { email, phone } = props;
 
-  const createTextElement = (value: string, name: string): JSX.Element => (
-    <Text c={value.length === 0 ? "dimmed" : ""}>
-      {value.length === 0 ? `No ${name}` : value}
-    </Text>
-  );
+  const createTextElement = (value: string, name: string): JSX.Element => {
+    if (value.length === 0) {
+      return <Text c="red">Missing {name}</Text>;
+    }
+    return <Text>{value}</Text>;
+  };
 
   return (
     <>

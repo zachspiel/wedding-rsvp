@@ -26,7 +26,7 @@ const Searchbar = (props: Props): JSX.Element => {
         form.reset();
       })}
     >
-      <MGroup pb="lg">
+      <MGroup pb="lg" align="end">
         <TextInput
           placeholder="First name"
           label="First Name"
@@ -39,7 +39,7 @@ const Searchbar = (props: Props): JSX.Element => {
           {...form.getInputProps("lastName")}
         />
 
-        <Button mt="lg" type="submit" disabled={!form.isValid()}>
+        <Button type="submit" disabled={!form.isValid()}>
           Search
         </Button>
       </MGroup>

@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "@mantine/form";
 import {
-  Textarea,
   Button,
   SegmentedControl,
   Center,
@@ -168,17 +167,6 @@ const AddGuest = (): JSX.Element => {
           </Radio.Group>
 
           <MailingAddressForm form={form} />
-
-          <Textarea
-            mt="md"
-            label="Message"
-            placeholder="Leave a message"
-            maxRows={10}
-            minRows={5}
-            autosize
-            name="message"
-            {...form.getInputProps("message")}
-          />
 
           <MGroup position="right" mt="xl">
             <Button variant="subtle" size="md" onClick={close}>
