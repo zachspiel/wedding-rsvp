@@ -1,4 +1,4 @@
-import { GuestAffiliation, Group } from "../../../types/Guest";
+import { GuestAffiliation, Group } from "../../../../types/Guest";
 
 export type FilterableKeys = "email" | "phone" | "address1";
 

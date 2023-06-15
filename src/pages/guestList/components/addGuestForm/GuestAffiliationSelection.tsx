@@ -1,7 +1,7 @@
 import React from "react";
 import { Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { GuestAffiliation, Group } from "../../../types/Guest";
+import { GuestAffiliation, Group } from "../../../../types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;

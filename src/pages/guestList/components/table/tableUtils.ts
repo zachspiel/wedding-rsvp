@@ -1,5 +1,5 @@
 import { keys } from "@mantine/utils";
-import { Group, Guest, GuestAffiliation } from "../../../types/Guest";
+import { Group, Guest, GuestAffiliation } from "../../../../types/Guest";
 
 type GroupFilterableKey = "email" | "phone" | "address1" | "address2" | "city" | "state";
 type GuestFilterableKey = "firstName" | "lastName" | "title";

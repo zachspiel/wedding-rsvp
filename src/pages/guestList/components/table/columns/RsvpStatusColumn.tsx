@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons";
-import { Guest, RsvpResonse } from "../../../types/Guest";
+import { Guest, RsvpResonse } from "../../../../../types/Guest";
 
 interface Props {
   guests: Guest[];

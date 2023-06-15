@@ -1,14 +1,14 @@
 import React from "react";
 import { ActionIcon, Button, Group as MGroup, Modal, Text } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons";
-import { Group } from "../../../types/Guest";
+import { Group } from "../../../../../types/Guest";
 import { ref, remove } from "@firebase/database";
 import { useDisclosure } from "@mantine/hooks";
-import { database } from "../../../database/database";
+import { database } from "../../../../../database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
-} from "../../../components/notifications/notifications";
+} from "../../../../../components/notifications/notifications";
 
 interface Props {
   group: Group;

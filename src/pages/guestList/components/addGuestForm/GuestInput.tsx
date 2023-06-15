@@ -9,7 +9,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Group, RelationshipType } from "../../../types/Guest";
+import { Group, RelationshipType } from "../../../../types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons";
 import { addChildToGuests, addPartnerToGuests } from "./util";
@@ -49,7 +49,7 @@ const GuestInput = (props: Props): JSX.Element => {
   }, [guests, index, lastAdultIndex]);
 
   const showAddChildButton = useMemo(() => {
-    return index === guests.length - 1 && guest.relationshipType === CHILD;
+    return index === guests.length - 1 && groupType === "family";
   }, [guests, index]);
 
   return (
@@ -138,7 +138,12 @@ const GuestInput = (props: Props): JSX.Element => {
       )}
 
       {showAddChildButton && (
-        <Button variant="outline" onClick={(): void => addChildToGuests(form)} mt="lg">
+        <Button
+          variant="outline"
+          onClick={(): void => addChildToGuests(form)}
+          mt="lg"
+          ml="sm"
+        >
           Add Child
         </Button>
       )}

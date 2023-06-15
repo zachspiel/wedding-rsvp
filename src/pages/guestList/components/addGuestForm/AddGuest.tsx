@@ -9,21 +9,21 @@ import {
   Modal,
 } from "@mantine/core";
 import GuestInput from "./GuestInput";
-import MailingAddressForm from "../../../components/form/MailingAddressForm";
+import MailingAddressForm from "../../../../components/form/MailingAddressForm";
 import { ref, set } from "@firebase/database";
 import GuestAffiliationSelection from "./GuestAffiliationSelection";
 import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../components/notifications/notifications";
-import { database } from "../../../database/database";
+} from "../../../../components/notifications/notifications";
+import { database } from "../../../../database/database";
 import {
   RelationshipType,
   Group,
   GuestAffiliation,
   RsvpResonse,
-} from "../../../types/Guest";
+} from "../../../../types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
 import { v4 as uuidv4 } from "uuid";
 

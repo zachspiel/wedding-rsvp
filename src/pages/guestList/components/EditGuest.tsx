@@ -9,8 +9,8 @@ import {
   showSuccessNotification,
   showFailureNotification,
 } from "../../../components/notifications/notifications";
-import GuestAffiliationSelection from "../addGuestForm/GuestAffiliationSelection";
-import GuestInput from "../addGuestForm/GuestInput";
+import GuestAffiliationSelection from "../components/addGuestForm/GuestAffiliationSelection";
+import GuestInput from "../components/addGuestForm/GuestInput";
 import MailingAddressForm from "../../../components/form/MailingAddressForm";
 
 interface Props {

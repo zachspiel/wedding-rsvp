@@ -1,12 +1,12 @@
 import React from "react";
 import { Group as MGroup, Radio } from "@mantine/core";
 import { ref, set } from "@firebase/database";
-import { Group } from "../../../types/Guest";
-import { database } from "../../../database/database";
+import { Group } from "../../../../../types/Guest";
+import { database } from "../../../../../database/database";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../components/notifications/notifications";
+} from "../../../../../components/notifications/notifications";
 
 interface Props {
   group: Group;
