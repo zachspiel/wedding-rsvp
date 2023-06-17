@@ -28,14 +28,14 @@ const Searchbar = (props: Props): JSX.Element => {
     >
       <MGroup pb="lg" align="end">
         <TextInput
+          label="First name"
           placeholder="First name"
-          label="First Name"
           {...form.getInputProps("firstName")}
         />
 
         <TextInput
+          label="Last name"
           placeholder="Last name"
-          label="Last Name"
           {...form.getInputProps("lastName")}
         />
 

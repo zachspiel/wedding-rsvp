@@ -7,6 +7,7 @@ import UploadImages from "./UploadImages";
 import useAdminView from "../../../hooks/adminView";
 import SectionTitle from "../../../components/common/SectionTitle";
 import { Photo } from "../../../types/Photo";
+import { Container, SimpleGrid } from "@mantine/core";
 
 export interface Captions {
   [key: string]: string;
@@ -36,24 +37,28 @@ const Gallery = (): JSX.Element => {
   ));
 
   return (
-    <>
-      <SectionTitle title="Gallery" id="gallery" />
-      {isAdminViewEnabled && <UploadImages />}
+    <Container sx={{ backgroundColor: "#f7f7f7" }} fluid>
+      <Container sx={{ padding: "0" }}>
+        <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
+          <SectionTitle title="Gallery" id="gallery" />
+          {isAdminViewEnabled && <UploadImages />}
 
-      <Carousel
-        slideSize="50%"
-        breakpoints={[{ maxWidth: "sm", slideSize: "100%", slideGap: 1 }]}
-        slideGap="xl"
-        pb="xl"
-        align="start"
-        withIndicators
-        slidesToScroll={1}
-        nextControlLabel="Next gallery image"
-        previousControlLabel="Previous gallery image"
-      >
-        {slides}
-      </Carousel>
-    </>
+          <Carousel
+            slideSize="50%"
+            breakpoints={[{ maxWidth: "sm", slideSize: "100%", slideGap: 1 }]}
+            slideGap="xl"
+            pb="xl"
+            align="start"
+            withIndicators
+            slidesToScroll={1}
+            nextControlLabel="Next gallery image"
+            previousControlLabel="Previous gallery image"
+          >
+            {slides}
+          </Carousel>
+        </SimpleGrid>
+      </Container>
+    </Container>
   );
 };
 

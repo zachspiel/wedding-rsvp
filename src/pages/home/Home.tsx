@@ -41,12 +41,12 @@ const Home = (): JSX.Element => {
       <Container fluid>
         <Container sx={{ padding: "0" }}>
           <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
-            <Gallery />
+            <Registry />
           </SimpleGrid>
         </Container>
       </Container>
 
-      <Registry />
+      <Gallery />
 
       {isSignedIn && <AdminViewToggle />}
 
