@@ -95,7 +95,7 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  rsvpLink: {
+  highlightedLink: {
     backgroundColor: theme.colors.pink[4],
     color: "#ffffff",
     "&:hover": {
@@ -118,7 +118,7 @@ const Navbar = (props: Props): JSX.Element => {
         className={cx(
           classes.link,
           menuItem.className,
-          menuItem.label === "RSVP" ? classes.rsvpLink : undefined,
+          menuItem.label === "RSVP" ? classes.highlightedLink : undefined,
         )}
       >
         {menuItem.label}
@@ -147,7 +147,10 @@ const Navbar = (props: Props): JSX.Element => {
         <Group spacing={5} className={classes.links}>
           {menuItems}
           {isSignedIn && (
-            <Button color="pink" onClick={(): Promise<void> => auth.signOut()}>
+            <Button
+              className={classes.highlightedLink}
+              onClick={(): Promise<void> => auth.signOut()}
+            >
               Sign out
             </Button>
           )}

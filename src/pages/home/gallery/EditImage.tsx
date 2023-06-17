@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { IconPencil } from "@tabler/icons";
+import { IconPencil, IconTrash } from "@tabler/icons";
 import { ref, remove, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../../database/database";
@@ -18,6 +18,7 @@ interface Props {
 const EditImage = (props: Props): JSX.Element => {
   const { image } = props;
   const [opened, setOpened] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const form = useForm({
     initialValues: { ...image },
@@ -54,6 +55,8 @@ const EditImage = (props: Props): JSX.Element => {
 
   const deleteImage = (): void => {
     const imageRef = storageRef(storage, image.filePath);
+    setShowConfirmDelete(false);
+
     deleteObject(imageRef)
       .then(() => {
         onSuccessfulDelete();
@@ -63,7 +66,7 @@ const EditImage = (props: Props): JSX.Element => {
         onDeletionError();
       });
   };
-
+  console.log(showConfirmDelete);
   return (
     <>
       <ActionIcon
@@ -95,9 +98,31 @@ const EditImage = (props: Props): JSX.Element => {
           />
 
           <Group position="right" mt="md">
-            <Button variant="subtle" color="red" onClick={(): void => deleteImage()}>
-              Delete
-            </Button>
+            {!showConfirmDelete && (
+              <Button
+                variant="subtle"
+                color="red"
+                leftIcon={<IconTrash />}
+                onClick={(): void => setShowConfirmDelete(true)}
+              >
+                Delete Image
+              </Button>
+            )}
+
+            {showConfirmDelete && (
+              <>
+                <Button
+                  variant="subtle"
+                  onClick={(): void => setShowConfirmDelete(false)}
+                >
+                  Cancel
+                </Button>
+
+                <Button color="red" onClick={(): void => deleteImage()}>
+                  Confirm
+                </Button>
+              </>
+            )}
 
             {form.isDirty() && <Button type="submit">Submit</Button>}
           </Group>
