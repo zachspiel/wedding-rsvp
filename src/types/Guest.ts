@@ -15,6 +15,7 @@ export interface Group {
   saveTheDateSent: boolean;
   dietaryRestrictions: string;
   guests: Guest[];
+  rsvpModifications?: RsvpModification[];
 }
 
 export interface Guest {
@@ -24,6 +25,10 @@ export interface Guest {
   nameUnknown: boolean;
   rsvp: RsvpResonse;
   relationshipType: RelationshipType;
+}
+
+export interface RsvpModification {
+  modifiedAt: string;
 }
 
 export enum RsvpResonse {

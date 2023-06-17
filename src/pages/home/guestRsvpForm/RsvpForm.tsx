@@ -67,6 +67,8 @@ const RsvpForm = (props: Props): JSX.Element => {
 
   const handleSubmit = (): void => {
     const groupRef = ref(database, `groups/${selectedGroup.id}`);
+    const rsvpModifications = [...(form.values.rsvpModifications ?? [])];
+    rsvpModifications.push({ modifiedAt: new Date().toISOString() });
 
     const updatedGuests = form.values.guests.map((guest) => {
       if (guest.nameUnknown && guest.rsvp === RsvpResonse.ACCEPTED) {
@@ -78,7 +80,7 @@ const RsvpForm = (props: Props): JSX.Element => {
 
     form.setValues({ guests: updatedGuests });
 
-    set(groupRef, { ...form.values })
+    set(groupRef, { ...form.values, rsvpModifications })
       .then(() => {
         logEvent(analytics, "rsvp_form_complete", {
           original: selectedGroup,
