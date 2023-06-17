@@ -76,9 +76,7 @@ const RsvpForm = (props: Props): JSX.Element => {
       return guest;
     });
 
-    form.setValues({ guests: updatedGuests });
-
-    set(groupRef, { ...form.values })
+    set(groupRef, { ...form.values, guests: updatedGuests })
       .then(() => {
         logEvent(analytics, "rsvp_form_complete", {
           original: selectedGroup,

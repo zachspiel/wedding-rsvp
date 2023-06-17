@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ActionIcon,
   Button,
@@ -9,10 +9,11 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Group, RelationshipType } from "../../../types/Guest";
+import { Group, RelationshipType } from "../../../../types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons";
 import { addChildToGuests, addPartnerToGuests } from "./util";
+import { findLastIndex } from "lodash";
 
 interface Props {
   form: UseFormReturnType<Group>;
@@ -28,8 +29,28 @@ const GuestInput = (props: Props): JSX.Element => {
   const firstChildInGroupIndex = guests.findIndex(
     (guest) => guest.relationshipType === CHILD,
   );
-  const showAddPlusOneButton =
-    guests.filter((guest) => guest.relationshipType === PARTNER).length === 0;
+
+  const lastAdultIndex = useMemo(
+    () => findLastIndex(guests, (guest) => guest.relationshipType !== CHILD),
+    [guests],
+  );
+
+  const showAddPlusOneButton = useMemo(
+    () => guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
+    [guests],
+  );
+
+  const showAddAdultButton = useMemo(() => {
+    return (
+      groupType === "family" &&
+      guest.relationshipType === PARTNER &&
+      index === lastAdultIndex
+    );
+  }, [guests, index, lastAdultIndex]);
+
+  const showAddChildButton = useMemo(() => {
+    return index === guests.length - 1 && groupType === "family";
+  }, [guests, index]);
 
   return (
     <>
@@ -104,12 +125,25 @@ const GuestInput = (props: Props): JSX.Element => {
       {index > 0 && guest.relationshipType !== PRIMARY && (
         <Switch
           mt="lg"
+          pb="sm"
           label="Name Unknown"
           {...form.getInputProps(`guests.${index}.nameUnknown`)}
         />
       )}
-      {index === guests.length - 1 && groupType === "family" && (
-        <Button variant="outline" onClick={(): void => addChildToGuests(form)} mt="lg">
+
+      {showAddAdultButton && (
+        <Button variant="outline" onClick={(): void => addPartnerToGuests(form)} mt="lg">
+          Add Adult
+        </Button>
+      )}
+
+      {showAddChildButton && (
+        <Button
+          variant="outline"
+          onClick={(): void => addChildToGuests(form)}
+          mt="lg"
+          ml="sm"
+        >
           Add Child
         </Button>
       )}

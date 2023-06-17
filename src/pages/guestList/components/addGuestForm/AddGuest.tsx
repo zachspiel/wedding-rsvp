@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "@mantine/form";
 import {
-  Textarea,
   Button,
   SegmentedControl,
   Center,
@@ -10,21 +9,21 @@ import {
   Modal,
 } from "@mantine/core";
 import GuestInput from "./GuestInput";
-import MailingAddressForm from "../../../components/form/MailingAddressForm";
+import MailingAddressForm from "../../../../components/form/MailingAddressForm";
 import { ref, set } from "@firebase/database";
 import GuestAffiliationSelection from "./GuestAffiliationSelection";
 import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../components/notifications/notifications";
-import { database } from "../../../database/database";
+} from "../../../../components/notifications/notifications";
+import { database } from "../../../../database/database";
 import {
   RelationshipType,
   Group,
   GuestAffiliation,
   RsvpResonse,
-} from "../../../types/Guest";
+} from "../../../../types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
 import { v4 as uuidv4 } from "uuid";
 
@@ -168,17 +167,6 @@ const AddGuest = (): JSX.Element => {
           </Radio.Group>
 
           <MailingAddressForm form={form} />
-
-          <Textarea
-            mt="md"
-            label="Message"
-            placeholder="Leave a message"
-            maxRows={10}
-            minRows={5}
-            autosize
-            name="message"
-            {...form.getInputProps("message")}
-          />
 
           <MGroup position="right" mt="xl">
             <Button variant="subtle" size="md" onClick={close}>

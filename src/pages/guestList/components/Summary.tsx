@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
 import { RelationshipType, Group } from "../../../types/Guest";
 
@@ -6,29 +6,38 @@ interface Props {
   groups: Group[];
 }
 
+const { CHILD } = RelationshipType;
+
 const Summary = (props: Props): JSX.Element => {
   const { groups } = props;
-  const allGuests = groups.flatMap((group) => group.guests);
-  const groupGuestLengths = groups
-    .filter((group) => group.invited)
-    .map((group) => group.guests.length);
 
-  const totalInvited =
-    groupGuestLengths.length > 0
-      ? groupGuestLengths.reduce((total, current) => total + current)
-      : 0;
+  const allGuests = useMemo(() => groups.flatMap((group) => group.guests), [groups]);
+  const groupGuestLengths = useMemo(
+    () => groups.filter((group) => group.invited).map((group) => group.guests.length),
+    [groups],
+  );
 
-  const totalAdults = allGuests.filter(
-    (guest) => guest.relationshipType !== RelationshipType.CHILD,
-  ).length;
+  const totalInvited = useMemo(() => {
+    if (groupGuestLengths.length > 0) {
+      return groupGuestLengths.reduce((total, current) => total + current);
+    }
+    return 0;
+  }, [groupGuestLengths]);
 
-  const totalChildren = allGuests.filter(
-    (guest) => guest.relationshipType === RelationshipType.CHILD,
-  ).length;
+  const totalAdults = useMemo(
+    () => allGuests.filter((guest) => guest.relationshipType !== CHILD).length,
+    [allGuests],
+  );
 
-  const totalMissingAddress = groups.filter(
-    (group) => group.address1?.length === 0,
-  ).length;
+  const totalChildren = useMemo(
+    () => allGuests.filter((guest) => guest.relationshipType === CHILD).length,
+    [allGuests],
+  );
+
+  const totalMissingAddress = useMemo(
+    () => groups.filter((group) => group.address1?.length === 0).length,
+    [allGuests],
+  );
 
   const createSummaryItem = (title: string, total: number): JSX.Element => {
     return (

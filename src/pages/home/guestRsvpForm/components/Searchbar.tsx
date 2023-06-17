@@ -26,10 +26,18 @@ const Searchbar = (props: Props): JSX.Element => {
         form.reset();
       })}
     >
-      <MGroup pb="lg">
-        <TextInput placeholder="First name" {...form.getInputProps("firstName")} />
+      <MGroup pb="lg" align="end">
+        <TextInput
+          label="First name"
+          placeholder="First name"
+          {...form.getInputProps("firstName")}
+        />
 
-        <TextInput placeholder="Last name" {...form.getInputProps("lastName")} />
+        <TextInput
+          label="Last name"
+          placeholder="Last name"
+          {...form.getInputProps("lastName")}
+        />
 
         <Button type="submit" disabled={!form.isValid()}>
           Search

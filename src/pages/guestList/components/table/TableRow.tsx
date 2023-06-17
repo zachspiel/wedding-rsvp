@@ -1,10 +1,10 @@
 import React from "react";
-import { Group } from "../../../types/Guest";
-import ActionColumn from "../columns/ActionColumn";
-import AddressColumn from "../columns/AddressColumn";
-import EmailMobileColumn from "../columns/EmailMobileColumn";
-import GuestsColumn from "../columns/GuestsColumn";
-import RsvpStatusColumn from "../columns/RsvpStatusColumn";
+import { Group } from "../../../../types/Guest";
+import ActionColumn from "./columns/ActionColumn";
+import AddressColumn from "./columns/AddressColumn";
+import EmailMobileColumn from "./columns/EmailMobileColumn";
+import GuestsColumn from "./columns/GuestsColumn";
+import RsvpStatusColumn from "./columns/RsvpStatusColumn";
 
 interface Props {
   group: Group;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@mantine/core";
-import { Guest, GuestAffiliation } from "../../../types/Guest";
+import { Guest, GuestAffiliation } from "../../../../../types/Guest";
 
 interface Props {
   guests: Guest[];
