@@ -10,6 +10,7 @@ interface Props {
 
 const SearchResultRow = (props: Props): JSX.Element => {
   const { group, displayBottomDivider } = props;
+  const isModifyingRsvp = group.rsvpModifications !== undefined;
 
   return (
     <Flex direction="column" key={group.id}>
@@ -28,7 +29,7 @@ const SearchResultRow = (props: Props): JSX.Element => {
             props.onSelect();
           }}
         >
-          Select
+          {isModifyingRsvp ? "Edit RSVP" : "Select"}
         </Button>
       </MGroup>
       {displayBottomDivider && <Divider my="sm" />}
