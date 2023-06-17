@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@mantine/core";
-import { Group } from "../../../types/Guest";
+import { Group } from "../../../../../types/Guest";
 
 interface Props {
   group: Group;

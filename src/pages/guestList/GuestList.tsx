@@ -16,12 +16,12 @@ import SectionTitle from "../../components/common/SectionTitle";
 import { database } from "../../database/database";
 import EditGuest from "./components/EditGuest";
 import Summary from "./components/Summary";
-import AddGuest from "./addGuestForm/AddGuest";
+import AddGuest from "./components/addGuestForm/AddGuest";
 import Navbar from "../../components/navbar/Navbar";
-import TableRow from "./table/TableRow";
+import TableRow from "./components/table/TableRow";
 import { IconSearch } from "@tabler/icons";
-import { filterGroups } from "./table/tableUtils";
-import FilterSelection from "./filters/FilterSelection";
+import { filterGroups } from "./components/table/tableUtils";
+import FilterSelection from "./components/filters/FilterSelection";
 import Footer from "../../components/navbar/Footer";
 
 const GuestList = (): JSX.Element => {

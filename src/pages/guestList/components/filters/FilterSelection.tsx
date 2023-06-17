@@ -1,6 +1,6 @@
 import React from "react";
 import { MultiSelect, SelectItem } from "@mantine/core";
-import { Group, GuestAffiliation } from "../../../types/Guest";
+import { Group, GuestAffiliation } from "../../../../types/Guest";
 import {
   filterGroupByAffiliation,
   getMissingValueTotals,
