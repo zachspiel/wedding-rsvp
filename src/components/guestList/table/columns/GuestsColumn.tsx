@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { Guest, GuestAffiliation } from "../../../../../types/Guest";
+import { Guest, GuestAffiliation } from "@spiel-wedding/types/Guest";
 
 interface Props {
   guests: Guest[];

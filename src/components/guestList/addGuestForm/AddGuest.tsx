@@ -10,7 +10,7 @@ import {
   Modal,
 } from "@mantine/core";
 import GuestInput from "./GuestInput";
-import MailingAddressForm from "../../../../components/form/MailingAddressForm";
+import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import { ref, set } from "@firebase/database";
 import GuestAffiliationSelection from "./GuestAffiliationSelection";
 import { useDisclosure } from "@mantine/hooks";
@@ -121,7 +121,7 @@ const AddGuest = (): JSX.Element => {
     })
       .then(() => {
         showSuccessNotification(
-          `Successfully added ${form.values.guests.length} guests 🎉!`
+          `Successfully added ${form.values.guests.length} guests 🎉!`,
         );
       })
       .catch(() => {

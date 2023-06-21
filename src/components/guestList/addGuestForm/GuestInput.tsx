@@ -9,7 +9,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Group, RelationshipType } from "../../../../types/Guest";
+import { Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons-react";
 import { addChildToGuests, addPartnerToGuests } from "./util";
@@ -27,17 +27,17 @@ const GuestInput = (props: Props): JSX.Element => {
   const { guests } = form.values;
   const guest = guests[index];
   const firstChildInGroupIndex = guests.findIndex(
-    (guest) => guest.relationshipType === CHILD
+    (guest) => guest.relationshipType === CHILD,
   );
 
   const lastAdultIndex = useMemo(
     () => findLastIndex(guests, (guest) => guest.relationshipType !== CHILD),
-    [guests]
+    [guests],
   );
 
   const showAddPlusOneButton = useMemo(
     () => guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
-    [guests]
+    [guests],
   );
 
   const showAddAdultButton = useMemo(() => {

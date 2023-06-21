@@ -5,15 +5,15 @@ import { Button, Group as MGroup, Radio, Tabs } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { ref, set } from "firebase/database";
 import RsvpStatus from "./RsvpStatus";
-import { database } from "../../../database/database";
-import { Group } from "../../../types/Guest";
+import { database } from "@spiel-wedding/database/database";
+import { Group } from "@spiel-wedding/types/Guest";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../components/notifications/notifications";
-import GuestAffiliationSelection from "../components/addGuestForm/GuestAffiliationSelection";
-import GuestInput from "../components/addGuestForm/GuestInput";
-import MailingAddressForm from "../../../components/form/MailingAddressForm";
+} from "@spiel-wedding/components/notifications/notifications";
+import MailingAddressForm from "../form/MailingAddressForm";
+import GuestAffiliationSelection from "./addGuestForm/GuestAffiliationSelection";
+import GuestInput from "./addGuestForm/GuestInput";
 
 interface Props {
   group: Group;
@@ -23,7 +23,7 @@ interface Props {
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe"
+    group.invited ? "definitely" : "maybe",
   );
 
   const form = useForm<Group>({

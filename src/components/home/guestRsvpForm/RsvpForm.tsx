@@ -10,15 +10,15 @@ import {
   TextInput,
 } from "@mantine/core";
 import { ref } from "@firebase/database";
-import { analytics, database } from "../../../database/database";
-import { Group, RsvpResonse } from "../../../types/Guest";
+import { analytics, database } from "@spiel-wedding/database/database";
+import { Group, RsvpResonse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import MailingAddressForm from "../../../components/form/MailingAddressForm";
+import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
 import { logEvent } from "firebase/analytics";
 import { set } from "firebase/database";
-import { showFailureNotification } from "../../../components/notifications/notifications";
+import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useEffect, useState } from "react";
 
 interface Props {

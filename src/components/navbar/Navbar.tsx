@@ -12,8 +12,8 @@ import {
   Anchor,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import useSignInStatus from "../../hooks/signInStatus";
-import { auth } from "../../database/database";
+import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
+import { auth } from "@spiel-wedding/database/database";
 import { MenuItem, links } from "./links";
 import Logo from "./Logo";
 import { useMemo } from "react";
@@ -118,7 +118,7 @@ const Navbar = (props: Props): JSX.Element => {
         className={cx(
           classes.link,
           menuItem.className,
-          menuItem.label === "RSVP" ? classes.rsvpLink : undefined
+          menuItem.label === "RSVP" ? classes.rsvpLink : undefined,
         )}
       >
         {menuItem.label}

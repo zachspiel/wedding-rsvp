@@ -3,13 +3,13 @@ import React from "react";
 import { Button, Container, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { ref, set, onValue } from "firebase/database";
-import { database } from "../../../database/database";
+import { database } from "@spiel-wedding/database/database";
 import GuestBookMessage from "./GuestBookMessage";
 import { v4 as uuidv4 } from "uuid";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
-} from "../../../components/notifications/notifications";
+} from "@spiel-wedding/components/notifications/notifications";
 import { useLocalStorage } from "usehooks-ts";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 
@@ -27,7 +27,7 @@ const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -63,7 +63,7 @@ const GuestBook = (): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while signing the guest book. Please try again later!"
+          "An error occured while signing the guest book. Please try again later!",
         );
       });
 

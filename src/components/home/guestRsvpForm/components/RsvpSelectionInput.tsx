@@ -1,7 +1,7 @@
 "use client";
 import { Group as MGroup, Radio } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { RsvpResonse, Group } from "../../../../types/Guest";
+import { RsvpResonse, Group } from "@spiel-wedding/types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;

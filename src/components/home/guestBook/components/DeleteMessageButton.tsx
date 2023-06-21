@@ -6,8 +6,8 @@ import { ref, set } from "firebase/database";
 import {
   showSuccessNotification,
   showCustomFailureNotification,
-} from "../../../../components/notifications/notifications";
-import { database } from "../../../../database/database";
+} from "@spiel-wedding/components/notifications/notifications";
+import { database } from "@spiel-wedding/database/database";
 import { IconTrash } from "@tabler/icons-react";
 
 interface Props {
@@ -27,7 +27,7 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while deleting the message. Please try again later."
+          "An error occured while deleting the message. Please try again later.",
         );
       });
   };

@@ -1,11 +1,11 @@
 "use client";
 
 import { Text } from "@mantine/core";
-import { Group } from "../../../types/Guest";
+import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
 import { ref, onValue } from "firebase/database";
-import { analytics, database } from "../../../database/database";
+import { analytics, database } from "@spiel-wedding/database/database";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
 import { logEvent } from "firebase/analytics";
@@ -34,12 +34,12 @@ const RsvpSection = (): JSX.Element => {
     const filteredResults = groups.filter(
       (group) =>
         group.guests.filter((guest) => guestMatchesSearch(firstName, lastName, guest))
-          .length > 0
+          .length > 0,
     );
 
     if (filteredResults.length === 0) {
       setError(
-        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`
+        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
       );
     } else {
       setError(undefined);

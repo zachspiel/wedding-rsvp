@@ -1,6 +1,6 @@
 import { Flex, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { Group } from "../../../../types/Guest";
+import { Group } from "@spiel-wedding/types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;

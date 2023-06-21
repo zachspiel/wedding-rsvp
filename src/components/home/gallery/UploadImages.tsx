@@ -1,13 +1,13 @@
 "use client";
 import { Group, FileButton, Button } from "@mantine/core";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage, database } from "../../../database/database";
+import { storage, database } from "@spiel-wedding/database/database";
 import { notifications } from "@mantine/notifications";
 import {
   showSuccessNotification,
   showFailureNotification,
-} from "../../../components/notifications/notifications";
-import { Photo } from "../../../types/Photo";
+} from "@spiel-wedding/components/notifications/notifications";
+import { Photo } from "@spiel-wedding/types/Photo";
 import { v4 as uuid4 } from "uuid";
 import { set, ref as databaseRef } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -37,7 +37,7 @@ const UploadImages = (): JSX.Element => {
         "state_changed",
         (snapshot) => {
           const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
           );
 
           if (percent === 100) {
@@ -48,7 +48,7 @@ const UploadImages = (): JSX.Element => {
             });
           }
         },
-        (err) => showFailureNotification()
+        (err) => showFailureNotification(),
       );
     }
   };

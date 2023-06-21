@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Flex, Text, useMantineTheme } from "@mantine/core";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useMediaQuery } from "@mantine/hooks";

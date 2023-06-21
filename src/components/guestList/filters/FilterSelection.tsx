@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { MultiSelect, SelectItem } from "@mantine/core";
-import { Group, GuestAffiliation } from "../../../../types/Guest";
+import { Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 import {
   filterGroupByAffiliation,
   getMissingValueTotals,
@@ -22,7 +22,7 @@ const FilterSelection = (props: Props): JSX.Element => {
       groups
         .map((group) => group.guests.length)
         .reduce((total, current) => total + current, 0),
-    [groups]
+    [groups],
   );
 
   React.useEffect(() => {

@@ -1,4 +1,4 @@
-import { Guest } from "../../../types/Guest";
+import { Guest } from "@spiel-wedding/types/Guest";
 
 const guestMatchesSearch = (
   firstName: string,
