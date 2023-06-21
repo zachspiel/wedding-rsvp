@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import {
   createStyles,
   Header,
@@ -12,11 +12,11 @@ import {
   Anchor,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import useSignInStatus from "../../hooks/signInStatus";
-import { auth } from "../../database/database";
+import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
+import { auth } from "@spiel-wedding/database/database";
 import { MenuItem, links } from "./links";
-import roses from "../../assets/images/blush-rose.webp";
 import Logo from "./Logo";
+import { useMemo } from "react";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
     zIndex: 1,
 
     [theme.fn.largerThan("sm")]: {
-      backgroundImage: `url(${roses})`,
+      backgroundImage: `url("/assets/images/blush-rose.webp")`,
       backgroundSize: "cover",
       backgroundPosition: "center",
     },
@@ -126,7 +126,7 @@ const Navbar = (props: Props): JSX.Element => {
     );
   };
 
-  const menuItems = React.useMemo(() => {
+  const menuItems = useMemo(() => {
     const elements = links.map(createMenuItem);
 
     if (isSignedIn) {

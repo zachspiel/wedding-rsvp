@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { SignInStatusContext } from "../context/SignInStatus";
-import { SignInStatusContextType } from "../types/SignInStatusContext";
+import { SignInStatusContext } from "@spiel-wedding/context/SignInStatus";
+import { SignInStatusContextType } from "@spiel-wedding/types/SignInStatusContext";
 
 const useSignInStatus = (): SignInStatusContextType => {
   const signInStatusContext = useContext(SignInStatusContext) as SignInStatusContextType;

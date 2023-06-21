@@ -1,22 +1,26 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAR4MP31HFiMfrKg0CS4GZlVdSxony21C4",
-  authDomain: "spielberger-wedding.firebaseapp.com",
-  databaseURL: "https://spielberger-wedding-default-rtdb.firebaseio.com",
-  projectId: "spielberger-wedding",
-  storageBucket: "spielberger-wedding.appspot.com",
-  messagingSenderId: "340233884916",
-  appId: "1:340233884916:web:ea915f50e3636bf387baa1",
-  measurementId: "G-CDGR4SLNX2",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(firebaseApp);
-export const analytics = getAnalytics(firebaseApp);
+export const analytics =
+  firebaseApp !== null && typeof window !== "undefined"
+    ? getAnalytics(firebaseApp)
+    : null;
 export const database = getDatabase(firebaseApp);
 export const storage = getStorage(firebaseApp);

@@ -1,14 +1,13 @@
-import React from "react";
+"use client";
 import { createStyles, Container, Group, Anchor, rem } from "@mantine/core";
 import { links } from "./links";
-import roses from "../../assets/images/blush-rose.webp";
 import Logo from "./Logo";
 
 const useStyles = createStyles((theme) => ({
   footer: {
     borderTop: `${rem(1)} solid ${theme.colors.gray[2]}`,
     [theme.fn.largerThan("sm")]: {
-      backgroundImage: `url(${roses})`,
+      backgroundImage: `url(/assets/images/blush-rose.webp)`,
       backgroundSize: "cover",
       backgroundPosition: "center",
     },
