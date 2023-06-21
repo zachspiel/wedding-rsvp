@@ -68,7 +68,7 @@ const EditImage = (props: Props): JSX.Element => {
         onDeletionError();
       });
   };
-  console.log(showConfirmDelete);
+
   return (
     <>
       <ActionIcon
