@@ -1,12 +1,12 @@
-import React from "react";
+"use client";
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
-import { auth } from "../database/database";
-import { FcProps } from "../types/fcProps";
-import { SignInStatusContextType } from "../types/SignInStatusContext";
+import { auth } from "@spiel-wedding/database/database";
+import { FcProps } from "@spiel-wedding/types/fcProps";
+import { SignInStatusContextType } from "@spiel-wedding/types/SignInStatusContext";
 
 export const SignInStatusContext = createContext<SignInStatusContextType | undefined>(
-  undefined,
+  undefined
 );
 
 const SignInStatusProvider = (props: FcProps): JSX.Element => {
