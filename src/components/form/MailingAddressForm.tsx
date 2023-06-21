@@ -1,4 +1,3 @@
-import React from "react";
 import { UseFormReturnType } from "@mantine/form";
 import { Group } from "../../types/Guest";
 import { Accordion, Grid, TextInput, Select } from "@mantine/core";
