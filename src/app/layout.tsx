@@ -9,7 +9,6 @@ import Footer from "@spiel-wedding/components/navbar/Footer";
 export const metadata = {
   title: "Spielberger Wedding 2024",
   description: "The Spielbergers 2024",
-  "og:image": "https://www.zachandsedona.com/assets/images/The-Spielbergers.webp",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
