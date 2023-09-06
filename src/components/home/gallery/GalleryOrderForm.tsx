@@ -1,10 +1,9 @@
 "use client";
 
-import { createStyles, Divider, Flex, rem, Text, Title } from "@mantine/core";
+import { createStyles, Flex, rem, ScrollArea, Text, Title } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconGripVertical } from "@tabler/icons-react";
-
 import { Photo } from "@spiel-wedding/types/Photo";
 import Image from "next/image";
 import { useEffect } from "react";
@@ -103,21 +102,22 @@ const GalleryOrderForm = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Divider />
       <Title order={4}>Reorder Gallery</Title>
       <DragDropContext
         onDragEnd={({ destination, source }) =>
           handlers.reorder({ from: source.index, to: destination?.index || 0 })
         }
       >
-        <Droppable droppableId="dnd-list" direction="vertical">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {items}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+        <ScrollArea h={350}>
+          <Droppable droppableId="dnd-list" direction="vertical">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {items}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </ScrollArea>
       </DragDropContext>
     </>
   );

@@ -51,36 +51,6 @@ const UploadImages = (): JSX.Element => {
     } else {
       showFailureNotification();
     }
-
-    // if (result.status === 200) {
-    //   showSuccessNotification("Successfully uploaded image.");
-    // } else {
-    //   showFailureNotification();
-    // }
-
-    // const arrayBuffer = await file.arrayBuffer();
-
-    // if (arrayBuffer !== undefined) {
-    //   const uploadTask = uploadBytesResumable(storageRef, arrayBuffer);
-
-    //   uploadTask.on(
-    //     "state_changed",
-    //     (snapshot) => {
-    //       const percent = Math.round(
-    //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-    //       );
-
-    //       if (percent === 100) {
-    //         showSuccessNotification("Successfully uploaded image.");
-
-    //         getDownloadURL(storageRef).then((url) => {
-    //           savePhotoToDatabase(file.name, url);
-    //         });
-    //       }
-    //     },
-    //     (err) => showFailureNotification(),
-    //   );
-    // }
   };
 
   const savePhotoToDatabase = (filename: string, downloadUrl: string): void => {
