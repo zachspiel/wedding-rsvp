@@ -56,7 +56,6 @@ const Gallery = (): JSX.Element => {
     </Carousel.Slide>
   ));
 
-  console.log(photos);
   return (
     <SectionContainer grayBackground>
       <SectionTitle title="Gallery" id="gallery" />

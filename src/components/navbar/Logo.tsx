@@ -1,5 +1,6 @@
 import React from "react";
-import { createStyles, Image } from "@mantine/core";
+import { createStyles } from "@mantine/core";
+import Image from "next/image";
 
 const useStyles = createStyles((theme) => ({
   logo: {
