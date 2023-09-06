@@ -1,4 +1,5 @@
 "use client";
+
 import { Carousel } from "@mantine/carousel";
 import { onValue, ref } from "firebase/database";
 import { database } from "@spiel-wedding/database/database";
@@ -8,14 +9,33 @@ import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { useState, useEffect } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { createStyles, getStylesRef } from "@mantine/core";
+import GalleryOrderForm from "./GalleryOrderForm";
 
 export interface Captions {
   [key: string]: string;
 }
 
+const useStyles = createStyles(() => ({
+  controls: {
+    ref: getStylesRef("controls"),
+    transition: "opacity 150ms ease",
+    opacity: 0,
+  },
+
+  root: {
+    "&:hover": {
+      [`& .${getStylesRef("controls")}`]: {
+        opacity: 1,
+      },
+    },
+  },
+}));
+
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const { classes } = useStyles();
 
   useEffect(() => {
     onValue(ref(database, "photos"), (snapshot) => {
@@ -36,6 +56,7 @@ const Gallery = (): JSX.Element => {
     </Carousel.Slide>
   ));
 
+  console.log(photos);
   return (
     <SectionContainer grayBackground>
       <SectionTitle title="Gallery" id="gallery" />
@@ -47,13 +68,16 @@ const Gallery = (): JSX.Element => {
         slideGap="xl"
         pb="xl"
         align="start"
-        withIndicators
         slidesToScroll={1}
+        loop
         nextControlLabel="Next gallery image"
         previousControlLabel="Previous gallery image"
+        classNames={classes}
       >
         {slides}
       </Carousel>
+
+      {isAdminViewEnabled && <GalleryOrderForm photos={photos} />}
     </SectionContainer>
   );
 };

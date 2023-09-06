@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { GuestMessage } from "../GuestBook";
@@ -27,7 +29,7 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while deleting the message. Please try again later.",
+          "An error occured while deleting the message. Please try again later."
         );
       });
   };

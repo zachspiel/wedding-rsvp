@@ -1,6 +1,3 @@
-import AdminViewProvider from "@spiel-wedding/context/AdminView";
-import SignInStatusProvider from "@spiel-wedding/context/SignInStatus";
-import { MantineProvider } from "@mantine/core";
 import Navbar from "@spiel-wedding/components/navbar/Navbar";
 import "./globals.css";
 import RootStyleRegistry from "./emotion";

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Textarea, Group, Button } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
@@ -41,7 +43,7 @@ const EditMessage = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while updating the message. Please try again later.",
+          "An error occured while updating the message. Please try again later."
         );
       });
 

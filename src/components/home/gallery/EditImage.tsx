@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { ref, remove, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
@@ -24,10 +24,6 @@ const EditImage = (props: Props): JSX.Element => {
 
   const form = useForm({
     initialValues: { ...image },
-
-    validate: {
-      caption: isNotEmpty("Please enter a caption"),
-    },
   });
 
   const handleSubmit = (): void => {

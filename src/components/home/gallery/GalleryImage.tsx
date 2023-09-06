@@ -1,6 +1,16 @@
 "use client";
-import { createStyles, Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
+
+import {
+  ActionIcon,
+  createStyles,
+  Flex,
+  getStylesRef,
+  Paper,
+  Switch,
+  Title,
+  useMantineTheme,
+} from "@mantine/core";
+import { IconCheck, IconEye, IconX } from "@tabler/icons-react";
 import EditImage from "./EditImage";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { ref, set } from "firebase/database";
@@ -9,7 +19,8 @@ import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface Props {
   image: Photo;
@@ -18,13 +29,17 @@ interface Props {
 
 const useStyles = createStyles((theme) => ({
   card: {
-    height: 440,
+    [theme.fn.smallerThan("md")]: {
+      height: 440,
+    },
+    [theme.fn.largerThan("md")]: {
+      height: 540,
+    },
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    position: "relative",
   },
 
   title: {
@@ -32,8 +47,18 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 900,
     color: theme.white,
     lineHeight: 1.2,
-    fontSize: 32,
+    fontSize: 24,
     marginTop: theme.spacing.xs,
+  },
+
+  cardContent: {
+    zIndex: 1,
+    position: "relative",
+  },
+
+  cardImage: {
+    height: 440,
+    borderRadius: theme.radius.md,
   },
 }));
 
@@ -42,6 +67,12 @@ const GalleryImage = (props: Props): JSX.Element => {
   const theme = useMantineTheme();
   const [checked, setChecked] = useState(image.isVisible);
   const { classes } = useStyles();
+
+  useEffect(() => {
+    if (image.isVisible !== checked) {
+      setChecked(image.isVisible);
+    }
+  }, [image.isVisible]);
 
   const toggleVisibility = (isVisible: boolean): void => {
     const successMessage = isVisible ? "public" : "hidden";
@@ -56,14 +87,17 @@ const GalleryImage = (props: Props): JSX.Element => {
   };
 
   return (
-    <Paper
-      shadow="md"
-      p="xl"
-      radius="md"
-      sx={{ backgroundImage: `url(${image.downloadUrl})` }}
-      className={classes.card}
-    >
-      <Flex wrap="wrap" w="100%">
+    <Paper shadow="md" p="xl" radius="md" className={classes.card}>
+      <Image
+        src={image.downloadUrl}
+        alt={image.caption ?? image.id}
+        className={classes.cardImage}
+        fill
+        sizes="(max-width: 768px) 33vw"
+        style={{ objectFit: "cover", zIndex: 0 }}
+      />
+
+      <Flex wrap="wrap" w="100%" className={classes.cardContent}>
         {displayAdminView && (
           <Switch
             checked={checked}
@@ -92,7 +126,7 @@ const GalleryImage = (props: Props): JSX.Element => {
             }
           />
         )}
-        <Title order={3} className={classes.title}>
+        <Title order={2} className={classes.title}>
           {image.caption}
         </Title>
         {displayAdminView && <EditImage image={image} />}
