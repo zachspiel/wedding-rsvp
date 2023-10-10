@@ -1,7 +1,5 @@
 "use client";
 import {
-  createStyles,
-  Header,
   Container,
   Group,
   Burger,
@@ -17,6 +15,8 @@ import { auth } from "@spiel-wedding/database/database";
 import { MenuItem, links } from "./links";
 import Logo from "./Logo";
 import { useMemo } from "react";
+import classes from "./navbar.module.css";
+import cx from "clsx";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -24,88 +24,7 @@ interface Props {
   showHome?: boolean;
 }
 
-const useStyles = createStyles((theme) => ({
-  root: {
-    position: "relative",
-    zIndex: 1,
-
-    [theme.fn.largerThan("sm")]: {
-      backgroundImage: `url("/assets/images/blush-rose.webp")`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    },
-  },
-
-  dropdown: {
-    position: "absolute",
-    top: HEADER_HEIGHT,
-    left: 0,
-    right: 0,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopWidth: 0,
-    overflow: "hidden",
-
-    [theme.fn.largerThan("sm")]: {
-      display: "none",
-    },
-  },
-
-  header: {
-    display: "flex",
-    [theme.fn.largerThan("sm")]: {
-      justifyContent: "center",
-    },
-    [theme.fn.smallerThan("sm")]: {
-      justifyContent: "space-between",
-    },
-    alignItems: "center",
-    height: "100%",
-  },
-
-  links: {
-    [theme.fn.smallerThan("sm")]: {
-      display: "none",
-    },
-  },
-
-  burger: {
-    [theme.fn.largerThan("sm")]: {
-      display: "none",
-    },
-  },
-
-  link: {
-    display: "block",
-    lineHeight: 1,
-    padding: `${rem(8)} ${rem(12)}`,
-    borderRadius: theme.radius.sm,
-    color: theme.colors.gray[7],
-    fontSize: theme.fontSizes.md,
-    fontWeight: 500,
-
-    "&:hover": {
-      backgroundColor: theme.colors.pink[0],
-      textDecoration: "none",
-    },
-
-    [theme.fn.smallerThan("sm")]: {
-      borderRadius: 0,
-      padding: theme.spacing.md,
-    },
-  },
-
-  highlightedLink: {
-    backgroundColor: theme.colors.pink[4],
-    color: "#ffffff",
-    "&:hover": {
-      backgroundColor: theme.colors.pink[3],
-    },
-  },
-}));
-
 const Navbar = (props: Props): JSX.Element => {
-  const { classes, cx } = useStyles();
   const { isSignedIn } = useSignInStatus();
 
   const [opened, { toggle, close }] = useDisclosure(false);
@@ -118,7 +37,7 @@ const Navbar = (props: Props): JSX.Element => {
         className={cx(
           classes.link,
           menuItem.className,
-          menuItem.label === "RSVP" ? classes.highlightedLink : undefined,
+          menuItem.label === "RSVP" ? classes.highlightedLink : undefined
         )}
       >
         {menuItem.label}
@@ -141,10 +60,10 @@ const Navbar = (props: Props): JSX.Element => {
   }, [links, isSignedIn]);
 
   return (
-    <Header height={HEADER_HEIGHT} className={classes.root}>
-      <Container className={classes.header} sx={{ maxWidth: "100%" }}>
+    <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
+      <Container className={classes.header} style={{ maxWidth: "100%" }}>
         <Logo />
-        <Group spacing={5} className={classes.links}>
+        <Group gap="md" className={classes.links}>
           {menuItems}
           {isSignedIn && (
             <Button
@@ -166,7 +85,7 @@ const Navbar = (props: Props): JSX.Element => {
           )}
         </Transition>
       </Container>
-    </Header>
+    </header>
   );
 };
 

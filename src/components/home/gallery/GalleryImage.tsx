@@ -1,6 +1,6 @@
 "use client";
 
-import { createStyles, Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
+import { Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import EditImage from "./EditImage";
 import { Photo } from "@spiel-wedding/types/Photo";
@@ -12,52 +12,17 @@ import {
 } from "@spiel-wedding/components/notifications/notifications";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import classes from "./gallery.module.css";
 
 interface Props {
   image: Photo;
   displayAdminView: boolean;
 }
 
-const useStyles = createStyles((theme) => ({
-  card: {
-    [theme.fn.smallerThan("md")]: {
-      height: 440,
-    },
-    [theme.fn.largerThan("md")]: {
-      height: 540,
-    },
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    position: "relative",
-  },
-
-  title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontWeight: 900,
-    color: theme.white,
-    lineHeight: 1.2,
-    fontSize: 24,
-    marginTop: theme.spacing.xs,
-  },
-
-  cardContent: {
-    zIndex: 1,
-    position: "relative",
-  },
-
-  cardImage: {
-    height: 440,
-    borderRadius: theme.radius.md,
-  },
-}));
-
 const GalleryImage = (props: Props): JSX.Element => {
   const { image, displayAdminView } = props;
   const theme = useMantineTheme();
   const [checked, setChecked] = useState(image.isVisible);
-  const { classes } = useStyles();
 
   useEffect(() => {
     if (image.isVisible !== checked) {
@@ -103,17 +68,9 @@ const GalleryImage = (props: Props): JSX.Element => {
             mr="md"
             thumbIcon={
               checked ? (
-                <IconCheck
-                  size="0.8rem"
-                  color={theme.colors.teal[theme.fn.primaryShade()]}
-                  stroke={3}
-                />
+                <IconCheck size="0.8rem" color={theme.colors.teal[6]} stroke={3} />
               ) : (
-                <IconX
-                  size="0.8rem"
-                  color={theme.colors.red[theme.fn.primaryShade()]}
-                  stroke={3}
-                />
+                <IconX size="0.8rem" color={theme.colors.red[6]} stroke={3} />
               )
             }
           />

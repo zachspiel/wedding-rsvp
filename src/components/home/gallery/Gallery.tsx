@@ -9,33 +9,17 @@ import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { useState, useEffect } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
-import { createStyles, getStylesRef } from "@mantine/core";
-import GalleryOrderForm from "./GalleryOrderForm";
+import classes from "./gallery.module.css";
+import { rem } from "@mantine/core";
+import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 
 export interface Captions {
   [key: string]: string;
 }
 
-const useStyles = createStyles(() => ({
-  controls: {
-    ref: getStylesRef("controls"),
-    transition: "opacity 150ms ease",
-    opacity: 0,
-  },
-
-  root: {
-    "&:hover": {
-      [`& .${getStylesRef("controls")}`]: {
-        opacity: 1,
-      },
-    },
-  },
-}));
-
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const { classes } = useStyles();
 
   useEffect(() => {
     onValue(ref(database, "photos"), (snapshot) => {
@@ -62,21 +46,15 @@ const Gallery = (): JSX.Element => {
       {isAdminViewEnabled && <UploadImages />}
 
       <Carousel
-        slideSize="50%"
-        breakpoints={[{ maxWidth: "sm", slideSize: "100%", slideGap: 1 }]}
-        slideGap="xl"
-        pb="xl"
-        align="start"
+        slideSize={{ md: "50%", sm: "100%", xs: "100%" }}
+        slideGap={{ sm: "md" }}
         slidesToScroll={1}
         loop
-        nextControlLabel="Next gallery image"
-        previousControlLabel="Previous gallery image"
+        withIndicators
         classNames={classes}
       >
         {slides}
       </Carousel>
-
-      {isAdminViewEnabled && <GalleryOrderForm photos={photos} />}
     </SectionContainer>
   );
 };

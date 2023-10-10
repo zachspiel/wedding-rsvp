@@ -53,11 +53,11 @@ export default function Login() {
   return (
     <Container size={420} my={40}>
       <Title
-        align="center"
-        sx={(theme): Record<string, string | number> => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+        style={{
+          fontFamily: `Greycliff CF, sans-serif`,
           fontWeight: 900,
-        })}
+          textAlign: "center",
+        }}
       >
         Hello 👋, please login below
       </Title>

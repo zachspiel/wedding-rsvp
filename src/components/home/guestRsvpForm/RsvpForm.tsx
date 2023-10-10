@@ -113,12 +113,12 @@ const RsvpForm = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Stepper active={currentStep} breakpoint="sm">
+      <Stepper active={currentStep}>
         <Stepper.Step label="RSVP">
           {form.values.guests.map((guest, guestIndex) => (
             <Flex direction="column" key={guestIndex}>
               <Divider my="sm" />
-              <MGroup position="apart">
+              <MGroup justify="space-between">
                 <Text>
                   {guest.nameUnknown && "Guest name unknown"}
                   {!guest.nameUnknown && `${guest.firstName} ${guest.lastName}`}
@@ -156,7 +156,7 @@ const RsvpForm = (props: Props): JSX.Element => {
         </Stepper.Completed>
       </Stepper>
 
-      <MGroup position="right" mt="xl">
+      <MGroup justify="right" mt="xl">
         {currentStep > 0 && currentStep < 3 && (
           <Button variant="default" onClick={prevStep}>
             Back

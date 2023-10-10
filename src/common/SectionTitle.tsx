@@ -8,7 +8,12 @@ interface Props {
 
 const SectionTitle = (props: Props): JSX.Element => {
   return (
-    <Title order={2} size="h1" weight={600} align="left" id={props.id}>
+    <Title
+      order={2}
+      size="h1"
+      id={props.id}
+      style={{ fontWeight: 600, textAlign: "left" }}
+    >
       {props.title}
     </Title>
   );

@@ -9,9 +9,14 @@ interface Props {
 
 const SectionContainer = (props: Props): JSX.Element => {
   return (
-    <Container sx={{ backgroundColor: props.grayBackground ? "#f7f7f7" : "" }} fluid>
-      <Container sx={{ padding: "0" }}>
-        <SimpleGrid cols={1} sx={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
+    <Container
+      style={{
+        backgroundColor: props.grayBackground ? "#f7f7f7" : "",
+      }}
+      fluid
+    >
+      <Container style={{ padding: 0, width: "50%" }}>
+        <SimpleGrid cols={1} style={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
           {props.children}
         </SimpleGrid>
       </Container>

@@ -7,7 +7,7 @@ const FlowerImage = (): JSX.Element => {
       src="/assets/images/green-flower.webp"
       fit="contain"
       height="125px"
-      sx={{ marginTop: "-65px" }}
+      style={{ marginTop: "-65px" }}
       alt="Flower Image"
     />
   );

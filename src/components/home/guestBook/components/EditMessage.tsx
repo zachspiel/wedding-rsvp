@@ -63,7 +63,7 @@ const EditMessage = (props: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Group position="right" mt="md">
+      <Group justify="right" mt="md">
         <Button size="md" onClick={(): void => closeEditor()} variant="subtle">
           Cancel
         </Button>

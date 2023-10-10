@@ -15,7 +15,7 @@ const WeddingCountdown = (): JSX.Element => {
   const getCountdownBox = (title: string, value: number): JSX.Element => {
     return (
       <Container
-        sx={{
+        style={{
           border: "none",
           width: "fit-content",
           float: "none",
@@ -24,10 +24,10 @@ const WeddingCountdown = (): JSX.Element => {
           backgroundColor: "#FFFFFF",
         }}
       >
-        <Text fz="lg" fw={300} align="center">
+        <Text fz="lg" fw={300} style={{ textAlign: "center" }}>
           {value}
         </Text>
-        <Text fz="lg" fw={700} align="center">
+        <Text fz="lg" fw={700} style={{ textAlign: "center" }}>
           {title}
         </Text>
       </Container>
@@ -39,7 +39,7 @@ const WeddingCountdown = (): JSX.Element => {
       <Flex
         justify={mobile ? "flex-start" : "center"}
         wrap="wrap"
-        sx={{ paddingBottom: "5rem" }}
+        style={{ paddingBottom: "5rem" }}
         gap="md"
       >
         {getCountdownBox("Days", Math.ceil(daysRemaining))}

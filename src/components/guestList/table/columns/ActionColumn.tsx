@@ -42,7 +42,7 @@ const ActionColumn = (props: Props): JSX.Element => {
       </MGroup>
       <Modal opened={opened} onClose={close} centered>
         <Text>This will permanently delete this group. Do you wish to continue?</Text>
-        <MGroup align="flex-end" position="right" mt="lg">
+        <MGroup align="flex-end" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel
           </Button>

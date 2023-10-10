@@ -51,7 +51,6 @@ const MailingAddressForm = (props: Props): JSX.Element => {
                 label="Country"
                 searchable
                 allowDeselect
-                nothingFound="No options"
                 data={countries.map((country) => {
                   return { value: country, label: country };
                 })}
