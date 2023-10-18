@@ -10,8 +10,6 @@ import { Photo } from "@spiel-wedding/types/Photo";
 import { useState, useEffect } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import classes from "./gallery.module.css";
-import { rem } from "@mantine/core";
-import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
 
 export interface Captions {
   [key: string]: string;
@@ -45,14 +43,7 @@ const Gallery = (): JSX.Element => {
       <SectionTitle title="Gallery" id="gallery" />
       {isAdminViewEnabled && <UploadImages />}
 
-      <Carousel
-        slideSize={{ md: "50%", sm: "100%", xs: "100%" }}
-        slideGap={{ sm: "md" }}
-        slidesToScroll={1}
-        loop
-        withIndicators
-        classNames={classes}
-      >
+      <Carousel slideSize="70%" slideGap="md" loop withIndicators classNames={classes}>
         {slides}
       </Carousel>
     </SectionContainer>

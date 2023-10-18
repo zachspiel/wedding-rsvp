@@ -15,7 +15,7 @@ const SectionContainer = (props: Props): JSX.Element => {
       }}
       fluid
     >
-      <Container style={{ padding: 0, width: "50%" }}>
+      <Container style={{ padding: 0 }}>
         <SimpleGrid cols={1} style={{ paddingBottom: "5rem", paddingTop: "3rem" }}>
           {props.children}
         </SimpleGrid>

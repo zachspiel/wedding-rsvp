@@ -3,7 +3,7 @@
 import { Container, Flex, Text, useMantineTheme } from "@mantine/core";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useMediaQuery } from "@mantine/hooks";
-
+import classes from "./countdown.module.css";
 const WeddingCountdown = (): JSX.Element => {
   const weddingDate = new Date("10/26/2024");
   const currentDate = new Date();
@@ -36,12 +36,7 @@ const WeddingCountdown = (): JSX.Element => {
 
   const renderCountdown = ({ hours, minutes }: CountdownRenderProps): JSX.Element => {
     return (
-      <Flex
-        justify={mobile ? "flex-start" : "center"}
-        wrap="wrap"
-        style={{ paddingBottom: "5rem" }}
-        gap="md"
-      >
+      <Flex className={classes.countdownContainer} wrap="wrap" gap="md">
         {getCountdownBox("Days", Math.ceil(daysRemaining))}
         {getCountdownBox("Hours", hours)}
         {getCountdownBox("Minutes", minutes)}

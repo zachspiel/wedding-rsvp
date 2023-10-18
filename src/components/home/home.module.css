@@ -12,13 +12,6 @@
     background-size: cover;
   }
 
-  @media (max-width: $mantine-breakpoint-md) {
-    padding-top: 400px;
-    padding-bottom: 20px;
-    background-size: contain;
-    background-position-y: 65px;
-  }
-
   @media (max-width: $mantine-breakpoint-sm) {
     padding-top: 250px;
     padding-bottom: 20px;

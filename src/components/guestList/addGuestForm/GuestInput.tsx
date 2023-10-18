@@ -27,17 +27,17 @@ const GuestInput = (props: Props): JSX.Element => {
   const { guests } = form.values;
   const guest = guests[index];
   const firstChildInGroupIndex = guests.findIndex(
-    (guest) => guest.relationshipType === CHILD,
+    (guest) => guest.relationshipType === CHILD
   );
 
   const lastAdultIndex = useMemo(
     () => findLastIndex(guests, (guest) => guest.relationshipType !== CHILD),
-    [guests],
+    [guests]
   );
 
   const showAddPlusOneButton = useMemo(
     () => guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
-    [guests],
+    [guests]
   );
 
   const showAddAdultButton = useMemo(() => {
@@ -55,7 +55,13 @@ const GuestInput = (props: Props): JSX.Element => {
   return (
     <>
       {firstChildInGroupIndex === index && (
-        <Title order={4} size="h3" weight={900} align="left" id="rsvp" mt="lg">
+        <Title
+          order={4}
+          size="h3"
+          style={{ fontWeight: 900, textAlign: "left" }}
+          id="rsvp"
+          mt="lg"
+        >
           Children
         </Title>
       )}

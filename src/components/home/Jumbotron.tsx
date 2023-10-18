@@ -1,5 +1,3 @@
-"use client";
-
 import { Overlay, Container, Title, Text } from "@mantine/core";
 import classes from "./home.module.css";
 
