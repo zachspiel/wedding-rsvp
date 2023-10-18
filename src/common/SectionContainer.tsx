@@ -1,5 +1,3 @@
-"use client";
-
 import { Container, SimpleGrid } from "@mantine/core";
 
 interface Props {

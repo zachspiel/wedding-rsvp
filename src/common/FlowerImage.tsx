@@ -1,4 +1,3 @@
-"use client";
 import { Image } from "@mantine/core";
 
 const FlowerImage = (): JSX.Element => {

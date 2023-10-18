@@ -1,4 +1,3 @@
-"use client";
 import { Container, Group, Anchor, rem } from "@mantine/core";
 import { links } from "./links";
 import Logo from "./Logo";
