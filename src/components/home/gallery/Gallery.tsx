@@ -1,4 +1,5 @@
 "use client";
+
 import { Carousel } from "@mantine/carousel";
 import { onValue, ref } from "firebase/database";
 import { database } from "@spiel-wedding/database/database";
@@ -8,6 +9,7 @@ import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { useState, useEffect } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import classes from "./gallery.module.css";
 
 export interface Captions {
   [key: string]: string;
@@ -41,17 +43,7 @@ const Gallery = (): JSX.Element => {
       <SectionTitle title="Gallery" id="gallery" />
       {isAdminViewEnabled && <UploadImages />}
 
-      <Carousel
-        slideSize="50%"
-        breakpoints={[{ maxWidth: "sm", slideSize: "100%", slideGap: 1 }]}
-        slideGap="xl"
-        pb="xl"
-        align="start"
-        withIndicators
-        slidesToScroll={1}
-        nextControlLabel="Next gallery image"
-        previousControlLabel="Previous gallery image"
-      >
+      <Carousel slideSize="70%" slideGap="md" loop withIndicators classNames={classes}>
         {slides}
       </Carousel>
     </SectionContainer>

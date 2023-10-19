@@ -11,10 +11,8 @@ const SectionTitle = (props: Props): JSX.Element => {
     <Title
       order={2}
       size="h1"
-      sx={(theme): Record<string, string> => ({ fontFamily: `Poppins, sans-serif` })}
-      weight={900}
-      align="left"
       id={props.id}
+      style={{ fontWeight: 600, textAlign: "left" }}
     >
       {props.title}
     </Title>

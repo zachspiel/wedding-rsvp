@@ -72,12 +72,12 @@ export default function GuestList() {
   return (
     <Container>
       <SimpleGrid cols={1} pb="xl">
-        <MGroup position="apart">
+        <MGroup justify="space-between">
           <SectionTitle title="All Guests" id="allGuests" />
           <AddGuest />
         </MGroup>
         <Summary groups={groups} />
-        <MGroup position="apart">
+        <MGroup justify="space-between">
           <FilterSelection
             groups={groups}
             filters={filters}
@@ -93,7 +93,7 @@ export default function GuestList() {
           <TextInput
             placeholder="Search by any field"
             mb="md"
-            icon={<IconSearch size="0.9rem" stroke={1.5} />}
+            rightSection={<IconSearch size="0.9rem" stroke={1.5} />}
             value={search}
             onChange={handleSearchChange}
           />

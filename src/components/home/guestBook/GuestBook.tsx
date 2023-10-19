@@ -1,6 +1,7 @@
 "use client";
+
 import React from "react";
-import { Button, Container, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { ref, set, onValue } from "firebase/database";
 import { database } from "@spiel-wedding/database/database";
@@ -27,7 +28,7 @@ const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",
-    [],
+    []
   );
 
   React.useEffect(() => {
@@ -63,7 +64,7 @@ const GuestBook = (): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while signing the guest book. Please try again later!",
+          "An error occured while signing the guest book. Please try again later!"
         );
       });
 
@@ -74,7 +75,7 @@ const GuestBook = (): JSX.Element => {
     <SectionContainer grayBackground>
       <SectionTitle title="Guest Book" id="guestBook" />
       <form onSubmit={form.onSubmit(() => saveMessage())}>
-        <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+        <SimpleGrid cols={{ base: 2, sm: 1 }} mt="xl">
           <TextInput
             label="Name"
             placeholder="Your name"

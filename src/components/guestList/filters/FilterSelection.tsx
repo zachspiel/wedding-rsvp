@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import { MultiSelect, SelectItem } from "@mantine/core";
+import {
+  MultiSelect,
+  ComboboxData,
+  ComboboxItem,
+  ComboboxItemGroup,
+} from "@mantine/core";
 import { Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 import {
   filterGroupByAffiliation,
@@ -16,18 +21,18 @@ interface Props {
 
 const FilterSelection = (props: Props): JSX.Element => {
   const { groups, filters, setFilters } = props;
-  const [selectItems, setSelectItems] = React.useState<SelectItem[]>([]);
+  const [selectItems, setSelectItems] = React.useState<ComboboxItemGroup[]>([]);
   const totalGuests = React.useMemo(
     () =>
       groups
         .map((group) => group.guests.length)
         .reduce((total, current) => total + current, 0),
-    [groups],
+    [groups]
   );
 
   React.useEffect(() => {
     const missingValueTotals = getMissingValueTotals(groups);
-    const newSelectItems: SelectItem[] = [];
+    const newSelectItems: ComboboxItemGroup[] = [];
 
     for (const [key, value] of Object.entries(missingValueTotals)) {
       if (value > 0) {
@@ -41,19 +46,23 @@ const FilterSelection = (props: Props): JSX.Element => {
     setSelectItems(newSelectItems);
   }, [groups]);
 
-  const createMissingValueItem = (value: string, label: string): SelectItem => {
-    return { value: value, label: `Missing ${label}`, group: "BY MISSING INFORMATION" };
+  const createMissingValueItem = (value: string, label: string): ComboboxItemGroup => {
+    return {
+      group: "BY MISSING INFORMATION",
+      items: [{ value, label: `Missing ${label}` }],
+    };
   };
 
-  const mapAffiliationToSelectItem = (affiliation: GuestAffiliation): SelectItem => {
+  const mapAffiliationToSelectItem = (
+    affiliation: GuestAffiliation
+  ): ComboboxItemGroup => {
     const totalGroups = filterGroupByAffiliation(affiliation, groups);
     const group = "BY RELATIONSHIP TO YOU";
     const label = affiliation === GuestAffiliation.NONE ? "Unknown" : affiliation;
 
     return {
-      value: affiliation,
-      label: `${label} (${totalGroups})`,
       group,
+      items: [{ value: affiliation, label: `${label} (${totalGroups})` }],
     };
   };
 

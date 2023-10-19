@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { GuestMessage } from "../GuestBook";
@@ -27,7 +29,7 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while deleting the message. Please try again later.",
+          "An error occured while deleting the message. Please try again later."
         );
       });
   };
@@ -39,7 +41,7 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       </ActionIcon>
       <Modal opened={opened} onClose={close} title="Delete Message" withCloseButton>
         <Text>This will permanently delete this message. Do you wish to continue?</Text>
-        <Group align="flex-end" position="right" mt="lg">
+        <Group align="flex-end" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel
           </Button>

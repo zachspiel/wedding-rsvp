@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { ref, remove, set } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
@@ -24,10 +24,6 @@ const EditImage = (props: Props): JSX.Element => {
 
   const form = useForm({
     initialValues: { ...image },
-
-    validate: {
-      caption: isNotEmpty("Please enter a caption"),
-    },
   });
 
   const handleSubmit = (): void => {
@@ -75,7 +71,7 @@ const EditImage = (props: Props): JSX.Element => {
         variant="filled"
         color="blue"
         onClick={(): void => setOpened(true)}
-        sx={{ marginTop: "15px", marginLeft: "0.5rem" }}
+        style={{ marginTop: "15px", marginLeft: "0.5rem" }}
       >
         <IconPencil size={16} />
       </ActionIcon>
@@ -93,18 +89,18 @@ const EditImage = (props: Props): JSX.Element => {
           />
 
           <Switch
-            sx={{ marginTop: "0.5rem" }}
+            style={{ marginTop: "0.5rem" }}
             label="Is publicly visible"
             checked={form.values.isVisible}
             {...form.getInputProps("isVisible")}
           />
 
-          <Group position="right" mt="md">
+          <Group align="right" mt="md">
             {!showConfirmDelete && (
               <Button
                 variant="subtle"
                 color="red"
-                leftIcon={<IconTrash />}
+                leftSection={<IconTrash />}
                 onClick={(): void => setShowConfirmDelete(true)}
               >
                 Delete Image

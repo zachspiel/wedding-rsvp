@@ -23,7 +23,7 @@ interface Props {
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe",
+    group.invited ? "definitely" : "maybe"
   );
 
   const form = useForm<Group>({
@@ -129,7 +129,7 @@ const EditGuest = (props: Props): JSX.Element => {
         </Tabs.Panel>
       </Tabs>
 
-      <MGroup position="right" mt="lg">
+      <MGroup justify="right" mt="lg">
         <Button
           variant="outline"
           mr="md"

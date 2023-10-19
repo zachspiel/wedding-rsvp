@@ -121,7 +121,7 @@ const AddGuest = (): JSX.Element => {
     })
       .then(() => {
         showSuccessNotification(
-          `Successfully added ${form.values.guests.length} guests 🎉!`,
+          `Successfully added ${form.values.guests.length} guests 🎉!`
         );
       })
       .catch(() => {
@@ -170,7 +170,7 @@ const AddGuest = (): JSX.Element => {
 
           <MailingAddressForm form={form} />
 
-          <MGroup position="right" mt="xl">
+          <MGroup justify="right" mt="xl">
             <Button variant="subtle" size="md" onClick={close}>
               Cancel
             </Button>

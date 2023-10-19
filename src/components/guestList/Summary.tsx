@@ -42,10 +42,10 @@ const Summary = (props: Props): JSX.Element => {
   const createSummaryItem = (title: string, total: number): JSX.Element => {
     return (
       <Flex direction="column">
-        <Title order={3} align="center">
+        <Title order={3} style={{ textAlign: "center" }}>
           {total}
         </Title>
-        <Text align="center">{title}</Text>
+        <Text style={{ textAlign: "center" }}>{title}</Text>
       </Flex>
     );
   };

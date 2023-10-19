@@ -1,4 +1,3 @@
-"use client";
 import { Card, Text, Image } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 
@@ -6,7 +5,13 @@ const Registry = (): JSX.Element => {
   return (
     <SectionContainer>
       <SectionTitle title="Registry" id="registry" />
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ display: "block", overflow: "auto" }}
+      >
         <Text mb="sm">
           We are so grateful to have you share in our special day. Your presence is our
           gift!

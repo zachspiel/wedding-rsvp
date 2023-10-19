@@ -1,5 +1,6 @@
 "use client";
-import { createStyles, Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
+
+import { Flex, Paper, Switch, Title, useMantineTheme } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import EditImage from "./EditImage";
 import { Photo } from "@spiel-wedding/types/Photo";
@@ -9,39 +10,25 @@ import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import classes from "./gallery.module.css";
 
 interface Props {
   image: Photo;
   displayAdminView: boolean;
 }
 
-const useStyles = createStyles((theme) => ({
-  card: {
-    height: 440,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
-
-  title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontWeight: 900,
-    color: theme.white,
-    lineHeight: 1.2,
-    fontSize: 32,
-    marginTop: theme.spacing.xs,
-  },
-}));
-
 const GalleryImage = (props: Props): JSX.Element => {
   const { image, displayAdminView } = props;
   const theme = useMantineTheme();
   const [checked, setChecked] = useState(image.isVisible);
-  const { classes } = useStyles();
+
+  useEffect(() => {
+    if (image.isVisible !== checked) {
+      setChecked(image.isVisible);
+    }
+  }, [image.isVisible]);
 
   const toggleVisibility = (isVisible: boolean): void => {
     const successMessage = isVisible ? "public" : "hidden";
@@ -56,14 +43,18 @@ const GalleryImage = (props: Props): JSX.Element => {
   };
 
   return (
-    <Paper
-      shadow="md"
-      p="xl"
-      radius="md"
-      sx={{ backgroundImage: `url(${image.downloadUrl})` }}
-      className={classes.card}
-    >
-      <Flex wrap="wrap" w="100%">
+    <Paper shadow="md" p="xl" radius="md" className={classes.card}>
+      <Image
+        src={image.downloadUrl}
+        alt={image.caption ?? image.id}
+        className={classes.cardImage}
+        fill
+        priority
+        sizes="(max-width: 768px) 33vw"
+        style={{ objectFit: "cover", zIndex: 0 }}
+      />
+
+      <Flex wrap="wrap" w="100%" className={classes.cardContent}>
         {displayAdminView && (
           <Switch
             checked={checked}
@@ -77,22 +68,14 @@ const GalleryImage = (props: Props): JSX.Element => {
             mr="md"
             thumbIcon={
               checked ? (
-                <IconCheck
-                  size="0.8rem"
-                  color={theme.colors.teal[theme.fn.primaryShade()]}
-                  stroke={3}
-                />
+                <IconCheck size="0.8rem" color={theme.colors.teal[6]} stroke={3} />
               ) : (
-                <IconX
-                  size="0.8rem"
-                  color={theme.colors.red[theme.fn.primaryShade()]}
-                  stroke={3}
-                />
+                <IconX size="0.8rem" color={theme.colors.red[6]} stroke={3} />
               )
             }
           />
         )}
-        <Title order={3} className={classes.title}>
+        <Title order={2} className={classes.title}>
           {image.caption}
         </Title>
         {displayAdminView && <EditImage image={image} />}
