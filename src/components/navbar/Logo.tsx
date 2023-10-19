@@ -1,17 +1,8 @@
 import React from "react";
-import { createStyles } from "@mantine/core";
 import Image from "next/image";
-
-const useStyles = createStyles((theme) => ({
-  logo: {
-    [theme.fn.largerThan("sm")]: {
-      display: "none",
-    },
-  },
-}));
+import classes from "./navbar.module.css";
 
 const Logo = (): JSX.Element => {
-  const { classes } = useStyles();
   return (
     <Image
       src={"/assets/images/The-Spielbergers-Wedding-Logo-Variant.webp"}

@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
-import { ref, uploadBytes } from "firebase/storage";
-import { storage } from "@spiel-wedding/database/database";
 
 export interface UploadImageParams {
   name: string;

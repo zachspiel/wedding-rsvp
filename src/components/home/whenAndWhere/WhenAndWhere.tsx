@@ -21,7 +21,13 @@ const WhenAndWhere = (): JSX.Element => {
     return (
       <List.Item>
         {url && (
-          <Anchor href={url} target="_blank" color="normal" fz="lg" display="flex">
+          <Anchor
+            href={url}
+            target="_blank"
+            style={{ color: "inherit" }}
+            fz="lg"
+            display="flex"
+          >
             {label}
             <IconExternalLink />
           </Anchor>
