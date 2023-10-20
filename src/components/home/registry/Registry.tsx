@@ -1,5 +1,7 @@
-import { Card, Text, Image } from "@mantine/core";
+import { Card, Text, Flex } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import familyPortrait from "../../../assets/images/The-Spielbergers.webp";
+import Image from "next/image";
 
 const Registry = (): JSX.Element => {
   return (
@@ -22,13 +24,13 @@ const Registry = (): JSX.Element => {
           honeymoon and first home fund at our reception following the ceremony.
         </Text>
         <Text>Thanks for visiting and we can&apos;t wait to see you on our big day!</Text>
-        <Image
-          src="/assets/images/The-Spielbergers.webp"
-          alt="The Spielbergers family portrait"
-          height={250}
-          fit="contain"
-          radius="xl"
-        />
+        <Flex justify="center">
+          <Image
+            src={familyPortrait}
+            alt="The Spielbergers family portrait"
+            height={350}
+          />
+        </Flex>
       </Card>
     </SectionContainer>
   );
