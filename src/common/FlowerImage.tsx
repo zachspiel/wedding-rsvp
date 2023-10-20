@@ -1,14 +1,17 @@
-import { Image } from "@mantine/core";
+import { Flex } from "@mantine/core";
+import Image from "next/image";
+import flowerImage from "../assets/images/green-flower.webp";
 
 const FlowerImage = (): JSX.Element => {
   return (
-    <Image
-      src="/assets/images/green-flower.webp"
-      fit="contain"
-      height="125px"
-      style={{ marginTop: "-65px" }}
-      alt="Flower Image"
-    />
+    <Flex justify="center">
+      <Image
+        src={flowerImage}
+        height={125}
+        style={{ marginTop: "-65px" }}
+        alt="Flower Image"
+      />
+    </Flex>
   );
 };
 
