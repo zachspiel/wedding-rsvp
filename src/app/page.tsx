@@ -17,7 +17,6 @@ export default function Home() {
       <FlowerImage />
       <Registry />
       <Gallery />
-      <AdminViewToggle />
     </main>
   );
 }

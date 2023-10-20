@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Container,
   Group,
@@ -17,6 +18,7 @@ import Logo from "./Logo";
 import { useMemo } from "react";
 import classes from "./navbar.module.css";
 import cx from "clsx";
+import { AdminViewToggle } from "@spiel-wedding/common";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -85,6 +87,8 @@ const Navbar = (props: Props): JSX.Element => {
           )}
         </Transition>
       </Container>
+
+      {isSignedIn && <AdminViewToggle />}
     </header>
   );
 };
