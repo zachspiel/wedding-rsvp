@@ -75,7 +75,7 @@ const GuestBook = (): JSX.Element => {
     <SectionContainer grayBackground>
       <SectionTitle title="Guest Book" id="guestBook" />
       <form onSubmit={form.onSubmit(() => saveMessage())}>
-        <SimpleGrid cols={{ base: 2, sm: 1 }} mt="xl">
+        <SimpleGrid cols={{ base: 2, sm: 1 }}>
           <TextInput
             label="Name"
             placeholder="Your name"
