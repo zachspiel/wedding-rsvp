@@ -4,11 +4,26 @@ import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "./theme";
 import { Providers } from "./Providers";
 import { Notifications } from "@mantine/notifications";
+import { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import localFont from "next/font/local";
 import "@mantine/notifications/styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import "./globals.css";
-import { Metadata } from "next";
+
+const poppins = Poppins({
+  weight: "400",
+  display: "swap",
+  variable: "--font-poppins",
+  subsets: ["latin"],
+});
+
+const brittanySignature = localFont({
+  src: "../assets/fonts/BrittanySignature.ttf",
+  display: "swap",
+  variable: "--font-brittany",
+});
 
 export const metadata: Metadata = {
   title: "Spielberger Wedding 2024",
@@ -36,7 +51,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${poppins.variable} ${brittanySignature.variable}`}>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.ico" />

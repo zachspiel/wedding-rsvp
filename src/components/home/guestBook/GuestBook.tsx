@@ -100,6 +100,7 @@ const GuestBook = (): JSX.Element => {
           autosize
           required
           name="message"
+          mt="md"
           {...form.getInputProps("message")}
         />
 

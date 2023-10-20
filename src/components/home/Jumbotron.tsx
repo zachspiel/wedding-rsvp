@@ -7,23 +7,10 @@ const Jumbotron = (): JSX.Element => {
       <Overlay color="#000" opacity={0.25} zIndex={0} />
 
       <div className={classes.inner}>
-        <Title
-          className={classes.title}
-          style={{
-            fontFamily: `Brittany, sans-serif`,
-          }}
-        >
-          {"We're Getting Married!"}
-        </Title>
+        <Title className={classes.title}>{"We're Getting Married!"}</Title>
 
         <Container size={640}>
-          <Text
-            size="lg"
-            className={classes.description}
-            style={{
-              fontFamily: `Poppins, sans-serif`,
-            }}
-          >
+          <Text size="lg" className={classes.description}>
             Sedona & Zach
           </Text>
         </Container>
@@ -32,7 +19,6 @@ const Jumbotron = (): JSX.Element => {
           size="lg"
           className={classes.description}
           style={{
-            fontFamily: `Poppins, sans-serif`,
             textAlign: "center",
           }}
         >

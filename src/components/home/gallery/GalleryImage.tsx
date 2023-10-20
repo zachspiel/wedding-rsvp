@@ -49,7 +49,6 @@ const GalleryImage = (props: Props): JSX.Element => {
         alt={image.caption ?? image.id}
         className={classes.cardImage}
         fill
-        priority
         sizes="(max-width: 768px) 33vw"
         style={{ objectFit: "cover", zIndex: 0 }}
       />

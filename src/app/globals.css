@@ -1,16 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap");
-
-@font-face {
-  font-family: "Brittany";
-  src: url("/assets/fonts/BrittanySignature.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Seasons";
-  src: url("/assets/fonts/TheSeasons.otf") format("opentype");
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
