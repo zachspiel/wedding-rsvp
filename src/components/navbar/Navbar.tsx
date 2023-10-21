@@ -77,7 +77,13 @@ const Navbar = (props: Props): JSX.Element => {
           )}
         </Group>
 
-        <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
+        <Burger
+          opened={opened}
+          onClick={toggle}
+          className={classes.burger}
+          size="sm"
+          name="Navbar menu button"
+        />
 
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles): JSX.Element => (
