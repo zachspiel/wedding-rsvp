@@ -1,6 +1,6 @@
 {
   "name": "wedding-rsvp-next-js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "author": {
     "name": "Zachary Spielberger",
@@ -22,11 +22,6 @@
     "@mantine/modals": "^7.1.2",
     "@mantine/notifications": "^7.1.2",
     "@tabler/icons-react": "^2.22.0",
-    "@types/node": "20.3.1",
-    "@types/react": "18.2.12",
-    "@types/react-beautiful-dnd": "^13.1.4",
-    "@types/react-dom": "18.2.5",
-    "@types/uuid": "^9.0.2",
     "embla-carousel-react": "^8.0.0-rc14",
     "encoding": "^0.1.13",
     "eslint": "8.43.0",
@@ -38,13 +33,18 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
-    "sharp": "^0.32.5",
+    "sharp": "^0.32.6",
     "typescript": "5.1.3",
     "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/lodash.findlastindex": "^4.6.7",
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.12",
+    "@types/react-beautiful-dnd": "^13.1.4",
+    "@types/react-dom": "18.2.5",
+    "@types/uuid": "^9.0.2",
     "postcss-preset-mantine": "^1.7.0",
     "postcss-simple-vars": "^7.0.1"
   }
