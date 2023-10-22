@@ -1,6 +1,6 @@
 {
   "name": "wedding-rsvp-next-js",
-  "version": "0.3.2",
+  "version": "0.4.2",
   "private": true,
   "author": {
     "name": "Zachary Spielberger",
@@ -15,13 +15,12 @@
   "dependencies": {
     "@mantine/carousel": "^7.1.2",
     "@mantine/core": "^7.1.2",
-    "@mantine/dates": "^7.1.2",
     "@mantine/dropzone": "^7.1.2",
     "@mantine/form": "^7.1.2",
     "@mantine/hooks": "^7.1.2",
-    "@mantine/modals": "^7.1.2",
     "@mantine/notifications": "^7.1.2",
     "@tabler/icons-react": "^2.22.0",
+    "@vercel/analytics": "^1.1.1",
     "embla-carousel-react": "^8.0.0-rc14",
     "encoding": "^0.1.13",
     "eslint": "8.43.0",

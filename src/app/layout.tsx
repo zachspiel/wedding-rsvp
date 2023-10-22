@@ -7,6 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/react";
 import "@mantine/notifications/styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </Providers>
         </MantineProvider>
+        <Analytics />
       </body>
     </html>
   );

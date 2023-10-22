@@ -519,13 +519,6 @@
     react-textarea-autosize "8.5.3"
     type-fest "^3.13.1"
 
-"@mantine/dates@^7.1.2":
-  version "7.1.2"
-  resolved "https://registry.npmjs.org/@mantine/dates/-/dates-7.1.2.tgz#ab9e0e7c2033b274e44be3c515dd8f2e5a5d9e3b"
-  integrity sha512-JE0Zf37NPH5Lt5AoHDORoWxiR6J8ozwTCWnh6ozwZNpeH5h/YpssS9mj4JX7hb4WytT5dr1ylOY1Zt5fDRM3+Q==
-  dependencies:
-    clsx "2.0.0"
-
 "@mantine/dropzone@^7.1.2":
   version "7.1.2"
   resolved "https://registry.npmjs.org/@mantine/dropzone/-/dropzone-7.1.2.tgz#a60e3ae576294f572d548b69fccd10b0e8c7470b"
@@ -545,11 +538,6 @@
   version "7.1.2"
   resolved "https://registry.npmjs.org/@mantine/hooks/-/hooks-7.1.2.tgz#d863a6be70dd53ef61d18ba03324880308c3aef5"
   integrity sha512-2sqfBKse/aJq93zEpIn4OY+jRACmDIWBixfBgobRfltDyeL8G+3223LSAaeT6ZD8+h2YBJVmbCD5QY7bx2l11Q==
-
-"@mantine/modals@^7.1.2":
-  version "7.1.2"
-  resolved "https://registry.npmjs.org/@mantine/modals/-/modals-7.1.2.tgz#7b0729b6ccd7b0b87b41cfdf9cda5561e7d9fa28"
-  integrity sha512-5OOSUzWpnYwnmLILfA8TAmnXogWpzu4Z8v0V+NiiQb2lFADZTl7qnBmw4BbAoT9mwWo3sXlCvepj5bGjsl7pMg==
 
 "@mantine/notifications@^7.1.2":
   version "7.1.2"
@@ -861,6 +849,13 @@
   dependencies:
     "@typescript-eslint/types" "6.7.2"
     eslint-visitor-keys "^3.4.1"
+
+"@vercel/analytics@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/@vercel/analytics/-/analytics-1.1.1.tgz#2a712378a95014a548b4f9d2ae1ea0721433908d"
+  integrity sha512-+NqgNmSabg3IFfxYhrWCfB/H+RCUOCR5ExRudNG2+pcRehq628DJB5e1u1xqwpLtn4pAYii4D98w7kofORAGQA==
+  dependencies:
+    server-only "^0.0.1"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -3050,6 +3045,11 @@ semver@^7.3.5, semver@^7.5.4:
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
+
+server-only@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.npmjs.org/server-only/-/server-only-0.0.1.tgz#0f366bb6afb618c37c9255a314535dc412cd1c9e"
+  integrity sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==
 
 set-function-name@^2.0.0, set-function-name@^2.0.1:
   version "2.0.1"
