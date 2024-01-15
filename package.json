@@ -1,7 +1,8 @@
 {
-  "name": "wedding-rsvp-next-js",
+  "name": "spiel-wedding",
   "version": "0.4.2",
   "private": true,
+  "license": "MIT",
   "author": {
     "name": "Zachary Spielberger",
     "email": "zachspielberger@gmail.com"

@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# Spielberger Wedding Website 🎉💍
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Firebase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
-## Available Scripts
+This project also includes an admin page for managing the guest list, RSVP status updates, and content modification on the homepage.
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+1. Clone this repository:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+git clone https://github.com/zachspiel/wedding-rsvp.git
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Navigate to the project directory:
 
-### `npm test`
+```bash
+cd wedding-rsvp
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Install dependencies
 
-### `npm run build`
+```bash
+yarn install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Create a Firebase project and setup database, authentication, and storage.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+5. Create a `.env` file in the project root and add your Firebase configuration:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+NEXT_PUBLIC_FIREBASE_APP_ID
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+NEXT_PUBLIC_FIREBASE_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_DATABASE_URL
+NEXT_PUBLIC_FIREBASE_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+```
 
-### `npm run eject`
+# Running the Project
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Run the following command to start the app locally:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+yarn dev
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## License
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project is licensed under the [MIT License](LICENSE.md).
