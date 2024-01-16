@@ -23,7 +23,7 @@ interface Props {
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe"
+    group.invited ? "definitely" : "maybe",
   );
 
   const form = useForm<Group>({
@@ -49,9 +49,7 @@ const EditGuest = (props: Props): JSX.Element => {
       .then(() => {
         showSuccessNotification("Successfully updated guest");
       })
-      .catch((error) => {
-        showFailureNotification();
-      });
+      .catch(showFailureNotification);
   };
 
   const submitAndClose = (): void => {
@@ -71,7 +69,12 @@ const EditGuest = (props: Props): JSX.Element => {
         <Tabs.Panel value="guestInfo" pt="xs">
           {form.values.guests.map((guest, index) => {
             return (
-              <GuestInput form={form} groupType="family" index={index} key={index} />
+              <GuestInput
+                form={form}
+                groupType="family"
+                index={index}
+                key={index}
+              />
             );
           })}
           <GuestAffiliationSelection form={form} />
@@ -110,7 +113,9 @@ const EditGuest = (props: Props): JSX.Element => {
           <Radio.Group
             {...form.getInputProps("inviteSent")}
             value={form.values.inviteSent ? "yes" : "no"}
-            onChange={(value): void => form.setFieldValue("inviteSent", value === "yes")}
+            onChange={(value): void =>
+              form.setFieldValue("inviteSent", value === "yes")
+            }
             name="inviteSent"
             label="Sent wedding invitation?"
             pt="lg"

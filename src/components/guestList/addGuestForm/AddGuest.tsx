@@ -23,7 +23,7 @@ import {
   RelationshipType,
   Group,
   GuestAffiliation,
-  RsvpResonse,
+  RsvpResponse,
 } from "@spiel-wedding/types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
 import { v4 as uuidv4 } from "uuid";
@@ -39,7 +39,7 @@ const DEFAULT_GROUP: Group = {
       firstName: "",
       lastName: "",
       nameUnknown: false,
-      rsvp: RsvpResonse.NO_RESPONSE,
+      rsvp: RsvpResponse.NO_RESPONSE,
       relationshipType: RelationshipType.PRIMARY,
     },
   ],
@@ -72,7 +72,11 @@ const AddGuest = (): JSX.Element => {
     },
   });
 
-  const isNameInvalid = (value: string, values: Group, path: string): boolean => {
+  const isNameInvalid = (
+    value: string,
+    values: Group,
+    path: string,
+  ): boolean => {
     const index = Number(path.split(".")[1]);
     if (!values.guests[index].nameUnknown) {
       return value.length === 0;
@@ -121,7 +125,7 @@ const AddGuest = (): JSX.Element => {
     })
       .then(() => {
         showSuccessNotification(
-          `Successfully added ${form.values.guests.length} guests 🎉!`
+          `Successfully added ${form.values.guests.length} guests 🎉!`,
         );
       })
       .catch(() => {
@@ -149,7 +153,12 @@ const AddGuest = (): JSX.Element => {
 
           {form.values.guests.map((guest, index) => {
             return (
-              <GuestInput form={form} groupType={groupType} index={index} key={index} />
+              <GuestInput
+                form={form}
+                groupType={groupType}
+                index={index}
+                key={index}
+              />
             );
           })}
 

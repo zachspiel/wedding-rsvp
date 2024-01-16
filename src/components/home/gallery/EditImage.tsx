@@ -1,6 +1,13 @@
 "use client";
 
-import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
+import {
+  Modal,
+  TextInput,
+  Group,
+  Button,
+  ActionIcon,
+  Switch,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { ref, remove, set } from "firebase/database";
@@ -60,9 +67,7 @@ const EditImage = (props: Props): JSX.Element => {
         onSuccessfulDelete();
         setOpened(false);
       })
-      .catch((error) => {
-        onDeletionError();
-      });
+      .catch(onDeletionError);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { List } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { Guest, RsvpResonse } from "@spiel-wedding/types/Guest";
+import { Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 interface Props {
   guests: Guest[];
@@ -13,8 +13,8 @@ const RsvpStatusColumn = (props: Props): JSX.Element => {
     <List listStyleType="none" withPadding>
       {guests.map((guest) => (
         <List.Item key={`${guest.firstName}-${guest.lastName}`}>
-          {guest.rsvp === RsvpResonse.ACCEPTED && <IconCheck color="green" />}
-          {guest.rsvp !== RsvpResonse.ACCEPTED && <IconX color="red" />}
+          {guest.rsvp === RsvpResponse.ACCEPTED && <IconCheck color="green" />}
+          {guest.rsvp !== RsvpResponse.ACCEPTED && <IconX color="red" />}
         </List.Item>
       ))}
     </List>

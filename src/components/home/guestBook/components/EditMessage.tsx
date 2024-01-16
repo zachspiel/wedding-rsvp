@@ -43,7 +43,7 @@ const EditMessage = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while updating the message. Please try again later."
+          "An error occurred while updating the message. Please try again later.",
         );
       });
 

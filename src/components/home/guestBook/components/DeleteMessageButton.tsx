@@ -29,7 +29,7 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while deleting the message. Please try again later."
+          "An error occurred while deleting the message. Please try again later.",
         );
       });
   };
@@ -39,8 +39,15 @@ const DeleteMessageButton = (props: Props): JSX.Element => {
       <ActionIcon onClick={open}>
         <IconTrash size={20} />
       </ActionIcon>
-      <Modal opened={opened} onClose={close} title="Delete Message" withCloseButton>
-        <Text>This will permanently delete this message. Do you wish to continue?</Text>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Delete Message"
+        withCloseButton
+      >
+        <Text>
+          This will permanently delete this message. Do you wish to continue?
+        </Text>
         <Group align="flex-end" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel

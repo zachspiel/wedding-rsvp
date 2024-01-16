@@ -1,5 +1,9 @@
 import { UseFormReturnType } from "@mantine/form";
-import { Group, RelationshipType, RsvpResonse } from "@spiel-wedding/types/Guest";
+import {
+  Group,
+  RelationshipType,
+  RsvpResponse,
+} from "@spiel-wedding/types/Guest";
 
 const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
   form.insertListItem(
@@ -7,7 +11,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
     {
       firstName: "",
       lastName: "",
-      rsvp: RsvpResonse.NO_RESPONSE,
+      rsvp: RsvpResponse.NO_RESPONSE,
       relationshipType: RelationshipType.PARTNER,
     },
     1,
@@ -18,7 +22,7 @@ const addChildToGuests = (form: UseFormReturnType<Group>): void => {
   form.insertListItem("guests", {
     firstName: "",
     lastName: "",
-    rsvp: RsvpResonse.NO_RESPONSE,
+    rsvp: RsvpResponse.NO_RESPONSE,
     relationshipType: RelationshipType.CHILD,
   });
 };
