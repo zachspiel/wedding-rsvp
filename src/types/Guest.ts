@@ -23,7 +23,7 @@ export interface Guest {
   firstName: string;
   lastName: string;
   nameUnknown: boolean;
-  rsvp: RsvpResonse;
+  rsvp: RsvpResponse;
   relationshipType: RelationshipType;
 }
 
@@ -31,7 +31,7 @@ export interface RsvpModification {
   modifiedAt: string;
 }
 
-export enum RsvpResonse {
+export enum RsvpResponse {
   NO_RESPONSE = "No Response",
   ACCEPTED = "Accepted",
   DECLINED = "Declined",

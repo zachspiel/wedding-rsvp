@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Alert,
   Button,
@@ -11,7 +12,7 @@ import {
 } from "@mantine/core";
 import { ref } from "@firebase/database";
 import { analytics, database } from "@spiel-wedding/database/database";
-import { Group, RsvpResonse } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import UnknownGuestInput from "./components/UnknownGuestInput";
@@ -41,25 +42,33 @@ const RsvpForm = (props: Props): JSX.Element => {
       email: isEmail("Email is not valid"),
       guests: {
         firstName: (value, values, path) =>
-          isNameInvalid(value, values, path) ? "Please enter a first name" : null,
+          isNameInvalid(value, values, path)
+            ? "Please enter a first name"
+            : null,
         lastName: (value, values, path) =>
-          isNameInvalid(value, values, path) ? "Please enter a last name" : null,
+          isNameInvalid(value, values, path)
+            ? "Please enter a last name"
+            : null,
       },
     },
   });
 
   useEffect(() => {
     form.values.guests.forEach((guest, guestIndex) => {
-      if (guest.rsvp === RsvpResonse.NO_RESPONSE) {
-        form.setFieldValue(`guests.${guestIndex}.rsvp`, RsvpResonse.ACCEPTED);
+      if (guest.rsvp === RsvpResponse.NO_RESPONSE) {
+        form.setFieldValue(`guests.${guestIndex}.rsvp`, RsvpResponse.ACCEPTED);
       }
     });
   }, []);
 
-  const isNameInvalid = (value: string, group: Group, path: string): boolean => {
+  const isNameInvalid = (
+    value: string,
+    group: Group,
+    path: string,
+  ): boolean => {
     const index = Number(path.split(".")[1]);
 
-    if (group.guests[index].rsvp === RsvpResonse.ACCEPTED) {
+    if (group.guests[index].rsvp === RsvpResponse.ACCEPTED) {
       return value.length === 0;
     }
 
@@ -72,14 +81,18 @@ const RsvpForm = (props: Props): JSX.Element => {
     rsvpModifications.push({ modifiedAt: new Date().toISOString() });
 
     const updatedGuests = form.values.guests.map((guest) => {
-      if (guest.nameUnknown && guest.rsvp === RsvpResonse.ACCEPTED) {
+      if (guest.nameUnknown && guest.rsvp === RsvpResponse.ACCEPTED) {
         return { ...guest, nameUnknown: false };
       }
 
       return guest;
     });
 
-    const updatedGroup = { ...form.values, guests: updatedGuests, rsvpModifications };
+    const updatedGroup = {
+      ...form.values,
+      guests: updatedGuests,
+      rsvpModifications,
+    };
 
     set(groupRef, updatedGroup)
       .then(() => {
@@ -126,7 +139,8 @@ const RsvpForm = (props: Props): JSX.Element => {
                 <RsvpSelection form={form} guestIndex={guestIndex} />
               </MGroup>
               {guest.nameUnknown &&
-                form.values.guests[guestIndex].rsvp === RsvpResonse.ACCEPTED && (
+                form.values.guests[guestIndex].rsvp ===
+                  RsvpResponse.ACCEPTED && (
                   <UnknownGuestInput form={form} index={guestIndex} />
                 )}
               {guestIndex === Object.keys(form.values.guests).length - 1 && (
@@ -150,8 +164,8 @@ const RsvpForm = (props: Props): JSX.Element => {
 
         <Stepper.Completed>
           <Alert title="Success!" color="teal" variant="filled">
-            Your reservation has been completed successfully, feel free to come back here
-            and edit it anytime before the wedding!
+            Your reservation has been completed successfully, feel free to come
+            back here and edit it anytime before the wedding!
           </Alert>
         </Stepper.Completed>
       </Stepper>

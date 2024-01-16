@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Flex, Text, useMantineTheme } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import classes from "./countdown.module.css";
 import { useEffect, useState } from "react";
@@ -38,7 +38,10 @@ const WeddingCountdown = (): JSX.Element => {
     );
   };
 
-  const renderCountdown = ({ hours, minutes }: CountdownRenderProps): JSX.Element => {
+  const renderCountdown = ({
+    hours,
+    minutes,
+  }: CountdownRenderProps): JSX.Element => {
     return (
       <Flex className={classes.countdownContainer} wrap="wrap" gap="md">
         {getCountdownBox("Days", Math.ceil(daysRemaining))}
@@ -48,7 +51,11 @@ const WeddingCountdown = (): JSX.Element => {
     );
   };
 
-  return <>{isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}</>;
+  return (
+    <>
+      {isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}
+    </>
+  );
 };
 
 export default WeddingCountdown;

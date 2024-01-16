@@ -28,7 +28,7 @@ const GuestBook = (): JSX.Element => {
   const [messages, setMessages] = React.useState<GuestMessage[]>([]);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -64,7 +64,7 @@ const GuestBook = (): JSX.Element => {
       })
       .catch(() => {
         showCustomFailureNotification(
-          "An error occured while signing the guest book. Please try again later!"
+          "An error occurred while signing the guest book. Please try again later!",
         );
       });
 

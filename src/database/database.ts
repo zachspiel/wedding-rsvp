@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
