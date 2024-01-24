@@ -1,9 +1,8 @@
 import { Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { GuestAffiliation, Group } from "@spiel-wedding/types/Guest";
-
+import { GroupFormState, GuestAffiliation } from "@spiel-wedding/types/Guest";
 interface Props {
-  form: UseFormReturnType<Group>;
+  form: UseFormReturnType<GroupFormState>;
 }
 
 const GuestAffiliationSelection = (props: Props): JSX.Element => {

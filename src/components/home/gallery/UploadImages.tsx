@@ -1,84 +1,54 @@
 "use client";
+
 import { Group, rem, Text, useMantineTheme } from "@mantine/core";
-import { database, storage } from "@spiel-wedding/database/database";
 import { notifications } from "@mantine/notifications";
 import {
   showSuccessNotification,
   showFailureNotification,
   showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { Photo } from "@spiel-wedding/types/Photo";
-import { v4 as uuid4 } from "uuid";
-import { set, ref as databaseRef } from "firebase/database";
-import { useEffect, useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconX, IconPhoto, IconUpload } from "@tabler/icons-react";
+import { useSWRConfig } from "swr";
+import {
+  GALLERY_SWR_KEY,
+  uploadFileToGallery,
+} from "@spiel-wedding/hooks/gallery";
 
 const UploadImages = (): JSX.Element => {
-  const [files, setFiles] = useState<File[]>([]);
   const theme = useMantineTheme();
-  const handleUpload = async (): Promise<void> => {
+  const { mutate } = useSWRConfig();
+
+  const handleUpload = async (files: File[]): Promise<void> => {
     notifications.show({
       message: "Uploading image(s)...",
       color: "blue",
     });
 
     files.forEach((file) => {
-      uploadFile(file);
+      uploadImage(file);
     });
   };
 
-  const uploadFile = async (file: File): Promise<void> => {
-    const formData = new FormData();
-    formData.append("file", file);
+  const uploadImage = async (file: File): Promise<void> => {
+    const newImage = await uploadFileToGallery(file);
 
-    const response = await fetch("/api/upload", { method: "POST", body: formData });
-    const { fileName, compressedImage } = await response.json();
-
-    if (fileName) {
-      const storageRef = ref(storage, `gallery/${fileName}`);
-      const bytes = new Uint8Array(compressedImage?.data ?? []);
-
-      uploadBytes(storageRef, bytes).then(() => {
-        getDownloadURL(storageRef)
-          .then((url) => {
-            showSuccessNotification("Successfully uploaded image.");
-            savePhotoToDatabase(fileName, url);
-          })
-          .catch(showFailureNotification);
-      });
+    if (newImage) {
+      showSuccessNotification("Successfully uploaded image.");
+      mutate(GALLERY_SWR_KEY);
     } else {
       showFailureNotification();
     }
   };
 
-  const savePhotoToDatabase = (filename: string, downloadUrl: string): void => {
-    const newPhoto: Photo = {
-      id: uuid4(),
-      caption: filename,
-      isVisible: false,
-      filePath: `/gallery/${filename}`,
-      downloadUrl: downloadUrl,
-    };
-
-    set(databaseRef(database, `photos/${newPhoto.id}`), newPhoto);
-  };
-
-  useEffect(() => {
-    if (files.length > 0) {
-      handleUpload();
-    }
-  }, [files]);
-
   return (
     <Dropzone
-      onDrop={(files) => setFiles(files)}
+      onDrop={(files) => handleUpload(files)}
       onReject={(files) =>
         files.map((file) =>
           showCustomFailureNotification(
-            file.errors.map((error) => error.message).join(", ")
-          )
+            file.errors.map((error) => error.message).join(", "),
+          ),
         )
       }
       accept={IMAGE_MIME_TYPE}

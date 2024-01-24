@@ -4,38 +4,32 @@ import { Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
-import { ref, onValue } from "firebase/database";
-import { analytics, database } from "@spiel-wedding/database/database";
+import { analytics } from "@spiel-wedding/database/database";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
 import { logEvent } from "firebase/analytics";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import useSWR from "swr";
+import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 
 const RsvpSection = (): JSX.Element => {
+  const { data: groups, isLoading } = useSWR(GROUP_SWR_KEY, getGroups);
   const [error, setError] = useState<string>();
-  const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchResults, setSearchResults] = useState<Group[]>([]);
-
-  useEffect(() => {
-    const guestsRef = ref(database, "groups/");
-    onValue(guestsRef, (snapshot) => {
-      const data = snapshot.val() ?? {};
-      const groupData = Object.values(data) as Group[];
-      setGroups(groupData);
-    });
-  }, []);
 
   const getSearchResults = (firstName: string, lastName: string): void => {
     setSelectedGroup(undefined);
     setSearchResults([]);
 
-    const filteredResults = groups.filter(
-      (group) =>
-        group.guests.filter((guest) => guestMatchesSearch(firstName, lastName, guest))
-          .length > 0,
-    );
+    const filteredResults =
+      groups?.filter(
+        (group) =>
+          group.guests.filter((guest) =>
+            guestMatchesSearch(firstName, lastName, guest),
+          ).length > 0,
+      ) ?? [];
 
     if (filteredResults.length === 0) {
       setError(
@@ -71,7 +65,7 @@ const RsvpSection = (): JSX.Element => {
       )}
 
       {error !== undefined && (
-        <Text color="red" fz="sm">
+        <Text c="red" fz="sm">
           {error}
         </Text>
       )}
@@ -86,7 +80,9 @@ const RsvpSection = (): JSX.Element => {
           />
         ))}
 
-      {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
+      {selectedGroup !== undefined && (
+        <RsvpForm selectedGroup={selectedGroup} />
+      )}
     </SectionContainer>
   );
 };

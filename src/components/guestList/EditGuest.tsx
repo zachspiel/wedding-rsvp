@@ -3,9 +3,7 @@
 import React from "react";
 import { Button, Group as MGroup, Radio, Tabs } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ref, set } from "firebase/database";
 import RsvpStatus from "./RsvpStatus";
-import { database } from "@spiel-wedding/database/database";
 import { Group } from "@spiel-wedding/types/Guest";
 import {
   showSuccessNotification,
@@ -14,6 +12,8 @@ import {
 import MailingAddressForm from "../form/MailingAddressForm";
 import GuestAffiliationSelection from "./addGuestForm/GuestAffiliationSelection";
 import GuestInput from "./addGuestForm/GuestInput";
+import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
+import { useSWRConfig } from "swr";
 
 interface Props {
   group: Group;
@@ -25,6 +25,7 @@ const EditGuest = (props: Props): JSX.Element => {
   const [isInvited, setIsInvited] = React.useState(
     group.invited ? "definitely" : "maybe",
   );
+  const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
     initialValues: group,
@@ -41,19 +42,19 @@ const EditGuest = (props: Props): JSX.Element => {
     form.setFieldValue("invited", value === "definitely");
   };
 
-  const handleSubmit = (): void => {
-    set(ref(database, "groups/" + group.id), {
-      ...form.values,
-      isInvited: isInvited === "definitely",
-    })
-      .then(() => {
-        showSuccessNotification("Successfully updated guest");
-      })
-      .catch(showFailureNotification);
+  const handleSubmit = async () => {
+    const updatedGroup = await updateGroup(form.getTransformedValues());
+
+    if (updatedGroup) {
+      showSuccessNotification("Successfully updated guest");
+      await mutate(GROUP_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
   };
 
-  const submitAndClose = (): void => {
-    handleSubmit();
+  const submitAndClose = async () => {
+    await handleSubmit();
     props.close();
   };
 

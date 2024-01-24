@@ -19,6 +19,8 @@ export interface Group {
 }
 
 export interface Guest {
+  id: string;
+  groupId: string;
   title: string;
   firstName: string;
   lastName: string;
@@ -28,7 +30,9 @@ export interface Guest {
 }
 
 export interface RsvpModification {
-  modifiedAt: string;
+  id: string;
+  createdAt: string;
+  groupId: string;
 }
 
 export enum RsvpResponse {
@@ -54,4 +58,14 @@ export enum RelationshipType {
   PRIMARY = "Primary",
   PARTNER = "Partner",
   CHILD = "Child",
+}
+
+export interface GuestMessage {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  isVisible: boolean;
+  createdAt?: string;
+  editedAt?: string;
 }

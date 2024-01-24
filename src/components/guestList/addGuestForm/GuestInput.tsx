@@ -27,17 +27,18 @@ const GuestInput = (props: Props): JSX.Element => {
   const { guests } = form.values;
   const guest = guests[index];
   const firstChildInGroupIndex = guests.findIndex(
-    (guest) => guest.relationshipType === CHILD
+    (guest) => guest.relationshipType === CHILD,
   );
 
   const lastAdultIndex = useMemo(
     () => findLastIndex(guests, (guest) => guest.relationshipType !== CHILD),
-    [guests]
+    [guests],
   );
 
   const showAddPlusOneButton = useMemo(
-    () => guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
-    [guests]
+    () =>
+      guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
+    [guests],
   );
 
   const showAddAdultButton = useMemo(() => {
@@ -74,7 +75,7 @@ const GuestInput = (props: Props): JSX.Element => {
               placeholder="Select..."
               name="title"
               allowDeselect
-              disabled={guest.nameUnknown}
+              disabled={guest.nameUnknown ?? false}
               data={[
                 { value: "Mr.", label: "Mr." },
                 { value: "Mrs.", label: "Mrs." },
@@ -86,7 +87,9 @@ const GuestInput = (props: Props): JSX.Element => {
               {...form.getInputProps(`guests.${index}.title`)}
             />
           )}
-          {guest.relationshipType === CHILD && <TextInput value="Child" disabled />}
+          {guest.relationshipType === CHILD && (
+            <TextInput value="Child" disabled />
+          )}
         </Grid.Col>
         <Grid.Col span={4}>
           <TextInput
@@ -111,7 +114,9 @@ const GuestInput = (props: Props): JSX.Element => {
         <Grid.Col span={2}>
           {index !== 0 && (
             <MGroup>
-              <ActionIcon onClick={(): void => form.removeListItem("guests", index)}>
+              <ActionIcon
+                onClick={(): void => form.removeListItem("guests", index)}
+              >
                 <IconX size="1.125rem" />
               </ActionIcon>
             </MGroup>
@@ -138,7 +143,11 @@ const GuestInput = (props: Props): JSX.Element => {
       )}
 
       {showAddAdultButton && (
-        <Button variant="outline" onClick={(): void => addPartnerToGuests(form)} mt="lg">
+        <Button
+          variant="outline"
+          onClick={(): void => addPartnerToGuests(form)}
+          mt="lg"
+        >
           Add Adult
         </Button>
       )}

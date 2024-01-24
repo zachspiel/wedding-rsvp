@@ -3,6 +3,7 @@ import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { createClient } from "@supabase/supabase-js";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -24,3 +25,8 @@ export const analytics =
     : null;
 export const database = getDatabase(firebaseApp);
 export const storage = getStorage(firebaseApp);
+
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+);

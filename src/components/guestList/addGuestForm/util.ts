@@ -9,6 +9,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
   form.insertListItem(
     "guests",
     {
+      groupId: form.values.id,
       firstName: "",
       lastName: "",
       rsvp: RsvpResponse.NO_RESPONSE,
@@ -20,6 +21,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
 
 const addChildToGuests = (form: UseFormReturnType<Group>): void => {
   form.insertListItem("guests", {
+    groupId: form.values.id,
     firstName: "",
     lastName: "",
     rsvp: RsvpResponse.NO_RESPONSE,
