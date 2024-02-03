@@ -1,5 +1,9 @@
 # Spielberger Wedding Website 🎉💍
 
+[![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
 <img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="200">
 
 Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
@@ -32,7 +36,7 @@ yarn install
 
 ```
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_ANON_KEY
 ```
 
 # Running the Project
