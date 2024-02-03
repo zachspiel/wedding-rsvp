@@ -151,11 +151,12 @@ const RsvpForm = (props: Props): JSX.Element => {
       </Stepper>
 
       <MGroup justify="right" mt="xl">
-        {currentStep > 0 && currentStep < 3 && (
+        {currentStep > 0 && (
           <Button variant="default" onClick={prevStep}>
             Back
           </Button>
         )}
+
         {currentStep < 2 && <Button onClick={nextStep}>Next step</Button>}
         {currentStep === 2 && (
           <Button onClick={handleSubmit} disabled={!form.isValid()}>
