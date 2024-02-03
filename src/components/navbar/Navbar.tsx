@@ -12,13 +12,13 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
-import { auth } from "@spiel-wedding/database/database";
 import { MenuItem, links } from "./links";
 import Logo from "./Logo";
 import { useMemo } from "react";
 import classes from "./navbar.module.css";
 import cx from "clsx";
 import { AdminViewToggle } from "@spiel-wedding/common";
+import { supabase } from "@spiel-wedding/database/database";
 
 const HEADER_HEIGHT = rem(60);
 
@@ -39,7 +39,7 @@ const Navbar = (props: Props): JSX.Element => {
         className={cx(
           classes.link,
           menuItem.className,
-          menuItem.label === "RSVP" ? classes.highlightedLink : undefined
+          menuItem.label === "RSVP" ? classes.highlightedLink : undefined,
         )}
       >
         {menuItem.label}
@@ -51,7 +51,9 @@ const Navbar = (props: Props): JSX.Element => {
     const elements = links.map(createMenuItem);
 
     if (isSignedIn) {
-      elements.push(createMenuItem({ label: "Guest List", link: "/guestList" }));
+      elements.push(
+        createMenuItem({ label: "Guest List", link: "/guestList" }),
+      );
     }
 
     if (props.showHome) {
@@ -70,7 +72,9 @@ const Navbar = (props: Props): JSX.Element => {
           {isSignedIn && (
             <Button
               className={classes.highlightedLink}
-              onClick={(): Promise<void> => auth.signOut()}
+              onClick={async () =>
+                await supabase.auth.signOut({ scope: "local" })
+              }
             >
               Sign out
             </Button>

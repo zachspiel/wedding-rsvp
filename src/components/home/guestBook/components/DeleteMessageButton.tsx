@@ -2,36 +2,37 @@
 
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { GuestMessage } from "../GuestBook";
 import { Modal, Text, Group, Button, ActionIcon } from "@mantine/core";
-import { ref, set } from "firebase/database";
 import {
   showSuccessNotification,
   showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { database } from "@spiel-wedding/database/database";
 import { IconTrash } from "@tabler/icons-react";
+import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { mutate } from "swr";
+import {
+  GALLERY_SWR_KEY,
+  removeGuestBookMessage,
+} from "@spiel-wedding/hooks/guestbook";
 
 interface Props {
   message: GuestMessage;
 }
 
-const DeleteMessageButton = (props: Props): JSX.Element => {
+const DeleteMessageButton = ({ message }: Props): JSX.Element => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { message } = props;
 
-  const deleteMessage = (): void => {
-    const messageRef = ref(database, `guestBook/${message.id}`);
+  const deleteMessage = async () => {
+    const removedMessage = await removeGuestBookMessage(message.id);
 
-    set(messageRef, { ...message, isVisible: false })
-      .then(() => {
-        showSuccessNotification("Successfully deleted the message!");
-      })
-      .catch(() => {
-        showCustomFailureNotification(
-          "An error occurred while deleting the message. Please try again later.",
-        );
-      });
+    if (removedMessage) {
+      showSuccessNotification("Successfully deleted the message!");
+      await mutate(GALLERY_SWR_KEY);
+    } else {
+      showCustomFailureNotification(
+        "An error occurred while deleting the message. Please try again later.",
+      );
+    }
   };
 
   return (

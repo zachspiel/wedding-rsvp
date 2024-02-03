@@ -11,59 +11,66 @@ import {
 } from "@mantine/core";
 import GuestInput from "./GuestInput";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import { ref, set } from "@firebase/database";
 import GuestAffiliationSelection from "./GuestAffiliationSelection";
 import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
   showFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { database } from "@spiel-wedding/database/database";
 import {
   RelationshipType,
-  Group,
   GuestAffiliation,
   RsvpResponse,
+  Group,
 } from "@spiel-wedding/types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
-import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
+import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
+import { v4 as uuid } from "uuid";
+import { useSWRConfig } from "swr";
 
-const DEFAULT_GROUP: Group = {
-  id: uuidv4(),
-  email: "",
-  phone: "",
-  guests: [
-    {
-      title: "",
-      firstName: "",
-      lastName: "",
-      nameUnknown: false,
-      rsvp: RsvpResponse.NO_RESPONSE,
-      relationshipType: RelationshipType.PRIMARY,
-    },
-  ],
-  affiliation: GuestAffiliation.NONE,
-  address1: "",
-  address2: "",
-  city: "",
-  state: "",
-  postal: "",
-  country: "",
-  message: "",
-  dietaryRestrictions: "",
-  invited: true,
-  inviteSent: false,
-  saveTheDateSent: false,
+const createDefaultGroup = (): Group => {
+  const groupId = uuid();
+
+  return {
+    id: groupId,
+    email: "",
+    phone: "",
+    guests: [
+      {
+        id: uuid(),
+        groupId: groupId,
+        title: "",
+        firstName: "",
+        lastName: "",
+        nameUnknown: false,
+        rsvp: RsvpResponse.NO_RESPONSE,
+        relationshipType: RelationshipType.PRIMARY,
+      },
+    ],
+    affiliation: GuestAffiliation.NONE,
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    postal: "",
+    country: "",
+    message: "",
+    dietaryRestrictions: "",
+    invited: true,
+    inviteSent: false,
+    saveTheDateSent: false,
+  };
 };
 
 const AddGuest = (): JSX.Element => {
   const [groupType, setGroupType] = useState("single");
   const [isInvited, setIsInvited] = useState("definitely");
   const [opened, { open, close }] = useDisclosure(false);
+  const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
-    initialValues: DEFAULT_GROUP,
+    initialValues: createDefaultGroup(),
     validate: {
       guests: {
         firstName: (value, group, path) => isNameInvalid(value, group, path),
@@ -110,27 +117,27 @@ const AddGuest = (): JSX.Element => {
     const totalGuests = form.values.guests.length - 1;
 
     for (let index = totalGuests; index > 0; index--) {
-      if (filters.includes(form.values.guests[index].relationshipType)) {
+      if (
+        filters.includes(
+          form.values.guests[index].relationshipType as RelationshipType,
+        )
+      ) {
         form.removeListItem("guests", index);
       }
     }
   };
 
-  const handleSubmit = (): void => {
-    const newGroupRef = ref(database, "groups/" + form.values.id);
+  const handleSubmit = async () => {
+    const newGroup = await createGroup(form.values);
 
-    set(newGroupRef, {
-      ...form.values,
-      createdAt: new Date().toISOString(),
-    })
-      .then(() => {
-        showSuccessNotification(
-          `Successfully added ${form.values.guests.length} guests 🎉!`,
-        );
-      })
-      .catch(() => {
-        showFailureNotification();
-      });
+    if (newGroup) {
+      showSuccessNotification(
+        `Successfully added ${form.values.guests.length} guests 🎉!`,
+      );
+      await mutate(GROUP_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
 
     form.reset();
   };
@@ -157,7 +164,7 @@ const AddGuest = (): JSX.Element => {
                 form={form}
                 groupType={groupType}
                 index={index}
-                key={index}
+                key={`${guest.id}-guest-input`}
               />
             );
           })}

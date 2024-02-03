@@ -1,13 +1,12 @@
 import { Select } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { GuestAffiliation, Group } from "@spiel-wedding/types/Guest";
+import { Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;
 }
 
-const GuestAffiliationSelection = (props: Props): JSX.Element => {
-  const { form } = props;
+const GuestAffiliationSelection = ({ form }: Props): JSX.Element => {
   const dropdownItems = Object.values(GuestAffiliation).map((affiliation) => {
     return { value: affiliation, label: affiliation };
   });
@@ -18,9 +17,8 @@ const GuestAffiliationSelection = (props: Props): JSX.Element => {
       placeholder="Select..."
       mt="lg"
       allowDeselect
-      name="affiliation"
-      {...form.getInputProps("affiliation")}
       data={dropdownItems}
+      {...form.getInputProps("affiliation")}
     />
   );
 };

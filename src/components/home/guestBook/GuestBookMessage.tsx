@@ -2,19 +2,18 @@
 
 import React, { useState } from "react";
 import { Group, Text, Flex, Card, ActionIcon } from "@mantine/core";
-import { GuestMessage } from "./GuestBook";
 import { IconPencil } from "@tabler/icons-react";
 import EditMessage from "./components/EditMessage";
 import DeleteMessageButton from "./components/DeleteMessageButton";
 import classes from "./guestbook.module.css";
+import { GuestMessage } from "@spiel-wedding/types/Guest";
 
 interface Props {
   message: GuestMessage;
   localMessages: string[];
 }
 
-const GuestBookMessage = (props: Props): JSX.Element => {
-  const { message, localMessages } = props;
+const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
   const isEditable = localMessages.includes(message.id);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -26,7 +25,10 @@ const GuestBookMessage = (props: Props): JSX.Element => {
 
           {isEditable && (
             <Flex>
-              <ActionIcon onClick={(): void => setIsEditing(!isEditing)} mr="md">
+              <ActionIcon
+                onClick={(): void => setIsEditing(!isEditing)}
+                mr="md"
+              >
                 <IconPencil size={20} />
               </ActionIcon>
 
@@ -37,14 +39,18 @@ const GuestBookMessage = (props: Props): JSX.Element => {
       )}
 
       {isEditing && (
-        <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
+        <EditMessage
+          message={message}
+          closeEditor={(): void => setIsEditing(false)}
+        />
       )}
 
       <Group>
         <div>
           <Flex>
             <Text size="xs" c="dimmed">
-              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+              By {message.name} -{" "}
+              {new Date(message.createdAt ?? "").toDateString()}
             </Text>
           </Flex>
         </div>

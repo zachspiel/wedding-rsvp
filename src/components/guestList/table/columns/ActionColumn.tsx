@@ -1,32 +1,39 @@
-import { ActionIcon, Button, Group as MGroup, Modal, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group as MGroup,
+  Modal,
+  Text,
+} from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { Group } from "@spiel-wedding/types/Guest";
-import { ref, remove } from "@firebase/database";
 import { useDisclosure } from "@mantine/hooks";
-import { database } from "@spiel-wedding/database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
+import { deleteGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
+import { useSWRConfig } from "swr";
 
 interface Props {
   group: Group;
   onEdit: () => void;
 }
 
-const ActionColumn = (props: Props): JSX.Element => {
-  const { group, onEdit } = props;
+const ActionColumn = ({ group, onEdit }: Props): JSX.Element => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { mutate } = useSWRConfig();
 
-  const handleDelete = (): void => {
-    const groupRef = ref(database, `groups/${group.id}`);
-    remove(groupRef)
-      .then(() => {
-        showSuccessNotification("Successfully deleted guest 🎉");
-      })
-      .catch(() => {
-        showFailureNotification();
-      });
+  const handleDelete = async () => {
+    const removedGroup = await deleteGroup(group.id);
+
+    if (removedGroup) {
+      showSuccessNotification("Successfully deleted guests 🎉");
+      await mutate(GROUP_SWR_KEY);
+      close();
+    } else {
+      showFailureNotification();
+    }
   };
 
   return (
@@ -41,7 +48,9 @@ const ActionColumn = (props: Props): JSX.Element => {
         </ActionIcon>
       </MGroup>
       <Modal opened={opened} onClose={close} centered>
-        <Text>This will permanently delete this group. Do you wish to continue?</Text>
+        <Text>
+          This will permanently delete this group. Do you wish to continue?
+        </Text>
         <MGroup align="flex-end" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel
