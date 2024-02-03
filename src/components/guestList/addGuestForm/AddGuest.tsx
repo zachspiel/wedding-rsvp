@@ -25,11 +25,7 @@ import {
 } from "@spiel-wedding/types/Guest";
 import { addPartnerToGuests, addChildToGuests } from "./util";
 import { useEffect, useState } from "react";
-import {
-  createGroup,
-  GROUP_SWR_KEY,
-  updateGroup,
-} from "@spiel-wedding/hooks/guests";
+import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import { v4 as uuid } from "uuid";
 import { useSWRConfig } from "swr";
 
@@ -168,7 +164,7 @@ const AddGuest = (): JSX.Element => {
                 form={form}
                 groupType={groupType}
                 index={index}
-                key={index}
+                key={`${guest.id}-guest-input`}
               />
             );
           })}

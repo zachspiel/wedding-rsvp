@@ -30,12 +30,12 @@ const UploadImages = (): JSX.Element => {
     });
   };
 
-  const uploadImage = async (file: File): Promise<void> => {
+  const uploadImage = async (file: File) => {
     const newImage = await uploadFileToGallery(file);
 
     if (newImage) {
       showSuccessNotification("Successfully uploaded image.");
-      mutate(GALLERY_SWR_KEY);
+      await mutate(GALLERY_SWR_KEY);
     } else {
       showFailureNotification();
     }

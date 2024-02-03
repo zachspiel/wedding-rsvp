@@ -74,7 +74,7 @@ const EditGuest = (props: Props): JSX.Element => {
                 form={form}
                 groupType="family"
                 index={index}
-                key={index}
+                key={`${guest.id}-edit-guest`}
               />
             );
           })}
@@ -130,7 +130,12 @@ const EditGuest = (props: Props): JSX.Element => {
 
         <Tabs.Panel value="rsvpStatus" pt="xs">
           {form.values.guests.map((guest, index) => (
-            <RsvpStatus guest={guest} index={index} form={form} key={index} />
+            <RsvpStatus
+              guest={guest}
+              index={index}
+              form={form}
+              key={`${guest.id}-rsvp-status`}
+            />
           ))}
         </Tabs.Panel>
       </Tabs>

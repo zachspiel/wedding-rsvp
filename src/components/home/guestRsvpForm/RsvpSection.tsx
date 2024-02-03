@@ -4,17 +4,15 @@ import { Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
-import { analytics } from "@spiel-wedding/database/database";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
-import { logEvent } from "firebase/analytics";
 import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 
 const RsvpSection = (): JSX.Element => {
-  const { data: groups, isLoading } = useSWR(GROUP_SWR_KEY, getGroups);
+  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
   const [error, setError] = useState<string>();
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchResults, setSearchResults] = useState<Group[]>([]);
@@ -37,13 +35,6 @@ const RsvpSection = (): JSX.Element => {
       );
     } else {
       setError(undefined);
-    }
-
-    if (analytics) {
-      logEvent(analytics, "rsvp_form_search", {
-        searchValue: { firstName, lastName },
-        totalResults: filteredResults.length,
-      });
     }
 
     setSearchResults(filteredResults);

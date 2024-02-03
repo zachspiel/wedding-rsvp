@@ -6,8 +6,11 @@ import {
 } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 import { v4 as uuid } from "uuid";
-import { NewGuest, UpdateGuest } from "@spiel-wedding/types/supabase";
-import addGuest from "@spiel-wedding/components/guestList/addGuestForm/AddGuest";
+import {
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "@spiel-wedding/types/supabase.types";
 
 export const GROUP_SWR_KEY = "group";
 const GROUP_TABLE = "group";
@@ -65,7 +68,7 @@ export const deleteGroup = async (
 };
 
 export const createGuests = async (
-  guests: NewGuest[],
+  guests: TablesInsert<"guests">[],
 ): Promise<Guest[] | undefined> => {
   const { data } = await supabase.from(GUEST_TABLE).insert(guests).select();
 
@@ -73,7 +76,7 @@ export const createGuests = async (
 };
 
 export const updateGuest = async (
-  guest: UpdateGuest,
+  guest: Tables<"guests">,
 ): Promise<Guest | undefined> => {
   const { data } = await supabase
     .from(GUEST_TABLE)
@@ -84,11 +87,10 @@ export const updateGuest = async (
   return data?.[0];
 };
 
-export const upsertGuests = async (guests: UpdateGuest[]): Promise<Guest[]> => {
-  const { data, error } = await supabase
-    .from(GUEST_TABLE)
-    .upsert(guests)
-    .select();
+export const upsertGuests = async (
+  guests: TablesUpdate<"guests">[],
+): Promise<Guest[]> => {
+  const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
 
   return data ?? [];
 };

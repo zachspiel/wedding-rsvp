@@ -109,7 +109,7 @@ const RsvpForm = (props: Props): JSX.Element => {
       <Stepper active={currentStep}>
         <Stepper.Step label="RSVP">
           {form.values.guests.map((guest, guestIndex) => (
-            <Flex direction="column" key={guestIndex}>
+            <Flex direction="column" key={`${guest.id}-rsvp-form`}>
               <Divider my="sm" />
               <MGroup justify="space-between">
                 <Text>

@@ -2,7 +2,7 @@
 
 <img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="200">
 
-Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Firebase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
+Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
 This project also includes an admin page for managing the guest list, RSVP status updates, and content modification on the homepage.
 
@@ -26,19 +26,13 @@ cd wedding-rsvp
 yarn install
 ```
 
-4. Create a Firebase project with a realtime database, authentication, and storage.
+4. Create a Supabase project with a  database, authentication, and storage.
 
-5. Go to project settings and add a web app if not done previously. Create a `.env` file in the project root and add your Firebase configuration:
+5. Go to project settings and add a web app if not done previously. Create a `.env` file in the project root and add your Supabase configuration:
 
 ```
-NEXT_PUBLIC_FIREBASE_APP_ID
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-NEXT_PUBLIC_FIREBASE_API_KEY
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-NEXT_PUBLIC_FIREBASE_DATABASE_URL
-NEXT_PUBLIC_FIREBASE_PROJECT_ID
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
 # Running the Project

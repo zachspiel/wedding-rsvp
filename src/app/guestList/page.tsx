@@ -44,7 +44,7 @@ export default function GuestList() {
 
   const rows = filteredGroups.map((group) => (
     <TableRow
-      key={group.id}
+      key={`${group.id}-table-row`}
       group={group}
       showRsvpStatus={showRsvpStatus}
       openModal={openModal}

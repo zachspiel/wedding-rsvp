@@ -21,8 +21,7 @@ interface Props {
   groupType: string;
 }
 
-const GuestInput = (props: Props): JSX.Element => {
-  const { form, groupType, index } = props;
+const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
   const { CHILD, PARTNER, PRIMARY } = RelationshipType;
   const { guests } = form.values;
   const guest = guests[index];

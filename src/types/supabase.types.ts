@@ -1,19 +1,9 @@
-import { Guest } from "@spiel-wedding/types/Guest";
-
 export type Json =
   | string
   | number
   | boolean
   | { [key: string]: Json | undefined }
   | Json[];
-
-export type NewGroup = Database["public"]["Tables"]["group"]["Update"];
-export type NewGuest = Database["public"]["Tables"]["guests"]["Insert"];
-export type UpdateGuest = Database["public"]["Tables"]["guests"]["Update"];
-
-export interface UpdateGuestFormState extends NewGroup {
-  guests: Guest[];
-}
 
 export interface Database {
   public: {

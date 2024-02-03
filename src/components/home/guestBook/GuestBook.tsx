@@ -18,7 +18,7 @@ import {
 } from "@spiel-wedding/hooks/guestbook";
 
 const GuestBook = (): JSX.Element => {
-  const { data, isLoading } = useSWR(GALLERY_SWR_KEY, getGuestMessages);
+  const { data } = useSWR(GALLERY_SWR_KEY, getGuestMessages);
   const { mutate } = useSWRConfig();
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",

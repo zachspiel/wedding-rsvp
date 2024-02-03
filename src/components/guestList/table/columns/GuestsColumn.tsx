@@ -12,7 +12,11 @@ const GuestsColumn = (props: Props): JSX.Element => {
   return (
     <>
       {guests.map((guest, index) => (
-        <Text key={index} ml={index > 0 ? "xl" : ""} style={{ display: "flex" }}>
+        <Text
+          key={`${guest.id}-guest-name`}
+          ml={index > 0 ? "xl" : ""}
+          style={{ display: "flex" }}
+        >
           {guest.nameUnknown && "Guest"}
           {guest.firstName} {guest.lastName}
         </Text>

@@ -11,7 +11,7 @@ import classes from "./gallery.module.css";
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const { data: photos, isLoading } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
+  const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
 
   const slides = photos
     ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
