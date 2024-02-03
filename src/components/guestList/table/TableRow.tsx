@@ -15,7 +15,7 @@ const TableRow = (props: Props): JSX.Element => {
   const { group, showRsvpStatus, openModal } = props;
 
   return (
-    <tr key={group.guests[0].firstName}>
+    <tr>
       <td>
         <GuestsColumn guests={group.guests} affiliation={group.affiliation} />
       </td>

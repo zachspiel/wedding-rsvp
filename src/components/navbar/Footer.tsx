@@ -1,4 +1,4 @@
-import { Container, Group, Anchor, rem } from "@mantine/core";
+import { Container, Group, Anchor } from "@mantine/core";
 import { links } from "./links";
 import Logo from "./Logo";
 import classes from "./navbar.module.css";

@@ -1,68 +1,64 @@
 "use client";
 
-import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
+import {
+  Modal,
+  TextInput,
+  Group,
+  Button,
+  ActionIcon,
+  Switch,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { ref, remove, set } from "firebase/database";
-import { deleteObject, ref as storageRef } from "firebase/storage";
-import { database, storage } from "@spiel-wedding/database/database";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { useState } from "react";
+import { useSWRConfig } from "swr";
+import {
+  GALLERY_SWR_KEY,
+  removeImage,
+  updatePhoto,
+} from "@spiel-wedding/hooks/gallery";
 
 interface Props {
   image: Photo;
 }
 
-const EditImage = (props: Props): JSX.Element => {
-  const { image } = props;
+const EditImage = ({ image }: Props): JSX.Element => {
   const [opened, setOpened] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const { mutate } = useSWRConfig();
 
   const form = useForm({
     initialValues: { ...image },
   });
 
-  const handleSubmit = (): void => {
-    set(ref(database, `photos/${image.id}`), { ...form.values })
-      .then(() => {
-        showSuccessNotification("Successfully updated image!");
-        setOpened(false);
-      })
-      .catch(() => {
-        showFailureNotification();
-      });
+  const handleSubmit = async () => {
+    const photo = await updatePhoto(image.id, form.getTransformedValues());
+
+    if (photo) {
+      showSuccessNotification("Successfully updated image!");
+      setOpened(false);
+      await mutate(GALLERY_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
   };
 
-  const onSuccessfulDelete = (): void => {
-    remove(ref(database, `photos/${image.id}`))
-      .then(() => {
-        showSuccessNotification("Successfully deleted image!");
-      })
-      .catch(() => {
-        showFailureNotification();
-      });
-  };
-
-  const onDeletionError = (): void => {
-    showFailureNotification();
-  };
-
-  const deleteImage = (): void => {
-    const imageRef = storageRef(storage, image.filePath);
+  const deleteImage = async () => {
+    const removedFile = await removeImage(image);
     setShowConfirmDelete(false);
 
-    deleteObject(imageRef)
-      .then(() => {
-        onSuccessfulDelete();
-        setOpened(false);
-      })
-      .catch((error) => {
-        onDeletionError();
-      });
+    if (removedFile && removedFile.length > 0) {
+      showSuccessNotification("Successfully deleted image!");
+      setOpened(false);
+      await mutate(GALLERY_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
   };
 
   return (
@@ -116,7 +112,7 @@ const EditImage = (props: Props): JSX.Element => {
                   Cancel
                 </Button>
 
-                <Button color="red" onClick={(): void => deleteImage()}>
+                <Button color="red" onClick={() => deleteImage()}>
                   Confirm
                 </Button>
               </>

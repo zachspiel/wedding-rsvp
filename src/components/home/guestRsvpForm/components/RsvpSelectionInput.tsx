@@ -1,7 +1,8 @@
 "use client";
+
 import { Group as MGroup, Radio } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { RsvpResonse, Group } from "@spiel-wedding/types/Guest";
+import { RsvpResponse, Group } from "@spiel-wedding/types/Guest";
 
 interface Props {
   form: UseFormReturnType<Group>;
@@ -22,9 +23,9 @@ const RsvpSelection = (props: Props): JSX.Element => {
   return (
     <Radio.Group {...form.getInputProps(`guests.${guestIndex}.rsvp`)}>
       <MGroup mt="xs">
-        <Radio value={RsvpResonse.ACCEPTED} label="Will Attend" />
+        <Radio value={RsvpResponse.ACCEPTED} label="Will Attend" />
         <Radio
-          value={RsvpResonse.DECLINED}
+          value={RsvpResponse.DECLINED}
           label="Will Not Attend"
           onClick={(): void => resetUnknownGuest(guestIndex)}
         />

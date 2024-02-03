@@ -3,21 +3,23 @@
 import React from "react";
 import { Textarea, Group, Button } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { ref, set } from "firebase/database";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { database } from "@spiel-wedding/database/database";
-import { GuestMessage } from "../GuestBook";
+import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { mutate } from "swr";
+import {
+  GALLERY_SWR_KEY,
+  updateGuestBookMessage,
+} from "@spiel-wedding/hooks/guestbook";
 
 interface Props {
   message: GuestMessage;
   closeEditor: () => void;
 }
 
-const EditMessage = (props: Props): JSX.Element => {
-  const { message, closeEditor } = props;
+const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
   const form = useForm({
     initialValues: message,
 
@@ -26,31 +28,26 @@ const EditMessage = (props: Props): JSX.Element => {
     },
   });
 
-  const updateMessage = (updatedEntry: string): void => {
-    let updatedMessage = [message].map((item) => item)[0];
+  const updateMessage = async (updatedEntry: GuestMessage) => {
+    const guestMessage = await updateGuestBookMessage(
+      updatedEntry.id,
+      updatedEntry.message,
+    );
 
-    updatedMessage = {
-      ...updatedMessage,
-      message: updatedEntry,
-      editedAt: new Date().toISOString(),
-    };
-
-    const messageRef = ref(database, `guestBook/${message.id}`);
-
-    set(messageRef, updatedMessage)
-      .then(() => {
-        showSuccessNotification("Successfully updated the message!");
-      })
-      .catch(() => {
-        showCustomFailureNotification(
-          "An error occured while updating the message. Please try again later."
-        );
-      });
+    if (guestMessage.length > 0) {
+      showSuccessNotification("Successfully updated message in guest book!");
+      await mutate(GALLERY_SWR_KEY);
+    } else {
+      showCustomFailureNotification(
+        "An error occurred while updating the message. Please try again later.",
+      );
+    }
 
     closeEditor();
   };
+
   return (
-    <form onSubmit={form.onSubmit(() => updateMessage(form.values.message))}>
+    <form onSubmit={form.onSubmit(() => updateMessage(form.values))}>
       <Textarea
         mt="md"
         label="Message"

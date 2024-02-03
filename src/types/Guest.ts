@@ -19,19 +19,23 @@ export interface Group {
 }
 
 export interface Guest {
+  id: string;
+  groupId: string;
   title: string;
   firstName: string;
   lastName: string;
   nameUnknown: boolean;
-  rsvp: RsvpResonse;
+  rsvp: RsvpResponse;
   relationshipType: RelationshipType;
 }
 
 export interface RsvpModification {
-  modifiedAt: string;
+  id: string;
+  createdAt: string;
+  groupId: string;
 }
 
-export enum RsvpResonse {
+export enum RsvpResponse {
   NO_RESPONSE = "No Response",
   ACCEPTED = "Accepted",
   DECLINED = "Declined",
@@ -54,4 +58,14 @@ export enum RelationshipType {
   PRIMARY = "Primary",
   PARTNER = "Partner",
   CHILD = "Child",
+}
+
+export interface GuestMessage {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  isVisible: boolean;
+  createdAt?: string;
+  editedAt?: string;
 }

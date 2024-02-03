@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Alert,
   Button,
@@ -9,17 +10,17 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { ref } from "@firebase/database";
-import { analytics, database } from "@spiel-wedding/database/database";
-import { Group, RsvpResonse } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
-import { logEvent } from "firebase/analytics";
-import { set } from "firebase/database";
 import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {
+  addEntryToRsvpModifications,
+  updateGroup,
+} from "@spiel-wedding/hooks/guests";
 
 interface Props {
   selectedGroup: Group;
@@ -29,8 +30,19 @@ const RsvpForm = (props: Props): JSX.Element => {
   const { selectedGroup } = props;
   const [currentStep, setCurrentStep] = useState(0);
 
+  const getInitialValues = () => {
+    const formattedGuests = selectedGroup.guests.map((guest) => {
+      if (guest.rsvp === RsvpResponse.NO_RESPONSE) {
+        return { ...guest, rsvp: RsvpResponse.ACCEPTED };
+      }
+      return guest;
+    });
+
+    return { ...selectedGroup, guests: formattedGuests };
+  };
+
   const form = useForm<Group>({
-    initialValues: selectedGroup,
+    initialValues: getInitialValues(),
     validate: {
       address1: isNotEmpty("Address cannot be empty"),
       city: isNotEmpty("City cannot be empty"),
@@ -41,59 +53,40 @@ const RsvpForm = (props: Props): JSX.Element => {
       email: isEmail("Email is not valid"),
       guests: {
         firstName: (value, values, path) =>
-          isNameInvalid(value, values, path) ? "Please enter a first name" : null,
+          isNameInvalid(value, values, path)
+            ? "Please enter a first name"
+            : null,
         lastName: (value, values, path) =>
-          isNameInvalid(value, values, path) ? "Please enter a last name" : null,
+          isNameInvalid(value, values, path)
+            ? "Please enter a last name"
+            : null,
       },
     },
   });
 
-  useEffect(() => {
-    form.values.guests.forEach((guest, guestIndex) => {
-      if (guest.rsvp === RsvpResonse.NO_RESPONSE) {
-        form.setFieldValue(`guests.${guestIndex}.rsvp`, RsvpResonse.ACCEPTED);
-      }
-    });
-  }, []);
-
-  const isNameInvalid = (value: string, group: Group, path: string): boolean => {
+  const isNameInvalid = (
+    value: string,
+    group: Group,
+    path: string,
+  ): boolean => {
     const index = Number(path.split(".")[1]);
 
-    if (group.guests[index].rsvp === RsvpResonse.ACCEPTED) {
+    if (group.guests[index].rsvp === RsvpResponse.ACCEPTED) {
       return value.length === 0;
     }
 
     return false;
   };
 
-  const handleSubmit = (): void => {
-    const groupRef = ref(database, `groups/${selectedGroup.id}`);
-    const rsvpModifications = [...(form.values.rsvpModifications ?? [])];
-    rsvpModifications.push({ modifiedAt: new Date().toISOString() });
+  const handleSubmit = async () => {
+    await addEntryToRsvpModifications(selectedGroup.id);
+    const updatedGroup = await updateGroup(form.getTransformedValues());
 
-    const updatedGuests = form.values.guests.map((guest) => {
-      if (guest.nameUnknown && guest.rsvp === RsvpResonse.ACCEPTED) {
-        return { ...guest, nameUnknown: false };
-      }
-
-      return guest;
-    });
-
-    const updatedGroup = { ...form.values, guests: updatedGuests, rsvpModifications };
-
-    set(groupRef, updatedGroup)
-      .then(() => {
-        if (analytics) {
-          logEvent(analytics, "rsvp_form_complete", {
-            original: selectedGroup,
-            updated: form.values,
-          });
-        }
-        nextStep();
-      })
-      .catch(() => {
-        showFailureNotification();
-      });
+    if (updatedGroup === undefined) {
+      showFailureNotification();
+    } else {
+      nextStep();
+    }
   };
 
   const nextStep = (): void =>
@@ -116,7 +109,7 @@ const RsvpForm = (props: Props): JSX.Element => {
       <Stepper active={currentStep}>
         <Stepper.Step label="RSVP">
           {form.values.guests.map((guest, guestIndex) => (
-            <Flex direction="column" key={guestIndex}>
+            <Flex direction="column" key={`${guest.id}-rsvp-form`}>
               <Divider my="sm" />
               <MGroup justify="space-between">
                 <Text>
@@ -126,10 +119,11 @@ const RsvpForm = (props: Props): JSX.Element => {
                 <RsvpSelection form={form} guestIndex={guestIndex} />
               </MGroup>
               {guest.nameUnknown &&
-                form.values.guests[guestIndex].rsvp === RsvpResonse.ACCEPTED && (
+                form.values.guests[guestIndex].rsvp ===
+                  RsvpResponse.ACCEPTED && (
                   <UnknownGuestInput form={form} index={guestIndex} />
                 )}
-              {guestIndex === Object.keys(form.values.guests).length - 1 && (
+              {guestIndex === form.values.guests.length - 1 && (
                 <Divider my="sm" />
               )}
             </Flex>
@@ -150,18 +144,19 @@ const RsvpForm = (props: Props): JSX.Element => {
 
         <Stepper.Completed>
           <Alert title="Success!" color="teal" variant="filled">
-            Your reservation has been completed successfully, feel free to come back here
-            and edit it anytime before the wedding!
+            Your reservation has been completed successfully, feel free to come
+            back here and edit it anytime before the wedding!
           </Alert>
         </Stepper.Completed>
       </Stepper>
 
       <MGroup justify="right" mt="xl">
-        {currentStep > 0 && currentStep < 3 && (
+        {currentStep > 0 && (
           <Button variant="default" onClick={prevStep}>
             Back
           </Button>
         )}
+
         {currentStep < 2 && <Button onClick={nextStep}>Next step</Button>}
         {currentStep === 2 && (
           <Button onClick={handleSubmit} disabled={!form.isValid()}>

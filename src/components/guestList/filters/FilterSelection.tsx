@@ -1,11 +1,7 @@
 "use client";
+
 import React from "react";
-import {
-  MultiSelect,
-  ComboboxData,
-  ComboboxItem,
-  ComboboxItemGroup,
-} from "@mantine/core";
+import { MultiSelect, ComboboxItemGroup, ComboboxItem } from "@mantine/core";
 import { Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 import {
   filterGroupByAffiliation,
@@ -27,43 +23,46 @@ const FilterSelection = (props: Props): JSX.Element => {
       groups
         .map((group) => group.guests.length)
         .reduce((total, current) => total + current, 0),
-    [groups]
+    [groups],
   );
 
   React.useEffect(() => {
     const missingValueTotals = getMissingValueTotals(groups);
     const newSelectItems: ComboboxItemGroup[] = [];
 
-    for (const [key, value] of Object.entries(missingValueTotals)) {
-      if (value > 0) {
-        newSelectItems.push(createMissingValueItem(key, `${key} (${value})`));
-      }
+    const missingItemOptions = Object.entries(missingValueTotals)
+      .filter(([key, value]) => value > 0)
+      .map(([key, value]) => ({
+        value: key,
+        label: `${key} (${value})`,
+      }));
+
+    if (missingItemOptions.length > 0) {
+      newSelectItems.push({
+        group: "BY MISSING INFORMATION",
+        items: missingItemOptions,
+      });
     }
 
-    const affiliations = getUniqueAffiliations(groups).map(mapAffiliationToSelectItem);
-    newSelectItems.push(...affiliations);
+    const affiliations = getUniqueAffiliations(groups).map(
+      mapAffiliationToSelectItem,
+    );
+    newSelectItems.push({
+      group: "BY RELATIONSHIP TO YOU",
+      items: affiliations,
+    });
 
     setSelectItems(newSelectItems);
   }, [groups]);
 
-  const createMissingValueItem = (value: string, label: string): ComboboxItemGroup => {
-    return {
-      group: "BY MISSING INFORMATION",
-      items: [{ value, label: `Missing ${label}` }],
-    };
-  };
-
   const mapAffiliationToSelectItem = (
-    affiliation: GuestAffiliation
-  ): ComboboxItemGroup => {
+    affiliation: GuestAffiliation,
+  ): ComboboxItem => {
     const totalGroups = filterGroupByAffiliation(affiliation, groups);
-    const group = "BY RELATIONSHIP TO YOU";
-    const label = affiliation === GuestAffiliation.NONE ? "Unknown" : affiliation;
+    const label =
+      affiliation === GuestAffiliation.NONE ? "Unknown" : affiliation;
 
-    return {
-      group,
-      items: [{ value: affiliation, label: `${label} (${totalGroups})` }],
-    };
+    return { value: affiliation, label: `${label} (${totalGroups})` };
   };
 
   return (

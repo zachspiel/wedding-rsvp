@@ -3,9 +3,7 @@
 import React from "react";
 import { Button, Group as MGroup, Radio, Tabs } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ref, set } from "firebase/database";
 import RsvpStatus from "./RsvpStatus";
-import { database } from "@spiel-wedding/database/database";
 import { Group } from "@spiel-wedding/types/Guest";
 import {
   showSuccessNotification,
@@ -14,6 +12,8 @@ import {
 import MailingAddressForm from "../form/MailingAddressForm";
 import GuestAffiliationSelection from "./addGuestForm/GuestAffiliationSelection";
 import GuestInput from "./addGuestForm/GuestInput";
+import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
+import { useSWRConfig } from "swr";
 
 interface Props {
   group: Group;
@@ -23,8 +23,9 @@ interface Props {
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe"
+    group.invited ? "definitely" : "maybe",
   );
+  const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
     initialValues: group,
@@ -41,21 +42,19 @@ const EditGuest = (props: Props): JSX.Element => {
     form.setFieldValue("invited", value === "definitely");
   };
 
-  const handleSubmit = (): void => {
-    set(ref(database, "groups/" + group.id), {
-      ...form.values,
-      isInvited: isInvited === "definitely",
-    })
-      .then(() => {
-        showSuccessNotification("Successfully updated guest");
-      })
-      .catch((error) => {
-        showFailureNotification();
-      });
+  const handleSubmit = async () => {
+    const updatedGroup = await updateGroup(form.getTransformedValues());
+
+    if (updatedGroup) {
+      showSuccessNotification("Successfully updated guest");
+      await mutate(GROUP_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
   };
 
-  const submitAndClose = (): void => {
-    handleSubmit();
+  const submitAndClose = async () => {
+    await handleSubmit();
     props.close();
   };
 
@@ -71,7 +70,12 @@ const EditGuest = (props: Props): JSX.Element => {
         <Tabs.Panel value="guestInfo" pt="xs">
           {form.values.guests.map((guest, index) => {
             return (
-              <GuestInput form={form} groupType="family" index={index} key={index} />
+              <GuestInput
+                form={form}
+                groupType="family"
+                index={index}
+                key={`${guest.id}-edit-guest`}
+              />
             );
           })}
           <GuestAffiliationSelection form={form} />
@@ -110,7 +114,9 @@ const EditGuest = (props: Props): JSX.Element => {
           <Radio.Group
             {...form.getInputProps("inviteSent")}
             value={form.values.inviteSent ? "yes" : "no"}
-            onChange={(value): void => form.setFieldValue("inviteSent", value === "yes")}
+            onChange={(value): void =>
+              form.setFieldValue("inviteSent", value === "yes")
+            }
             name="inviteSent"
             label="Sent wedding invitation?"
             pt="lg"
@@ -124,7 +130,12 @@ const EditGuest = (props: Props): JSX.Element => {
 
         <Tabs.Panel value="rsvpStatus" pt="xs">
           {form.values.guests.map((guest, index) => (
-            <RsvpStatus guest={guest} index={index} form={form} key={index} />
+            <RsvpStatus
+              guest={guest}
+              index={index}
+              form={form}
+              key={`${guest.id}-rsvp-status`}
+            />
           ))}
         </Tabs.Panel>
       </Tabs>

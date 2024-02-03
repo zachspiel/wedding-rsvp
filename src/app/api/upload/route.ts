@@ -29,7 +29,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, compressedImage, fileName });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ error }, { status: 400 });
   }
 }

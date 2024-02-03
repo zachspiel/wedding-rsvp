@@ -1,4 +1,4 @@
-import { AdminViewToggle, FlowerImage } from "@spiel-wedding/common";
+import { FlowerImage } from "@spiel-wedding/common";
 import Jumbotron from "@spiel-wedding/components/home/Jumbotron";
 import Gallery from "@spiel-wedding/components/home/gallery/Gallery";
 import GuestBook from "@spiel-wedding/components/home/guestBook/GuestBook";
