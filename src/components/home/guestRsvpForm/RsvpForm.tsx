@@ -145,7 +145,7 @@ const RsvpForm = (props: Props): JSX.Element => {
         <Stepper.Completed>
           <Alert title="Success!" color="teal" variant="filled">
             Your reservation has been completed successfully, feel free to come
-            back here and edit it anytime before the wedding!
+            back here and edit it anytime before September 26th!
           </Alert>
         </Stepper.Completed>
       </Stepper>

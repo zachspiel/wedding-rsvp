@@ -66,7 +66,9 @@ const Navbar = (props: Props): JSX.Element => {
   return (
     <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
       <Container className={classes.header} style={{ maxWidth: "100%" }}>
-        <Logo />
+        <Anchor href="/" p="xs">
+          <Logo />
+        </Anchor>
         <Group gap="md" className={classes.links}>
           {menuItems}
           {isSignedIn && (

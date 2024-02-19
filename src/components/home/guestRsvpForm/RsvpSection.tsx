@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@mantine/core";
+import { Alert, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
@@ -10,6 +10,7 @@ import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 const RsvpSection = (): JSX.Element => {
   const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
@@ -44,10 +45,19 @@ const RsvpSection = (): JSX.Element => {
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
       <Text>
-        {`Please enter the first and last name of one member of your party below. If
-                you're responding for you and a guest (or your family), you'll be able to
-                RSVP for your entire group on the next page.`}
+        Please enter the first and last name of one member of your party below.
+        If you&apos;re responding for you and a guest (or your family),
+        you&apos;ll be able to RSVP for your entire group on the next page.
       </Text>
+
+      <Alert
+        variant="light"
+        color="teal"
+        icon={<IconInfoCircle />}
+        style={{ width: "fit-content" }}
+      >
+        Please RSVP no later than September 26th 2024.
+      </Alert>
 
       <Searchbar getSearchResults={getSearchResults} />
 

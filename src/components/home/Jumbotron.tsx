@@ -1,27 +1,19 @@
-import { Overlay, Container, Title, Text } from "@mantine/core";
+import { Container, Title, Text } from "@mantine/core";
 import classes from "./home.module.css";
 
 const Jumbotron = (): JSX.Element => {
   return (
     <div className={classes.wrapper}>
-      <Overlay color="#000" opacity={0.25} zIndex={0} />
-
       <div className={classes.inner}>
-        <Title className={classes.title}>{"We're Getting Married!"}</Title>
+        <Title className={classes.title}>We&apos;re Getting Married!</Title>
 
-        <Container size={640}>
-          <Text size="lg" className={classes.description}>
+        <Container size={500}>
+          <Text size="xl" className={classes.description}>
             Sedona & Zach
           </Text>
         </Container>
 
-        <Text
-          size="lg"
-          className={classes.description}
-          style={{
-            textAlign: "center",
-          }}
-        >
+        <Text size="lg" className={classes.description}>
           10.26.24
         </Text>
       </div>

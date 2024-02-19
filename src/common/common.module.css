@@ -4,3 +4,7 @@
   bottom: 1rem;
   z-index: 1001;
 }
+
+.sectionTitle {
+  font-family: var(--font-playfair);
+}

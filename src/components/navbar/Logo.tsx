@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import classes from "./navbar.module.css";
 import logo from "../../assets/images/The-Spielbergers-Wedding-Logo-Variant.webp";

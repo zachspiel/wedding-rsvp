@@ -3,3 +3,12 @@
   padding-bottom: 5rem;
   flex-flow: row wrap;
 }
+
+.dividerTop::before, .dividerBottom::after {
+  content: '';
+  display: block;
+  margin: 0.5em auto;
+  width: 90px;
+  height: 1px;
+  background-color: #000 !important;
+}

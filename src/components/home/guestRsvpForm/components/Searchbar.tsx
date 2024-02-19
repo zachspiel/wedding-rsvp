@@ -38,7 +38,7 @@ const Searchbar = (props: Props): JSX.Element => {
           {...form.getInputProps("lastName")}
         />
 
-        <Button type="submit" disabled={!form.isValid()}>
+        <Button type="submit" disabled={!form.isValid()} color="teal.5">
           Search
         </Button>
       </MGroup>

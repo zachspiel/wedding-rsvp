@@ -13,7 +13,9 @@ const Footer = (): JSX.Element => {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <Logo />
+        <Anchor href="/">
+          <Logo />
+        </Anchor>
         <Group className={classes.links}>{items}</Group>
       </Container>
     </div>
