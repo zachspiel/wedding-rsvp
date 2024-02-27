@@ -16,6 +16,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
   showFailureNotification,
+  showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import {
   RelationshipType,
@@ -122,15 +123,14 @@ const AddGuest = (): JSX.Element => {
   };
 
   const handleSubmit = async () => {
-    const { data: newGroup, error } = await createGroup(form.values);
-
-    if (error) {
-      showFailureNotification();
-    } else if (newGroup) {
+    try {
+      await createGroup(form.values);
       showSuccessNotification(
         `Successfully added ${form.values.guests.length} guests 🎉!`
       );
       await mutate(GROUP_SWR_KEY);
+    } catch (error) {
+      showCustomFailureNotification(`${error}`);
     }
 
     form.reset();

@@ -1,43 +1,34 @@
 import { Group, Guest, RsvpModification, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 import { v4 as uuid } from "uuid";
-import {
-  ApiResult,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
-} from "@spiel-wedding/types/supabase.types";
+import { Tables, TablesInsert, TablesUpdate } from "@spiel-wedding/types/supabase.types";
 
 export const GROUP_SWR_KEY = "group";
 const GROUP_TABLE = "group";
 const GUEST_TABLE = "guests";
 const RSVP_TABLE = "rsvp_modifications";
 
-export const getGroups = async (): Promise<ApiResult<Group[]>> => {
+export const getGroups = async (): Promise<Group[]> => {
   const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
-  return { data: data ?? [], error: error?.message };
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
 };
 
-export const createGroup = async (
-  group: Group
-): Promise<ApiResult<Group | undefined>> => {
+export const createGroup = async (group: Group): Promise<Group | undefined> => {
   const { id, guests, rsvpModifications, ...groupData } = group;
 
   const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
 
   if (error) {
-    return { data: undefined, error: error.message };
+    throw new Error(error.message);
   }
 
   const newGroup = data?.[0] ?? ({} as Group);
-  const { data: newGuests, error: createGuestError } = await createGuests(
-    guests,
-    newGroup.id
-  );
-
-  if (createGuestError) {
-    return { data: undefined, error: createGuestError };
-  }
+  const newGuests = await createGuests(guests, newGroup.id);
 
   return { ...newGroup, guests: newGuests };
 };
@@ -72,7 +63,7 @@ export const deleteGroup = async (groupId: string): Promise<Group | undefined> =
 export const createGuests = async (
   guests: TablesInsert<"guests">[],
   groupId: string
-): Promise<ApiResult<Guest[] | undefined>> => {
+): Promise<Guest[] | undefined> => {
   const formattedGuests = guests.map((guest) => {
     const { id, ...values } = guest;
     return { ...values, groupId: groupId };
@@ -84,10 +75,10 @@ export const createGuests = async (
     .select();
 
   if (error) {
-    return { data: undefined, error: error.message };
+    throw new Error(error.message);
   }
 
-  return { data: data ?? [] };
+  return data ?? [];
 };
 
 export const updateGuest = async (

@@ -1,8 +1,3 @@
-export interface ApiResult<T> {
-  data: T;
-  error?: string;
-}
-
 export type Json =
   | string
   | number

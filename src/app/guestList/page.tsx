@@ -8,16 +8,13 @@ import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
 import DownloadGuestList from "@spiel-wedding/features/DownloadGuestList/DownloadGuestList";
-import { showNotification } from "@mantine/notifications";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 
 export default function GuestList() {
-  const { data: result } = useSWR(GROUP_SWR_KEY, getGroups);
+  const { data: groups, error } = useSWR(GROUP_SWR_KEY, getGroups);
 
-  if (result?.error) {
-    showNotification({
-      color: "red",
-      message: result.error,
-    });
+  if (error) {
+    showCustomFailureNotification(error);
   }
 
   return (
@@ -26,10 +23,10 @@ export default function GuestList() {
         <MGroup justify="space-between">
           <SectionTitle title="All Guests" id="allGuests" />
           <AddGuest />
-          <DownloadGuestList groups={result?.data ?? []} />
+          <DownloadGuestList groups={groups ?? []} />
         </MGroup>
-        <Summary groups={result?.data ?? []} />
-        <GuestListTable groups={result?.data ?? []} />
+        <Summary groups={groups ?? []} />
+        <GuestListTable groups={groups ?? []} />
       </SimpleGrid>
     </Container>
   );
