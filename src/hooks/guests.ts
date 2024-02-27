@@ -1,12 +1,8 @@
-import {
-  Group,
-  Guest,
-  RsvpModification,
-  RsvpResponse,
-} from "@spiel-wedding/types/Guest";
+import { Group, Guest, RsvpModification, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 import { v4 as uuid } from "uuid";
 import {
+  ApiResult,
   Tables,
   TablesInsert,
   TablesUpdate,
@@ -17,18 +13,33 @@ const GROUP_TABLE = "group";
 const GUEST_TABLE = "guests";
 const RSVP_TABLE = "rsvp_modifications";
 
-export const getGroups = async (): Promise<Group[]> => {
-  const { data } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
-  return data ?? [];
+export const getGroups = async (): Promise<ApiResult<Group[]>> => {
+  const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
+  return { data: data ?? [], error: error?.message };
 };
 
-export const createGroup = async (group: Group): Promise<Group | undefined> => {
-  const { guests, rsvpModifications, ...groupData } = group;
+export const createGroup = async (
+  group: Group
+): Promise<ApiResult<Group | undefined>> => {
+  const { id, guests, rsvpModifications, ...groupData } = group;
 
-  const { data } = await supabase.from(GROUP_TABLE).insert(groupData).select();
-  const newGuests = await createGuests(guests);
+  const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
 
-  return { ...(data?.[0] ?? {}), guests: newGuests };
+  if (error) {
+    return { data: undefined, error: error.message };
+  }
+
+  const newGroup = data?.[0] ?? ({} as Group);
+  const { data: newGuests, error: createGuestError } = await createGuests(
+    guests,
+    newGroup.id
+  );
+
+  if (createGuestError) {
+    return { data: undefined, error: createGuestError };
+  }
+
+  return { ...newGroup, guests: newGuests };
 };
 
 export const updateGroup = async (group: Group): Promise<Group | undefined> => {
@@ -47,36 +58,40 @@ export const updateGroup = async (group: Group): Promise<Group | undefined> => {
 
   const updatedGuestsResult = await upsertGuests(updatedGuests);
 
-  const { data } = await supabase
-    .from(GROUP_TABLE)
-    .upsert(updatedGroup)
-    .select();
+  const { data } = await supabase.from(GROUP_TABLE).upsert(updatedGroup).select();
 
   return { ...data?.[0], guests: updatedGuestsResult };
 };
 
-export const deleteGroup = async (
-  groupId: string,
-): Promise<Group | undefined> => {
-  const { data } = await supabase
-    .from(GROUP_TABLE)
-    .delete()
-    .eq("id", groupId)
-    .select();
+export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
+  const { data } = await supabase.from(GROUP_TABLE).delete().eq("id", groupId).select();
 
   return data?.[0];
 };
 
 export const createGuests = async (
   guests: TablesInsert<"guests">[],
-): Promise<Guest[] | undefined> => {
-  const { data } = await supabase.from(GUEST_TABLE).insert(guests).select();
+  groupId: string
+): Promise<ApiResult<Guest[] | undefined>> => {
+  const formattedGuests = guests.map((guest) => {
+    const { id, ...values } = guest;
+    return { ...values, groupId: groupId };
+  });
 
-  return data ?? [];
+  const { data, error } = await supabase
+    .from(GUEST_TABLE)
+    .insert(formattedGuests)
+    .select();
+
+  if (error) {
+    return { data: undefined, error: error.message };
+  }
+
+  return { data: data ?? [] };
 };
 
 export const updateGuest = async (
-  guest: Tables<"guests">,
+  guest: Tables<"guests">
 ): Promise<Guest | undefined> => {
   const { data } = await supabase
     .from(GUEST_TABLE)
@@ -88,7 +103,7 @@ export const updateGuest = async (
 };
 
 export const upsertGuests = async (
-  guests: TablesUpdate<"guests">[],
+  guests: TablesUpdate<"guests">[]
 ): Promise<Guest[]> => {
   const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
 
@@ -96,7 +111,7 @@ export const upsertGuests = async (
 };
 
 export const addEntryToRsvpModifications = async (
-  groupId: string,
+  groupId: string
 ): Promise<RsvpModification | undefined> => {
   const { data } = await supabase.from(RSVP_TABLE).insert({ groupId }).select();
 
