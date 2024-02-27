@@ -8,9 +8,7 @@ interface Props {
 
 const { CHILD } = RelationshipType;
 
-const Summary = (props: Props): JSX.Element => {
-  const { groups } = props;
-
+const Summary = ({ groups }: Props): JSX.Element => {
   const allGuests = useMemo(() => groups.flatMap((group) => group.guests), [groups]);
   const groupGuestLengths = useMemo(
     () => groups.filter((group) => group.invited).map((group) => group.guests.length),

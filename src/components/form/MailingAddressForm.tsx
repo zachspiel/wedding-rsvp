@@ -2,6 +2,7 @@ import { UseFormReturnType } from "@mantine/form";
 import { Accordion, Grid, TextInput, Select } from "@mantine/core";
 import { countries } from "./countries";
 import { Group } from "@spiel-wedding/types/Guest";
+import { STATES } from "./states";
 
 interface Props {
   form: UseFormReturnType<Group>;
@@ -34,16 +35,13 @@ const MailingAddressForm = (props: Props): JSX.Element => {
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                label="City"
-                name="city"
-                {...form.getInputProps("city")}
-              />
+              <TextInput label="City" name="city" {...form.getInputProps("city")} />
             </Grid.Col>
             <Grid.Col span={3}>
-              <TextInput
+              <Select
                 label="State"
-                name="state"
+                name="State"
+                data={STATES}
                 {...form.getInputProps("state")}
               />
             </Grid.Col>
@@ -74,18 +72,10 @@ const MailingAddressForm = (props: Props): JSX.Element => {
         <Accordion.Panel>
           <Grid>
             <Grid.Col span={6}>
-              <TextInput
-                label="Email"
-                name="email"
-                {...form.getInputProps("email")}
-              />
+              <TextInput label="Email" name="email" {...form.getInputProps("email")} />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                label="Phone"
-                name="phone"
-                {...form.getInputProps("phone")}
-              />
+              <TextInput label="Phone" name="phone" {...form.getInputProps("phone")} />
             </Grid.Col>
           </Grid>
         </Accordion.Panel>
