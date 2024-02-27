@@ -12,7 +12,7 @@ const RsvpStatusColumn = (props: Props): JSX.Element => {
   return (
     <List listStyleType="none" withPadding>
       {guests.map((guest) => (
-        <List.Item key={`${guest.firstName}-${guest.lastName}`}>
+        <List.Item key={guest.id}>
           {guest.rsvp === RsvpResponse.ACCEPTED && <IconCheck color="green" />}
           {guest.rsvp !== RsvpResponse.ACCEPTED && <IconX color="red" />}
         </List.Item>

@@ -16,6 +16,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
   showFailureNotification,
+  showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import {
   RelationshipType,
@@ -79,11 +80,7 @@ const AddGuest = (): JSX.Element => {
     },
   });
 
-  const isNameInvalid = (
-    value: string,
-    values: Group,
-    path: string,
-  ): boolean => {
+  const isNameInvalid = (value: string, values: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
     if (!values.guests[index].nameUnknown) {
       return value.length === 0;
@@ -118,9 +115,7 @@ const AddGuest = (): JSX.Element => {
 
     for (let index = totalGuests; index > 0; index--) {
       if (
-        filters.includes(
-          form.values.guests[index].relationshipType as RelationshipType,
-        )
+        filters.includes(form.values.guests[index].relationshipType as RelationshipType)
       ) {
         form.removeListItem("guests", index);
       }
@@ -128,18 +123,18 @@ const AddGuest = (): JSX.Element => {
   };
 
   const handleSubmit = async () => {
-    const newGroup = await createGroup(form.values);
-
-    if (newGroup) {
+    try {
+      await createGroup(form.values);
       showSuccessNotification(
-        `Successfully added ${form.values.guests.length} guests 🎉!`,
+        `Successfully added ${form.values.guests.length} guests 🎉!`
       );
       await mutate(GROUP_SWR_KEY);
-    } else {
-      showFailureNotification();
+    } catch (error) {
+      showCustomFailureNotification(`${error}`);
     }
 
     form.reset();
+    form.setInitialValues(createDefaultGroup());
   };
 
   return (
@@ -191,14 +186,14 @@ const AddGuest = (): JSX.Element => {
               Cancel
             </Button>
             <Button type="submit" size="md">
-              Add Guest
+              Add Group
             </Button>
           </MGroup>
         </form>
       </Modal>
 
       <Button variant="outline" onClick={open}>
-        Add Guest
+        Add Group
       </Button>
     </>
   );
