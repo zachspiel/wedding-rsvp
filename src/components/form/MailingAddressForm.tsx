@@ -1,6 +1,5 @@
 import { UseFormReturnType } from "@mantine/form";
 import { Accordion, Grid, TextInput, Select } from "@mantine/core";
-import { countries } from "./countries";
 import { Group } from "@spiel-wedding/types/Guest";
 import { STATES } from "./states";
 
@@ -50,17 +49,6 @@ const MailingAddressForm = (props: Props): JSX.Element => {
                 label="Zip Code"
                 name="postal"
                 {...form.getInputProps("postal")}
-              />
-            </Grid.Col>
-            <Grid.Col>
-              <Select
-                label="Country"
-                searchable
-                allowDeselect
-                data={countries.map((country) => {
-                  return { value: country, label: country };
-                })}
-                {...form.getInputProps("country")}
               />
             </Grid.Col>
           </Grid>

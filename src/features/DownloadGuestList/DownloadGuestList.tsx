@@ -37,7 +37,7 @@ const DownloadGuestList = ({ groups }: Props) => {
   };
 
   return (
-    <Button leftSection={<IconDownload />} onClick={handleDownload}>
+    <Button variant="outline" leftSection={<IconDownload />} onClick={handleDownload}>
       Export CSV
     </Button>
   );
