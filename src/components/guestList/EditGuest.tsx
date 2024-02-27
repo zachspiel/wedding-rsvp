@@ -9,11 +9,13 @@ import {
   showSuccessNotification,
   showFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import MailingAddressForm from "../form/MailingAddressForm";
-import GuestAffiliationSelection from "./addGuestForm/GuestAffiliationSelection";
-import GuestInput from "./addGuestForm/GuestInput";
 import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
 import { useSWRConfig } from "swr";
+import {
+  GuestAffiliationSelection,
+  GuestInput,
+  MailingAddressForm,
+} from "@spiel-wedding/components/form";
 
 interface Props {
   group: Group;
@@ -23,7 +25,7 @@ interface Props {
 const EditGuest = (props: Props): JSX.Element => {
   const { group } = props;
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe",
+    group.invited ? "definitely" : "maybe"
   );
   const { mutate } = useSWRConfig();
 
@@ -114,9 +116,7 @@ const EditGuest = (props: Props): JSX.Element => {
           <Radio.Group
             {...form.getInputProps("inviteSent")}
             value={form.values.inviteSent ? "yes" : "no"}
-            onChange={(value): void =>
-              form.setFieldValue("inviteSent", value === "yes")
-            }
+            onChange={(value): void => form.setFieldValue("inviteSent", value === "yes")}
             name="inviteSent"
             label="Sent wedding invitation?"
             pt="lg"
