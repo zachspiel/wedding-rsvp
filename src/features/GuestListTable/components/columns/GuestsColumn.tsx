@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Badge, Text } from "@mantine/core";
 import { Guest, GuestAffiliation } from "@spiel-wedding/types/Guest";
 
 interface Props {
@@ -22,9 +22,9 @@ const GuestsColumn = (props: Props): JSX.Element => {
         </Text>
       ))}
       {affiliation !== GuestAffiliation.NONE && (
-        <Text fs="italic" ml="xl">
+        <Badge size="xs" fz="xs" style={{ textTransform: "capitalize" }}>
           {affiliation}
-        </Text>
+        </Badge>
       )}
     </>
   );

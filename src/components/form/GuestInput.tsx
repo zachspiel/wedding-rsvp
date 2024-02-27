@@ -12,7 +12,7 @@ import {
 import { Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons-react";
-import { addChildToGuests, addPartnerToGuests } from "./util";
+import { addChildToGuests, addPartnerToGuests } from "../../features/AddGroupForm/util";
 import findLastIndex from "lodash.findlastindex";
 
 interface Props {
@@ -21,36 +21,30 @@ interface Props {
   groupType: string;
 }
 
+const { CHILD, PARTNER, PRIMARY } = RelationshipType;
+
 const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
-  const { CHILD, PARTNER, PRIMARY } = RelationshipType;
   const { guests } = form.values;
   const guest = guests[index];
+
   const firstChildInGroupIndex = guests.findIndex(
-    (guest) => guest.relationshipType === CHILD,
+    (guest) => guest.relationshipType === CHILD
   );
 
-  const lastAdultIndex = useMemo(
-    () => findLastIndex(guests, (guest) => guest.relationshipType !== CHILD),
-    [guests],
+  const lastAdultIndex = findLastIndex(
+    guests,
+    (guest) => guest.relationshipType !== CHILD
   );
 
-  const showAddPlusOneButton = useMemo(
-    () =>
-      guests.filter((guest) => guest.relationshipType === PARTNER).length === 0,
-    [guests],
-  );
+  const showAddPlusOneButton =
+    guests.filter((guest) => guest.relationshipType === PARTNER).length === 0;
 
-  const showAddAdultButton = useMemo(() => {
-    return (
-      groupType === "family" &&
-      guest.relationshipType === PARTNER &&
-      index === lastAdultIndex
-    );
-  }, [guests, index, lastAdultIndex]);
+  const showAddAdultButton =
+    groupType === "family" &&
+    guest.relationshipType === PARTNER &&
+    index === lastAdultIndex;
 
-  const showAddChildButton = useMemo(() => {
-    return index === guests.length - 1 && groupType === "family";
-  }, [guests, index]);
+  const showAddChildButton = index === guests.length - 1 && groupType === "family";
 
   return (
     <>
@@ -86,9 +80,7 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
               {...form.getInputProps(`guests.${index}.title`)}
             />
           )}
-          {guest.relationshipType === CHILD && (
-            <TextInput value="Child" disabled />
-          )}
+          {guest.relationshipType === CHILD && <TextInput value="Child" disabled />}
         </Grid.Col>
         <Grid.Col span={4}>
           <TextInput
@@ -113,9 +105,7 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
         <Grid.Col span={2}>
           {index !== 0 && (
             <MGroup>
-              <ActionIcon
-                onClick={(): void => form.removeListItem("guests", index)}
-              >
+              <ActionIcon onClick={(): void => form.removeListItem("guests", index)}>
                 <IconX size="1.125rem" />
               </ActionIcon>
             </MGroup>
@@ -142,11 +132,7 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
       )}
 
       {showAddAdultButton && (
-        <Button
-          variant="outline"
-          onClick={(): void => addPartnerToGuests(form)}
-          mt="lg"
-        >
+        <Button variant="outline" onClick={(): void => addPartnerToGuests(form)} mt="lg">
           Add Adult
         </Button>
       )}
