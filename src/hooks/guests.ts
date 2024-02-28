@@ -33,7 +33,10 @@ export const createGroup = async (group: Group): Promise<Group | undefined> => {
   return { ...newGroup, guests: newGuests };
 };
 
-export const updateGroup = async (group: Group): Promise<Group | undefined> => {
+export const updateGroup = async (
+  group: Group,
+  originalGroup: Group
+): Promise<Group | undefined> => {
   const { guests, rsvpModifications, ...updatedGroup } = group;
 
   const updatedGuests =
@@ -47,7 +50,19 @@ export const updateGroup = async (group: Group): Promise<Group | undefined> => {
       return { ...guest, id };
     }) ?? [];
 
-  const updatedGuestsResult = await upsertGuests(updatedGuests);
+  const guestIds = updatedGuests.map((guest) => guest.id);
+
+  const removedGuests = originalGroup.guests.filter(
+    (guest) => !guestIds.includes(guest.id)
+  );
+
+  if (removedGuests.length > 0) {
+    await deleteGuests(removedGuests);
+  }
+
+  const remainingGuests = updatedGuests.filter((guest) => guestIds.includes(guest.id));
+
+  const updatedGuestsResult = await upsertGuests(remainingGuests);
 
   const { data } = await supabase.from(GROUP_TABLE).upsert(updatedGroup).select();
 
@@ -97,6 +112,21 @@ export const upsertGuests = async (
   guests: TablesUpdate<"guests">[]
 ): Promise<Guest[]> => {
   const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
+
+  return data ?? [];
+};
+
+export const deleteGuests = async (
+  guests: TablesUpdate<"guests">[]
+): Promise<Guest[]> => {
+  const { data } = await supabase
+    .from(GUEST_TABLE)
+    .delete()
+    .in(
+      "id",
+      guests.map((guest) => guest.id)
+    )
+    .select();
 
   return data ?? [];
 };
