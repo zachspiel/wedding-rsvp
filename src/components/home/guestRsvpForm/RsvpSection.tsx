@@ -6,33 +6,39 @@ import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 
 const RsvpSection = (): JSX.Element => {
-  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
+  const { data, error: getGroupsError } = useSWR(GROUP_SWR_KEY, getGroups);
   const [error, setError] = useState<string>();
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchResults, setSearchResults] = useState<Group[]>([]);
+
+  useEffect(() => {
+    if (getGroupsError) {
+      showCustomFailureNotification(getGroupsError);
+    }
+  }, [getGroupsError]);
 
   const getSearchResults = (firstName: string, lastName: string): void => {
     setSelectedGroup(undefined);
     setSearchResults([]);
 
     const filteredResults =
-      groups?.filter(
+      data?.filter(
         (group) =>
-          group.guests.filter((guest) =>
-            guestMatchesSearch(firstName, lastName, guest),
-          ).length > 0,
+          group.guests.filter((guest) => guestMatchesSearch(firstName, lastName, guest))
+            .length > 0
       ) ?? [];
 
     if (filteredResults.length === 0) {
       setError(
-        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
+        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`
       );
     } else {
       setError(undefined);
@@ -45,9 +51,9 @@ const RsvpSection = (): JSX.Element => {
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
       <Text>
-        Please enter the first and last name of one member of your party below.
-        If you&apos;re responding for you and a guest (or your family),
-        you&apos;ll be able to RSVP for your entire group on the next page.
+        Please enter the first and last name of one member of your party below. If
+        you&apos;re responding for you and a guest (or your family), you&apos;ll be able
+        to RSVP for your entire group on the next page.
       </Text>
 
       <Alert
@@ -81,9 +87,7 @@ const RsvpSection = (): JSX.Element => {
           />
         ))}
 
-      {selectedGroup !== undefined && (
-        <RsvpForm selectedGroup={selectedGroup} />
-      )}
+      {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
     </SectionContainer>
   );
 };

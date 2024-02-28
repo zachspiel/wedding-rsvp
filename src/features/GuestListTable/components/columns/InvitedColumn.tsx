@@ -15,7 +15,7 @@ const InvitedColumn = ({ group }: Props): JSX.Element => {
     const updatedGroup = [group].map((group) => group)[0];
     updatedGroup.invited = value === "definitely";
 
-    const updateGroupResult = await updateGroup(updatedGroup);
+    const updateGroupResult = await updateGroup(updatedGroup, group);
 
     if (updateGroupResult) {
       showSuccessNotification("Successfully updated guests 🎉!");

@@ -1,69 +1,31 @@
 "use client";
 
-import { useForm } from "@mantine/form";
 import {
-  Button,
-  SegmentedControl,
-  Center,
   Group as MGroup,
-  Radio,
   Modal,
+  Center,
+  SegmentedControl,
+  Radio,
+  Button,
 } from "@mantine/core";
-import GuestInput from "./GuestInput";
-import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import GuestAffiliationSelection from "./GuestAffiliationSelection";
+import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import {
   showSuccessNotification,
-  showFailureNotification,
+  showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import {
-  RelationshipType,
-  GuestAffiliation,
-  RsvpResponse,
-  Group,
-} from "@spiel-wedding/types/Guest";
-import { addPartnerToGuests, addChildToGuests } from "./util";
-import { useEffect, useState } from "react";
 import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
-import { v4 as uuid } from "uuid";
+import { Group, RelationshipType } from "@spiel-wedding/types/Guest";
+import { useState, useEffect } from "react";
 import { useSWRConfig } from "swr";
+import {
+  GuestAffiliationSelection,
+  GuestInput,
+  MailingAddressForm,
+} from "@spiel-wedding/components/form";
+import { addPartnerToGuests, addChildToGuests, createDefaultGroup } from "./util";
 
-const createDefaultGroup = (): Group => {
-  const groupId = uuid();
-
-  return {
-    id: groupId,
-    email: "",
-    phone: "",
-    guests: [
-      {
-        id: uuid(),
-        groupId: groupId,
-        title: "",
-        firstName: "",
-        lastName: "",
-        nameUnknown: false,
-        rsvp: RsvpResponse.NO_RESPONSE,
-        relationshipType: RelationshipType.PRIMARY,
-      },
-    ],
-    affiliation: GuestAffiliation.NONE,
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    postal: "",
-    country: "",
-    message: "",
-    dietaryRestrictions: "",
-    invited: true,
-    inviteSent: false,
-    saveTheDateSent: false,
-  };
-};
-
-const AddGuest = (): JSX.Element => {
+const AddGroupForm = () => {
   const [groupType, setGroupType] = useState("single");
   const [isInvited, setIsInvited] = useState("definitely");
   const [opened, { open, close }] = useDisclosure(false);
@@ -79,11 +41,7 @@ const AddGuest = (): JSX.Element => {
     },
   });
 
-  const isNameInvalid = (
-    value: string,
-    values: Group,
-    path: string,
-  ): boolean => {
+  const isNameInvalid = (value: string, values: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
     if (!values.guests[index].nameUnknown) {
       return value.length === 0;
@@ -117,29 +75,25 @@ const AddGuest = (): JSX.Element => {
     const totalGuests = form.values.guests.length - 1;
 
     for (let index = totalGuests; index > 0; index--) {
-      if (
-        filters.includes(
-          form.values.guests[index].relationshipType as RelationshipType,
-        )
-      ) {
+      if (filters.includes(form.values.guests[index].relationshipType)) {
         form.removeListItem("guests", index);
       }
     }
   };
 
   const handleSubmit = async () => {
-    const newGroup = await createGroup(form.values);
-
-    if (newGroup) {
+    try {
+      await createGroup(form.values);
       showSuccessNotification(
-        `Successfully added ${form.values.guests.length} guests 🎉!`,
+        `Successfully added ${form.values.guests.length} guests 🎉!`
       );
       await mutate(GROUP_SWR_KEY);
-    } else {
-      showFailureNotification();
+    } catch (error) {
+      showCustomFailureNotification(`${error}`);
     }
 
     form.reset();
+    form.setInitialValues(createDefaultGroup());
   };
 
   return (
@@ -164,7 +118,7 @@ const AddGuest = (): JSX.Element => {
                 form={form}
                 groupType={groupType}
                 index={index}
-                key={`${guest.id}-guest-input`}
+                key={`${guest.id}-guest-input-${index}`}
               />
             );
           })}
@@ -191,17 +145,15 @@ const AddGuest = (): JSX.Element => {
               Cancel
             </Button>
             <Button type="submit" size="md">
-              Add Guest
+              Add Group
             </Button>
           </MGroup>
         </form>
       </Modal>
 
-      <Button variant="outline" onClick={open}>
-        Add Guest
-      </Button>
+      <Button onClick={open}>Add Group</Button>
     </>
   );
 };
 
-export default AddGuest;
+export default AddGroupForm;

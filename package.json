@@ -1,6 +1,6 @@
 {
   "name": "spiel-wedding",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "license": "MIT",
   "author": {
@@ -14,12 +14,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/carousel": "^7.1.2",
-    "@mantine/core": "^7.1.2",
-    "@mantine/dropzone": "^7.1.2",
-    "@mantine/form": "^7.1.2",
-    "@mantine/hooks": "^7.1.2",
-    "@mantine/notifications": "^7.1.2",
+    "@mantine/carousel": "^7.5.3",
+    "@mantine/core": "^7.5.3",
+    "@mantine/dropzone": "^7.5.3",
+    "@mantine/form": "^7.5.3",
+    "@mantine/hooks": "^7.5.3",
+    "@mantine/notifications": "^7.5.3",
     "@supabase/supabase-js": "^2.39.3",
     "@tabler/icons-react": "^2.22.0",
     "@vercel/analytics": "^1.1.1",
@@ -28,8 +28,10 @@
     "encoding": "^0.1.13",
     "eslint": "8.43.0",
     "eslint-config-next": "13.5.2",
+    "file-saver": "^2.0.5",
     "lodash.findlastindex": "^4.6.0",
     "next": "13.5.4",
+    "papaparse": "^5.4.1",
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
@@ -42,7 +44,9 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/lodash.findlastindex": "^4.6.7",
+    "@types/papaparse": "^5.3.14",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",
     "@types/uuid": "^9.0.2",
