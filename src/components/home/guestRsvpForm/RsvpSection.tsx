@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@mantine/core";
+import { Skeleton, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import { guestMatchesSearch } from "./util";
@@ -12,40 +12,44 @@ import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 
-const RsvpSection = (): JSX.Element => {
-  const { data, error: getGroupsError } = useSWR(GROUP_SWR_KEY, getGroups);
-  const [error, setError] = useState<string>();
-  const [selectedGroup, setSelectedGroup] = useState<Group>();
-  const [searchResults, setSearchResults] = useState<Group[]>([]);
+const getMatchingGuests = async (
+  firstName: string,
+  lastName: string
+): Promise<Group[]> => {
+  const result = await fetch(
+    `/api/searchResult?firstName=${firstName}&lastName=${lastName}`
+  ).then((res) => res.json());
 
-  useEffect(() => {
-    if (getGroupsError) {
-      showCustomFailureNotification(getGroupsError);
-    }
-  }, [getGroupsError]);
+  if (result.length === 0) {
+    const error = {
+      info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
+      status: 400,
+    };
+    throw error;
+  }
+
+  return result;
+};
+
+interface SearchForm {
+  firstName: string;
+  lastName: string;
+}
+
+const RsvpSection = (): JSX.Element => {
+  const [searchForm, setSearchForm] = useState<SearchForm>();
+  const { data, error, isLoading } = useSWR(
+    searchForm ? ["searchResults", searchForm] : null,
+    ([url, params]) => getMatchingGuests(params.firstName, params.lastName)
+  );
+
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
 
   const getSearchResults = (firstName: string, lastName: string): void => {
-    setSelectedGroup(undefined);
-    setSearchResults([]);
-
-    const filteredResults =
-      data?.filter(
-        (group) =>
-          group.guests.filter((guest) => guestMatchesSearch(firstName, lastName, guest))
-            .length > 0
-      ) ?? [];
-
-    if (filteredResults.length === 0) {
-      setError(
-        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`
-      );
-    } else {
-      setError(undefined);
-    }
-
-    setSearchResults(filteredResults);
+    setSearchForm({ firstName, lastName });
   };
 
+  console.log(data);
   return (
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
@@ -57,27 +61,38 @@ const RsvpSection = (): JSX.Element => {
 
       <Searchbar getSearchResults={getSearchResults} />
 
-      {selectedGroup === undefined && searchResults.length > 0 && (
+      {selectedGroup === undefined && (data ?? []).length > 0 && (
         <Text>Select your info below or try searching again.</Text>
       )}
 
       {error !== undefined && (
         <Text c="red" fz="sm">
-          {error}
+          {error.info}
         </Text>
       )}
 
       {selectedGroup === undefined &&
-        searchResults.map((group, index) => (
+        data &&
+        data?.map((group, index) => (
           <SearchResultRow
             key={`${group.id}-${index}`}
             group={group}
-            displayBottomDivider={index === searchResults.length - 1}
+            displayBottomDivider={index === data?.length - 1}
             onSelect={(): void => setSelectedGroup(group)}
           />
         ))}
 
       {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
+
+      {isLoading && (
+        <>
+          <Skeleton w="100%" h={25} />
+
+          <Skeleton w="100%" h={25} my="md" />
+
+          <Skeleton w="100%" h={25} />
+        </>
+      )}
     </SectionContainer>
   );
 };
