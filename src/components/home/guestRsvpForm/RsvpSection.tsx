@@ -3,14 +3,11 @@
 import { Skeleton, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
-import { guestMatchesSearch } from "./util";
 import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
-import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 
 const getMatchingGuests = async (
   firstName: string,
