@@ -7,3 +7,19 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+:root {
+  --primary-button-bg: #717769;
+}
+
+.primaryButton {
+  background-color: #717769;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    background-color: hsl(86, 6.3%, 80%);
+  }
+}

@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Container,
-  Title,
-  Paper,
-  TextInput,
-  PasswordInput,
-  Button,
-} from "@mantine/core";
+import { Container, Title, Paper, TextInput, PasswordInput, Button } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { supabase } from "@spiel-wedding/database/database";
 import {
@@ -28,7 +21,7 @@ export default function Login() {
   const { isSignedIn } = useSignInStatus();
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (!isSignedIn) {
       router.push("/");
     }
   }, []);
@@ -59,7 +52,7 @@ export default function Login() {
   };
 
   return (
-    <Container size={420} my={40}>
+    <Container size={420} pt={100}>
       <Title
         style={{
           fontFamily: `Greycliff CF, sans-serif`,

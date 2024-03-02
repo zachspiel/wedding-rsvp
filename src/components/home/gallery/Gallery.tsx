@@ -22,17 +22,11 @@ const Gallery = (): JSX.Element => {
     ));
 
   return (
-    <SectionContainer grayBackground>
+    <SectionContainer grayBackground flowerImages>
       <SectionTitle title="Gallery" id="gallery" />
       {isAdminViewEnabled && <UploadImages />}
 
-      <Carousel
-        slideSize="70%"
-        slideGap="md"
-        loop
-        withIndicators
-        classNames={classes}
-      >
+      <Carousel slideSize="70%" slideGap="md" loop withIndicators classNames={classes}>
         {slides}
       </Carousel>
     </SectionContainer>

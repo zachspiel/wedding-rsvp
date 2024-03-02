@@ -10,6 +10,7 @@ const Registry = (): JSX.Element => {
       <Card
         shadow="sm"
         padding="lg"
+        mt="xl"
         radius="md"
         withBorder
         style={{ display: "block", overflow: "auto" }}

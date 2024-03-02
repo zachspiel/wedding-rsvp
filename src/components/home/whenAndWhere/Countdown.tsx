@@ -16,7 +16,11 @@ const WeddingCountdown = (): JSX.Element => {
     setIsLoaded(true);
   }, []);
 
-  const getCountdownBox = (title: string, value: number): JSX.Element => {
+  const getCountdownBox = (
+    title: string,
+    value: number,
+    className?: string
+  ): JSX.Element => {
     return (
       <Container
         style={{
@@ -27,6 +31,7 @@ const WeddingCountdown = (): JSX.Element => {
           margin: "25px 0",
           backgroundColor: "#FFFFFF",
         }}
+        className={className}
       >
         <Text fz="lg" fw={300} style={{ textAlign: "center" }}>
           {value}
@@ -38,24 +43,17 @@ const WeddingCountdown = (): JSX.Element => {
     );
   };
 
-  const renderCountdown = ({
-    hours,
-    minutes,
-  }: CountdownRenderProps): JSX.Element => {
+  const renderCountdown = ({ hours, minutes }: CountdownRenderProps): JSX.Element => {
     return (
       <Flex className={classes.countdownContainer} wrap="wrap" gap="md">
         {getCountdownBox("Days", Math.ceil(daysRemaining))}
-        {getCountdownBox("Hours", hours)}
+        {getCountdownBox("Hours", hours, classes.countdownContainerMiddle)}
         {getCountdownBox("Minutes", minutes)}
       </Flex>
     );
   };
 
-  return (
-    <>
-      {isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}
-    </>
-  );
+  return <>{isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}</>;
 };
 
 export default WeddingCountdown;

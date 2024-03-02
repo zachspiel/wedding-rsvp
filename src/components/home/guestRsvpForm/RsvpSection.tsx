@@ -2,50 +2,14 @@
 
 import { Alert, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
-import Searchbar from "./components/Searchbar";
-import { guestMatchesSearch } from "./util";
-import SearchResultRow from "./components/SearchResultRow";
 import RsvpForm from "./RsvpForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
-import useSWR from "swr";
-import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
+import RsvpSearchForm from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
 
 const RsvpSection = (): JSX.Element => {
-  const { data, error: getGroupsError } = useSWR(GROUP_SWR_KEY, getGroups);
-  const [error, setError] = useState<string>();
   const [selectedGroup, setSelectedGroup] = useState<Group>();
-  const [searchResults, setSearchResults] = useState<Group[]>([]);
-
-  useEffect(() => {
-    if (getGroupsError) {
-      showCustomFailureNotification(getGroupsError);
-    }
-  }, [getGroupsError]);
-
-  const getSearchResults = (firstName: string, lastName: string): void => {
-    setSelectedGroup(undefined);
-    setSearchResults([]);
-
-    const filteredResults =
-      data?.filter(
-        (group) =>
-          group.guests.filter((guest) => guestMatchesSearch(firstName, lastName, guest))
-            .length > 0
-      ) ?? [];
-
-    if (filteredResults.length === 0) {
-      setError(
-        `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`
-      );
-    } else {
-      setError(undefined);
-    }
-
-    setSearchResults(filteredResults);
-  };
 
   return (
     <SectionContainer>
@@ -65,27 +29,7 @@ const RsvpSection = (): JSX.Element => {
         Please RSVP no later than September 26th 2024.
       </Alert>
 
-      <Searchbar getSearchResults={getSearchResults} />
-
-      {selectedGroup === undefined && searchResults.length > 0 && (
-        <Text>Select your info below or try searching again.</Text>
-      )}
-
-      {error !== undefined && (
-        <Text c="red" fz="sm">
-          {error}
-        </Text>
-      )}
-
-      {selectedGroup === undefined &&
-        searchResults.map((group, index) => (
-          <SearchResultRow
-            key={`${group.id}-${index}`}
-            group={group}
-            displayBottomDivider={index === searchResults.length - 1}
-            onSelect={(): void => setSelectedGroup(group)}
-          />
-        ))}
+      <RsvpSearchForm selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
 
       {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
     </SectionContainer>

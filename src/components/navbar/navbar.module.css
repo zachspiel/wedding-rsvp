@@ -1,11 +1,9 @@
-.logo {
-}
-
 .root {
   position: fixed;
   width: 100%;
   z-index: 1;
   background-color: #ffffff;
+  border-bottom: 1px solid #717769;
 }
 
 .dropdown {
@@ -52,7 +50,8 @@
   font-weight: 500;
 
   &:hover {
-    background-color: var(--mantine-color-teal-0);
+    background-color: hsl(86, 6.3%, 80%);
+    color: white;
     text-decoration: none;
   }
 
@@ -63,15 +62,18 @@
 }
 
 .highlightedLink {
-  background-color: var(--mantine-color-teal-5);
+  background-color: #717769;
   color: #ffffff;
 
   &:hover {
-    background-color: var(--mantine-color-teal-4);
+    opacity: 0.9;
+    text-decoration: none;
   }
 }
 
 .footer {
+  background-color: #717769;
+
   border-top: rem(1) solid var(--mantine-color-gray-2);
 
   .inner {

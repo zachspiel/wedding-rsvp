@@ -7,8 +7,8 @@ const Logo = (): JSX.Element => {
     <Image
       src={logo}
       className={classes.logo}
-      width={64}
-      height={57}
+      width={100}
+      height={90}
       alt="The Spielbergers Wedding Logo"
     />
   );

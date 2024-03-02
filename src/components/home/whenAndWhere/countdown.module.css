@@ -4,11 +4,12 @@
   flex-flow: row wrap;
 }
 
-.dividerTop::before, .dividerBottom::after {
-  content: '';
+.dividerTop::before,
+.dividerBottom::after {
+  content: "";
   display: block;
   margin: 0.5em auto;
   width: 90px;
   height: 1px;
-  background-color: #000 !important;
+  background-color: #000000 !important;
 }

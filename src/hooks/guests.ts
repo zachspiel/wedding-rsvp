@@ -4,9 +4,9 @@ import { v4 as uuid } from "uuid";
 import { Tables, TablesInsert, TablesUpdate } from "@spiel-wedding/types/supabase.types";
 
 export const GROUP_SWR_KEY = "group";
-const GROUP_TABLE = "group";
-const GUEST_TABLE = "guests";
-const RSVP_TABLE = "rsvp_modifications";
+export const GROUP_TABLE = "group";
+export const GUEST_TABLE = "guests";
+export const RSVP_TABLE = "rsvp_modifications";
 
 export const getGroups = async (): Promise<Group[]> => {
   const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");

@@ -4,6 +4,7 @@ import React from "react";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
+import classes from "../guestbook.module.css";
 
 interface Props {
   handleSubmit: (guestMessage: Omit<GuestMessage, "id">) => void;
@@ -31,7 +32,7 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         form.reset();
       })}
     >
-      <SimpleGrid cols={{ xs: 1, sm: 2 }}>
+      <SimpleGrid cols={{ xs: 1, sm: 2 }} mt="xl">
         <TextInput
           label="Name"
           placeholder="Your name"
@@ -60,7 +61,7 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Button type="submit" size="md" mt="md" color="teal.5">
+      <Button type="submit" size="md" mt="md" className={classes.submitButton}>
         Sign guest book
       </Button>
     </form>
