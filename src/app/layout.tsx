@@ -1,29 +1,26 @@
 import Navbar from "@spiel-wedding/components/navbar/Navbar";
 import Footer from "@spiel-wedding/components/navbar/Footer";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { theme } from "./theme";
+import { ColorSchemeScript } from "@mantine/core";
 import { Providers } from "./Providers";
-import { Notifications } from "@mantine/notifications";
 import { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import localFont from "next/font/local";
+import { Playfair, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import "@mantine/notifications/styles.css";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "@mantine/carousel/styles.css";
 import "./globals.css";
+
+const playfair = Playfair({
+  display: "swap",
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
 
 const poppins = Poppins({
   weight: "400",
   display: "swap",
   variable: "--font-poppins",
   subsets: ["latin"],
-});
-
-const brittanySignature = localFont({
-  src: "../assets/fonts/BrittanySignature.ttf",
-  display: "swap",
-  variable: "--font-brittany",
 });
 
 export const metadata: Metadata = {
@@ -50,16 +47,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${poppins.variable} ${brittanySignature.variable}`}
-    >
+    <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -70,14 +60,11 @@ export default function RootLayout({
         <meta name="robots" content="all" />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          <Notifications />
-          <Providers>
-            <Navbar />
-            {children}
-            <Footer />
-          </Providers>
-        </MantineProvider>
+        <Providers poppins={poppins}>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
         <Analytics />
       </body>
     </html>

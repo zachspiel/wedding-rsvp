@@ -17,10 +17,7 @@ const guestMatchesSearch = (
     return false;
   }
 
-  return (
-    guestFirstName.includes(firstNameLowerCase) &&
-    guestLastName.includes(lastNameLowerCase)
-  );
+  return guestFirstName == firstNameLowerCase && guestLastName == lastNameLowerCase;
 };
 
 export async function GET(request: NextRequest) {

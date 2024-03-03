@@ -21,7 +21,7 @@ export default function Login() {
   const { isSignedIn } = useSignInStatus();
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (!isSignedIn) {
       router.push("/");
     }
   }, [isSignedIn]);
@@ -52,7 +52,7 @@ export default function Login() {
   };
 
   return (
-    <Container size={420} my={40}>
+    <Container size={420} pt={100}>
       <Title
         style={{
           fontFamily: `Greycliff CF, sans-serif`,

@@ -1,11 +1,10 @@
-import { Container, Group, Anchor } from "@mantine/core";
+import { Container, Group, Anchor, Image } from "@mantine/core";
 import { links } from "./links";
-import Logo from "./Logo";
 import classes from "./navbar.module.css";
 
 const Footer = (): JSX.Element => {
   const items = links.map((link) => (
-    <Anchor<"a"> c="dimmed" key={link.label} href={link.link} size="md">
+    <Anchor<"a"> c="white" key={link.label} href={link.link} size="md" fz="lg">
       {link.label}
     </Anchor>
   ));
@@ -13,7 +12,6 @@ const Footer = (): JSX.Element => {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <Logo />
         <Group className={classes.links}>{items}</Group>
       </Container>
     </div>

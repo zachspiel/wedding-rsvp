@@ -1,0 +1,6 @@
+.familyPortrait {
+  @media (max-width: $mantine-breakpoint-md) {
+    width: 250px;
+    height: 250px;
+  }
+}
