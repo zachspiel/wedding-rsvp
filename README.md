@@ -4,8 +4,6 @@
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-[![My Awesome Stats](https://awesome-github-stats.azurewebsites.net/user-stats/zachspiel)](https://git.io/awesome-stats-card)
-
 <img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="200">
 
 Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.

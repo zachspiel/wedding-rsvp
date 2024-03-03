@@ -34,6 +34,9 @@ const WhenAndWhere = (): JSX.Element => {
             636 W University Dr, Mesa, AZ 85201
           </Anchor>
         </Title>
+        <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
+          Formal Attire
+        </Title>
         <Title
           size={isMobile ? "h4" : "h2"}
           order={2}
