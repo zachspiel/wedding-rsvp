@@ -1,10 +1,11 @@
-import Navbar from "@spiel-wedding/components/navbar/Navbar";
-import Footer from "@spiel-wedding/components/navbar/Footer";
 import { ColorSchemeScript } from "@mantine/core";
 import { Providers } from "./Providers";
 import { Metadata } from "next";
 import { Playfair, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { Navbar } from "@spiel-wedding/components/navbar";
+import { Footer } from "@spiel-wedding/components/footer";
+
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/carousel/styles.css";

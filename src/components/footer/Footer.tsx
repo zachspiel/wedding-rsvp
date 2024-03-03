@@ -1,10 +1,17 @@
 import { Container, Group, Anchor, Image } from "@mantine/core";
-import { links } from "./links";
-import classes from "./navbar.module.css";
+import classes from "./footer.module.css";
+import { links } from "@spiel-wedding/common";
 
 const Footer = (): JSX.Element => {
   const items = links.map((link) => (
-    <Anchor<"a"> c="white" key={link.label} href={link.link} size="md" fz="lg">
+    <Anchor<"a">
+      c="white"
+      key={link.label}
+      href={link.link}
+      size="md"
+      fz="lg"
+      className={link.label === "RSVP" ? classes.highlightedLink : ""}
+    >
       {link.label}
     </Anchor>
   ));

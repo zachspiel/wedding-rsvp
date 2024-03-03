@@ -12,9 +12,9 @@ const WhenAndWhere = (): JSX.Element => {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   return (
-    <SectionContainer grayBackground>
-      <SectionTitle id="whenAndWhere" title="When & Where" />
-      <Flex direction="column" justify="center" ta="center">
+    <SectionContainer id="whenAndWhere" greenBackground>
+      <SectionTitle title="When & Where" />
+      <Flex direction="column" justify="center" ta="center" mb="xl">
         <Title
           size={isMobile ? "h4" : "h2"}
           order={2}

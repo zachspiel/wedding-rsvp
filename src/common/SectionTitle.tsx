@@ -6,13 +6,12 @@ import cx from "clsx";
 
 interface Props {
   title: string;
-  id: string;
   hideFlowers?: boolean;
 }
 
-const SectionTitle = ({ title, id, hideFlowers }: Props): JSX.Element => {
+const SectionTitle = ({ title, hideFlowers }: Props): JSX.Element => {
   return (
-    <Flex justify="center" direction="column" w="100%" align="center" mb="xl" id={id}>
+    <Flex justify="center" direction="column" w="100%" align="center" mb="xl">
       <Image
         src="/assets/images/flower-divider-top.png"
         alt="Flower top"

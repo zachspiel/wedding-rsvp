@@ -1,7 +1,4 @@
-"use client";
-
-import AdminViewToggle from "./AdminViewToggle";
-import SectionContainer from "./SectionContainer";
-import SectionTitle from "./SectionTitle";
-
-export { AdminViewToggle, SectionContainer, SectionTitle };
+export { default as AdminViewToggle } from "./AdminViewToggle";
+export * from "./links";
+export { default as SectionContainer } from "./SectionContainer";
+export { default as SectionTitle } from "./SectionTitle";
