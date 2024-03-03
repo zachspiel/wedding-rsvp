@@ -38,12 +38,8 @@ const Gallery = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer grayBackground flowerImages>
-      <SectionTitle
-        title="Gallery"
-        id="gallery"
-        hideFlowers={(photos ?? []).length > 0}
-      />
+    <SectionContainer id="gallery" greenBackground flowerImages>
+      <SectionTitle title="Gallery" hideFlowers={(photos ?? []).length > 0} />
       {isAdminViewEnabled && <UploadImages />}
 
       <Carousel

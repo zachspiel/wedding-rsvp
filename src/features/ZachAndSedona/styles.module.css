@@ -30,7 +30,7 @@
 
   @media (max-width: $mantine-breakpoint-sm) {
     height: 300px;
-    width: 100px;
+    width: 90px;
   }
 }
 
@@ -53,7 +53,7 @@
 
   @media (max-width: $mantine-breakpoint-sm) {
     height: 300px;
-    width: 100px;
+    width: 90px;
   }
 }
 

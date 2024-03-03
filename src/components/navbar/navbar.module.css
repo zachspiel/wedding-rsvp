@@ -28,7 +28,7 @@
   height: 100%;
 }
 
-.links {
+.navbarLinks {
   @media (max-width: $mantine-breakpoint-sm) {
     display: none;
   }
@@ -68,28 +68,5 @@
   &:hover {
     opacity: 0.9;
     text-decoration: none;
-  }
-}
-
-.footer {
-  background-color: #717769;
-
-  border-top: rem(1) solid var(--mantine-color-gray-2);
-
-  .inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: var(--mantine-spacing-xl);
-    padding-bottom: var(--mantine-spacing-xl);
-  }
-
-  .links {
-    justify-content: center;
-    text-align: center;
-    @media (mx-width: $mantine-breakpoint-xs) {
-      margin-top: var(--mantine-spacing-md);
-    }
   }
 }

@@ -28,15 +28,15 @@ const WeddingCountdown = (): JSX.Element => {
           width: "fit-content",
           float: "none",
           minWidth: "100px",
-          margin: "25px 0",
           backgroundColor: "#FFFFFF",
         }}
+        m={0}
         className={className}
       >
-        <Text fz="lg" fw={300} style={{ textAlign: "center" }}>
+        <Text fz="lg" fw={300} ta="center">
           {value}
         </Text>
-        <Text fz="lg" fw={700} style={{ textAlign: "center" }}>
+        <Text fz="lg" fw={700} ta="center">
           {title}
         </Text>
       </Container>

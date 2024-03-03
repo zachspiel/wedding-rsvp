@@ -42,7 +42,7 @@ export default function GuestList() {
         {!isLoading && isSignedIn && (
           <>
             <MGroup justify="space-between">
-              <SectionTitle title="All Guests" id="allGuests" />
+              <SectionTitle title="All Guests" />
               <Group>
                 <DownloadGuestList groups={groups ?? []} />
                 <AddGroupForm />

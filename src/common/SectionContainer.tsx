@@ -5,22 +5,25 @@ import cx from "clsx";
 
 interface Props {
   children: React.ReactNode;
-  grayBackground?: boolean;
+  greenBackground?: boolean;
   flowerImages?: boolean;
+  id?: string;
 }
 
 const SectionContainer = ({
   children,
-  grayBackground,
+  greenBackground,
   flowerImages,
+  id,
 }: Props): JSX.Element => {
   return (
     <Container
       style={{
-        backgroundColor: grayBackground ? "hsl(86, 6.3%, 80%)" : "",
+        backgroundColor: greenBackground ? "hsl(86, 6.3%, 80%)" : "",
       }}
       fluid
-      className={classes.sectionContainer}
+      pos="relative"
+      id={id}
     >
       <Container style={{ padding: 0 }}>
         {flowerImages && (
@@ -37,7 +40,7 @@ const SectionContainer = ({
           cols={1}
           style={{
             paddingTop: "3rem",
-            paddingBottom: grayBackground ? "1rem" : "5rem",
+            paddingBottom: greenBackground ? "1rem" : "5rem",
           }}
         >
           {children}
