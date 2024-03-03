@@ -22,9 +22,7 @@ interface Props {
 const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
   const theme = useMantineTheme();
   const { mutate } = useSWRConfig();
-  const { data } = supabase.storage
-    .from("gallery")
-    .getPublicUrl(image.imagePath);
+  const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
 
   const toggleVisibility = async (isVisible: boolean) => {
     const photo = await updatePhoto(image.id, { isVisible });
@@ -49,12 +47,7 @@ const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
         style={{ objectFit: "contain", zIndex: 0 }}
       />
 
-      <Flex
-        wrap="wrap"
-        w="100%"
-        className={classes.adminControlsContainer}
-        m="md"
-      >
+      <Flex wrap="wrap" w="100%" className={classes.adminControlsContainer} m="md">
         {displayAdminView && (
           <Switch
             checked={image.isVisible}
@@ -67,11 +60,7 @@ const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
             mr="md"
             thumbIcon={
               image.isVisible ? (
-                <IconCheck
-                  size="0.8rem"
-                  color={theme.colors.teal[6]}
-                  stroke={3}
-                />
+                <IconCheck size="0.8rem" color={theme.colors.teal[6]} stroke={3} />
               ) : (
                 <IconX size="0.8rem" color={theme.colors.red[6]} stroke={3} />
               )
