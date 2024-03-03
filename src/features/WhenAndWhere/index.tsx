@@ -1,59 +1,48 @@
 "use client";
 
-import { Anchor, List, Text } from "@mantine/core";
-import {
-  IconBuildingCottage,
-  IconCalendarEvent,
-  IconExternalLink,
-  IconMapPin,
-  IconTie,
-  TablerIconsProps,
-} from "@tabler/icons-react";
+import { Anchor, em, Flex, Title } from "@mantine/core";
 import WeddingCountdown from "./components/Countdown";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { useMediaQuery } from "@mantine/hooks";
+import classes from "./styles.module.css";
 
 const GOOGLE_MAPS_URL = "https://goo.gl/maps/BtzfDmV1pqNAbrRE6";
 
-type TablerIcon = (props: TablerIconsProps) => JSX.Element;
-
 const WhenAndWhere = (): JSX.Element => {
-  const createListItem = (
-    label: string,
-    icon: TablerIcon,
-    url?: string,
-  ): JSX.Element => {
-    return (
-      <List.Item>
-        {url && (
-          <Anchor
-            href={url}
-            target="_blank"
-            style={{ color: "inherit" }}
-            fz="lg"
-            display="flex"
-          >
-            {label}
-            <IconExternalLink />
-          </Anchor>
-        )}
-        {!url && <Text fz="lg">{label}</Text>}
-      </List.Item>
-    );
-  };
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   return (
     <SectionContainer grayBackground>
       <SectionTitle id="whenAndWhere" title="When & Where" />
-      <List spacing="xs" size="sm" center>
-        {createListItem("October 26th, 2024", IconCalendarEvent)}
-        {createListItem("The Wright House", IconBuildingCottage)}
-        {createListItem(
-          "636 W University Dr, Mesa, AZ 85201",
-          IconMapPin,
-          GOOGLE_MAPS_URL,
-        )}
-        {createListItem("Semi-formal", IconTie)}
-      </List>
+      <Flex direction="column" justify="center" ta="center">
+        <Title
+          size={isMobile ? "h4" : "h2"}
+          order={2}
+          mb="md"
+          fw={400}
+          className={classes.dividerTop}
+        >
+          The Wright House • Garden Ballroom
+        </Title>
+        <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
+          <Anchor
+            href={GOOGLE_MAPS_URL}
+            target="_blank"
+            style={{ color: "inherit" }}
+            fz="inherit"
+          >
+            636 W University Dr, Mesa, AZ 85201
+          </Anchor>
+        </Title>
+        <Title
+          size={isMobile ? "h4" : "h2"}
+          order={2}
+          fw={400}
+          className={classes.dividerBottom}
+        >
+          October 26th, 2024
+        </Title>
+      </Flex>
       <WeddingCountdown />
     </SectionContainer>
   );

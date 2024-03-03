@@ -12,3 +12,11 @@
     margin-bottom: 0;
   }
 }
+
+.submitButton {
+  background-color: #717769;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}

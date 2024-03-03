@@ -17,10 +17,7 @@ import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
 import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
-import {
-  addEntryToRsvpModifications,
-  updateGroup,
-} from "@spiel-wedding/hooks/guests";
+import { addEntryToRsvpModifications, updateGroup } from "@spiel-wedding/hooks/guests";
 
 interface Props {
   selectedGroup: Group;
@@ -52,22 +49,14 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       email: isEmail("Email is not valid"),
       guests: {
         firstName: (value, values, path) =>
-          isNameInvalid(value, values, path)
-            ? "Please enter a first name"
-            : null,
+          isNameInvalid(value, values, path) ? "Please enter a first name" : null,
         lastName: (value, values, path) =>
-          isNameInvalid(value, values, path)
-            ? "Please enter a last name"
-            : null,
+          isNameInvalid(value, values, path) ? "Please enter a last name" : null,
       },
     },
   });
 
-  const isNameInvalid = (
-    value: string,
-    group: Group,
-    path: string,
-  ): boolean => {
+  const isNameInvalid = (value: string, group: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
 
     if (group.guests[index].rsvp === RsvpResponse.ACCEPTED) {
@@ -79,10 +68,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
 
   const handleSubmit = async () => {
     await addEntryToRsvpModifications(selectedGroup.id);
-    const updatedGroup = await updateGroup(
-      form.getTransformedValues(),
-      selectedGroup,
-    );
+    const updatedGroup = await updateGroup(form.getTransformedValues(), selectedGroup);
 
     if (updatedGroup === undefined) {
       showFailureNotification();
@@ -121,13 +107,10 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
                 <RsvpSelection form={form} guestIndex={guestIndex} />
               </MGroup>
               {guest.nameUnknown &&
-                form.values.guests[guestIndex].rsvp ===
-                  RsvpResponse.ACCEPTED && (
+                form.values.guests[guestIndex].rsvp === RsvpResponse.ACCEPTED && (
                   <UnknownGuestInput form={form} index={guestIndex} />
                 )}
-              {guestIndex === form.values.guests.length - 1 && (
-                <Divider my="sm" />
-              )}
+              {guestIndex === form.values.guests.length - 1 && <Divider my="sm" />}
             </Flex>
           ))}
         </Stepper.Step>
@@ -146,8 +129,8 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
 
         <Stepper.Completed>
           <Alert title="Success!" color="teal" variant="filled">
-            Your reservation has been completed successfully, feel free to come
-            back here and edit it anytime before the wedding!
+            Your reservation has been completed successfully, feel free to come back here
+            and edit it anytime before September 26th!
           </Alert>
         </Stepper.Completed>
       </Stepper>

@@ -17,7 +17,7 @@
 }
 
 .card {
-  height: rem(440px);
+  height: rem(640px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

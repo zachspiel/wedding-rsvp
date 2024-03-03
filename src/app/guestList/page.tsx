@@ -13,7 +13,7 @@ import { SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
-import DownloadGuestList from "@spiel-wedding/features/DownloadGuestList/DownloadGuestList";
+import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import AddGroupForm from "@spiel-wedding/features/AddGroupForm/AddGroupForm";
 import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
 import { useEffect } from "react";

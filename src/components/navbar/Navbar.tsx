@@ -20,7 +20,7 @@ import cx from "clsx";
 import { AdminViewToggle } from "@spiel-wedding/common";
 import { supabase } from "@spiel-wedding/database/database";
 
-const HEADER_HEIGHT = rem(60);
+const HEADER_HEIGHT = rem(100);
 
 interface Props {
   showHome?: boolean;
@@ -39,7 +39,7 @@ const Navbar = (props: Props): JSX.Element => {
         className={cx(
           classes.link,
           menuItem.className,
-          menuItem.label === "RSVP" ? classes.highlightedLink : undefined,
+          menuItem.label === "RSVP" ? classes.highlightedLink : undefined
         )}
       >
         {menuItem.label}
@@ -51,9 +51,7 @@ const Navbar = (props: Props): JSX.Element => {
     const elements = links.map(createMenuItem);
 
     if (isSignedIn) {
-      elements.push(
-        createMenuItem({ label: "Guest List", link: "/guestList" }),
-      );
+      elements.push(createMenuItem({ label: "Guest List", link: "/guestList" }));
     }
 
     if (props.showHome) {
@@ -66,15 +64,15 @@ const Navbar = (props: Props): JSX.Element => {
   return (
     <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
       <Container className={classes.header} style={{ maxWidth: "100%" }}>
-        <Logo />
+        <Anchor href="/" p="xs">
+          <Logo />
+        </Anchor>
         <Group gap="md" className={classes.links}>
           {menuItems}
           {isSignedIn && (
             <Button
               className={classes.highlightedLink}
-              onClick={async () =>
-                await supabase.auth.signOut({ scope: "local" })
-              }
+              onClick={async () => await supabase.auth.signOut({ scope: "local" })}
             >
               Sign out
             </Button>

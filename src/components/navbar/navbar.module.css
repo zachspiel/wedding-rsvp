@@ -1,23 +1,14 @@
-.logo {
-  @media (min-width: $mantine-breakpoint-sm) {
-    display: none;
-  }
-}
-
 .root {
-  position: relative;
+  position: fixed;
+  width: 100%;
   z-index: 1;
-
-  @media (min-width: $mantine-breakpoint-sm) {
-    background-image: url("/assets/images/blush-rose.webp");
-    background-size: cover;
-    background-position: center;
-  }
+  background-color: #ffffff;
+  border-bottom: 1px solid #717769;
 }
 
 .dropdown {
   position: absolute;
-  top: rem(60);
+  top: rem(100);
   left: 0;
   right: 0;
   border-top-right-radius: 0;
@@ -32,15 +23,7 @@
 
 .header {
   display: flex;
-
-  @media (min-width: $mantine-breakpoint-sm) {
-    justify-content: center;
-  }
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    justify-content: space-between;
-  }
-
+  justify-content: space-between;
   align-items: center;
   height: 100%;
 }
@@ -67,7 +50,8 @@
   font-weight: 500;
 
   &:hover {
-    background-color: var(--mantine-color-pink-0);
+    background-color: hsl(86, 6.3%, 80%);
+    color: white;
     text-decoration: none;
   }
 
@@ -78,33 +62,27 @@
 }
 
 .highlightedLink {
-  background-color: var(--mantine-color-pink-4);
+  background-color: #717769;
   color: #ffffff;
 
   &:hover {
-    background-color: var(--mantine-color-pink-3);
+    opacity: 0.9;
+    text-decoration: none;
   }
 }
 
 .footer {
-  border-top: rem(1) solid var(--mantine-color-gray-2);
+  background-color: #717769;
 
-  @media (min-width: $mantine-breakpoint-md) {
-    background-image: url("/assets/images/blush-rose.webp");
-    background-size: cover;
-    background-position: center;
-  }
+  border-top: rem(1) solid var(--mantine-color-gray-2);
 
   .inner {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding-top: var(--mantine-spacing-xl);
     padding-bottom: var(--mantine-spacing-xl);
-
-    @media (mx-width: $mantine-breakpoint-md) {
-      flex-direction: column;
-    }
   }
 
   .links {
