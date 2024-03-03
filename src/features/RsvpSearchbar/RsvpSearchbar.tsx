@@ -36,7 +36,7 @@ interface Props {
   setSelectedGroup: (group: Group) => void;
 }
 
-const RsvpSearchForm = ({ selectedGroup, setSelectedGroup }: Props) => {
+const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
   const [searchForm, setSearchForm] = useState<SearchForm>();
   const { data, error, isLoading, mutate } = useSWR(
     searchForm ? ["searchResults", searchForm] : null,
@@ -106,4 +106,4 @@ const RsvpSearchForm = ({ selectedGroup, setSelectedGroup }: Props) => {
   );
 };
 
-export default RsvpSearchForm;
+export default RsvpSearchbar;

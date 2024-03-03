@@ -6,7 +6,26 @@ import RsvpForm from "./RsvpForm";
 import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { IconInfoCircle } from "@tabler/icons-react";
-import RsvpSearchForm from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
+import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
+
+const getMatchingGuests = async (
+  firstName: string,
+  lastName: string
+): Promise<Group[]> => {
+  const result = await fetch(
+    `/api/searchResult?firstName=${firstName}&lastName=${lastName}`
+  ).then((res) => res.json());
+
+  if (result.length === 0) {
+    const error = {
+      info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
+      status: 400,
+    };
+    throw error;
+  }
+
+  return result;
+};
 
 const RsvpSection = (): JSX.Element => {
   const [selectedGroup, setSelectedGroup] = useState<Group>();
@@ -29,7 +48,7 @@ const RsvpSection = (): JSX.Element => {
         Please RSVP no later than September 26th 2024.
       </Alert>
 
-      <RsvpSearchForm selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
+      <RsvpSearchbar selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
 
       {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
     </SectionContainer>
