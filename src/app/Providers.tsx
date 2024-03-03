@@ -16,8 +16,7 @@ export function Providers({
   const theme = createTheme({
     fontFamily: poppins.style.fontFamily + "," + DEFAULT_THEME.fontFamily,
     headings: {
-      fontFamily:
-        poppins.style.fontFamily + "," + DEFAULT_THEME.headings.fontFamily,
+      fontFamily: poppins.style.fontFamily + "," + DEFAULT_THEME.headings.fontFamily,
     },
     breakpoints: {
       xs: "30em",
@@ -29,11 +28,7 @@ export function Providers({
   });
 
   return (
-    <MantineProvider
-      defaultColorScheme="light"
-      theme={theme}
-      forceColorScheme="light"
-    >
+    <MantineProvider defaultColorScheme="light" theme={theme} forceColorScheme="light">
       <Notifications />
       <SignInStatusProvider>
         <AdminViewProvider>{children}</AdminViewProvider>

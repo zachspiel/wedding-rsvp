@@ -37,3 +37,21 @@
 .flowerImageRight {
   right: 10px;
 }
+
+.flowerDivider {
+  @media (max-width: $mantine-breakpoint-md) {
+    width: 225px;
+    height: 75px;
+  }
+}
+
+.hidden {
+  @media (min-width: $mantine-breakpoint-lg) {
+    display: none;
+    margin-top: 100px;
+  }
+
+  @media (max-width: $mantine-breakpoint-lg) {
+    display: block;
+  }
+}

@@ -25,7 +25,7 @@ const SectionContainer = ({
       <Container style={{ padding: 0 }}>
         {flowerImages && (
           <Image
-            src="https://images.zola.com/30e1d2ab-fefd-458e-8abf-1ac3928e13e7"
+            src="/assets/images/container-flower.png"
             width={475}
             height={475}
             className={cx(classes.flowerImage, classes.flowerImageLeft)}
@@ -45,7 +45,7 @@ const SectionContainer = ({
 
         {flowerImages && (
           <Image
-            src="https://images.zola.com/30e1d2ab-fefd-458e-8abf-1ac3928e13e7"
+            src="/assets/images/container-flower.png"
             width={475}
             height={475}
             alt="Flower image right"

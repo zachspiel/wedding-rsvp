@@ -1,28 +1,24 @@
 import React from "react";
-import { Center, Flex, Stack, Title } from "@mantine/core";
+import { Flex, Title } from "@mantine/core";
 import classes from "./common.module.css";
 import Image from "next/image";
+import cx from "clsx";
 
 interface Props {
   title: string;
   id: string;
+  hideFlowers?: boolean;
 }
 
-const SectionTitle = (props: Props): JSX.Element => {
+const SectionTitle = ({ title, id, hideFlowers }: Props): JSX.Element => {
   return (
-    <Flex
-      justify="center"
-      direction="column"
-      w="100%"
-      align="center"
-      mb="xl"
-      id={props.id}
-    >
+    <Flex justify="center" direction="column" w="100%" align="center" mb="xl" id={id}>
       <Image
-        src="https://images.zola.com/723f79df-4627-4699-af22-2759453ca0a3?w=400"
+        src="/assets/images/flower-divider-top.png"
         alt="Flower top"
         width={400}
         height={100}
+        className={cx(classes.flowerDivider, hideFlowers ? classes.hidden : "")}
       />
       <Title
         size="h1"
@@ -30,14 +26,15 @@ const SectionTitle = (props: Props): JSX.Element => {
         style={{ fontWeight: 600, textAlign: "left" }}
         w="initial"
       >
-        {props.title}
+        {title}
       </Title>
 
       <Image
-        src="https://images.zola.com/0a0487b7-1629-4e21-9e11-26933de0df18?w=400"
+        src="/assets/images/flower-divider-bottom.png"
         alt="Flower bottom"
         width={400}
         height={100}
+        className={cx(classes.flowerDivider, hideFlowers ? classes.hidden : "")}
       />
     </Flex>
   );

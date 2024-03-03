@@ -24,7 +24,7 @@ export default function Login() {
     if (!isSignedIn) {
       router.push("/");
     }
-  }, []);
+  }, [isSignedIn]);
 
   const form = useForm<LoginForm>({
     initialValues: {
