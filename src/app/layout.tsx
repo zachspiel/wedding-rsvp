@@ -70,7 +70,7 @@ export default function RootLayout({
         <meta name="robots" content="all" />
       </head>
       <body>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} forceColorScheme="light">
           <Notifications />
           <Providers>
             <Navbar />

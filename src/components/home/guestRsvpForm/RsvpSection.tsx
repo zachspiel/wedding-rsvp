@@ -4,17 +4,17 @@ import { Skeleton, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import Searchbar from "./components/Searchbar";
 import SearchResultRow from "./components/SearchResultRow";
-import RsvpForm from "./RsvpForm";
+import RsvpForm from "@spiel-wedding/features/RsvpForm";
 import { useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
 
 const getMatchingGuests = async (
   firstName: string,
-  lastName: string
+  lastName: string,
 ): Promise<Group[]> => {
   const result = await fetch(
-    `/api/searchResult?firstName=${firstName}&lastName=${lastName}`
+    `/api/searchResult?firstName=${firstName}&lastName=${lastName}`,
   ).then((res) => res.json());
 
   if (result.length === 0) {
@@ -37,7 +37,7 @@ const RsvpSection = (): JSX.Element => {
   const [searchForm, setSearchForm] = useState<SearchForm>();
   const { data, error, isLoading } = useSWR(
     searchForm ? ["searchResults", searchForm] : null,
-    ([url, params]) => getMatchingGuests(params.firstName, params.lastName)
+    ([url, params]) => getMatchingGuests(params.firstName, params.lastName),
   );
 
   const [selectedGroup, setSelectedGroup] = useState<Group>();
@@ -78,7 +78,9 @@ const RsvpSection = (): JSX.Element => {
           />
         ))}
 
-      {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
+      {selectedGroup !== undefined && (
+        <RsvpForm selectedGroup={selectedGroup} />
+      )}
 
       {isLoading && (
         <>

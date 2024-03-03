@@ -8,13 +8,13 @@ import {
 import { useLocalStorage } from "usehooks-ts";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
-import GuestBookForm from "@spiel-wedding/components/home/guestBook/components/GuestBookForm";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import {
   addMessageToGuestBook,
   GALLERY_SWR_KEY,
   getGuestMessages,
 } from "@spiel-wedding/hooks/guestbook";
+import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
 
 const GuestBook = (): JSX.Element => {
   const { data, mutate } = useSWR(GALLERY_SWR_KEY, getGuestMessages);

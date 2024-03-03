@@ -1,6 +1,6 @@
 .wrapper {
     position: relative;
-    background-image: url("/assets/images/engagement_photo.jpg");
+    background-image: url("/assets/images/jumbotron.webp");
 
     @media (min-width: $mantine-breakpoint-lg) {
         background-attachment: fixed;
