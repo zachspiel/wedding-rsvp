@@ -8,10 +8,6 @@ html {
   scroll-behavior: smooth;
 }
 
-:root {
-  --primary-button-bg: #717769;
-}
-
 .primaryButton {
   background-color: #717769;
 

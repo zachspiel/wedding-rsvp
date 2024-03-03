@@ -4,18 +4,11 @@ import { ColorSchemeScript } from "@mantine/core";
 import { Providers } from "./Providers";
 import { Metadata } from "next";
 import { Playfair, Poppins } from "next/font/google";
-import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/carousel/styles.css";
 import "./globals.css";
-
-const brittanySignature = localFont({
-  src: "../assets/fonts/BrittanySignature.ttf",
-  display: "swap",
-  variable: "--font-brittany",
-});
 
 const playfair = Playfair({
   display: "swap",
@@ -56,10 +49,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${poppins.variable} ${brittanySignature.variable} ${playfair.variable}`}
-    >
+    <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.ico" />
