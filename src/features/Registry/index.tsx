@@ -8,11 +8,9 @@ const Registry = (): JSX.Element => {
     <SectionContainer>
       <SectionTitle title="Registry" id="registry" />
       <Card
-        shadow="sm"
         padding="lg"
         mt="xl"
         radius="md"
-        withBorder
         style={{ display: "block", overflow: "auto" }}
       >
         <Text mb="sm">

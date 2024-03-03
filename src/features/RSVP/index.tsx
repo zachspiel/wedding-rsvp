@@ -20,6 +20,16 @@ const RSVP = (): JSX.Element => {
         to RSVP for your entire group on the next page.
       </Text>
 
+      <Text>
+        We love your children, but due to space restrictions, we cannot accommodate guests
+        under the age of 18 on our wedding day. The only children present will be those in
+        the wedding party. Thank you for your understanding.
+      </Text>
+
+      <Text>
+        Please reach out to Sedona or Zach if you have any questions about guest
+        attendance.
+      </Text>
       <Alert
         variant="light"
         color="teal"
