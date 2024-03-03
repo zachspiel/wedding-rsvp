@@ -1,3 +1,3 @@
 export type SignInStatusContextType = {
-  isSignedIn: boolean;
+  isSignedIn?: boolean;
 };
