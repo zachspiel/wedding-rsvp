@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useState } from "react";
 import { AdminContextType } from "@spiel-wedding/types/AdminContextType";
 import { FcProps } from "@spiel-wedding/types/fcProps";

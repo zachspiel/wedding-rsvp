@@ -5,8 +5,8 @@ import classes from "./registry.module.css";
 
 const Registry = (): JSX.Element => {
   return (
-    <SectionContainer>
-      <SectionTitle title="Registry" id="registry" />
+    <SectionContainer id="registry">
+      <SectionTitle title="Registry" />
       <Card
         padding="lg"
         mt="xl"
