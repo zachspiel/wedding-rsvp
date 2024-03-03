@@ -1,10 +1,9 @@
 import { Group } from "@spiel-wedding/types/Guest";
 import ActionColumn from "./columns/ActionColumn";
 import AddressColumn from "./columns/AddressColumn";
-import EmailMobileColumn from "./columns/EmailMobileColumn";
 import GuestsColumn from "./columns/GuestsColumn";
 import RsvpStatusColumn from "./columns/RsvpStatusColumn";
-import { TableTd, TableTr } from "@mantine/core";
+import { TableTd, TableTr, Text } from "@mantine/core";
 
 interface Props {
   groups: Group[];
@@ -21,7 +20,13 @@ const TableRows = ({ groups, showRsvpStatus, openModal }: Props): JSX.Element =>
             <GuestsColumn guests={group.guests} affiliation={group.affiliation} />
           </TableTd>
           <TableTd>
-            <EmailMobileColumn email={group.email} phone={group.phone} />
+            <>
+              {group.email.length === 0 ? (
+                <Text c="red">Missing email</Text>
+              ) : (
+                <Text>{group.email}</Text>
+              )}
+            </>
           </TableTd>
           <TableTd>
             <AddressColumn group={group} />
