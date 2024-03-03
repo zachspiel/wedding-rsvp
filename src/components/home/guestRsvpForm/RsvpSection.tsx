@@ -46,7 +46,6 @@ const RsvpSection = (): JSX.Element => {
     setSearchForm({ firstName, lastName });
   };
 
-  console.log(data);
   return (
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />

@@ -1,6 +1,13 @@
 "use client";
 
-import { Alert, Container, Group, Group as MGroup, SimpleGrid } from "@mantine/core";
+import {
+  Alert,
+  Container,
+  Group,
+  Group as MGroup,
+  SimpleGrid,
+  Skeleton,
+} from "@mantine/core";
 import Summary from "@spiel-wedding/components/guestList/Summary";
 import { SectionTitle } from "@spiel-wedding/common";
 import useSWR from "swr";
@@ -13,20 +20,24 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function GuestList() {
-  const { data: groups, error, isLoading } = useSWR(GROUP_SWR_KEY, getGroups);
-  const router = useRouter();
   const { isSignedIn } = useSignInStatus();
+  const {
+    data: groups,
+    error,
+    isLoading,
+  } = useSWR(() => (isSignedIn ? GROUP_SWR_KEY : null), getGroups);
+  const router = useRouter();
 
   useEffect(() => {
-    if (!isSignedIn) {
+    if (isSignedIn !== undefined && !isSignedIn) {
       router.push("/");
     }
-  }, []);
+  }, [isSignedIn]);
 
   return (
     <Container>
       <SimpleGrid cols={1} pb="xl">
-        {!isLoading && (
+        {!isLoading && isSignedIn && (
           <>
             <MGroup justify="space-between">
               <SectionTitle title="All Guests" id="allGuests" />
@@ -40,6 +51,17 @@ export default function GuestList() {
             <GuestListTable groups={groups ?? []} />
           </>
         )}
+
+        {isSignedIn === undefined ||
+          (isLoading && (
+            <>
+              <Skeleton w="100%" h={25} />
+
+              <Skeleton w="100%" h={25} my="md" />
+
+              <Skeleton w="100%" h={25} />
+            </>
+          ))}
       </SimpleGrid>
     </Container>
   );

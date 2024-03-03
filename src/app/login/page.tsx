@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Container,
-  Title,
-  Paper,
-  TextInput,
-  PasswordInput,
-  Button,
-} from "@mantine/core";
+import { Container, Title, Paper, TextInput, PasswordInput, Button } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { supabase } from "@spiel-wedding/database/database";
 import {
@@ -31,7 +24,7 @@ export default function Login() {
     if (isSignedIn) {
       router.push("/");
     }
-  }, []);
+  }, [isSignedIn]);
 
   const form = useForm<LoginForm>({
     initialValues: {

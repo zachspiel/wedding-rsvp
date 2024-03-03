@@ -7,6 +7,7 @@ export const STATES = [
   "Colorado",
   "Connecticut",
   "Delaware",
+  "D.C.",
   "Florida",
   "Georgia",
   "Hawaii",
