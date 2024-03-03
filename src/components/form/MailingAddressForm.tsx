@@ -1,5 +1,5 @@
 import { UseFormReturnType } from "@mantine/form";
-import { Accordion, Grid, TextInput, Select } from "@mantine/core";
+import { Accordion, Grid, TextInput, Select, NumberInput } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import { STATES } from "./states";
 
@@ -45,7 +45,7 @@ const MailingAddressForm = (props: Props): JSX.Element => {
               />
             </Grid.Col>
             <Grid.Col span={3}>
-              <TextInput
+              <NumberInput
                 label="Zip Code"
                 name="postal"
                 {...form.getInputProps("postal")}
