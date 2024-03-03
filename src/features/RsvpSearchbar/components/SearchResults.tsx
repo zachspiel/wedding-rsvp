@@ -12,7 +12,7 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
       {searchResults.map((group, index) => {
         const displayBottomDivider = index === searchResults.length - 1;
         const isModifyingRsvp = group.rsvpModifications !== null;
-        console.log(group);
+
         return (
           <Flex direction="column" key={group.id}>
             <Divider my="sm" />

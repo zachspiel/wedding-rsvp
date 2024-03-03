@@ -45,7 +45,6 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       state: isNotEmpty("State cannot be empty"),
       postal: isNotEmpty("Zip Code cannot be empty"),
       country: isNotEmpty("Country cannot be empty"),
-      phone: isNotEmpty("Phone cannot be empty"),
       email: isEmail("Email is not valid"),
       guests: {
         firstName: (value, values, path) =>
@@ -85,7 +84,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       ) {
         return current;
       }
-      return current < 3 ? current + 1 : current;
+      return current < 2 ? current + 1 : current;
     });
 
   const prevStep = (): void => {
@@ -116,15 +115,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         </Stepper.Step>
 
         <Stepper.Step label="Contact Information">
-          <MailingAddressForm form={form} openTabsByDefault />
-        </Stepper.Step>
-
-        <Stepper.Step label="Additional Information">
-          <TextInput
-            label="Dietary Restrictions"
-            placeholder="Please enter any dietary restrictions"
-            {...form.getInputProps("dietaryRestrictions")}
-          />
+          <MailingAddressForm form={form} openTabsByDefault showEmailTooltip />
         </Stepper.Step>
 
         <Stepper.Completed>
@@ -142,9 +133,17 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
           </Button>
         )}
 
-        {currentStep < 2 && <Button onClick={nextStep}>Next step</Button>}
-        {currentStep === 2 && (
-          <Button onClick={handleSubmit} disabled={!form.isValid()}>
+        {currentStep === 0 && (
+          <Button onClick={nextStep} className="primaryButton">
+            Next step
+          </Button>
+        )}
+        {currentStep === 1 && (
+          <Button
+            onClick={handleSubmit}
+            disabled={!form.isValid()}
+            className="primaryButton"
+          >
             Save
           </Button>
         )}

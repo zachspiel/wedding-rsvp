@@ -1,28 +1,16 @@
 import { Group, Guest, GuestAffiliation } from "@spiel-wedding/types/Guest";
 
-type GroupFilterableKey =
-  | "email"
-  | "phone"
-  | "address1"
-  | "address2"
-  | "city"
-  | "state";
+type GroupFilterableKey = "email" | "address1" | "address2" | "city" | "state";
 
 type GuestFilterableKey = "firstName" | "lastName" | "title";
 
-const filterGroups = (
-  groups: Group[],
-  search: string,
-  filters: string[],
-): Group[] => {
+const filterGroups = (groups: Group[], search: string, filters: string[]): Group[] => {
   const query = search.toLowerCase().trim();
   return groups.filter((group) => {
     const containsQuery =
-      guestsContainQuery(group.guests, query) ||
-      groupContainsQuery(group, query);
+      guestsContainQuery(group.guests, query) || groupContainsQuery(group, query);
     const containsFilter =
-      isGroupMissingValue(group, filters) ||
-      groupMatchesAffiliation(group, filters);
+      isGroupMissingValue(group, filters) || groupMatchesAffiliation(group, filters);
 
     return (
       (query.length > 0 ? containsQuery : true) &&
@@ -38,10 +26,8 @@ const groupContainsQuery = (group: Group, query: string): boolean => {
 };
 
 const isGroupMissingValue = (group: Group, filters: string[]): boolean => {
-  const validEntries = ["email", "phone", "address1"];
-  const missingValueFilters = filters.filter((filter) =>
-    validEntries.includes(filter),
-  );
+  const validEntries = ["email", "address1"];
+  const missingValueFilters = filters.filter((filter) => validEntries.includes(filter));
 
   return Object.keys(group)
     .filter(isGroupFilterableKey)
@@ -50,12 +36,8 @@ const isGroupMissingValue = (group: Group, filters: string[]): boolean => {
 };
 
 const groupMatchesAffiliation = (group: Group, filters: string[]): boolean => {
-  const validEntries = Object.values(GuestAffiliation).map((value) =>
-    value.toString(),
-  );
-  const relationshipFilters = filters.filter((key) =>
-    validEntries.includes(key),
-  );
+  const validEntries = Object.values(GuestAffiliation).map((value) => value.toString());
+  const relationshipFilters = filters.filter((key) => validEntries.includes(key));
 
   return relationshipFilters.includes(group.affiliation);
 };
@@ -66,21 +48,19 @@ const guestsContainQuery = (guests: Guest[], query: string): boolean => {
       Object.keys(guest)
         .filter(isGuestFilterableKey)
         .some((key) => guest[key].toLowerCase().includes(query)) ||
-      `${guest.firstName.toLowerCase()} ${guest.lastName.toLowerCase()}`.includes(
-        query,
-      ),
+      `${guest.firstName.toLowerCase()} ${guest.lastName.toLowerCase()}`.includes(query)
   );
 };
 
 const isGroupFilterableKey = (
-  key: GroupFilterableKey | string,
+  key: GroupFilterableKey | string
 ): key is GroupFilterableKey => {
-  const validKeys = ["email", "phone", "address1", "address2", "city", "state"];
+  const validKeys = ["email", "address1", "address2", "city", "state"];
   return validKeys.includes(key);
 };
 
 const isGuestFilterableKey = (
-  key: GuestFilterableKey | string,
+  key: GuestFilterableKey | string
 ): key is GuestFilterableKey => {
   const validKeys = ["firstName", "lastName"];
   return validKeys.includes(key);

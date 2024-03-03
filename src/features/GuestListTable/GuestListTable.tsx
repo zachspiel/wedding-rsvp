@@ -25,12 +25,7 @@ import {
   sortGroups,
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { Group, Guest } from "@spiel-wedding/types/Guest";
-import {
-  IconChevronDown,
-  IconChevronUp,
-  IconSearch,
-  IconX,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
 import { ChangeEvent, useMemo, useState } from "react";
 import classes from "./styles.module.css";
 
@@ -52,13 +47,8 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   const filteredGroups = useMemo(
-    () =>
-      filterGroups(
-        sortGroups(groups ?? [], reverseSortDirection),
-        search,
-        filters,
-      ),
-    [search, filters, groups, reverseSortDirection],
+    () => filterGroups(sortGroups(groups ?? [], reverseSortDirection), search, filters),
+    [search, filters, groups, reverseSortDirection]
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -131,7 +121,7 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
         <TableThead>
           <TableTr>
             <Th onSort={updateSortedGroups}>Name</Th>
-            <TableTh>Email & Mobile</TableTh>
+            <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
             {showRsvpStatus && <TableTh>RSVP Status</TableTh>}
             <TableTh />

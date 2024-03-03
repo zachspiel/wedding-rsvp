@@ -1,6 +1,5 @@
 export interface Group {
   id: string;
-  phone: string;
   email: string;
   affiliation: GuestAffiliation;
   address1: string;
@@ -13,7 +12,6 @@ export interface Group {
   invited: boolean;
   message: string;
   saveTheDateSent: boolean;
-  dietaryRestrictions: string;
   guests: Guest[];
   rsvpModifications?: RsvpModification[];
 }

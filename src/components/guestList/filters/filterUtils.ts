@@ -1,6 +1,6 @@
 import { GuestAffiliation, Group } from "@spiel-wedding/types/Guest";
 
-export type FilterableKeys = "email" | "phone" | "address1";
+export type FilterableKeys = "email" | "address1";
 
 const getUniqueAffiliations = (groups: Group[]): GuestAffiliation[] => {
   return Array.from(new Set(groups.map((group) => group.affiliation)).values());
@@ -8,7 +8,7 @@ const getUniqueAffiliations = (groups: Group[]): GuestAffiliation[] => {
 
 const filterGroupByAffiliation = (
   affiliation: GuestAffiliation,
-  groups: Group[],
+  groups: Group[]
 ): number => {
   return groups.filter((group) => group.affiliation === affiliation).length;
 };
@@ -20,7 +20,6 @@ const filterGroupByProperty = (property: FilterableKeys, groups: Group[]): numbe
 const getMissingValueTotals = (groups: Group[]): Record<string, number> => {
   return {
     email: filterGroupByProperty("email", groups),
-    phone: filterGroupByProperty("phone", groups),
     address1: filterGroupByProperty("address1", groups),
   };
 };
