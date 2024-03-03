@@ -8,10 +8,14 @@ import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
 import useSWR from "swr";
 import classes from "./gallery.module.css";
+import { v4 as uuid } from "uuid";
+import { Paper, Skeleton, em } from "@mantine/core";
+
+const LOADING_SCREEN = [uuid(), uuid(), uuid()];
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
+  const { data: photos, isLoading } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
 
   const slides = photos
     ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
@@ -21,17 +25,32 @@ const Gallery = (): JSX.Element => {
       </Carousel.Slide>
     ));
 
+  const loadingScreen = () => {
+    return LOADING_SCREEN.map((item) => {
+      return (
+        <Carousel.Slide key={item}>
+          <Paper bg="none" radius="md" className={classes.card}>
+            <Skeleton height="100%" w="100%" />
+          </Paper>
+        </Carousel.Slide>
+      );
+    });
+  };
+
   return (
-    <SectionContainer grayBackground flowerImages>
-      <SectionTitle
-        title="Gallery"
-        id="gallery"
-        hideFlowers={(photos ?? []).length > 0}
-      />
+    <SectionContainer id="gallery" greenBackground flowerImages>
+      <SectionTitle title="Gallery" hideFlowers={(photos ?? []).length > 0} />
       {isAdminViewEnabled && <UploadImages />}
 
-      <Carousel slideSize="70%" slideGap="md" loop withIndicators classNames={classes}>
+      <Carousel
+        slideSize={{ base: "100%", sm: "50%" }}
+        slideGap="md"
+        loop
+        withIndicators
+        classNames={classes}
+      >
         {slides}
+        {isLoading && loadingScreen()}
       </Carousel>
     </SectionContainer>
   );

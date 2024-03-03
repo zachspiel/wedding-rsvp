@@ -12,13 +12,12 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
-import { MenuItem, links } from "./links";
 import Logo from "./Logo";
 import { useMemo } from "react";
-import classes from "./navbar.module.css";
-import cx from "clsx";
-import { AdminViewToggle } from "@spiel-wedding/common";
 import { supabase } from "@spiel-wedding/database/database";
+import { AdminViewToggle, MenuItem, links } from "@spiel-wedding/common";
+import cx from "clsx";
+import classes from "./navbar.module.css";
 
 const HEADER_HEIGHT = rem(100);
 
@@ -67,7 +66,7 @@ const Navbar = (props: Props): JSX.Element => {
         <Anchor href="/" p="xs">
           <Logo />
         </Anchor>
-        <Group gap="md" className={classes.links}>
+        <Group gap="md" className={classes.navbarLinks}>
           {menuItems}
           {isSignedIn && (
             <Button

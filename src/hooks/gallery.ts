@@ -14,7 +14,7 @@ export const getPhotoGallery = async (): Promise<Photo[]> => {
 
 export const updatePhoto = async (
   id: string,
-  photo: Partial<Photo>,
+  photo: Partial<Photo>
 ): Promise<Photo | null> => {
   const { data } = await supabase
     .from(TABLE)
@@ -25,9 +25,7 @@ export const updatePhoto = async (
   return data?.[0];
 };
 
-export const uploadFileToGallery = async (
-  file: File,
-): Promise<Photo | null> => {
+export const uploadFileToGallery = async (file: File): Promise<Photo | null> => {
   const fileExtension = file.name.split(".").pop();
   const fileName = uuid() + "." + fileExtension;
 
@@ -40,9 +38,7 @@ export const uploadFileToGallery = async (
   return null;
 };
 
-export const addImageCaption = async (
-  imagePath: string,
-): Promise<Photo | null> => {
+export const addImageCaption = async (imagePath: string): Promise<Photo | null> => {
   const newImage: Omit<Photo, "id"> = {
     caption: "",
     isVisible: false,
@@ -54,12 +50,8 @@ export const addImageCaption = async (
   return data?.[0];
 };
 
-export const removeImage = async (
-  photo: Photo,
-): Promise<FileObject[] | null> => {
-  const { data } = await supabase.storage
-    .from("gallery")
-    .remove([photo.imagePath]);
+export const removeImage = async (photo: Photo): Promise<FileObject[] | null> => {
+  const { data } = await supabase.storage.from("gallery").remove([photo.imagePath]);
 
   const { error } = await supabase.from(TABLE).delete().eq("id", photo.id);
 

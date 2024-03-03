@@ -20,17 +20,17 @@ const GuestBook = (): JSX.Element => {
   const { data, mutate } = useSWR(GALLERY_SWR_KEY, getGuestMessages);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",
-    [],
+    []
   );
 
   const saveMessage = async (
-    newGuestMessage: Omit<GuestMessage, "id">,
+    newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
     const guestMessage = await addMessageToGuestBook(newGuestMessage);
 
     if (guestMessage.length === 0) {
       showCustomFailureNotification(
-        "An error occurred while signing the guest book. Please try again later!",
+        "An error occurred while signing the guest book. Please try again later!"
       );
     } else {
       await mutate();
@@ -40,8 +40,8 @@ const GuestBook = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer grayBackground>
-      <SectionTitle title="Guest Book" id="guestBook" />
+    <SectionContainer id="guestBook" greenBackground>
+      <SectionTitle title="Guest Book" />
       <GuestBookForm handleSubmit={saveMessage} />
 
       {data?.map((message) => (

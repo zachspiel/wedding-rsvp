@@ -14,7 +14,6 @@ const createDefaultGroup = (): Group => {
   return {
     id: groupId,
     email: "",
-    phone: "",
     guests: [
       {
         id: uuid(),
@@ -35,7 +34,6 @@ const createDefaultGroup = (): Group => {
     postal: "",
     country: "",
     message: "",
-    dietaryRestrictions: "",
     invited: true,
     inviteSent: false,
     saveTheDateSent: false,

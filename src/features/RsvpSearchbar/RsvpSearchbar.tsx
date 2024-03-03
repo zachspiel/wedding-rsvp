@@ -33,7 +33,7 @@ const getMatchingGuests = async (
 
 interface Props {
   selectedGroup?: Group;
-  setSelectedGroup: (group: Group) => void;
+  setSelectedGroup: (group?: Group) => void;
 }
 
 const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
@@ -55,8 +55,14 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
   });
 
   const handleSubmit = (values: SearchForm) => {
+    setSelectedGroup(undefined);
     setSearchForm(values);
     mutate();
+  };
+
+  const selectGroup = (group: Group) => {
+    setSelectedGroup(group);
+    form.reset();
   };
 
   return (
@@ -66,12 +72,14 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
           <TextInput
             label="First name"
             placeholder="First name"
+            fz="lg"
             {...form.getInputProps("firstName")}
           />
 
           <TextInput
             label="Last name"
             placeholder="Last name"
+            fz="lg"
             {...form.getInputProps("lastName")}
           />
 
@@ -98,10 +106,12 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
       )}
 
       {selectedGroup === undefined && (data ?? []).length > 0 && (
-        <Text>Select your info below or try searching again.</Text>
+        <Text>Select your party below or try searching again.</Text>
       )}
 
-      <SearchResults searchResults={data ?? []} setSelectedGroup={setSelectedGroup} />
+      {!selectedGroup && (
+        <SearchResults searchResults={data ?? []} setSelectedGroup={selectGroup} />
+      )}
     </>
   );
 };

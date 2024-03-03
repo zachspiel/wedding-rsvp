@@ -5,14 +5,12 @@ import classes from "./registry.module.css";
 
 const Registry = (): JSX.Element => {
   return (
-    <SectionContainer>
-      <SectionTitle title="Registry" id="registry" />
+    <SectionContainer id="registry">
+      <SectionTitle title="Registry" />
       <Card
-        shadow="sm"
         padding="lg"
         mt="xl"
         radius="md"
-        withBorder
         style={{ display: "block", overflow: "auto" }}
       >
         <Text mb="sm">
