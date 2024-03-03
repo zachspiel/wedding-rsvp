@@ -9,7 +9,7 @@ import {
   IconTie,
   TablerIconsProps,
 } from "@tabler/icons-react";
-import WeddingCountdown from "./Countdown";
+import WeddingCountdown from "./components/Countdown";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 
 const GOOGLE_MAPS_URL = "https://goo.gl/maps/BtzfDmV1pqNAbrRE6";
@@ -17,7 +17,11 @@ const GOOGLE_MAPS_URL = "https://goo.gl/maps/BtzfDmV1pqNAbrRE6";
 type TablerIcon = (props: TablerIconsProps) => JSX.Element;
 
 const WhenAndWhere = (): JSX.Element => {
-  const createListItem = (label: string, icon: TablerIcon, url?: string): JSX.Element => {
+  const createListItem = (
+    label: string,
+    icon: TablerIcon,
+    url?: string,
+  ): JSX.Element => {
     return (
       <List.Item>
         {url && (
@@ -46,7 +50,7 @@ const WhenAndWhere = (): JSX.Element => {
         {createListItem(
           "636 W University Dr, Mesa, AZ 85201",
           IconMapPin,
-          GOOGLE_MAPS_URL
+          GOOGLE_MAPS_URL,
         )}
         {createListItem("Semi-formal", IconTie)}
       </List>

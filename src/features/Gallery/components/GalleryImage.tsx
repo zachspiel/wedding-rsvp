@@ -9,7 +9,7 @@ import {
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import Image from "next/image";
-import classes from "./gallery.module.css";
+import classes from "../gallery.module.css";
 import { useSWRConfig } from "swr";
 import { GALLERY_SWR_KEY, updatePhoto } from "@spiel-wedding/hooks/gallery";
 import { supabase } from "@spiel-wedding/database/database";

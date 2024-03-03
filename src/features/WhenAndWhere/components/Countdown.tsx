@@ -2,7 +2,7 @@
 
 import { Container, Flex, Text } from "@mantine/core";
 import Countdown, { CountdownRenderProps } from "react-countdown";
-import classes from "./countdown.module.css";
+import classes from "../styles.module.css";
 import { useEffect, useState } from "react";
 
 const WeddingCountdown = (): JSX.Element => {

@@ -21,11 +21,13 @@ import { useRouter } from "next/navigation";
 
 export default function GuestList() {
   const { isSignedIn } = useSignInStatus();
+
   const {
     data: groups,
     error,
     isLoading,
   } = useSWR(() => (isSignedIn ? GROUP_SWR_KEY : null), getGroups);
+
   const router = useRouter();
 
   useEffect(() => {

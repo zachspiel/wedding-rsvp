@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
@@ -31,7 +30,7 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         form.reset();
       })}
     >
-      <SimpleGrid cols={{ base: 2, sm: 1 }}>
+      <SimpleGrid cols={{ xs: 1, sm: 2 }}>
         <TextInput
           label="Name"
           placeholder="Your name"
@@ -60,7 +59,7 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Button type="submit" size="md" mt="md">
+      <Button type="submit" size="md" mt="md" color="teal.5">
         Sign guest book
       </Button>
     </form>

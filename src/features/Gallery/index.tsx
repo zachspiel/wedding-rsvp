@@ -1,8 +1,8 @@
 "use client";
 
 import { Carousel } from "@mantine/carousel";
-import GalleryImage from "./GalleryImage";
-import UploadImages from "./UploadImages";
+import GalleryImage from "./components/GalleryImage";
+import UploadImages from "./components/UploadImages";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
