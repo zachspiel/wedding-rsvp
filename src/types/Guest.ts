@@ -14,6 +14,8 @@ export interface Group {
   saveTheDateSent: boolean;
   guests: Guest[];
   rsvpModifications?: RsvpModification[];
+  edited_at?: string;
+  created_at?: string;
 }
 
 export interface Guest {

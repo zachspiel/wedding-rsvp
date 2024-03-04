@@ -5,8 +5,8 @@ import SignInStatusProvider from "../context/SignInStatus";
 import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
-import {useEffect} from "react";
-import {logBugReportLink} from "@spiel-wedding/components/easterEggs";
+import { useEffect } from "react";
+import { logBugReportLink } from "@spiel-wedding/components/easterEggs";
 
 export function Providers({
   children,
@@ -15,9 +15,8 @@ export function Providers({
   children: any;
   poppins: NextFontWithVariable;
 }) {
-
   useEffect(() => {
-    logBugReportLink()
+    logBugReportLink();
   }, []);
 
   const theme = createTheme({
