@@ -19,7 +19,7 @@ const Registry = (): JSX.Element => {
           gift!
         </Text>
         <Text mb="sm">
-          But for those of you who are stubborn, we will be accepting contributions to our
+          For those of you who are stubborn, we will be accepting contributions to our
           honeymoon fund at our reception following the ceremony.
           <Anchor href="https://withjoy.com/sedona-and-zach/registry" target="_blank">
             {" "}
