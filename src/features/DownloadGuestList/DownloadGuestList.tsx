@@ -10,22 +10,36 @@ interface Props {
   groups: Group[];
 }
 
+const VALID_KEYS = [
+  "email",
+  "affiliation",
+  "address1",
+  "address2",
+  "city",
+  "state",
+  "postal",
+  "guests",
+];
+
 const DownloadGuestList = ({ groups }: Props) => {
   const handleDownload = () => {
     const formattedRows = groups.map((group) => {
-      let formattedRow: Record<string, string> = group as unknown as any;
-      Object.keys(group).map((column) => {
-        const key = column as keyof Group;
-        if (typeof group[key] === "object" && group[key] !== null) {
-          if (key === "guests" && group.guests.length > 0) {
-            const { firstName, lastName } = group.guests[0];
+      let formattedRow: Record<string, string> = {};
 
-            formattedRow[key] = `${firstName} ${lastName}`;
+      Object.keys(group)
+        .filter((key) => VALID_KEYS.includes(key))
+        .map((column) => {
+          const key = column as keyof Group;
+          if (key === "guests" && group.guests.length > 0) {
+            group.guests.forEach((guest, index) => {
+              const { firstName, lastName, nameUnknown } = guest;
+              const name = nameUnknown ? "Unknown Guest" : `${firstName} ${lastName}`;
+              formattedRow[`Guest ${index + 1}`] = name;
+            });
           } else {
-            formattedRow[key] = JSON.stringify(formattedRow[key]);
+            formattedRow[column] = group[key] as string;
           }
-        }
-      });
+        });
       return formattedRow;
     });
 
