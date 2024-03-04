@@ -24,7 +24,7 @@ import {
   filterGroups,
   sortGroups,
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
-import { Group, Guest } from "@spiel-wedding/types/Guest";
+import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
 import { ChangeEvent, useMemo, useState } from "react";
 import classes from "./styles.module.css";

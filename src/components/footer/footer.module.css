@@ -15,7 +15,8 @@
   .links {
     justify-content: center;
     text-align: center;
-    @media (mx-width: $mantine-breakpoint-xs) {
+
+    @media (max-width: $mantine-breakpoint-xs) {
       margin-top: var(--mantine-spacing-md);
     }
   }
@@ -27,7 +28,6 @@
   line-height: 1;
   padding: rem(8) rem(12);
   border-radius: var(--mantine-radius-sm);
-  color: var(--mantine-color-gray-7);
   font-size: var(--mantine-font-size-md);
 
   &:hover {

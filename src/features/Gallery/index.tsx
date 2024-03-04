@@ -9,7 +9,7 @@ import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
 import useSWR from "swr";
 import classes from "./gallery.module.css";
 import { v4 as uuid } from "uuid";
-import { Paper, Skeleton, em } from "@mantine/core";
+import { Paper, Skeleton } from "@mantine/core";
 
 const LOADING_SCREEN = [uuid(), uuid(), uuid()];
 

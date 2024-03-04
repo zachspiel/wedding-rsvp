@@ -26,7 +26,6 @@
 
 .flowerImageLeft {
   left: 10px;
-  -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 
@@ -36,7 +35,7 @@
 
 .flowerDivider {
   @media (max-width: $mantine-breakpoint-md) {
-    width: 225px;
+    width: 256px;
     height: 75px;
   }
 }

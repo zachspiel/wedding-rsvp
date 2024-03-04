@@ -1,4 +1,4 @@
-import { Container, Group, Anchor, Image } from "@mantine/core";
+import { Container, Group, Anchor } from "@mantine/core";
 import classes from "./footer.module.css";
 import { links } from "@spiel-wedding/common";
 
