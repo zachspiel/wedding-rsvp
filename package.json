@@ -1,6 +1,6 @@
 {
   "name": "spiel-wedding",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "private": true,
   "license": "MIT",
   "author": {
@@ -31,7 +31,7 @@
     "eslint-config-next": "13.5.2",
     "file-saver": "^2.0.5",
     "lodash.findlastindex": "^4.6.0",
-    "next": "13.5.4",
+    "next": "14.1.1",
     "papaparse": "^5.4.1",
     "react": "18.2.0",
     "react-countdown": "^2.3.5",

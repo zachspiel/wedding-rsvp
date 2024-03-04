@@ -1,6 +1,11 @@
 module.exports = {
   reactStrictMode: false,
   images: {
-    domains: ["qaobgjglyovmcaiiagyx.supabase.co", "images.zola.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "qaobgjglyovmcaiiagyx.supabase.co",
+      },
+    ],
   },
 };
