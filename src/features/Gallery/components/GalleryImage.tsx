@@ -17,9 +17,10 @@ import { supabase } from "@spiel-wedding/database/database";
 interface Props {
   image: Photo;
   displayAdminView: boolean;
+  openImage?: () => void;
 }
 
-const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
+const GalleryImage = ({ image, displayAdminView, openImage }: Props): JSX.Element => {
   const theme = useMantineTheme();
   const { mutate } = useSWRConfig();
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
@@ -37,7 +38,7 @@ const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
   };
 
   return (
-    <Paper bg="none" radius="md" className={classes.card}>
+    <Paper bg="none" radius="md" className={classes.card} onClick={openImage}>
       <Image
         src={data.publicUrl}
         alt={image.caption ?? image.id}
