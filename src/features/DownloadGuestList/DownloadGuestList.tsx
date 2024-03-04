@@ -23,6 +23,8 @@ const VALID_KEYS = [
 
 const DownloadGuestList = ({ groups }: Props) => {
   const handleDownload = () => {
+    let columns: string[] = [];
+
     const formattedRows = groups.map((group) => {
       let formattedRow: Record<string, string> = {};
 
@@ -40,11 +42,15 @@ const DownloadGuestList = ({ groups }: Props) => {
             formattedRow[column] = group[key] as string;
           }
         });
+
+      if (Object.keys(formattedRow).length > columns.length) {
+        columns = Object.keys(formattedRow);
+      }
+
       return formattedRow;
     });
 
-    const csv = Papa.unparse(formattedRows);
-
+    const csv = Papa.unparse(formattedRows, { columns });
     const filename = "Spielberger-Wedding-Guest-List.csv";
     const csvData = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     saveAs(csvData, filename);
