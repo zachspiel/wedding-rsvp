@@ -12,7 +12,7 @@ const weddingDateString = `
 
 const logBugReportLink = () => {
   console.log("Hello! Hopefully you won't find too much down here, but for more information regarding the tech stack please go here: ");
- console.log("Additionally, if you notice any 🐛, please report them to the GitHub repo above. Thank you!");
+  console.log("If you notice a 🐛, please report it to the GitHub repo above. Thank you!");
 }
 
 export { weddingDateString, logBugReportLink };
