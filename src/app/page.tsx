@@ -6,6 +6,7 @@ import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import ZachAndSedona from "@spiel-wedding/features/ZachAndSedona";
 import RSVP from "@spiel-wedding/features/RSVP";
 
+
 export default function Home() {
   return (
     <main>

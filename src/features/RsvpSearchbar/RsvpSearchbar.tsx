@@ -21,11 +21,10 @@ const getMatchingGuests = async (
   ).then((res) => res.json());
 
   if (result.length === 0) {
-    const error = {
+    throw {
       info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
       status: 400,
     };
-    throw error;
   }
 
   return result;

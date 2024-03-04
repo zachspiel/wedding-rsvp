@@ -10,4 +10,9 @@ const weddingDateString = `
   ____|___|_|___|_____/_______\\ |||___October 26th 2024___
  `;
 
-export { weddingDateString };
+const logBugReportLink = () => {
+  console.log("Hello! Hopefully you won't find too much down here, but for more information regarding the tech stack please go here: ");
+ console.log("Additionally, if you notice any 🐛, please report them to the GitHub repo above. Thank you!");
+}
+
+export { weddingDateString, logBugReportLink };

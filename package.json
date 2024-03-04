@@ -1,6 +1,6 @@
 {
   "name": "spiel-wedding",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "license": "MIT",
   "author": {
@@ -24,6 +24,7 @@
     "@tabler/icons-react": "^2.22.0",
     "@vercel/analytics": "^1.1.1",
     "bufferutil": "^4.0.8",
+    "compressorjs": "^1.2.1",
     "embla-carousel-react": "^8.0.0-rc14",
     "encoding": "^0.1.13",
     "eslint": "8.43.0",

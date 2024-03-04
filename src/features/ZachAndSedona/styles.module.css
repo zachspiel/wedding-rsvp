@@ -12,7 +12,7 @@
 }
 
 .flowerContainer::before {
-  background-image: url("https://images.zola.com/29fceccb-d1f9-4d7e-ba3b-9f253851f32e?w=500");
+  background-image: url("/assets/images/right-flower.png");
   content: " ";
   background-size: contain;
   background-repeat: no-repeat;
@@ -35,7 +35,7 @@
 }
 
 .flowerContainer::after {
-  background-image: url("https://images.zola.com/79e82109-4342-4bca-bc48-6298b4ef24d2?w=500");
+  background-image: url("/assets/images/left-flower.png");
   content: " ";
   background-size: contain;
   background-repeat: no-repeat;

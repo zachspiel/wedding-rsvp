@@ -8,7 +8,6 @@ import {
   Group as MGroup,
   Stepper,
   Text,
-  TextInput,
 } from "@mantine/core";
 import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
