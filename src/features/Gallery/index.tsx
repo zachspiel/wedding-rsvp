@@ -11,12 +11,15 @@ import classes from "./gallery.module.css";
 import { Modal } from "@mantine/core";
 import { useState } from "react";
 import { Photo } from "@spiel-wedding/types/Photo";
+import { useMediaQuery } from "@mantine/hooks";
+import { IconX } from "@tabler/icons-react";
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
   const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
   const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
   const [openModal, setOpenModal] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 50em)");
 
   const createSlides = (images?: Photo[], updateOrderedPhotos?: boolean) => {
     return images
@@ -26,6 +29,7 @@ const Gallery = (): JSX.Element => {
           <GalleryImage
             image={photo}
             displayAdminView={isAdminViewEnabled}
+            isOpen={!updateOrderedPhotos ? openModal : false}
             openImage={() => {
               if (updateOrderedPhotos) {
                 const newOrderedPhotos = images.filter((item) => item.id !== photo.id);
@@ -60,17 +64,22 @@ const Gallery = (): JSX.Element => {
         onClose={() => setOpenModal(false)}
         transitionProps={{ transition: "fade", duration: 200 }}
         centered
+        fullScreen={isMobile}
         size="calc(100vw - 3rem)"
         overlayProps={{
           backgroundOpacity: 0.55,
           blur: 3,
         }}
+        closeButtonProps={{
+          icon: <IconX color="#ffffff" />,
+          bg: "#717769",
+        }}
+        classNames={classes}
       >
         <Carousel
           slideSize={{ base: "100%", sm: "50%", md: "33.333333%" }}
           slideGap={{ base: 0, sm: "md" }}
           loop
-          align="start"
           withIndicators
           classNames={classes}
         >

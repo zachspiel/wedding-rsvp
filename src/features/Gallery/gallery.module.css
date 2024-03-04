@@ -1,3 +1,9 @@
+.root,
+.content,
+.header {
+  background-color: hsl(86, 6.3%, 80%);
+}
+
 .controls {
   @media (max-width: $mantine-breakpoint-sm) {
     opacity: 0;
@@ -22,6 +28,14 @@
     cursor: pointer;
     transform: scale(1.01);
   }
+
+  @media (max-width: $mantine-breakpoint-md) {
+    height: rem(400px);
+  }
+}
+
+.cardModal {
+  height: rem(640px);
 }
 
 .title {
