@@ -27,16 +27,18 @@ const WeddingCountdown = (): JSX.Element => {
           border: "none",
           width: "fit-content",
           float: "none",
-          minWidth: "100px",
-          backgroundColor: "#FFFFFF",
+          minWidth: "110px",
+          borderRadius: "var(--mantine-radius-sm)",
         }}
+        bg="sage-green"
+        c="white"
         m={0}
         className={className}
       >
-        <Text fz="lg" fw={300} ta="center">
+        <Text fz="xl" fw={300} ta="center">
           {value}
         </Text>
-        <Text fz="lg" fw={700} ta="center">
+        <Text fz="xl" fw={700} ta="center">
           {title}
         </Text>
       </Container>

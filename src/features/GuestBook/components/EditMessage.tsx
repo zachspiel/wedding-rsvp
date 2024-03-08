@@ -69,7 +69,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
         >
           Cancel
         </Button>
-        <Button type="submit" size="md" color="teal.5">
+        <Button type="submit" size="md">
           Save
         </Button>
       </Group>

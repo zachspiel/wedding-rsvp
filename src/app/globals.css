@@ -16,20 +16,6 @@ html {
   background-color: var(--highlight-color);
 }
 
-.primaryButton {
-  background-color: #717769;
-
-  &:hover:not([disabled]) {
-    opacity: 0.9;
-    background-color: #717769;
-  }
-
-  &:disabled {
-    background-color: var(--mantine-color-gray-1);
-    color: var(--mantine-color-gray-5);
-  }
-}
-
 .mantine-TextInput-input,
 .mantine-Textarea-input,
 .mantine-NumberInput-input,

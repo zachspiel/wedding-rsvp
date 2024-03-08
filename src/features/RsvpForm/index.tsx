@@ -167,11 +167,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
           </Button>
         )}
 
-        {currentStep < TOTAL_STEPS - 1 && (
-          <Button onClick={nextStep} className="primaryButton">
-            Next step
-          </Button>
-        )}
+        {currentStep < TOTAL_STEPS - 1 && <Button onClick={nextStep}>Next step</Button>}
         {currentStep === TOTAL_STEPS - 1 && (
           <Button onClick={handleSubmit} disabled={!form.isValid()} color="teal.5">
             Save RSVP

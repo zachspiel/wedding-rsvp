@@ -86,13 +86,7 @@ const GuestBookForm = ({ name, email, handleSubmit }: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Button
-        type="submit"
-        size="md"
-        mt="md"
-        className="primaryButton"
-        disabled={!form.isValid()}
-      >
+      <Button type="submit" size="md" mt="md" disabled={!form.isValid()}>
         Sign guest book
       </Button>
     </form>

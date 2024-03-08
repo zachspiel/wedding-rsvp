@@ -82,7 +82,7 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
             {...form.getInputProps("lastName")}
           />
 
-          <Button type="submit" disabled={!form.isValid()} className="primaryButton">
+          <Button type="submit" disabled={!form.isValid()}>
             Search
           </Button>
         </MGroup>

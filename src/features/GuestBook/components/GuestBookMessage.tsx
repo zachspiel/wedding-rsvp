@@ -25,11 +25,7 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
 
           {isEditable && (
             <Flex>
-              <ActionIcon
-                onClick={(): void => setIsEditing(!isEditing)}
-                mr="md"
-                className="primaryButton"
-              >
+              <ActionIcon onClick={(): void => setIsEditing(!isEditing)} mr="md">
                 <IconPencil size={20} />
               </ActionIcon>
 
