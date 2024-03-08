@@ -1,7 +1,7 @@
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 
-export const GALLERY_SWR_KEY = "guestbook";
+export const GUESTBOOK_SWR_KEY = "guestbook";
 const TABLE = "guestbook";
 export const getGuestMessages = async (): Promise<GuestMessage[]> => {
   const { data } = await supabase.from(TABLE).select().eq("isVisible", "true");
@@ -10,7 +10,7 @@ export const getGuestMessages = async (): Promise<GuestMessage[]> => {
 };
 
 export const addMessageToGuestBook = async (
-  message: Omit<GuestMessage, "id">,
+  message: Omit<GuestMessage, "id">
 ): Promise<GuestMessage[]> => {
   const { data } = await supabase.from(TABLE).insert(message).select();
 
@@ -19,7 +19,7 @@ export const addMessageToGuestBook = async (
 
 export const updateGuestBookMessage = async (
   id: string,
-  message: string,
+  message: string
 ): Promise<GuestMessage[]> => {
   const { data } = await supabase
     .from(TABLE)
@@ -31,7 +31,7 @@ export const updateGuestBookMessage = async (
 };
 
 export const removeGuestBookMessage = async (
-  id: string,
+  id: string
 ): Promise<GuestMessage | null> => {
   const { data } = await supabase
     .from(TABLE)

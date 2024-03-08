@@ -3,16 +3,27 @@
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
+import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
+import { useLocalStorage } from "usehooks-ts";
+import { mutate } from "swr";
 
 interface Props {
-  handleSubmit: (guestMessage: Omit<GuestMessage, "id">) => void;
+  name?: string;
+  email?: string;
+  handleSubmit: (message: GuestMessage[]) => void;
 }
 
-const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
+const GuestBookForm = ({ name, email, handleSubmit }: Props): JSX.Element => {
+  const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
+    "guestMessages",
+    []
+  );
+
   const form = useForm({
     initialValues: {
-      name: "",
-      email: "",
+      name: name ?? "",
+      email: email ?? "",
       message: "",
       isVisible: true,
     },
@@ -23,10 +34,26 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
     },
   });
 
+  const saveMessage = async (
+    newGuestMessage: Omit<GuestMessage, "id">
+  ): Promise<void> => {
+    const guestMessage = await addMessageToGuestBook(newGuestMessage);
+    setLocalMessages([...localMessages, guestMessage[0].id]);
+
+    if (guestMessage.length === 0) {
+      showCustomFailureNotification(
+        "An error occurred while signing the guest book. Please try again later!"
+      );
+    } else {
+      handleSubmit(guestMessage);
+      await mutate(GUESTBOOK_SWR_KEY);
+    }
+  };
+
   return (
     <form
       onSubmit={form.onSubmit(() => {
-        handleSubmit(form.values);
+        saveMessage(form.values);
         form.reset();
       })}
     >
@@ -59,7 +86,13 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Button type="submit" size="md" mt="md" className="primaryButton">
+      <Button
+        type="submit"
+        size="md"
+        mt="md"
+        className="primaryButton"
+        disabled={!form.isValid()}
+      >
         Sign guest book
       </Button>
     </form>

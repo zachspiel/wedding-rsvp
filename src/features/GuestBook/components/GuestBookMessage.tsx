@@ -28,6 +28,7 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
               <ActionIcon
                 onClick={(): void => setIsEditing(!isEditing)}
                 mr="md"
+                className="primaryButton"
               >
                 <IconPencil size={20} />
               </ActionIcon>
@@ -39,18 +40,14 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
       )}
 
       {isEditing && (
-        <EditMessage
-          message={message}
-          closeEditor={(): void => setIsEditing(false)}
-        />
+        <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
       )}
 
       <Group>
         <div>
           <Flex>
             <Text size="xs" c="dimmed">
-              By {message.name} -{" "}
-              {new Date(message.createdAt ?? "").toDateString()}
+              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
             </Text>
           </Flex>
         </div>

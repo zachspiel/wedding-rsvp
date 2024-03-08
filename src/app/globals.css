@@ -8,14 +8,24 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  --highlight-color: hsl(86, 6.3%, 80%);
+}
+
+*::selection {
+  background-color: var(--highlight-color);
+}
+
 .primaryButton {
   background-color: #717769;
 
-  &:hover {
+  &:hover:not([disabled]) {
     opacity: 0.9;
+    background-color: #717769;
   }
 
   &:disabled {
-    background-color: hsl(86, 6.3%, 80%);
+    background-color: var(--mantine-color-gray-1);
+    color: var(--mantine-color-gray-5);
   }
 }

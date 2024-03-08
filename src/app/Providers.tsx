@@ -7,6 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 import { useEffect } from "react";
 import { logBugReportLink } from "@spiel-wedding/components/easterEggs";
+import { ModalsProvider } from "@mantine/modals";
 
 export function Providers({
   children,
@@ -35,10 +36,12 @@ export function Providers({
 
   return (
     <MantineProvider defaultColorScheme="light" theme={theme} forceColorScheme="light">
-      <Notifications />
-      <SignInStatusProvider>
-        <AdminViewProvider>{children}</AdminViewProvider>
-      </SignInStatusProvider>
+      <ModalsProvider>
+        <Notifications />
+        <SignInStatusProvider>
+          <AdminViewProvider>{children}</AdminViewProvider>
+        </SignInStatusProvider>
+      </ModalsProvider>
     </MantineProvider>
   );
 }
