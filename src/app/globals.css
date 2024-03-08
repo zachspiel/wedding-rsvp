@@ -29,3 +29,12 @@ html {
     color: var(--mantine-color-gray-5);
   }
 }
+
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-NumberInput-input,
+.mantine-Select-input {
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 16px;
+  }
+}
