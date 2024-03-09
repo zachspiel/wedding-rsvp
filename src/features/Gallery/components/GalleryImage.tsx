@@ -51,7 +51,6 @@ const GalleryImage = ({
       mb="lg"
       className={cx(classes.card, isOpen ? classes.cardModal : "")}
       onClick={openImage}
-      style={{ overflow: "hidden" }}
     >
       <Image
         src={data.publicUrl}
