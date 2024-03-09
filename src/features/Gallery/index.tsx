@@ -73,6 +73,7 @@ const Gallery = (): JSX.Element => {
         closeButtonProps={{
           icon: <IconX color="#ffffff" />,
           bg: "#717769",
+          size: isMobile ? "lg" : "",
         }}
         classNames={classes}
       >

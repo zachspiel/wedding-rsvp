@@ -24,18 +24,18 @@
   position: relative;
   transition: all 0.1s ease-in-out;
 
+  @media (min-width: $mantine-breakpoint-md) {
+    height: 700px;
+  }
+}
+
+.cardWithHover {
+  object-fit: cover !important;
+
   &:hover {
     cursor: pointer;
     transform: scale(1.01);
   }
-
-  @media (max-width: $mantine-breakpoint-md) {
-    height: rem(400px);
-  }
-}
-
-.cardModal {
-  height: rem(640px);
 }
 
 .title {

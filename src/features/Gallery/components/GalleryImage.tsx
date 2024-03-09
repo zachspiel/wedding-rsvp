@@ -48,13 +48,15 @@ const GalleryImage = ({
     <Paper
       bg="none"
       radius="md"
+      mb="lg"
       className={cx(classes.card, isOpen ? classes.cardModal : "")}
       onClick={openImage}
+      style={{ overflow: "hidden" }}
     >
       <Image
         src={data.publicUrl}
         alt={image.caption ?? image.id}
-        className={classes.cardImage}
+        className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
         fill
         sizes="(max-width: 768px) 33vw"
         style={{ objectFit: "contain", zIndex: 0 }}
