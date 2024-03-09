@@ -1,3 +1,9 @@
+.root,
+.content,
+.header {
+  background-color: hsl(86, 6.3%, 80%);
+}
+
 .controls {
   @media (max-width: $mantine-breakpoint-sm) {
     opacity: 0;
@@ -16,6 +22,18 @@
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
+  transition: all 0.1s ease-in-out;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 500px;
+  }
+}
+
+.cardWithHover {
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+  }
 }
 
 .title {
