@@ -4,3 +4,12 @@
     height: 250px;
   }
 }
+
+.registryButton {
+  background-color: #717769;
+
+  &:hover {
+    opacity: 0.9;
+    text-decoration: none;
+  }
+}

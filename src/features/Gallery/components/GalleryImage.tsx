@@ -13,13 +13,21 @@ import classes from "../gallery.module.css";
 import { useSWRConfig } from "swr";
 import { GALLERY_SWR_KEY, updatePhoto } from "@spiel-wedding/hooks/gallery";
 import { supabase } from "@spiel-wedding/database/database";
+import cx from "clsx";
 
 interface Props {
   image: Photo;
   displayAdminView: boolean;
+  isOpen?: boolean;
+  openImage?: () => void;
 }
 
-const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
+const GalleryImage = ({
+  image,
+  displayAdminView,
+  isOpen,
+  openImage,
+}: Props): JSX.Element => {
   const theme = useMantineTheme();
   const { mutate } = useSWRConfig();
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
@@ -37,11 +45,17 @@ const GalleryImage = ({ image, displayAdminView }: Props): JSX.Element => {
   };
 
   return (
-    <Paper bg="none" radius="md" className={classes.card}>
+    <Paper
+      bg="none"
+      radius="md"
+      mb="lg"
+      className={cx(classes.card, isOpen ? classes.cardModal : "")}
+      onClick={openImage}
+    >
       <Image
         src={data.publicUrl}
         alt={image.caption ?? image.id}
-        className={classes.cardImage}
+        className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
         fill
         sizes="(max-width: 768px) 33vw"
         style={{ objectFit: "contain", zIndex: 0 }}

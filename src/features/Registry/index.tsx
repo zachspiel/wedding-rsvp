@@ -1,7 +1,8 @@
-import { Card, Text, Flex } from "@mantine/core";
+import { Card, Text, Flex, Anchor, Button } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import Image from "next/image";
 import classes from "./registry.module.css";
+import { IconExternalLink } from "@tabler/icons-react";
 
 const Registry = (): JSX.Element => {
   return (
@@ -18,11 +19,28 @@ const Registry = (): JSX.Element => {
           gift!
         </Text>
         <Text mb="sm">
-          We&apos;re lucky to already have a home full of everything we need. If you wish
-          to contribute beyond your attendance, we will be accepting contributions to our
-          honeymoon and first home fund at our reception following the ceremony.
+          For those of you who are stubborn, we will be accepting contributions to our
+          honeymoon fund at our reception following the ceremony.
+          <Anchor href="https://withjoy.com/sedona-and-zach/registry" target="_blank">
+            {" "}
+            We&apos;ve also put together a wish-list to help you out
+          </Anchor>
+          . Our dream honeymoon would be in St. Lucia. Anything you want to contribute is
+          greatly appreciated!
+        </Text>
+        <Text mb="sm">
+          Please note that if you would like to purchase a physical item, you will need to
+          ship it to yourself and bring it to the reception or reach out to Sedona and
+          Zach for their address.
         </Text>
         <Text>Thanks for visiting and we can&apos;t wait to see you on our big day!</Text>
+
+        <Anchor href="https://withjoy.com/sedona-and-zach/registry" target="_blank">
+          <Button className="primaryButton" rightSection={<IconExternalLink />} mt="md">
+            Open registry
+          </Button>
+        </Anchor>
+
         <Flex justify="center">
           <Image
             src="/assets/images/The-Spielbergers.webp"
