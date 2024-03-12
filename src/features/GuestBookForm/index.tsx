@@ -1,7 +1,7 @@
 "use client";
 
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, ButtonProps, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
@@ -12,9 +12,17 @@ interface Props {
   name?: string;
   email?: string;
   handleSubmit: (message: GuestMessage[]) => void;
+  customButtonLabel?: string;
+  handleSubmitWithoutMessage?: boolean;
 }
 
-const GuestBookForm = ({ name, email, handleSubmit }: Props): JSX.Element => {
+const GuestBookForm = ({
+  name,
+  email,
+  handleSubmit,
+  customButtonLabel,
+  handleSubmitWithoutMessage,
+}: Props): JSX.Element => {
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
     "guestMessages",
     []
@@ -37,16 +45,20 @@ const GuestBookForm = ({ name, email, handleSubmit }: Props): JSX.Element => {
   const saveMessage = async (
     newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
-    const guestMessage = await addMessageToGuestBook(newGuestMessage);
-    setLocalMessages([...localMessages, guestMessage[0].id]);
-
-    if (guestMessage.length === 0) {
-      showCustomFailureNotification(
-        "An error occurred while signing the guest book. Please try again later!"
-      );
+    if (!form.isValid() && handleSubmitWithoutMessage) {
+      handleSubmit([]);
     } else {
-      handleSubmit(guestMessage);
-      await mutate(GUESTBOOK_SWR_KEY);
+      const guestMessage = await addMessageToGuestBook(newGuestMessage);
+      setLocalMessages([...localMessages, guestMessage[0].id]);
+
+      if (guestMessage.length === 0) {
+        showCustomFailureNotification(
+          "An error occurred while signing the guest book. Please try again later!"
+        );
+      } else {
+        handleSubmit(guestMessage);
+        await mutate(GUESTBOOK_SWR_KEY);
+      }
     }
   };
 
@@ -86,9 +98,18 @@ const GuestBookForm = ({ name, email, handleSubmit }: Props): JSX.Element => {
         {...form.getInputProps("message")}
       />
 
-      <Button type="submit" size="md" mt="md" disabled={!form.isValid()}>
-        Sign guest book
-      </Button>
+      {customButtonLabel && (
+        <Button type="submit" mt="md">
+          {customButtonLabel}{" "}
+          {form.isValid() ? " & sign guest book" : " without signing guest book"}
+        </Button>
+      )}
+
+      {!customButtonLabel && (
+        <Button type="submit" size="md" mt="md" disabled={!form.isValid()}>
+          Sign guest book
+        </Button>
+      )}
     </form>
   );
 };

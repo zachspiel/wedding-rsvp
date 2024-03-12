@@ -65,6 +65,11 @@ const RSVP = (): JSX.Element => {
         transitionProps={{ transition: "slide-up", duration: 200 }}
         centered
         fullScreen={isMobile}
+        closeButtonProps={{
+          bg: "sage-green",
+          c: "white",
+          size: "lg",
+        }}
         size="calc(50vw - 3rem)"
       >
         {selectedGroup && <RsvpForm selectedGroup={selectedGroup} />}

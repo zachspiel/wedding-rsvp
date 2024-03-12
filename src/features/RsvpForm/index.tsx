@@ -10,7 +10,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Group, GuestMessage, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import UnknownGuestInput from "./components/UnknownGuestInput";
@@ -20,6 +20,7 @@ import { useState } from "react";
 import { addEntryToRsvpModifications, updateGroup } from "@spiel-wedding/hooks/guests";
 import GuestBookForm from "../GuestBookForm";
 import { useMediaQuery } from "@mantine/hooks";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 
 interface Props {
   selectedGroup: Group;
@@ -97,6 +98,10 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
     setCurrentStep((current) => (current > 0 ? current - 1 : current));
   };
 
+  const handleGuestbookFormSubmission = (newGuestMessage: GuestMessage[]) => {
+    handleSubmit();
+  };
+
   return (
     <>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
@@ -138,7 +143,9 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
             <GuestBookForm
               name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
               email={form.values.email}
-              handleSubmit={() => setShowMessageAdded(true)}
+              handleSubmit={handleGuestbookFormSubmission}
+              handleSubmitWithoutMessage
+              customButtonLabel="Save RSVP"
             />
           )}
           {showMessageAdded && (
@@ -162,15 +169,14 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         style={{ borderTop: "1px solid --var(--mantine-color-gray-3)" }}
       >
         {currentStep > 0 && (
-          <Button variant="default" onClick={prevStep}>
+          <Button variant="default" onClick={prevStep} leftSection={<IconChevronLeft />}>
             Back
           </Button>
         )}
 
-        {currentStep < TOTAL_STEPS - 1 && <Button onClick={nextStep}>Next step</Button>}
-        {currentStep === TOTAL_STEPS - 1 && (
-          <Button onClick={handleSubmit} disabled={!form.isValid()} color="teal.5">
-            Save RSVP
+        {currentStep < TOTAL_STEPS - 1 && (
+          <Button onClick={nextStep} rightSection={<IconChevronRight />}>
+            Next step
           </Button>
         )}
       </MGroup>
