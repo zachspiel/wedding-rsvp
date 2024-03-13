@@ -7,28 +7,31 @@ import {
   Paper,
   Transition,
   rem,
-  Button,
   Anchor,
+  ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
 import Logo from "./Logo";
 import { useMemo } from "react";
-import { supabase } from "@spiel-wedding/database/database";
 import { AdminViewToggle, MenuItem, links } from "@spiel-wedding/common";
 import cx from "clsx";
+import { createClient } from "@spiel-wedding/database/client";
+import { User } from "@supabase/supabase-js";
+import { IconLogout } from "@tabler/icons-react";
 import classes from "./navbar.module.css";
+import { showFailureNotification } from "../notifications/notifications";
+import { redirect } from "next/navigation";
 
-const HEADER_HEIGHT = rem(100);
+export const HEADER_HEIGHT = rem(100);
 
 interface Props {
-  showHome?: boolean;
+  user: User | null;
 }
 
-const Navbar = (props: Props): JSX.Element => {
-  const { isSignedIn } = useSignInStatus();
-
+const Navbar = ({ user }: Props): JSX.Element => {
+  const supabase = createClient();
   const [opened, { toggle, close }] = useDisclosure(false);
+
   const createMenuItem = (menuItem: MenuItem): JSX.Element => {
     return (
       <Anchor<"a">
@@ -49,16 +52,22 @@ const Navbar = (props: Props): JSX.Element => {
   const menuItems = useMemo(() => {
     const elements = links.map(createMenuItem);
 
-    if (isSignedIn) {
+    if (user) {
       elements.push(createMenuItem({ label: "Guest List", link: "/guestList" }));
     }
 
-    if (props.showHome) {
-      elements.unshift(createMenuItem({ label: "Home", link: "/" }));
-    }
-
     return elements;
-  }, [links, isSignedIn]);
+  }, [links, user]);
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut({ scope: "local" });
+
+    if (error) {
+      showFailureNotification();
+    } else {
+      redirect("/");
+    }
+  };
 
   return (
     <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
@@ -68,13 +77,10 @@ const Navbar = (props: Props): JSX.Element => {
         </Anchor>
         <Group gap="md" className={classes.navbarLinks}>
           {menuItems}
-          {isSignedIn && (
-            <Button
-              className={classes.highlightedLink}
-              onClick={async () => await supabase.auth.signOut({ scope: "local" })}
-            >
-              Sign out
-            </Button>
+          {user && (
+            <ActionIcon variant="subtle" onClick={signOut}>
+              <IconLogout />
+            </ActionIcon>
           )}
         </Group>
 
@@ -95,7 +101,7 @@ const Navbar = (props: Props): JSX.Element => {
         </Transition>
       </Container>
 
-      {isSignedIn && <AdminViewToggle />}
+      {user && <AdminViewToggle />}
     </header>
   );
 };

@@ -1,11 +1,12 @@
-import { ColorSchemeScript } from "@mantine/core";
+import { ColorSchemeScript, rem } from "@mantine/core";
 import { Providers } from "./Providers";
 import { Metadata } from "next";
 import { Playfair, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "@spiel-wedding/components/navbar";
 import { Footer } from "@spiel-wedding/components/footer";
-
+import { createClient } from "@spiel-wedding/database/server";
+import { AppShell, AppShellHeader, AppShellMain, AppShellFooter } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/carousel/styles.css";
@@ -48,7 +49,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
@@ -62,9 +68,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers poppins={poppins}>
-          <Navbar />
-          {children}
-          <Footer />
+          <AppShell header={{ height: rem(100) }}>
+            <AppShellHeader>
+              <Navbar user={user} />
+            </AppShellHeader>
+            <AppShellMain>{children}</AppShellMain>
+            <AppShellFooter pos="relative">
+              <Footer />
+            </AppShellFooter>
+          </AppShell>
         </Providers>
         <Analytics />
       </body>
