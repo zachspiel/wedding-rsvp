@@ -10,7 +10,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { Group, GuestMessage, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import UnknownGuestInput from "./components/UnknownGuestInput";
@@ -30,7 +30,6 @@ const TOTAL_STEPS = 3;
 
 const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [showMessageAdded, setShowMessageAdded] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
 
   const getInitialValues = () => {
@@ -98,10 +97,6 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
     setCurrentStep((current) => (current > 0 ? current - 1 : current));
   };
 
-  const handleGuestbookFormSubmission = (newGuestMessage: GuestMessage[]) => {
-    handleSubmit();
-  };
-
   return (
     <>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
@@ -139,20 +134,13 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
             Leave a note for Sedona and Zach. (Optional)
           </Title>
 
-          {!showMessageAdded && (
-            <GuestBookForm
-              name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
-              email={form.values.email}
-              handleSubmit={handleGuestbookFormSubmission}
-              handleSubmitWithoutMessage
-              customButtonLabel="Save RSVP"
-            />
-          )}
-          {showMessageAdded && (
-            <Alert variant="light" color="teal">
-              Successfully added message to guest book!
-            </Alert>
-          )}
+          <GuestBookForm
+            name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
+            email={form.values.email}
+            handleSubmit={handleSubmit}
+            handleSubmitWithoutMessage
+            customButtonLabel="Save RSVP"
+          />
         </Stepper.Step>
 
         <Stepper.Completed>

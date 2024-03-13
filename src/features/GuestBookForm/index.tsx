@@ -1,7 +1,7 @@
 "use client";
 
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import { Button, ButtonProps, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
@@ -74,14 +74,16 @@ const GuestBookForm = ({
           label="Name"
           placeholder="Your name"
           name="name"
-          required
+          required={!handleSubmitWithoutMessage}
+          description={handleSubmitWithoutMessage ? "Optional" : ""}
           {...form.getInputProps("name")}
         />
         <TextInput
           label="Email"
           placeholder="Your email"
           name="email"
-          required
+          required={!handleSubmitWithoutMessage}
+          description={handleSubmitWithoutMessage ? "Optional" : ""}
           {...form.getInputProps("email")}
         />
       </SimpleGrid>
@@ -92,7 +94,8 @@ const GuestBookForm = ({
         maxRows={10}
         minRows={5}
         autosize
-        required
+        required={!handleSubmitWithoutMessage}
+        description={handleSubmitWithoutMessage ? "Optional" : ""}
         name="message"
         mt="md"
         {...form.getInputProps("message")}
@@ -100,8 +103,7 @@ const GuestBookForm = ({
 
       {customButtonLabel && (
         <Button type="submit" mt="md">
-          {customButtonLabel}{" "}
-          {form.isValid() ? " & sign guest book" : " without signing guest book"}
+          {customButtonLabel}
         </Button>
       )}
 
