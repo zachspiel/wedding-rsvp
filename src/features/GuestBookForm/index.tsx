@@ -68,8 +68,6 @@ const GuestBookForm = ({
     }
   };
 
-  console.log(!handleSubmitWithoutMessage);
-
   return (
     <form
       onSubmit={form.onSubmit(() => {
