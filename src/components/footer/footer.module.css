@@ -1,5 +1,6 @@
 .footer {
   background-color: #717769;
+  position: "relative";
 
   border-top: rem(1) solid var(--mantine-color-gray-2);
 

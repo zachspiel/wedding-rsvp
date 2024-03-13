@@ -45,7 +45,11 @@ export const addImageCaption = async (imagePath: string): Promise<Photo | null> 
     imagePath: imagePath,
   };
 
-  const { data } = await supabase.from(TABLE).insert(newImage).select();
+  const { data, error } = await supabase.from(TABLE).insert(newImage).select();
+
+  if (error) {
+    return null;
+  }
 
   return data?.[0];
 };

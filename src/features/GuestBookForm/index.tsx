@@ -1,7 +1,7 @@
 "use client";
 
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
@@ -36,9 +36,15 @@ const GuestBookForm = ({
       isVisible: true,
     },
     validate: {
-      name: isNotEmpty("Please enter your name to sign the guest book."),
-      email: isEmail("Please enter a valid email."),
-      message: isNotEmpty("Please enter a message to sign the guest book."),
+      name: !handleSubmitWithoutMessage
+        ? isNotEmpty("Please enter your name to sign the guest book.")
+        : undefined,
+      email: !handleSubmitWithoutMessage
+        ? isEmail("Please enter a valid email.")
+        : undefined,
+      message: !handleSubmitWithoutMessage
+        ? isNotEmpty("Please enter a message to sign the guest book.")
+        : undefined,
     },
   });
 
@@ -62,6 +68,8 @@ const GuestBookForm = ({
     }
   };
 
+  console.log(!handleSubmitWithoutMessage);
+
   return (
     <form
       onSubmit={form.onSubmit(() => {
@@ -75,7 +83,6 @@ const GuestBookForm = ({
           placeholder="Your name"
           name="name"
           required={!handleSubmitWithoutMessage}
-          description={handleSubmitWithoutMessage ? "Optional" : ""}
           {...form.getInputProps("name")}
         />
         <TextInput
@@ -83,7 +90,6 @@ const GuestBookForm = ({
           placeholder="Your email"
           name="email"
           required={!handleSubmitWithoutMessage}
-          description={handleSubmitWithoutMessage ? "Optional" : ""}
           {...form.getInputProps("email")}
         />
       </SimpleGrid>
@@ -95,16 +101,17 @@ const GuestBookForm = ({
         minRows={5}
         autosize
         required={!handleSubmitWithoutMessage}
-        description={handleSubmitWithoutMessage ? "Optional" : ""}
         name="message"
         mt="md"
         {...form.getInputProps("message")}
       />
 
       {customButtonLabel && (
-        <Button type="submit" mt="md">
-          {customButtonLabel}
-        </Button>
+        <Group justify="end">
+          <Button type="submit" mt="md">
+            {customButtonLabel}
+          </Button>
+        </Group>
       )}
 
       {!customButtonLabel && (

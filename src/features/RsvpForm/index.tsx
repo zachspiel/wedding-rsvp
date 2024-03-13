@@ -152,7 +152,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       </Stepper>
 
       <MGroup
-        justify="right"
+        justify={currentStep === 0 ? "right" : "space-between"}
         mt="xl"
         style={{ borderTop: "1px solid --var(--mantine-color-gray-3)" }}
       >

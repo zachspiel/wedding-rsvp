@@ -1,32 +1,20 @@
 "use client";
 
-import { Container, Title, Paper, TextInput, PasswordInput, Button } from "@mantine/core";
-import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import {
-  showSuccessNotification,
-  showFailureNotification,
-} from "@spiel-wedding/components/notifications/notifications";
-import { supabase } from "@spiel-wedding/database/database";
-import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
+  Container,
+  Title,
+  Paper,
+  TextInput,
+  PasswordInput,
+  Button,
+  rem,
+} from "@mantine/core";
+import { useForm, isEmail, isNotEmpty } from "@mantine/form";
+import { LoginFormData } from "./types";
+import { login } from "./actions";
 
 const LoginForm = () => {
-  const router = useRouter();
-  const { isSignedIn } = useSignInStatus();
-
-  useEffect(() => {
-    if (isSignedIn) {
-      router.push("/");
-    }
-  }, []);
-
-  const form = useForm<LoginForm>({
+  const form = useForm<LoginFormData>({
     initialValues: {
       email: "",
       password: "",
@@ -37,23 +25,13 @@ const LoginForm = () => {
     },
   });
 
-  const handleSubmit = async ({ email, password }: LoginForm) => {
-    const { data } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (data.user) {
-      showSuccessNotification("You have successfully signed in.");
-      router.push("/");
-    } else {
-      showFailureNotification();
-    }
+  const handleSubmit = async (formData: LoginFormData) => {
+    await login(formData);
   };
 
   return (
     <>
-      <Container size={420} my={40}>
+      <Container size={420} pos="relative">
         <Title
           style={{
             fontFamily: `Greycliff CF, sans-serif`,

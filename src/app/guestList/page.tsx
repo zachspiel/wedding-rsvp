@@ -1,69 +1,54 @@
-"use client";
-
-import {
-  Alert,
-  Container,
-  Group,
-  Group as MGroup,
-  SimpleGrid,
-  Skeleton,
-} from "@mantine/core";
+import { Container, Group as MGroup, SimpleGrid, Skeleton } from "@mantine/core";
 import Summary from "@spiel-wedding/components/guestList/Summary";
 import { SectionTitle } from "@spiel-wedding/common";
-import useSWR from "swr";
 import { getGroups, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
 import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import AddGroupForm from "@spiel-wedding/features/AddGroupForm/AddGroupForm";
-import useSignInStatus from "@spiel-wedding/hooks/signInStatus";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+import { createClient } from "@spiel-wedding/database/server";
+import { User } from "@supabase/supabase-js";
+import { Group } from "@spiel-wedding/types/Guest";
 
-export default function GuestList() {
-  const { isSignedIn } = useSignInStatus();
+interface Props {
+  user: User | null;
+  groups: Group[];
+}
 
-  const {
-    data: groups,
-    error,
-    isLoading,
-  } = useSWR(() => (isSignedIn ? GROUP_SWR_KEY : null), getGroups);
+async function getGuestList() {
+  const supabase = createClient();
+  const { data } = await supabase.auth.getUser();
+  const result: Props = { user: data?.user, groups: [] };
 
-  const router = useRouter();
+  if (data?.user) {
+    const groups = await getGroups();
 
-  useEffect(() => {
-    if (isSignedIn !== undefined && !isSignedIn) {
-      router.push("/");
-    }
-  }, [isSignedIn]);
+    result["groups"] = groups;
+  }
+
+  return result;
+}
+
+export default async function GuestList() {
+  const { user, groups } = await getGuestList();
+  if (!user) {
+    redirect("/");
+  }
 
   return (
     <Container>
       <SimpleGrid cols={1} pb="xl">
-        {!isLoading && isSignedIn && (
-          <>
-            <MGroup justify="space-between">
-              <SectionTitle title="All Guests" hideFlowers />
-              <Group>
-                <DownloadGuestList groups={groups ?? []} />
-                <AddGroupForm />
-              </Group>
+        <>
+          <MGroup justify="space-between">
+            <SectionTitle title="All Guests" hideFlowers />
+            <MGroup>
+              <DownloadGuestList groups={groups ?? []} />
+              <AddGroupForm />
             </MGroup>
-            {error && <Alert color="red" title={error} />}
-            <Summary groups={groups ?? []} />
-            <GuestListTable groups={groups ?? []} />
-          </>
-        )}
-
-        {isSignedIn === undefined ||
-          (isLoading && (
-            <>
-              <Skeleton w="100%" h={25} />
-
-              <Skeleton w="100%" h={25} my="md" />
-
-              <Skeleton w="100%" h={25} />
-            </>
-          ))}
+          </MGroup>
+          <Summary groups={groups ?? []} />
+          <GuestListTable groups={groups ?? []} />
+        </>
       </SimpleGrid>
     </Container>
   );
