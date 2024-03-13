@@ -18,9 +18,9 @@ import cx from "clsx";
 import { createClient } from "@spiel-wedding/database/client";
 import { User } from "@supabase/supabase-js";
 import { IconLogout } from "@tabler/icons-react";
-import classes from "./navbar.module.css";
 import { showFailureNotification } from "../notifications/notifications";
 import { redirect } from "next/navigation";
+import classes from "./navbar.module.css";
 
 export const HEADER_HEIGHT = rem(100);
 
@@ -65,7 +65,7 @@ const Navbar = ({ user }: Props): JSX.Element => {
     if (error) {
       showFailureNotification();
     } else {
-      redirect("/");
+      redirect("/login");
     }
   };
 

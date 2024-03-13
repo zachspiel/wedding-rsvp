@@ -1,7 +1,6 @@
 "use client";
 
 import AdminViewProvider from "../context/AdminView";
-import SignInStatusProvider from "../context/SignInStatus";
 import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
@@ -36,9 +35,7 @@ export function Providers({
   return (
     <MantineProvider defaultColorScheme="light" theme={theme} forceColorScheme="light">
       <Notifications />
-      <SignInStatusProvider>
-        <AdminViewProvider>{children}</AdminViewProvider>
-      </SignInStatusProvider>
+      <AdminViewProvider>{children}</AdminViewProvider>
     </MantineProvider>
   );
 }
