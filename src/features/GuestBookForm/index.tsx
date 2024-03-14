@@ -51,7 +51,7 @@ const GuestBookForm = ({
   const saveMessage = async (
     newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
-    if (!form.isValid() && handleSubmitWithoutMessage) {
+    if (handleSubmitWithoutMessage && isAnyFieldEmpty(newGuestMessage)) {
       handleSubmit([]);
     } else {
       const guestMessage = await addMessageToGuestBook(newGuestMessage);
@@ -66,6 +66,11 @@ const GuestBookForm = ({
         await mutate(GUESTBOOK_SWR_KEY);
       }
     }
+  };
+
+  const isAnyFieldEmpty = (newMessage: Omit<GuestMessage, "id">) => {
+    const { name, message, email } = newMessage;
+    return [name, message, email].filter((item) => item.length === 0).length > 0;
   };
 
   return (

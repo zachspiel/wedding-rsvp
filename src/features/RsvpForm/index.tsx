@@ -17,7 +17,7 @@ import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
 import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
-import { addEntryToRsvpModifications, updateGroup } from "@spiel-wedding/hooks/guests";
+import { updateGroup } from "@spiel-wedding/hooks/guests";
 import GuestBookForm from "../GuestBookForm";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -72,7 +72,6 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
   };
 
   const handleSubmit = async () => {
-    await addEntryToRsvpModifications(selectedGroup.id);
     const updatedGroup = await updateGroup(form.getTransformedValues(), selectedGroup);
 
     if (updatedGroup === undefined) {
