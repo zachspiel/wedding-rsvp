@@ -16,7 +16,7 @@ import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
 import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
-import { addEntryToRsvpModifications, updateGroup } from "@spiel-wedding/hooks/guests";
+import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { sendMail } from "./action";
 
 interface Props {
@@ -89,8 +89,6 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
   const prevStep = (): void => {
     setCurrentStep((current) => (current > 0 ? current - 1 : current));
   };
-
-  console.log(form.errors);
 
   return (
     <>
