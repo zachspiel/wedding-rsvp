@@ -8,11 +8,11 @@ import {
   Group as MGroup,
   Stepper,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import UnknownGuestInput from "./components/UnknownGuestInput";
 import RsvpSelection from "./components/RsvpSelectionInput";
 import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
@@ -106,7 +106,21 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
               </MGroup>
               {guest.nameUnknown &&
                 form.values.guests[guestIndex].rsvp === RsvpResponse.ACCEPTED && (
-                  <UnknownGuestInput form={form} index={guestIndex} />
+                  <Flex>
+                    <TextInput
+                      label="First Name"
+                      placeholder="First Name"
+                      required
+                      mr="lg"
+                      {...form.getInputProps(`guests.${guestIndex}.firstName`)}
+                    />
+                    <TextInput
+                      label="Last Name"
+                      placeholder="Last Name"
+                      required
+                      {...form.getInputProps(`guests.${guestIndex}.lastName`)}
+                    />
+                  </Flex>
                 )}
               {guestIndex === form.values.guests.length - 1 && <Divider my="sm" />}
             </Flex>

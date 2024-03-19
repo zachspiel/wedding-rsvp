@@ -4,7 +4,7 @@ import { Anchor, em, Flex, Title } from "@mantine/core";
 import WeddingCountdown from "./components/Countdown";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { useMediaQuery } from "@mantine/hooks";
-import { GOOGLE_MAPS_URL } from "@spiel-wedding/common/constants";
+import { MAP_URL } from "@spiel-wedding/common/constants";
 import classes from "./styles.module.css";
 
 const WhenAndWhere = (): JSX.Element => {
@@ -25,7 +25,7 @@ const WhenAndWhere = (): JSX.Element => {
         </Title>
         <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
           <Anchor
-            href={GOOGLE_MAPS_URL}
+            href={MAP_URL}
             target="_blank"
             style={{ color: "inherit" }}
             fz="inherit"

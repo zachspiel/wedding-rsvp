@@ -1,28 +1,23 @@
 import { Html } from "@react-email/html";
-import { Preview, Text } from "@react-email/components";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
-import { Img } from "@react-email/img";
+import { Body, Head, Preview, Text } from "@react-email/components";
+import { Group } from "@spiel-wedding/types/Guest";
+import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
+
+const paragraph = {
+  fontSize: "18px",
+  lineHeight: "1.4",
+};
 
 const RsvpEmailTemplate = (group: Group) => {
   return (
     <Html lang="en">
-      {group.guests.map((guest) => {
-        const rsvpEmoji = guest.rsvp === RsvpResponse.ACCEPTED ? "✅" : "❌";
-
-        return (
-          <Text key={guest.id}>
-            {guest.firstName} {guest.lastName} - {guest.rsvp} {rsvpEmoji}
-          </Text>
-        );
-      })}
+      <Head />
 
       <Preview>{group.guests[0].firstName} has RSVPed</Preview>
-
-      <Img
-        src="https://www.zachandsedona.com/assets/images/The-Spielbergers.webp"
-        height={250}
-        width={250}
-      />
+      <Body>
+        <Text style={paragraph}>A copy of the RSVP can be found below:</Text>
+        <GuestTable guests={group.guests} />
+      </Body>
     </Html>
   );
 };
