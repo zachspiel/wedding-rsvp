@@ -8,6 +8,7 @@ import {
   Group as MGroup,
   Stepper,
   Text,
+  Title,
   TextInput,
 } from "@mantine/core";
 import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
@@ -18,13 +19,19 @@ import { showFailureNotification } from "@spiel-wedding/components/notifications
 import { useState } from "react";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { sendMail } from "./action";
+import GuestBookForm from "../GuestBookForm";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useMediaQuery } from "usehooks-ts";
 
 interface Props {
   selectedGroup: Group;
 }
 
+const TOTAL_STEPS = 3;
+
 const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
+  const isMobile = useMediaQuery("(max-width: 50em)");
 
   const getInitialValues = () => {
     const formattedGuests = selectedGroup.guests.map((guest) => {
@@ -83,7 +90,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       ) {
         return current;
       }
-      return current < 2 ? current + 1 : current;
+      return current < TOTAL_STEPS ? current + 1 : current;
     });
 
   const prevStep = (): void => {
@@ -92,7 +99,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
 
   return (
     <>
-      <Stepper active={currentStep}>
+      <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
           {form.values.guests.map((guest, guestIndex) => (
             <Flex direction="column" key={`${guest.id}-rsvp-form`}>
@@ -128,7 +135,26 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         </Stepper.Step>
 
         <Stepper.Step label="Contact Information">
-          <MailingAddressForm form={form} openTabsByDefault showEmailTooltip />
+          <MailingAddressForm
+            form={form}
+            openTabsByDefault
+            showEmailTooltip
+            emailRequired
+          />
+        </Stepper.Step>
+
+        <Stepper.Step label="Leave a note">
+          <Title order={4} fw="normal" ta="center">
+            Leave a note for Sedona and Zach. (Optional)
+          </Title>
+
+          <GuestBookForm
+            name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
+            email={form.values.email}
+            handleSubmit={handleSubmit}
+            handleSubmitWithoutMessage
+            customButtonLabel="Save RSVP"
+          />
         </Stepper.Step>
 
         <Stepper.Completed>
@@ -139,25 +165,20 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         </Stepper.Completed>
       </Stepper>
 
-      <MGroup justify="right" mt="xl">
+      <MGroup
+        justify={currentStep === 0 ? "right" : "space-between"}
+        mt="xl"
+        style={{ borderTop: "1px solid --var(--mantine-color-gray-3)" }}
+      >
         {currentStep > 0 && (
-          <Button variant="default" onClick={prevStep}>
+          <Button variant="default" onClick={prevStep} leftSection={<IconChevronLeft />}>
             Back
           </Button>
         )}
 
-        {currentStep === 0 && (
-          <Button onClick={nextStep} className="primaryButton">
+        {currentStep < TOTAL_STEPS - 1 && (
+          <Button onClick={nextStep} rightSection={<IconChevronRight />}>
             Next step
-          </Button>
-        )}
-        {currentStep === 1 && (
-          <Button
-            onClick={handleSubmit}
-            disabled={!form.isValid()}
-            className="primaryButton"
-          >
-            Save
           </Button>
         )}
       </MGroup>

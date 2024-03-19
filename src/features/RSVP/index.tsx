@@ -1,15 +1,24 @@
 "use client";
 
-import { Alert, Text } from "@mantine/core";
+import { Alert, Modal, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import RsvpForm from "@spiel-wedding/features/RsvpForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { IconInfoCircle } from "@tabler/icons-react";
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
+import { useMediaQuery } from "@mantine/hooks";
 
 const RSVP = (): JSX.Element => {
   const [selectedGroup, setSelectedGroup] = useState<Group>();
+  const [opened, setOpened] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 50em)");
+
+  useEffect(() => {
+    if (!opened && selectedGroup !== undefined) {
+      setSelectedGroup(undefined);
+    }
+  }, [opened]);
 
   return (
     <SectionContainer id="rsvp">
@@ -39,9 +48,32 @@ const RSVP = (): JSX.Element => {
         Please RSVP no later than September 26th 2024.
       </Alert>
 
-      <RsvpSearchbar selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
+      <RsvpSearchbar
+        selectedGroup={selectedGroup}
+        setSelectedGroup={(group) => {
+          setSelectedGroup(group);
 
-      {selectedGroup !== undefined && <RsvpForm selectedGroup={selectedGroup} />}
+          if (group) {
+            setOpened(true);
+          }
+        }}
+      />
+
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        transitionProps={{ transition: "slide-up", duration: 200 }}
+        centered
+        fullScreen={isMobile}
+        closeButtonProps={{
+          bg: "sage-green",
+          c: "white",
+          size: "lg",
+        }}
+        size="calc(50vw - 3rem)"
+      >
+        {selectedGroup && <RsvpForm selectedGroup={selectedGroup} />}
+      </Modal>
     </SectionContainer>
   );
 };

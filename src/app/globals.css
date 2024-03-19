@@ -8,14 +8,19 @@ html {
   scroll-behavior: smooth;
 }
 
-.primaryButton {
-  background-color: #717769;
+:root {
+  --highlight-color: hsl(86, 6.3%, 80%);
+}
 
-  &:hover {
-    opacity: 0.9;
-  }
+*::selection {
+  background-color: var(--highlight-color);
+}
 
-  &:disabled {
-    background-color: hsl(86, 6.3%, 80%);
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-NumberInput-input,
+.mantine-Select-input {
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 16px;
   }
 }

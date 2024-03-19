@@ -33,10 +33,18 @@ const UploadImages = (): JSX.Element => {
       quality: 0.6,
 
       success(result) {
-        uploadFileToGallery(result as File).then(async (newImage) => {
-          showSuccessNotification("Successfully uploaded image.");
-          await mutate(GALLERY_SWR_KEY);
-        });
+        uploadFileToGallery(result as File)
+          .then(async (newImage) => {
+            if (newImage) {
+              showSuccessNotification("Successfully uploaded image.");
+              await mutate(GALLERY_SWR_KEY);
+            } else {
+              showFailureNotification();
+            }
+          })
+          .catch(() => {
+            showFailureNotification();
+          });
       },
       error(err) {
         showFailureNotification();

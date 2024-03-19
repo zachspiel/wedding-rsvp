@@ -1,6 +1,6 @@
 {
   "name": "spiel-wedding",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "private": true,
   "license": "MIT",
   "author": {
@@ -14,12 +14,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/carousel": "^7.5.3",
-    "@mantine/core": "^7.5.3",
-    "@mantine/dropzone": "^7.5.3",
-    "@mantine/form": "^7.5.3",
-    "@mantine/hooks": "^7.5.3",
-    "@mantine/notifications": "^7.5.3",
+    "@mantine/carousel": "^7.6.1",
+    "@mantine/core": "^7.6.1",
+    "@mantine/dropzone": "^7.6.1",
+    "@mantine/form": "^7.6.1",
+    "@mantine/hooks": "^7.6.1",
+    "@mantine/modals": "^7.6.1",
+    "@mantine/notifications": "^7.6.2",
     "@react-email/components": "^0.0.15",
     "@react-email/html": "^0.0.7",
     "@react-email/img": "^0.0.7",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
+    "@types/imagemin": "^8.0.5",
     "@types/lodash.findlastindex": "^4.6.7",
     "@types/nodemailer": "^6.4.14",
     "@types/papaparse": "^5.3.14",

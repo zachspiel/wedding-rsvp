@@ -45,7 +45,11 @@ const Gallery = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer id="gallery" greenBackground flowerImages>
+    <SectionContainer
+      id="gallery"
+      greenBackground
+      flowerImages={(photos ?? []).length > 0}
+    >
       <SectionTitle title="Gallery" hideFlowers={(photos ?? []).length > 0} />
       {isAdminViewEnabled && <UploadImages />}
 
@@ -64,7 +68,7 @@ const Gallery = (): JSX.Element => {
         onClose={() => setOpenModal(false)}
         transitionProps={{ transition: "fade", duration: 200 }}
         centered
-        fullScreen={isMobile}
+        fullScreen
         size="calc(100vw - 3rem)"
         overlayProps={{
           backgroundOpacity: 0.55,
@@ -78,7 +82,7 @@ const Gallery = (): JSX.Element => {
         classNames={classes}
       >
         <Carousel
-          slideSize={{ base: "100%", sm: "50%", md: "33.333333%" }}
+          slideSize={{ base: "100%" }}
           slideGap={{ base: 0, sm: "md" }}
           loop
           withIndicators

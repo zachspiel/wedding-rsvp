@@ -13,8 +13,9 @@ const AdminViewToggle = (): JSX.Element => {
     <ActionIcon
       className={classes.toggleButton}
       variant="filled"
-      color="blue"
-      onClick={(): void => toggleIsAdminViewEnabled()}
+      bg="blue"
+      onClick={toggleIsAdminViewEnabled}
+      style={{ zIndex: 101 }}
     >
       {icon}
     </ActionIcon>

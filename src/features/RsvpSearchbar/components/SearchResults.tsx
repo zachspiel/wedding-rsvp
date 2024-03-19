@@ -26,7 +26,6 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
                 ))}
               </Flex>
               <Button
-                className="primaryButton"
                 onClick={(): void => {
                   setSelectedGroup(group);
                 }}
