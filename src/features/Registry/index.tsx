@@ -29,7 +29,7 @@ const Registry = (): JSX.Element => {
             {" "}
             We&apos;ve also put together a wish-list to help you out
           </Anchor>
-          . Our dream honeymoon would be in St. Lucia. Anything you want to contribute is
+          . Our dream honeymoon would be in Tahiti. Anything you want to contribute is
           greatly appreciated!
         </Text>
         <Text mb="sm">
