@@ -4,9 +4,8 @@ import { Anchor, em, Flex, Title } from "@mantine/core";
 import WeddingCountdown from "./components/Countdown";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
 import { useMediaQuery } from "@mantine/hooks";
+import { MAP_URL } from "@spiel-wedding/common/constants";
 import classes from "./styles.module.css";
-
-const GOOGLE_MAPS_URL = "https://goo.gl/maps/BtzfDmV1pqNAbrRE6";
 
 const WhenAndWhere = (): JSX.Element => {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
@@ -26,7 +25,7 @@ const WhenAndWhere = (): JSX.Element => {
         </Title>
         <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
           <Anchor
-            href={GOOGLE_MAPS_URL}
+            href={MAP_URL}
             target="_blank"
             style={{ color: "inherit" }}
             fz="inherit"
