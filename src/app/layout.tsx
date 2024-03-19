@@ -73,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Navbar user={user} />
             </AppShellHeader>
             <AppShellMain>{children}</AppShellMain>
-            <AppShellFooter pos="relative">
+            <AppShellFooter pos="relative" zIndex={10}>
               <Footer />
             </AppShellFooter>
           </AppShell>

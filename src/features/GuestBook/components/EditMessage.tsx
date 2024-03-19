@@ -10,7 +10,7 @@ import {
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { mutate } from "swr";
 import {
-  GALLERY_SWR_KEY,
+  GUESTBOOK_SWR_KEY,
   updateGuestBookMessage,
 } from "@spiel-wedding/hooks/guestbook";
 
@@ -31,15 +31,15 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
   const updateMessage = async (updatedEntry: GuestMessage) => {
     const guestMessage = await updateGuestBookMessage(
       updatedEntry.id,
-      updatedEntry.message,
+      updatedEntry.message
     );
 
     if (guestMessage.length > 0) {
       showSuccessNotification("Successfully updated message in guest book!");
-      await mutate(GALLERY_SWR_KEY);
+      await mutate(GUESTBOOK_SWR_KEY);
     } else {
       showCustomFailureNotification(
-        "An error occurred while updating the message. Please try again later.",
+        "An error occurred while updating the message. Please try again later."
       );
     }
 
@@ -61,7 +61,12 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
       />
 
       <Group justify="right" mt="md">
-        <Button size="md" onClick={(): void => closeEditor()} variant="subtle">
+        <Button
+          size="md"
+          onClick={(): void => closeEditor()}
+          variant="subtle"
+          color="gray"
+        >
           Cancel
         </Button>
         <Button type="submit" size="md">

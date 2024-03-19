@@ -7,12 +7,14 @@ interface Props {
   form: UseFormReturnType<Group>;
   openTabsByDefault?: boolean;
   showEmailTooltip?: boolean;
+  emailRequired?: boolean;
 }
 
 const MailingAddressForm = ({
   form,
   openTabsByDefault,
   showEmailTooltip,
+  emailRequired,
 }: Props): JSX.Element => {
   const openAllTabs = openTabsByDefault ?? false;
   const defaultValue = openAllTabs ? ["mailing", "contact"] : ["mailing"];
@@ -64,7 +66,12 @@ const MailingAddressForm = ({
         <Accordion.Panel>
           <Grid>
             <Grid.Col span={{ base: 12, md: 6 }}>
-              <TextInput label="Email" name="email" {...form.getInputProps("email")} />
+              <TextInput
+                label="Email"
+                name="email"
+                {...form.getInputProps("email")}
+                withAsterisk={emailRequired}
+              />
             </Grid.Col>
           </Grid>
 

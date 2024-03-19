@@ -21,11 +21,15 @@ const Registry = (): JSX.Element => {
         <Text mb="sm">
           For those of you who are stubborn, we will be accepting contributions to our
           honeymoon fund at our reception following the ceremony.
-          <Anchor href="https://withjoy.com/sedona-and-zach/registry" target="_blank">
+          <Anchor
+            href="https://withjoy.com/sedona-and-zach/registry"
+            target="_blank"
+            c="blue"
+          >
             {" "}
             We&apos;ve also put together a wish-list to help you out
           </Anchor>
-          . Our dream honeymoon would be in St. Lucia. Anything you want to contribute is
+          . Our dream honeymoon would be in Tahiti. Anything you want to contribute is
           greatly appreciated!
         </Text>
         <Text mb="sm">

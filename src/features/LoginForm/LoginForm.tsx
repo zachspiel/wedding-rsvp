@@ -7,7 +7,6 @@ import {
   TextInput,
   PasswordInput,
   Button,
-  rem,
 } from "@mantine/core";
 import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import { LoginFormData } from "./types";

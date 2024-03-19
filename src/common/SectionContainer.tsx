@@ -23,9 +23,8 @@ const SectionContainer = ({
       }}
       fluid
       pos="relative"
-      id={id}
     >
-      <Container style={{ padding: 0 }}>
+      <Container style={{ padding: 0 }} id={id}>
         {flowerImages && (
           <Image
             src="/assets/images/container-flower.png"

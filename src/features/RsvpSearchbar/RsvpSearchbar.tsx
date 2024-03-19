@@ -82,7 +82,7 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
             {...form.getInputProps("lastName")}
           />
 
-          <Button type="submit" disabled={!form.isValid()} className="primaryButton">
+          <Button type="submit" disabled={!form.isValid()}>
             Search
           </Button>
         </MGroup>
@@ -105,7 +105,13 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
       )}
 
       {selectedGroup === undefined && (data ?? []).length > 0 && (
-        <Text>Select your party below or try searching again.</Text>
+        <>
+          <Text>Select your party below or try searching again.</Text>
+          <Text>
+            If none of these are you, please reach out to Sedona and Zach to see exactly
+            how they entered your details.
+          </Text>
+        </>
       )}
 
       {!selectedGroup && (

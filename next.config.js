@@ -6,6 +6,10 @@ module.exports = {
         protocol: "https",
         hostname: "qaobgjglyovmcaiiagyx.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "www.zachandsedona.com",
+      },
     ],
   },
 };

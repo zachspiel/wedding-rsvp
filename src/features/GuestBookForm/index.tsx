@@ -1,32 +1,82 @@
 "use client";
 
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import { Button, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
+import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
+import { useLocalStorage } from "usehooks-ts";
+import { mutate } from "swr";
 
 interface Props {
-  handleSubmit: (guestMessage: Omit<GuestMessage, "id">) => void;
+  name?: string;
+  email?: string;
+  handleSubmit: (message: GuestMessage[]) => void;
+  customButtonLabel?: string;
+  handleSubmitWithoutMessage?: boolean;
 }
 
-const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
+const GuestBookForm = ({
+  name,
+  email,
+  handleSubmit,
+  customButtonLabel,
+  handleSubmitWithoutMessage,
+}: Props): JSX.Element => {
+  const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
+    "guestMessages",
+    []
+  );
+
   const form = useForm({
     initialValues: {
-      name: "",
-      email: "",
+      name: name ?? "",
+      email: email ?? "",
       message: "",
       isVisible: true,
     },
     validate: {
-      name: isNotEmpty("Please enter your name to sign the guest book."),
-      email: isEmail("Please enter a valid email."),
-      message: isNotEmpty("Please enter a message to sign the guest book."),
+      name: !handleSubmitWithoutMessage
+        ? isNotEmpty("Please enter your name to sign the guest book.")
+        : undefined,
+      email: !handleSubmitWithoutMessage
+        ? isEmail("Please enter a valid email.")
+        : undefined,
+      message: !handleSubmitWithoutMessage
+        ? isNotEmpty("Please enter a message to sign the guest book.")
+        : undefined,
     },
   });
+
+  const saveMessage = async (
+    newGuestMessage: Omit<GuestMessage, "id">
+  ): Promise<void> => {
+    if (handleSubmitWithoutMessage && isAnyFieldEmpty(newGuestMessage)) {
+      handleSubmit([]);
+    } else {
+      const guestMessage = await addMessageToGuestBook(newGuestMessage);
+      setLocalMessages([...localMessages, guestMessage[0].id]);
+
+      if (guestMessage.length === 0) {
+        showCustomFailureNotification(
+          "An error occurred while signing the guest book. Please try again later!"
+        );
+      } else {
+        handleSubmit(guestMessage);
+        await mutate(GUESTBOOK_SWR_KEY);
+      }
+    }
+  };
+
+  const isAnyFieldEmpty = (newMessage: Omit<GuestMessage, "id">) => {
+    const { name, message, email } = newMessage;
+    return [name, message, email].filter((item) => item.length === 0).length > 0;
+  };
 
   return (
     <form
       onSubmit={form.onSubmit(() => {
-        handleSubmit(form.values);
+        saveMessage(form.values);
         form.reset();
       })}
     >
@@ -35,14 +85,14 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
           label="Name"
           placeholder="Your name"
           name="name"
-          required
+          required={!handleSubmitWithoutMessage}
           {...form.getInputProps("name")}
         />
         <TextInput
           label="Email"
           placeholder="Your email"
           name="email"
-          required
+          required={!handleSubmitWithoutMessage}
           {...form.getInputProps("email")}
         />
       </SimpleGrid>
@@ -53,15 +103,25 @@ const GuestBookForm = ({ handleSubmit }: Props): JSX.Element => {
         maxRows={10}
         minRows={5}
         autosize
-        required
+        required={!handleSubmitWithoutMessage}
         name="message"
         mt="md"
         {...form.getInputProps("message")}
       />
 
-      <Button type="submit" size="md" mt="md" className="primaryButton">
-        Sign guest book
-      </Button>
+      {customButtonLabel && (
+        <Group justify="end">
+          <Button type="submit" mt="md">
+            {customButtonLabel}
+          </Button>
+        </Group>
+      )}
+
+      {!customButtonLabel && (
+        <Button type="submit" size="md" mt="md" disabled={!form.isValid()}>
+          Sign guest book
+        </Button>
+      )}
     </form>
   );
 };
