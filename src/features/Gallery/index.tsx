@@ -66,7 +66,7 @@ const Gallery = (): JSX.Element => {
       <Modal
         opened={openModal}
         onClose={() => setOpenModal(false)}
-        transitionProps={{ transition: "fade", duration: 200 }}
+        transitionProps={{ transition: "slide-up", duration: 200 }}
         centered
         fullScreen
         size="calc(100vw - 3rem)"
