@@ -59,6 +59,8 @@ const Gallery = (): JSX.Element => {
         loop
         withIndicators
         classNames={classes}
+        previousControlProps={{ "aria-label": "Previous Image" }}
+        nextControlProps={{ "aria-label": "Next Image" }}
       >
         {createSlides(photos, true)}
       </Carousel>

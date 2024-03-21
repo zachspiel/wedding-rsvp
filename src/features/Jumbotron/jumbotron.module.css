@@ -1,28 +1,14 @@
 .wrapper {
   position: relative;
-  background-image: url("/assets/images/engagement-photo.webp");
-  background-position: center;
   height: 100vh;
-
-  @media (min-width: $mantine-breakpoint-xl) {
-    background-attachment: fixed;
-  }
-
-  @media (min-width: $mantine-breakpoint-lg) {
-    background-attachment: fixed;
-  }
-
-  @media (min-width: $mantine-breakpoint-md) {
-    padding-bottom: 100px;
-    background-size: cover;
-  }
-
-  @media (max-width: $mantine-breakpoint-md) {
-    padding-bottom: 20px;
-    background-size: cover;
-  }
+  clip-path: inset(0 0 0 0);
+  margin-top: 0;
 }
 
 .inner {
-  position: relative;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  left: 0;
+  top: 0;
 }
