@@ -20,7 +20,7 @@ const BurgerMenu = ({ user }: Props): JSX.Element => {
         onClick={toggle}
         className={classes.burger}
         size="sm"
-        name="Navbar menu button"
+        aria-label="Navbar menu button"
       />
       <Transition transition="pop-top-right" duration={200} mounted={opened}>
         {(styles): JSX.Element => (
