@@ -6,7 +6,6 @@ const Logo = (): JSX.Element => {
       src="/assets/images/The-Spielbergers-Wedding-Logo-Variant.webp"
       width={100}
       height={90}
-      priority
       alt="The Spielbergers Wedding Logo"
     />
   );

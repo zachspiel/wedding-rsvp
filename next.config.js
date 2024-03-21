@@ -1,4 +1,9 @@
-module.exports = {
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: false,
   images: {
     remotePatterns: [
@@ -6,10 +11,11 @@ module.exports = {
         protocol: "https",
         hostname: "qaobgjglyovmcaiiagyx.supabase.co",
       },
-      {
-        protocol: "https",
-        hostname: "www.zachandsedona.com",
-      },
     ],
   },
+  experimental: {
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks", "@supabase/supabase-js"],
+  },
 };
+
+module.exports = withBundleAnalyzer(nextConfig);
