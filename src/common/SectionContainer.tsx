@@ -1,6 +1,4 @@
-"use client";
-
-import { Container, SimpleGrid, Transition } from "@mantine/core";
+import { Container, SimpleGrid } from "@mantine/core";
 import classes from "./common.module.css";
 import Image from "next/image";
 import cx from "clsx";

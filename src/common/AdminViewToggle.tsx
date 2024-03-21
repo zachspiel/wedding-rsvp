@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { ActionIcon } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
