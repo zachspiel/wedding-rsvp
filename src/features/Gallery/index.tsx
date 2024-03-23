@@ -21,7 +21,11 @@ const Gallery = (): JSX.Element => {
   const [openModal, setOpenModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
 
-  const createSlides = (images?: Photo[], updateOrderedPhotos?: boolean) => {
+  const createSlides = (
+    objectFit: "cover" | "contain",
+    images?: Photo[],
+    updateOrderedPhotos?: boolean
+  ) => {
     return images
       ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
       .map((photo) => (
@@ -30,6 +34,7 @@ const Gallery = (): JSX.Element => {
             image={photo}
             displayAdminView={isAdminViewEnabled}
             isOpen={!updateOrderedPhotos ? openModal : false}
+            objectFit={objectFit}
             openImage={() => {
               if (updateOrderedPhotos) {
                 const newOrderedPhotos = images.filter((item) => item.id !== photo.id);
@@ -54,7 +59,7 @@ const Gallery = (): JSX.Element => {
       {isAdminViewEnabled && <UploadImages />}
 
       <Carousel
-        slideSize={{ base: "100%", sm: "50%" }}
+        slideSize={{ base: "100%", sm: "60%" }}
         slideGap="md"
         loop
         withIndicators
@@ -62,7 +67,7 @@ const Gallery = (): JSX.Element => {
         previousControlProps={{ "aria-label": "Previous Image" }}
         nextControlProps={{ "aria-label": "Next Image" }}
       >
-        {createSlides(photos, true)}
+        {createSlides("cover", photos, true)}
       </Carousel>
 
       <Modal
@@ -90,7 +95,7 @@ const Gallery = (): JSX.Element => {
           withIndicators
           classNames={classes}
         >
-          {createSlides(orderedPhotos)}
+          {createSlides("contain", orderedPhotos)}
         </Carousel>
       </Modal>
     </SectionContainer>

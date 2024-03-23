@@ -10,19 +10,27 @@
   }
 }
 
-.control,
 .indicator {
+  background-color: #8e9386;
+}
+
+.control {
   background-color: var(--mantine-color-white);
 }
 
 .card {
-  height: 480px;
+  height: 620px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
   transition: all 0.1s ease-in-out;
+  overflow: hidden;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 500px;
+  }
 }
 
 .cardModal {
