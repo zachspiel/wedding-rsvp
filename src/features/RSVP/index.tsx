@@ -21,8 +21,8 @@ const RSVP = (): JSX.Element => {
   }, [opened]);
 
   return (
-    <SectionContainer id="rsvp">
-      <SectionTitle title="RSVP" />
+    <SectionContainer>
+      <SectionTitle title="RSVP" id="rsvp" />
       <Text>
         Please enter the first and last name of one member of your party below. If
         you&apos;re responding for you and a guest (or your family), you&apos;ll be able

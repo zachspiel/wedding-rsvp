@@ -5,13 +5,8 @@
   z-index: 1001;
 }
 
-.sectionContainerInner {
-  padding-top: 3rem;
-  width: 50%;
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    width: 100%;
-  }
+.sectionTitleContainer {
+  scroll-margin-top: 110px;
 }
 
 .sectionTitle {
