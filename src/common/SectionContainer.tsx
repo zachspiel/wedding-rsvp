@@ -20,11 +20,20 @@ const SectionContainer = ({
     <Container
       style={{
         backgroundColor: greenBackground ? "hsl(86, 6.3%, 80%)" : "",
+        justifyContent: "center",
       }}
       fluid
       pos="relative"
+      id={id}
+      display="flex"
     >
-      <Container style={{ padding: 0 }} id={id}>
+      <SimpleGrid
+        cols={1}
+        style={{
+          paddingBottom: greenBackground ? "1rem" : "5rem",
+        }}
+        className={classes.sectionContainerInner}
+      >
         {flowerImages && (
           <Image
             src="/assets/images/container-flower.png"
@@ -35,15 +44,7 @@ const SectionContainer = ({
           />
         )}
 
-        <SimpleGrid
-          cols={1}
-          style={{
-            paddingTop: "3rem",
-            paddingBottom: greenBackground ? "1rem" : "5rem",
-          }}
-        >
-          {children}
-        </SimpleGrid>
+        {children}
 
         {flowerImages && (
           <Image
@@ -54,7 +55,7 @@ const SectionContainer = ({
             className={cx(classes.flowerImage, classes.flowerImageRight)}
           />
         )}
-      </Container>
+      </SimpleGrid>
     </Container>
   );
 };

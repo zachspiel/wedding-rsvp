@@ -7,7 +7,7 @@ import {
   showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { IconTrash } from "@tabler/icons-react";
-import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { mutate } from "swr";
 import {
   GUESTBOOK_SWR_KEY,
@@ -16,7 +16,7 @@ import {
 import { modals } from "@mantine/modals";
 
 interface Props {
-  message: GuestMessage;
+  message: PublicGuestMessage;
 }
 
 const DeleteMessageButton = ({ message }: Props): JSX.Element => {
@@ -36,6 +36,7 @@ const DeleteMessageButton = ({ message }: Props): JSX.Element => {
   const openModal = () => {
     modals.openConfirmModal({
       title: "Delete Message",
+      centered: true,
       children: (
         <Text>This will permanently delete this message. Do you wish to continue?</Text>
       ),

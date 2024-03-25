@@ -5,6 +5,15 @@
   z-index: 1001;
 }
 
+.sectionContainerInner {
+  padding-top: 3rem;
+  width: 50%;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    width: 100%;
+  }
+}
+
 .sectionTitle {
   font-family: var(--font-playfair);
   margin: 0px 0px 1rem 0x;

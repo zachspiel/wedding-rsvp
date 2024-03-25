@@ -21,9 +21,7 @@ async function getGuestList() {
   const result: Props = { user: data?.user, groups: [] };
 
   if (data?.user) {
-    const groups = await getGroups();
-
-    result["groups"] = groups;
+    result["groups"] = await getGroups();
   }
 
   return result;
