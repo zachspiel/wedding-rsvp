@@ -7,7 +7,7 @@ import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { mutate } from "swr";
 import {
   GUESTBOOK_SWR_KEY,
@@ -15,7 +15,7 @@ import {
 } from "@spiel-wedding/hooks/guestbook";
 
 interface Props {
-  message: GuestMessage;
+  message: PublicGuestMessage;
   closeEditor: () => void;
 }
 
@@ -28,7 +28,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
     },
   });
 
-  const updateMessage = async (updatedEntry: GuestMessage) => {
+  const updateMessage = async (updatedEntry: PublicGuestMessage) => {
     const guestMessage = await updateGuestBookMessage(
       updatedEntry.id,
       updatedEntry.message

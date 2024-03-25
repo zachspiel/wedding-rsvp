@@ -3,8 +3,12 @@ import { supabase } from "@spiel-wedding/database/database";
 
 export const GUESTBOOK_SWR_KEY = "guestbook";
 const TABLE = "guestbook";
-export const getGuestMessages = async (): Promise<GuestMessage[]> => {
-  const { data } = await supabase.from(TABLE).select().eq("isVisible", "true");
+
+export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]> => {
+  const { data } = await supabase
+    .from(TABLE)
+    .select("id,name,message,isVisible,createdAt,editedAt")
+    .eq("isVisible", "true");
 
   return data ?? [];
 };

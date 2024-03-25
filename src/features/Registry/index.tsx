@@ -6,8 +6,8 @@ import { IconExternalLink } from "@tabler/icons-react";
 
 const Registry = (): JSX.Element => {
   return (
-    <SectionContainer id="registry">
-      <SectionTitle title="Registry" />
+    <SectionContainer>
+      <SectionTitle title="Registry" id="registry" />
       <Card
         padding="lg"
         mt="xl"

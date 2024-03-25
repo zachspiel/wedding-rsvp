@@ -5,7 +5,7 @@ import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 import { useEffect } from "react";
-import { logBugReportLink } from "@spiel-wedding/components/easterEggs";
+import { displayEasterEggs } from "@spiel-wedding/components/easterEggs";
 import { ModalsProvider } from "@mantine/modals";
 
 export function Providers({
@@ -16,7 +16,7 @@ export function Providers({
   poppins: NextFontWithVariable;
 }) {
   useEffect(() => {
-    logBugReportLink();
+    displayEasterEggs();
   }, []);
 
   const theme = createTheme({
@@ -51,7 +51,7 @@ export function Providers({
   return (
     <MantineProvider defaultColorScheme="light" theme={theme} forceColorScheme="light">
       <ModalsProvider>
-          <AdminViewProvider>{children}</AdminViewProvider>
+        <AdminViewProvider>{children}</AdminViewProvider>
       </ModalsProvider>
       <Notifications />
     </MantineProvider>

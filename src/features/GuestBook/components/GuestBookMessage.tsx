@@ -6,10 +6,10 @@ import { IconPencil } from "@tabler/icons-react";
 import EditMessage from "./EditMessage";
 import DeleteMessageButton from "./DeleteMessageButton";
 import classes from "../guestbook.module.css";
-import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 
 interface Props {
-  message: GuestMessage;
+  message: PublicGuestMessage;
   localMessages: string[];
 }
 

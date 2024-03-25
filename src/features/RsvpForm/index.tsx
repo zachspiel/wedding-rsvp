@@ -21,7 +21,7 @@ import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { sendMail } from "./action";
 import GuestBookForm from "../GuestBookForm";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { useMediaQuery } from "usehooks-ts";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface Props {
   selectedGroup: Group;

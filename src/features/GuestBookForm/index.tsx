@@ -5,8 +5,8 @@ import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { useLocalStorage } from "usehooks-ts";
 import { mutate } from "swr";
+import { useLocalStorage } from "@mantine/hooks";
 
 interface Props {
   name?: string;
@@ -23,10 +23,10 @@ const GuestBookForm = ({
   customButtonLabel,
   handleSubmitWithoutMessage,
 }: Props): JSX.Element => {
-  const [localMessages, setLocalMessages] = useLocalStorage<string[]>(
-    "guestMessages",
-    []
-  );
+  const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
+    key: "guestMessages",
+    defaultValue: [],
+  });
 
   const form = useForm({
     initialValues: {
@@ -35,17 +35,13 @@ const GuestBookForm = ({
       message: "",
       isVisible: true,
     },
-    validate: {
-      name: !handleSubmitWithoutMessage
-        ? isNotEmpty("Please enter your name to sign the guest book.")
-        : undefined,
-      email: !handleSubmitWithoutMessage
-        ? isEmail("Please enter a valid email.")
-        : undefined,
-      message: !handleSubmitWithoutMessage
-        ? isNotEmpty("Please enter a message to sign the guest book.")
-        : undefined,
-    },
+    validate: !handleSubmitWithoutMessage
+      ? {
+          name: isNotEmpty("Please enter your name to sign the guest book."),
+          email: isEmail("Please enter a valid email."),
+          message: isNotEmpty("Please enter a message to sign the guest book."),
+        }
+      : undefined,
   });
 
   const saveMessage = async (
