@@ -7,11 +7,21 @@ import cx from "clsx";
 interface Props {
   title: string;
   hideFlowers?: boolean;
+  id?: string;
 }
 
-const SectionTitle = ({ title, hideFlowers }: Props): JSX.Element => {
+const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
   return (
-    <Flex justify="center" direction="column" w="100%" align="center" mb="xl">
+    <Flex
+      justify="center"
+      direction="column"
+      w="100%"
+      align="center"
+      mb="xl"
+      style={{ marginTop: "3rem" }}
+      className={classes.sectionTitleContainer}
+      id={id}
+    >
       <Image
         src="/assets/images/flower-divider-top.png"
         alt="Flower top"

@@ -13,7 +13,7 @@ const Jumbotron = (): JSX.Element => {
           placeholder="blur"
           quality={100}
           fill
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: "cover", transform: "translate3d(0, 0, 0)" }}
         />
       </div>
     </div>

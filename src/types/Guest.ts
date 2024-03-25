@@ -69,3 +69,5 @@ export interface GuestMessage {
   createdAt?: string;
   editedAt?: string;
 }
+
+export type PublicGuestMessage = Omit<GuestMessage, "email">;

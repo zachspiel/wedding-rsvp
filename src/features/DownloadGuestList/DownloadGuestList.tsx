@@ -35,8 +35,7 @@ const DownloadGuestList = ({ groups }: Props) => {
           if (key === "guests" && group.guests.length > 0) {
             group.guests.forEach((guest, index) => {
               const { firstName, lastName, nameUnknown } = guest;
-              const name = nameUnknown ? "Unknown Guest" : `${firstName} ${lastName}`;
-              formattedRow[`Guest ${index + 1}`] = name;
+              formattedRow[`Guest ${index + 1}`] = nameUnknown ? "Unknown Guest" : `${firstName} ${lastName}`;
             });
           } else {
             formattedRow[column] = group[key] as string;

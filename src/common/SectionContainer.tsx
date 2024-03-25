@@ -7,14 +7,12 @@ interface Props {
   children: React.ReactNode;
   greenBackground?: boolean;
   flowerImages?: boolean;
-  id?: string;
 }
 
 const SectionContainer = ({
   children,
   greenBackground,
   flowerImages,
-  id,
 }: Props): JSX.Element => {
   return (
     <Container
@@ -24,7 +22,7 @@ const SectionContainer = ({
       fluid
       pos="relative"
     >
-      <Container style={{ padding: 0 }} id={id}>
+      <Container style={{ padding: 0 }}>
         {flowerImages && (
           <Image
             src="/assets/images/container-flower.png"
@@ -38,7 +36,6 @@ const SectionContainer = ({
         <SimpleGrid
           cols={1}
           style={{
-            paddingTop: "3rem",
             paddingBottom: greenBackground ? "1rem" : "5rem",
           }}
         >

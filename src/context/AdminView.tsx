@@ -2,11 +2,14 @@
 
 import { createContext, useState } from "react";
 import { AdminContextType } from "@spiel-wedding/types/AdminContextType";
-import { FcProps } from "@spiel-wedding/types/fcProps";
 
 export const AdminViewContext = createContext<AdminContextType | undefined>(undefined);
 
-const AdminViewProvider = (props: FcProps): JSX.Element => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const AdminViewProvider = ({ children }: Props): JSX.Element => {
   const [isAdminViewEnabled, setIsAdminViewEnabled] = useState(false);
 
   const toggleIsAdminViewEnabled = (): void => {
@@ -15,7 +18,7 @@ const AdminViewProvider = (props: FcProps): JSX.Element => {
 
   return (
     <AdminViewContext.Provider value={{ isAdminViewEnabled, toggleIsAdminViewEnabled }}>
-      {props.children}
+      {children}
     </AdminViewContext.Provider>
   );
 };

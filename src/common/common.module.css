@@ -5,6 +5,10 @@
   z-index: 1001;
 }
 
+.sectionTitleContainer {
+  scroll-margin-top: 110px;
+}
+
 .sectionTitle {
   font-family: var(--font-playfair);
   margin: 0px 0px 1rem 0x;
