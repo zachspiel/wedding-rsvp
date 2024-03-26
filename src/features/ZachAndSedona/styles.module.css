@@ -11,7 +11,7 @@
   justify-content: center;
 }
 
-.flowerContainer::before {
+.flowerContainerLeft {
   background-image: url("/assets/images/right-flower.webp");
   content: " ";
   background-size: contain;
@@ -34,7 +34,7 @@
   }
 }
 
-.flowerContainer::after {
+.flowerContainerRight {
   background-image: url("/assets/images/left-flower.webp");
   content: " ";
   background-size: contain;
