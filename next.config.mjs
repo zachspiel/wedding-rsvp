@@ -1,6 +1,7 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
+// @ts-check
+import withPlaiceholder from "@plaiceholder/next";
+
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -18,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+export default withPlaiceholder(nextConfig);

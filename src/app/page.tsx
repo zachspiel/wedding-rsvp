@@ -5,7 +5,7 @@ import Registry from "@spiel-wedding/features/Registry";
 import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import ZachAndSedona from "@spiel-wedding/features/ZachAndSedona";
 import RSVP from "@spiel-wedding/features/RSVP";
-
+import FAQ from "@spiel-wedding/features/FAQ";
 
 export default function Home() {
   return (
@@ -17,6 +17,7 @@ export default function Home() {
       <GuestBook />
       <Registry />
       <Gallery />
+      <FAQ />
     </main>
   );
 }

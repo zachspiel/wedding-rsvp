@@ -9,5 +9,6 @@ export const links: MenuItem[] = [
   { label: "Guest Book", link: "#guestBook" },
   { label: "Registry", link: "#registry" },
   { label: "Gallery", link: "#gallery" },
+  { label: "FAQ", link: "#faq" },
   { label: "RSVP", link: "#rsvp" },
 ];
