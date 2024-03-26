@@ -7,6 +7,7 @@ import EditMessage from "./EditMessage";
 import DeleteMessageButton from "./DeleteMessageButton";
 import classes from "../guestbook.module.css";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
+import { motion } from "framer-motion";
 
 interface Props {
   message: PublicGuestMessage;
@@ -18,37 +19,43 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <Card shadow="sm" p="lg" radius="md" withBorder>
-      {!isEditing && (
-        <Group justify="space-between" mt="md" mb="xs">
-          <span className={classes.content}>{`"${message.message}"`}</span>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1, transition: { ease: "easeInOut", duration: 0.7 } }}
+      viewport={{ once: true }}
+    >
+      <Card shadow="sm" p="lg" radius="md" withBorder>
+        {!isEditing && (
+          <Group justify="space-between" mt="md" mb="xs">
+            <span className={classes.content}>{`"${message.message}"`}</span>
 
-          {isEditable && (
+            {isEditable && (
+              <Flex>
+                <ActionIcon onClick={(): void => setIsEditing(!isEditing)} mr="md">
+                  <IconPencil size={20} />
+                </ActionIcon>
+
+                <DeleteMessageButton message={message} />
+              </Flex>
+            )}
+          </Group>
+        )}
+
+        {isEditing && (
+          <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
+        )}
+
+        <Group>
+          <div>
             <Flex>
-              <ActionIcon onClick={(): void => setIsEditing(!isEditing)} mr="md">
-                <IconPencil size={20} />
-              </ActionIcon>
-
-              <DeleteMessageButton message={message} />
+              <Text size="xs" c="dimmed">
+                By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+              </Text>
             </Flex>
-          )}
+          </div>
         </Group>
-      )}
-
-      {isEditing && (
-        <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
-      )}
-
-      <Group>
-        <div>
-          <Flex>
-            <Text size="xs" c="dimmed">
-              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
-            </Text>
-          </Flex>
-        </div>
-      </Group>
-    </Card>
+      </Card>
+    </motion.div>
   );
 };
 
