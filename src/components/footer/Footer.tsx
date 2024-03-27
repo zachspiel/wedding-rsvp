@@ -1,6 +1,6 @@
 import { Container, Group, Anchor } from "@mantine/core";
 import classes from "./footer.module.css";
-import { links } from "@spiel-wedding/common";
+import { links } from "../common";
 
 const Footer = (): JSX.Element => {
   const items = links.map((link) => (

@@ -28,15 +28,14 @@ const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
       <motion.div
         initial={{
           opacity: 0,
-          x: 100,
         }}
         whileInView={{
           opacity: 1,
-          x: 0,
           transition: {
-            duration: 0.7,
+            duration: 0.5,
           },
         }}
+        viewport={{ amount: "all", once: true }}
       >
         <Image
           src="/assets/images/flower-divider-top.png"
@@ -45,29 +44,17 @@ const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
           height={100}
           className={cx(classes.flowerDivider, hideFlowers ? classes.hidden : "")}
         />
-      </motion.div>
 
-      <Title
-        size="h1"
-        className={classes.sectionTitle}
-        style={{ fontWeight: 600, textAlign: "left" }}
-        w="initial"
-      >
-        {title}
-      </Title>
-      <motion.div
-        initial={{
-          opacity: 0,
-          x: -100,
-        }}
-        whileInView={{
-          opacity: 1,
-          x: 0,
-          transition: {
-            duration: 0.7,
-          },
-        }}
-      >
+        <Title
+          size="h1"
+          className={classes.sectionTitle}
+          style={{ fontWeight: 600, textAlign: "left" }}
+          w="initial"
+          ta="center"
+        >
+          {title}
+        </Title>
+
         <Image
           src="/assets/images/flower-divider-bottom.png"
           alt="Flower bottom"

@@ -2,9 +2,9 @@
 
 import { Anchor, em, Flex, Title } from "@mantine/core";
 import WeddingCountdown from "./components/Countdown";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import { useMediaQuery } from "@mantine/hooks";
-import { MAP_URL } from "@spiel-wedding/common/constants";
+import { MAP_URL } from "@spiel-wedding/components/common/constants";
 import classes from "./styles.module.css";
 
 const WhenAndWhere = (): JSX.Element => {

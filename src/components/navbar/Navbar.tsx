@@ -1,6 +1,6 @@
 import { Container, Group, rem, Anchor } from "@mantine/core";
 import Logo from "./components/Logo";
-import { AdminViewToggle } from "@spiel-wedding/common";
+import { AdminViewToggle } from "../common";
 import { User } from "@supabase/supabase-js";
 import classes from "./navbar.module.css";
 import MenuItems from "./components/MenuItems";

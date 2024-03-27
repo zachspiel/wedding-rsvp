@@ -1,6 +1,6 @@
 import { Container, Group as MGroup, SimpleGrid } from "@mantine/core";
 import Summary from "@spiel-wedding/components/guestList/Summary";
-import { SectionTitle } from "@spiel-wedding/common";
+import { SectionTitle } from "../../components/common";
 import { getGroups } from "@spiel-wedding/hooks/guests";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
 import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";

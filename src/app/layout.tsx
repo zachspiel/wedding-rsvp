@@ -64,7 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers poppins={poppins}>
-          <AppShell header={{ height: rem(100) }} style={{ overflow: "hidden" }}>
+          <AppShell header={{ height: rem(100) }}>
             <AppShellHeader>
               <Navbar user={user} />
             </AppShellHeader>
