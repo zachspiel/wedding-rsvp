@@ -2,7 +2,7 @@
 
 import GuestBookMessage from "./components/GuestBookMessage";
 import { showSuccessNotification } from "@spiel-wedding/components/notifications/notifications";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import useSWR from "swr";
 import { GUESTBOOK_SWR_KEY, getGuestMessages } from "@spiel-wedding/hooks/guestbook";
 import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
