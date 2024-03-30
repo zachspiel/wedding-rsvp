@@ -48,8 +48,9 @@ const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
         <Title
           size="h1"
           className={classes.sectionTitle}
-          style={{ fontWeight: 600, textAlign: "center" }}
           w="initial"
+          ta="center"
+          fw={600}
         >
           {title}
         </Title>

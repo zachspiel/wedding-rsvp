@@ -4,7 +4,7 @@ import { Carousel } from "@mantine/carousel";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
 import useAdminView from "@spiel-wedding/hooks/adminView";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
 import useSWR from "swr";
 import classes from "./gallery.module.css";
@@ -24,7 +24,7 @@ const Gallery = (): JSX.Element => {
   const createSlides = (
     objectFit: "cover" | "contain",
     images?: Photo[],
-    updateOrderedPhotos?: boolean
+    updateOrderedPhotos?: boolean,
   ) => {
     return images
       ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))

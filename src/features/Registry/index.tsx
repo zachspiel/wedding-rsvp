@@ -1,5 +1,5 @@
 import { Card, Text, Flex, Anchor, Button } from "@mantine/core";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import Image from "next/image";
 import classes from "./registry.module.css";
 import { IconExternalLink } from "@tabler/icons-react";

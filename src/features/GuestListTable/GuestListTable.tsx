@@ -48,16 +48,12 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
 
   const filteredGroups = useMemo(
     () => filterGroups(sortGroups(groups ?? [], reverseSortDirection), search, filters),
-    [search, filters, groups, reverseSortDirection]
+    [search, filters, groups, reverseSortDirection],
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget;
     setSearch(value);
-  };
-
-  const handleFilterChange = (updatedFilters: string[]): void => {
-    setFilters(updatedFilters);
   };
 
   const openModal = (group: Group): void => {
@@ -95,7 +91,7 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
         <FilterSelection
           groups={groups ?? []}
           filters={filters}
-          setFilters={handleFilterChange}
+          setFilters={setFilters}
         />
         <Switch
           label="Show RSVP Status"

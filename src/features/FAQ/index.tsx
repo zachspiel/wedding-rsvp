@@ -1,4 +1,4 @@
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
 import { Card, Text } from "@mantine/core";
 
 const FAQ = () => {

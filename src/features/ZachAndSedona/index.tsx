@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Flex, Title } from "@mantine/core";
-import { SectionContainer } from "@spiel-wedding/common";
+import { SectionContainer } from "../../components/common";
 import classes from "./styles.module.css";
 import { motion } from "framer-motion";
 

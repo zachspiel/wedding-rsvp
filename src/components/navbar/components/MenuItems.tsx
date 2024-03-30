@@ -1,7 +1,7 @@
 "use client";
 
 import { Anchor } from "@mantine/core";
-import { MenuItem, links } from "@spiel-wedding/common";
+import { MenuItem, links } from "../../common";
 import classes from "../navbar.module.css";
 import cx from "clsx";
 import { User } from "@supabase/supabase-js";
@@ -22,7 +22,7 @@ const MenuItems = ({ user, onClick }: Props): JSX.Element => {
         className={cx(
           classes.link,
           item.className,
-          item.label === "RSVP" ? classes.highlightedLink : undefined
+          item.label === "RSVP" ? classes.highlightedLink : undefined,
         )}
       >
         {item.label}

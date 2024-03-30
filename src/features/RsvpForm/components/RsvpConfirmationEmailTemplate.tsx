@@ -2,7 +2,7 @@ import { Html } from "@react-email/html";
 import { Text, Link, Container, Head, Preview, Body } from "@react-email/components";
 import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { Img } from "@react-email/img";
-import { MAP_URL } from "@spiel-wedding/common/constants";
+import { MAP_URL } from "@spiel-wedding/components/common/constants";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
 
 const main = {
@@ -31,7 +31,7 @@ const portrait = {
 
 const RsvpConfirmationEmailTemplate = (group: Group) => {
   const anyGuestAccepted = group.guests.some(
-    (guest) => guest.rsvp === RsvpResponse.ACCEPTED
+    (guest) => guest.rsvp === RsvpResponse.ACCEPTED,
   );
 
   const previewText = anyGuestAccepted
