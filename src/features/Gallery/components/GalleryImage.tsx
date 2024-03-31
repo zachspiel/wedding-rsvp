@@ -35,7 +35,7 @@ const GalleryImage = ({
 }: Props): JSX.Element => {
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
   const { data: placeholder } = useSWR(
-    [`placeholder-${image}`, data.publicUrl],
+    [`placeholder-${data.publicUrl}`, data.publicUrl],
     ([key, url]) => getPlaceholder(url),
   );
 
@@ -48,6 +48,7 @@ const GalleryImage = ({
       onClick={openImage}
     >
       <Image
+        key={data.publicUrl}
         src={data.publicUrl}
         alt={image.caption ?? image.id}
         className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
@@ -58,7 +59,8 @@ const GalleryImage = ({
           zIndex: 0,
           transform: "translate3d(0, 0, 0)",
         }}
-        placeholder={placeholder ?? "empty"}
+        blurDataURL={placeholder}
+        placeholder={placeholder === undefined ? "empty" : "blur"}
       />
 
       <Flex wrap="wrap" w="100%" className={classes.adminControlsContainer} m="md">
