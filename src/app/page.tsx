@@ -16,8 +16,8 @@ export default function Home() {
       <RSVP />
       <GuestBook />
       <Registry />
-      <Gallery />
       <FAQ />
+      <Gallery />
     </main>
   );
 }

@@ -3,8 +3,8 @@ import { Card, Text } from "@mantine/core";
 
 const FAQ = () => {
   return (
-    <SectionContainer>
-      <SectionTitle title="FAQ" id="faq" />
+    <SectionContainer greenBackground flowerImages>
+      <SectionTitle title="FAQ" id="faq" hideFlowers />
       <Card
         padding="lg"
         mt="xl"
