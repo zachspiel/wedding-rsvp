@@ -8,7 +8,6 @@ import {
   getMissingValueTotals,
   getUniqueAffiliations,
 } from "./filterUtils";
-import RsvpStatus from "@spiel-wedding/components/guestList/RsvpStatus";
 
 interface Props {
   groups: Group[];

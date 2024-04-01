@@ -24,7 +24,7 @@ const Gallery = (): JSX.Element => {
   const createSlides = (
     objectFit: "cover" | "contain",
     images?: Photo[],
-    updateOrderedPhotos?: boolean,
+    updateOrderedPhotos?: boolean
   ) => {
     return images
       ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
@@ -50,12 +50,8 @@ const Gallery = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer greenBackground flowerImages={(photos ?? []).length > 0}>
-      <SectionTitle
-        id="gallery"
-        title="Gallery"
-        hideFlowers={(photos ?? []).length > 0}
-      />
+    <SectionContainer>
+      <SectionTitle id="gallery" title="Gallery" />
       {isAdminViewEnabled && <UploadImages />}
 
       <Carousel
