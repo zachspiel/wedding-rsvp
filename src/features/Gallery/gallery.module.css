@@ -1,0 +1,88 @@
+.content,
+.header {
+  background-color: hsl(86, 6.3%, 80%);
+}
+
+.controls {
+  @media (max-width: $mantine-breakpoint-sm) {
+    opacity: 0;
+  }
+}
+
+.indicator {
+  background-color: #8e9386;
+}
+
+.control {
+  background-color: var(--mantine-color-white);
+}
+
+.card {
+  height: 620px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  transition: all 0.1s ease-in-out;
+  overflow: hidden;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 500px;
+  }
+}
+
+.cardModal {
+  height: 80vh;
+}
+
+.cardWithHover {
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.01) !important;
+  }
+}
+
+.title {
+  font-family: "Greycliff CF; sans-serif", serif;
+  font-weight: 900;
+  color: white;
+  line-height: 1.2;
+  font-size: 24px;
+  margin-top: var(--mantine-spacing-xs);
+}
+
+.adminControlsContainer {
+  z-index: 1;
+  position: absolute;
+}
+
+.cardImage {
+  z-index: 0 !important;
+  border-radius: var(--mantine-radius-md);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  border-radius: var(--mantine-radius-md);
+  border: rem(1) solid var(--mantine-color-gray-2);
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-xl);
+  padding-left: calc(var(--mantine-spacing-xl) - var(--mantine-spacing-md));
+  background-color: white;
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.itemDragging {
+  box-shadow: var(--mantine-shadows-sm);
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--mantine-color-gray-6);
+  padding-left: var(--mantine-spacing-md);
+  padding-right: var(--mantine-spacing-md);
+}

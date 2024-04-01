@@ -1,0 +1,38 @@
+.footer {
+  background-color: #717769;
+  position: "relative";
+
+  border-top: rem(1) solid var(--mantine-color-gray-2);
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: var(--mantine-spacing-xl);
+    padding-bottom: var(--mantine-spacing-xl);
+  }
+
+  .links {
+    justify-content: center;
+    text-align: center;
+
+    @media (max-width: $mantine-breakpoint-xs) {
+      margin-top: var(--mantine-spacing-md);
+    }
+  }
+}
+
+.highlightedLink {
+  background-color: white;
+  color: #717769 !important;
+  line-height: 1;
+  padding: rem(8) rem(12);
+  border-radius: var(--mantine-radius-sm);
+  font-size: var(--mantine-font-size-md);
+
+  &:hover {
+    opacity: 0.9;
+    text-decoration: none;
+  }
+}

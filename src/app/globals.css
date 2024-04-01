@@ -1,11 +1,26 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+:root {
+  --highlight-color: hsl(86, 6.3%, 80%);
+}
+
+*::selection {
+  background-color: var(--highlight-color);
+}
+
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-NumberInput-input,
+.mantine-Select-input {
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 16px;
+  }
 }

@@ -3,28 +3,30 @@
 import React from "react";
 import { Button, Group as MGroup, Radio, Tabs } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ref, set } from "firebase/database";
 import RsvpStatus from "./RsvpStatus";
-import { database } from "@spiel-wedding/database/database";
 import { Group } from "@spiel-wedding/types/Guest";
 import {
   showSuccessNotification,
   showFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import MailingAddressForm from "../form/MailingAddressForm";
-import GuestAffiliationSelection from "./addGuestForm/GuestAffiliationSelection";
-import GuestInput from "./addGuestForm/GuestInput";
+import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
+import { useSWRConfig } from "swr";
+import {
+  GuestAffiliationSelection,
+  GuestInput,
+  MailingAddressForm,
+} from "@spiel-wedding/components/form";
 
 interface Props {
   group: Group;
   close: () => void;
 }
 
-const EditGuest = (props: Props): JSX.Element => {
-  const { group } = props;
+const EditGuest = ({ group, close }: Props): JSX.Element => {
   const [isInvited, setIsInvited] = React.useState(
     group.invited ? "definitely" : "maybe"
   );
+  const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
     initialValues: group,
@@ -41,22 +43,20 @@ const EditGuest = (props: Props): JSX.Element => {
     form.setFieldValue("invited", value === "definitely");
   };
 
-  const handleSubmit = (): void => {
-    set(ref(database, "groups/" + group.id), {
-      ...form.values,
-      isInvited: isInvited === "definitely",
-    })
-      .then(() => {
-        showSuccessNotification("Successfully updated guest");
-      })
-      .catch((error) => {
-        showFailureNotification();
-      });
+  const handleSubmit = async () => {
+    const updatedGroup = await updateGroup(form.getTransformedValues(), group);
+
+    if (updatedGroup) {
+      showSuccessNotification("Successfully updated guest");
+      await mutate(GROUP_SWR_KEY);
+    } else {
+      showFailureNotification();
+    }
   };
 
-  const submitAndClose = (): void => {
-    handleSubmit();
-    props.close();
+  const submitAndClose = async () => {
+    await handleSubmit();
+    close();
   };
 
   return (
@@ -71,7 +71,12 @@ const EditGuest = (props: Props): JSX.Element => {
         <Tabs.Panel value="guestInfo" pt="xs">
           {form.values.guests.map((guest, index) => {
             return (
-              <GuestInput form={form} groupType="family" index={index} key={index} />
+              <GuestInput
+                form={form}
+                groupType="family"
+                index={index}
+                key={`${guest.id}-edit-guest`}
+              />
             );
           })}
           <GuestAffiliationSelection form={form} />
@@ -124,7 +129,12 @@ const EditGuest = (props: Props): JSX.Element => {
 
         <Tabs.Panel value="rsvpStatus" pt="xs">
           {form.values.guests.map((guest, index) => (
-            <RsvpStatus guest={guest} index={index} form={form} key={index} />
+            <RsvpStatus
+              guest={guest}
+              index={index}
+              form={form}
+              key={`${guest.id}-rsvp-status`}
+            />
           ))}
         </Tabs.Panel>
       </Tabs>

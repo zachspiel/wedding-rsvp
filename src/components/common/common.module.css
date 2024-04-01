@@ -1,0 +1,56 @@
+.toggleButton {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1001;
+}
+
+.sectionTitleContainer {
+  scroll-margin-top: 110px;
+}
+
+.sectionTitle {
+  font-family: var(--font-playfair);
+  margin: 0px 0px 1rem 0x;
+  font-weight: 400;
+  line-height: 1.2;
+  font-size: 2.66rem;
+  padding: 27px 0;
+}
+
+.flowerImage {
+  display: block;
+  position: absolute;
+  top: 60px;
+
+  @media (max-width: $mantine-breakpoint-xl) {
+    display: none;
+  }
+}
+
+.flowerImageLeft {
+  left: 10px;
+  transform: scaleX(-1);
+}
+
+.flowerImageRight {
+  right: 10px;
+}
+
+.flowerDivider {
+  @media (max-width: $mantine-breakpoint-md) {
+    width: 256px;
+    height: 75px;
+  }
+}
+
+.hidden {
+  @media (min-width: $mantine-breakpoint-lg) {
+    display: none;
+    margin-top: 100px;
+  }
+
+  @media (max-width: $mantine-breakpoint-lg) {
+    display: block;
+  }
+}

@@ -1,46 +1,84 @@
-# Getting Started with Create React App
+# Spielberger Wedding Website 💍
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-## Available Scripts
+<img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="200">
 
-In the project directory, you can run:
+Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
-### `npm start`
+This project also includes an admin page for managing the guest list, RSVP status updates, and content modification on the homepage.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Getting Started
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Clone this repository:
 
-### `npm test`
+```bash
+git clone https://github.com/zachspiel/wedding-rsvp.git
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Navigate to the project directory:
 
-### `npm run build`
+```bash
+cd wedding-rsvp
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Install dependencies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+yarn install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Create a Supabase project with a database, authentication, and storage.
 
-### `npm run eject`
+5. Go to API settings under project settings. Create a `.env` file in the project root and add your Supabase configuration:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+6. Add the following variables to the `.env` file. These are used to send emails to guests when they RSVP. 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+EMAIL (email that will send mail)
+PASS (password for email to send mail)
+EMAIL_RECIPIENTS (email that will recieve mail once guests RSVP)
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# Running the Project
 
-## Learn More
+Run the following command to start the app locally:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+yarn dev
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Project Structure
+
+The structure for this project is based off of [Bulletproof React](https://github.com/alan2207/bulletproof-react). Common components can be found under src/components. Specific features like the guest book or RSVP form can be found under src/features.
+
+```
+.
+└── src
+    ├── app
+    │   ├── api
+    │   ├── guestList (admin route for managing guest list)
+    │   ├── login (public login page)
+    │   └── page.tsx
+    ├── components
+    ├── context
+    ├── database
+    ├── features
+    │   └── [FEATURE]
+    │       ├── components
+    │       ├── index.tsx
+    │       └── styles.module.css
+    ├── hooks
+    └── types
+```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).

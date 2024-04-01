@@ -1,0 +1,14 @@
+.wrapper {
+  position: relative;
+  height: 100vh;
+  clip-path: inset(0 0 0 0);
+  margin-top: 0;
+}
+
+.inner {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  left: 0;
+  top: 0;
+}

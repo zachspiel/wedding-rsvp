@@ -1,6 +1,5 @@
 export interface Group {
   id: string;
-  phone: string;
   email: string;
   affiliation: GuestAffiliation;
   address1: string;
@@ -13,25 +12,30 @@ export interface Group {
   invited: boolean;
   message: string;
   saveTheDateSent: boolean;
-  dietaryRestrictions: string;
   guests: Guest[];
   rsvpModifications?: RsvpModification[];
+  edited_at?: string;
+  created_at?: string;
 }
 
 export interface Guest {
+  id: string;
+  groupId: string;
   title: string;
   firstName: string;
   lastName: string;
   nameUnknown: boolean;
-  rsvp: RsvpResonse;
+  rsvp: RsvpResponse;
   relationshipType: RelationshipType;
 }
 
 export interface RsvpModification {
-  modifiedAt: string;
+  id: string;
+  createdAt: string;
+  groupId: string;
 }
 
-export enum RsvpResonse {
+export enum RsvpResponse {
   NO_RESPONSE = "No Response",
   ACCEPTED = "Accepted",
   DECLINED = "Declined",
@@ -55,3 +59,15 @@ export enum RelationshipType {
   PARTNER = "Partner",
   CHILD = "Child",
 }
+
+export interface GuestMessage {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  isVisible: boolean;
+  createdAt?: string;
+  editedAt?: string;
+}
+
+export type PublicGuestMessage = Omit<GuestMessage, "email">;

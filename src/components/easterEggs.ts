@@ -10,4 +10,14 @@ const weddingDateString = `
   ____|___|_|___|_____/_______\\ |||___October 26th 2024___
  `;
 
-export { weddingDateString };
+const displayEasterEggs = () => {
+  console.log(weddingDateString);
+  console.log(
+    "Hello! Hopefully you won't find too much down here, but for more information regarding the tech stack please go here: https://github.com/zachspiel/wedding-rsvp"
+  );
+  console.log(
+    "If you notice a 🐛, please report it to the GitHub repo above. Thank you!"
+  );
+};
+
+export { displayEasterEggs };

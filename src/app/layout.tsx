@@ -1,16 +1,22 @@
-import Navbar from "@spiel-wedding/components/navbar/Navbar";
-import Footer from "@spiel-wedding/components/navbar/Footer";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { theme } from "./theme";
+import { ColorSchemeScript, rem } from "@mantine/core";
 import { Providers } from "./Providers";
-import { Notifications } from "@mantine/notifications";
 import { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import localFont from "next/font/local";
-import "@mantine/notifications/styles.css";
+import { Playfair, Poppins } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { Navbar } from "@spiel-wedding/components/navbar";
+import { Footer } from "@spiel-wedding/components/footer";
+import { createClient } from "@spiel-wedding/database/server";
+import { AppShell, AppShellHeader, AppShellMain, AppShellFooter } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "@mantine/carousel/styles.css";
 import "./globals.css";
+
+const playfair = Playfair({
+  display: "swap",
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
 
 const poppins = Poppins({
   weight: "400",
@@ -19,16 +25,10 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 
-const brittanySignature = localFont({
-  src: "../assets/fonts/BrittanySignature.ttf",
-  display: "swap",
-  variable: "--font-brittany",
-});
-
 export const metadata: Metadata = {
   title: "Spielberger Wedding 2024",
   metadataBase: new URL("https://zachandsedona.com"),
-  description: "The Spielbergers 2024",
+  description: "We're getting married! Sedona Rannells and Zachary Spielberger 2024.",
   creator: "Zachary Spielberger",
   keywords: ["The Spielbergers 2024"],
   openGraph: {
@@ -49,27 +49,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
-    <html lang="en" className={`${poppins.variable} ${brittanySignature.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.ico" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
         <meta name="robots" content="all" />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          <Notifications />
-          <Providers>
-            <Navbar />
-            {children}
-            <Footer />
-          </Providers>
-        </MantineProvider>
+        <Providers poppins={poppins}>
+          <AppShell header={{ height: rem(100) }}>
+            <AppShellHeader>
+              <Navbar user={user} />
+            </AppShellHeader>
+            <AppShellMain>{children}</AppShellMain>
+            <AppShellFooter pos="relative" zIndex={10}>
+              <Footer />
+            </AppShellFooter>
+          </AppShell>
+        </Providers>
+        <Analytics />
       </body>
     </html>
   );
