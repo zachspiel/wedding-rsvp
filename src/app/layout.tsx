@@ -59,7 +59,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
         <ColorSchemeScript />
-        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="robots" content="all" />
       </head>
       <body>
