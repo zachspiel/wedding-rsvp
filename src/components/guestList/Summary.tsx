@@ -1,12 +1,10 @@
 import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
-import { Group, RelationshipType, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { useMemo } from "react";
 
 interface Props {
   groups: Group[];
 }
-
-const { CHILD } = RelationshipType;
 
 const Summary = ({ groups }: Props): JSX.Element => {
   const groupGuestLengths = groups
