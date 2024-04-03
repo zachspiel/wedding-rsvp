@@ -18,7 +18,6 @@ const SectionContainer = ({
     <Container
       style={{
         backgroundColor: greenBackground ? "hsl(86, 6.3%, 80%)" : "",
-        minHeight: "75vh",
       }}
       fluid
       pos="relative"
