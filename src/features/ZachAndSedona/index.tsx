@@ -4,6 +4,7 @@ import { Card, Flex, Title } from "@mantine/core";
 import { SectionContainer } from "../../components/common";
 import classes from "./styles.module.css";
 import { motion } from "framer-motion";
+import cx from "clsx";
 
 const ZachAndSedona = () => {
   return (
@@ -20,7 +21,7 @@ const ZachAndSedona = () => {
               },
             }}
           >
-            <div className={classes.flowerContainerLeft} />
+            <div className={cx(classes.flowerImage, classes.flowerContainerLeft)} />
           </motion.div>
           <Flex direction="column" justify="center">
             <motion.div
@@ -86,7 +87,7 @@ const ZachAndSedona = () => {
               },
             }}
           >
-            <div className={classes.flowerContainerRight} />
+            <div className={cx(classes.flowerImage, classes.flowerContainerRight)} />
           </motion.div>
         </Flex>
       </Card>
