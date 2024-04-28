@@ -11,8 +11,7 @@
   justify-content: center;
 }
 
-.flowerContainer::before {
-  background-image: url("/assets/images/right-flower.webp");
+.flowerImage {
   content: " ";
   background-size: contain;
   background-repeat: no-repeat;
@@ -34,27 +33,12 @@
   }
 }
 
-.flowerContainer::after {
+.flowerContainerLeft {
+  background-image: url("/assets/images/right-flower.webp");
+}
+
+.flowerContainerRight {
   background-image: url("/assets/images/left-flower.webp");
-  content: " ";
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 460px;
-  width: 305px;
-  z-index: 1;
-  display: block;
-  flex-shrink: 0;
-
-  @media (max-width: $mantine-breakpoint-md) {
-    height: 300px;
-    width: 130px;
-  }
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    height: 300px;
-    width: 90px;
-  }
 }
 
 .titleElement {

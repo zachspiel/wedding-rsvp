@@ -15,7 +15,7 @@ import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import RsvpSelection from "./components/RsvpSelectionInput";
-import { showFailureNotification } from "@spiel-wedding/components/notifications/notifications";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { sendMail } from "./action";
@@ -75,7 +75,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
     const updatedGroup = await updateGroup(form.getTransformedValues(), selectedGroup);
 
     if (updatedGroup === undefined) {
-      showFailureNotification();
+      showCustomFailureNotification("An error occurred. Please try again later");
     } else {
       nextStep();
       await sendMail(form.values);

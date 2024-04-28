@@ -8,8 +8,8 @@ const guestMatchesSearch = (
   lastName: string,
   guest: Guest
 ): boolean => {
-  const firstNameLowerCase = firstName.toLowerCase();
-  const lastNameLowerCase = lastName.toLowerCase();
+  const firstNameLowerCase = firstName.toLowerCase().trim();
+  const lastNameLowerCase = lastName.toLowerCase().trim();
   const guestFirstName = guest.firstName.toLowerCase();
   const guestLastName = guest.lastName.toLowerCase();
 

@@ -1,21 +1,21 @@
-import { Group, Guest, GuestAffiliation } from "@spiel-wedding/types/Guest";
+import { Group, Guest, GuestAffiliation, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 type GroupFilterableKey = "email" | "address1" | "address2" | "city" | "state";
 
-type GuestFilterableKey = "firstName" | "lastName" | "title";
+type GuestFilterableKey = "firstName" | "lastName" | "title" | "rsvp";
 
 const filterGroups = (groups: Group[], search: string, filters: string[]): Group[] => {
   const query = search.toLowerCase().trim();
+
+  if (query.length === 0 && filters.length === 0) {
+    return groups;
+  }
+
   return groups.filter((group) => {
     const containsQuery =
       guestsContainQuery(group.guests, query) || groupContainsQuery(group, query);
-    const containsFilter =
-      isGroupMissingValue(group, filters) || groupMatchesAffiliation(group, filters);
 
-    return (
-      (query.length > 0 ? containsQuery : true) &&
-      (filters.length > 0 ? containsFilter : true)
-    );
+    return containsQuery && doesGroupMatchFilter(group, filters);
   });
 };
 
@@ -25,6 +25,13 @@ const groupContainsQuery = (group: Group, query: string): boolean => {
     .some((key) => group[key].toLowerCase().includes(query));
 };
 
+const doesGroupMatchFilter = (group: Group, filters: string[]) => {
+  return (
+    isGroupMissingValue(group, filters) ||
+    groupMatchesAffiliation(group, filters) ||
+    groupMatchesRsvp(group, filters)
+  );
+};
 const isGroupMissingValue = (group: Group, filters: string[]): boolean => {
   const validEntries = ["email", "address1"];
   const missingValueFilters = filters.filter((filter) => validEntries.includes(filter));
@@ -42,27 +49,40 @@ const groupMatchesAffiliation = (group: Group, filters: string[]): boolean => {
   return relationshipFilters.includes(group.affiliation);
 };
 
+const groupMatchesRsvp = (group: Group, filters: string[]): boolean => {
+  const { ACCEPTED, DECLINED, NO_RESPONSE } = RsvpResponse;
+  const rsvpFilters = filters.filter((key) => {
+    return key === ACCEPTED || key === DECLINED || key === NO_RESPONSE;
+  });
+
+  if (rsvpFilters.length === 0) {
+    return true;
+  }
+
+  return group.guests.some((guest) => rsvpFilters.includes(guest.rsvp));
+};
+
 const guestsContainQuery = (guests: Guest[], query: string): boolean => {
   return guests.some(
     (guest) =>
       Object.keys(guest)
         .filter(isGuestFilterableKey)
         .some((key) => guest[key].toLowerCase().includes(query)) ||
-      `${guest.firstName.toLowerCase()} ${guest.lastName.toLowerCase()}`.includes(query)
+      `${guest.firstName.toLowerCase()} ${guest.lastName.toLowerCase()}`.includes(query),
   );
 };
 
 const isGroupFilterableKey = (
-  key: GroupFilterableKey | string
+  key: GroupFilterableKey | string,
 ): key is GroupFilterableKey => {
   const validKeys = ["email", "address1", "address2", "city", "state"];
   return validKeys.includes(key);
 };
 
 const isGuestFilterableKey = (
-  key: GuestFilterableKey | string
+  key: GuestFilterableKey | string,
 ): key is GuestFilterableKey => {
-  const validKeys = ["firstName", "lastName"];
+  const validKeys = ["firstName", "lastName", "rsvp"];
   return validKeys.includes(key);
 };
 

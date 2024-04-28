@@ -4,7 +4,7 @@ import { Carousel } from "@mantine/carousel";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
 import useAdminView from "@spiel-wedding/hooks/adminView";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
 import useSWR from "swr";
 import classes from "./gallery.module.css";
@@ -50,12 +50,8 @@ const Gallery = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer greenBackground flowerImages={(photos ?? []).length > 0}>
-      <SectionTitle
-        id="gallery"
-        title="Gallery"
-        hideFlowers={(photos ?? []).length > 0}
-      />
+    <SectionContainer>
+      <SectionTitle id="gallery" title="Gallery" />
       {isAdminViewEnabled && <UploadImages />}
 
       <Carousel

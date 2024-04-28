@@ -28,13 +28,13 @@ import {
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import classes from "./styles.module.css";
 import useSWR from "swr";
 import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
 import Summary from "@spiel-wedding/components/guestList/Summary";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
-import { SectionTitle } from "@spiel-wedding/common";
+import { SectionTitle } from "@spiel-wedding/components/common";
 import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 
@@ -53,18 +53,15 @@ const GuestListTable = (): JSX.Element => {
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-  const filteredGroups = useMemo(
-    () => filterGroups(sortGroups(groups ?? [], reverseSortDirection), search, filters),
-    [search, filters, groups, reverseSortDirection]
+  const filteredGroups = filterGroups(
+    sortGroups(groups ?? [], reverseSortDirection),
+    search,
+    filters,
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget;
     setSearch(value);
-  };
-
-  const handleFilterChange = (updatedFilters: string[]): void => {
-    setFilters(updatedFilters);
   };
 
   const openModal = (group: Group): void => {
@@ -110,7 +107,7 @@ const GuestListTable = (): JSX.Element => {
         <FilterSelection
           groups={groups ?? []}
           filters={filters}
-          setFilters={handleFilterChange}
+          setFilters={setFilters}
         />
         <Switch
           label="Show RSVP Status"

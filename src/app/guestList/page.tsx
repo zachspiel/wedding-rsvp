@@ -1,8 +1,7 @@
-import { Container, Group as MGroup, SimpleGrid } from "@mantine/core";
+import { Container, SimpleGrid } from "@mantine/core";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
 import { redirect } from "next/navigation";
 import { createClient } from "@spiel-wedding/database/server";
-import { supabase } from "@spiel-wedding/database/database";
 
 async function getUser() {
   const supabase = createClient();

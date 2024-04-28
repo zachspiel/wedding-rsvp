@@ -28,7 +28,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Spielberger Wedding 2024",
   metadataBase: new URL("https://zachandsedona.com"),
-  description: "The Spielbergers 2024",
+  description: "We're getting married! Sedona Rannells and Zachary Spielberger 2024.",
   creator: "Zachary Spielberger",
   keywords: ["The Spielbergers 2024"],
   openGraph: {
@@ -59,7 +59,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
         <ColorSchemeScript />
-        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="robots" content="all" />
       </head>
       <body>

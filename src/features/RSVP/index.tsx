@@ -4,7 +4,7 @@ import { Alert, Modal, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import RsvpForm from "@spiel-wedding/features/RsvpForm";
 import { useEffect, useState } from "react";
-import { SectionContainer, SectionTitle } from "@spiel-wedding/common";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import { IconInfoCircle } from "@tabler/icons-react";
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
 import { useMediaQuery } from "@mantine/hooks";

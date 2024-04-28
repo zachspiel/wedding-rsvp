@@ -21,13 +21,14 @@ const SectionContainer = ({
       }}
       fluid
       pos="relative"
+      h={flowerImages ? "75vh" : undefined}
     >
       <Container style={{ padding: 0 }}>
         {flowerImages && (
           <Image
             src="/assets/images/container-flower.png"
-            width={475}
-            height={475}
+            width={375}
+            height={375}
             className={cx(classes.flowerImage, classes.flowerImageLeft)}
             alt="Flower image left"
           />
@@ -45,8 +46,8 @@ const SectionContainer = ({
         {flowerImages && (
           <Image
             src="/assets/images/container-flower.png"
-            width={475}
-            height={475}
+            width={375}
+            height={375}
             alt="Flower image right"
             className={cx(classes.flowerImage, classes.flowerImageRight)}
           />

@@ -1,19 +1,15 @@
 import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
-import { RelationshipType, Group } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { useMemo } from "react";
 
 interface Props {
   groups: Group[];
 }
 
-const { CHILD } = RelationshipType;
-
 const Summary = ({ groups }: Props): JSX.Element => {
-  const allGuests = useMemo(() => groups.flatMap((group) => group.guests), [groups]);
-  const groupGuestLengths = useMemo(
-    () => groups.filter((group) => group.invited).map((group) => group.guests.length),
-    [groups]
-  );
+  const groupGuestLengths = groups
+    .filter((group) => group.invited)
+    .map((group) => group.guests.length);
 
   const totalInvited = useMemo(() => {
     if (groupGuestLengths.length > 0) {
@@ -22,22 +18,15 @@ const Summary = ({ groups }: Props): JSX.Element => {
     return 0;
   }, [groupGuestLengths]);
 
-  const totalAdults = useMemo(
-    () => allGuests.filter((guest) => guest.relationshipType !== CHILD).length,
-    [allGuests]
-  );
+  const totalAccepted = groups
+    .flatMap((group) => group.guests)
+    .filter((guest) => guest.rsvp === RsvpResponse.ACCEPTED).length;
 
-  const totalChildren = useMemo(
-    () => allGuests.filter((guest) => guest.relationshipType === CHILD).length,
-    [allGuests]
-  );
+  const totalDeclined = groups
+    .flatMap((group) => group.guests)
+    .filter((guest) => guest.rsvp === RsvpResponse.DECLINED).length;
 
-  const totalMissingAddress = useMemo(
-    () => groups.filter((group) => group.address1?.length === 0).length,
-    [allGuests]
-  );
-
-  const totalSaveTheDatesSent = groups.filter((group) => group.saveTheDateSent).length;
+  const totalMissingResponse = totalInvited - totalAccepted - totalDeclined;
 
   const createSummaryItem = (title: string, total: number): JSX.Element => {
     return (
@@ -53,10 +42,9 @@ const Summary = ({ groups }: Props): JSX.Element => {
   return (
     <MGroup align="apart" grow pb="xl" pt="xl">
       {createSummaryItem("Definitely Invited", totalInvited)}
-      {createSummaryItem("Adults", totalAdults)}
-      {createSummaryItem("Children", totalChildren)}
-      {createSummaryItem("Missing Addresses", totalMissingAddress)}
-      {createSummaryItem("Save the Dates Sent", totalSaveTheDatesSent)}
+      {createSummaryItem("Accepted", totalAccepted)}
+      {createSummaryItem("Declined", totalDeclined)}
+      {createSummaryItem("No Response", totalMissingResponse)}
     </MGroup>
   );
 };
