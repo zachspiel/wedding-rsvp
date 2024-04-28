@@ -15,6 +15,8 @@ import {
   Text,
   Center,
   rem,
+  Checkbox,
+  Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
@@ -26,25 +28,30 @@ import {
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import classes from "./styles.module.css";
-
-interface Props {
-  groups: Group[];
-}
+import useSWR from "swr";
+import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
+import Summary from "@spiel-wedding/components/guestList/Summary";
+import AddGroupForm from "../AddGroupForm/AddGroupForm";
+import { SectionTitle } from "@spiel-wedding/common";
+import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
+import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 
 interface ThProps {
   children: React.ReactNode;
   onSort(): void;
 }
 
-const GuestListTable = ({ groups }: Props): JSX.Element => {
+const GuestListTable = (): JSX.Element => {
+  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
   const [showRsvpStatus, setShowRsvpStatus] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   const filteredGroups = useMemo(
     () => filterGroups(sortGroups(groups ?? [], reverseSortDirection), search, filters),
@@ -92,6 +99,14 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
   return (
     <>
       <MGroup justify="space-between">
+        <SectionTitle title="All Guests" hideFlowers />
+        <MGroup>
+          <DownloadGuestList groups={groups ?? []} />
+          <AddGroupForm />
+        </MGroup>
+      </MGroup>
+      <Summary groups={groups ?? []} />
+      <MGroup justify="space-between">
         <FilterSelection
           groups={groups ?? []}
           filters={filters}
@@ -103,27 +118,45 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
           onChange={(e): void => setShowRsvpStatus(e.currentTarget.checked)}
         />
       </MGroup>
-      <TextInput
-        placeholder="Search by any field"
-        mb="md"
-        value={search}
-        onChange={handleSearchChange}
-        leftSection={<IconSearch size="0.9rem" stroke={1.5} />}
-        rightSection={
-          search.length > 0 && (
-            <ActionIcon onClick={() => setSearch("")} variant="subtle">
-              <IconX />
-            </ActionIcon>
-          )
-        }
-      />
+      <MGroup mb="md">
+        <TextInput
+          placeholder="Search by any field"
+          w="75%"
+          value={search}
+          onChange={handleSearchChange}
+          leftSection={<IconSearch size="0.9rem" stroke={1.5} />}
+          rightSection={
+            search.length > 0 && (
+              <ActionIcon onClick={() => setSearch("")} variant="subtle">
+                <IconX />
+              </ActionIcon>
+            )
+          }
+        />
+        <Button disabled={selectedRows.length === 0} onClick={open}>
+          Edit Groups
+        </Button>
+      </MGroup>
       <Table highlightOnHover>
         <TableThead>
           <TableTr>
+            <TableTh>
+              <Checkbox
+                checked={selectedRows.length === groups?.length}
+                onChange={(e) => {
+                  if (e.currentTarget.checked) {
+                    setSelectedRows((groups ?? []).map(({ id }) => id));
+                  } else {
+                    setSelectedRows([]);
+                  }
+                }}
+              />
+            </TableTh>
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
             {showRsvpStatus && <TableTh>RSVP Status</TableTh>}
+            <TableTh>Save the Date Sent?</TableTh>
             <TableTh />
           </TableTr>
         </TableThead>
@@ -131,12 +164,26 @@ const GuestListTable = ({ groups }: Props): JSX.Element => {
           <TableRows
             groups={filteredGroups}
             showRsvpStatus={showRsvpStatus}
+            selectedGroups={selectedRows}
             openModal={openModal}
+            toggleGroupSelected={(group) => {
+              if (selectedRows.includes(group.id)) {
+                setSelectedRows(selectedRows.filter((id) => group.id !== id));
+              } else {
+                setSelectedRows([...selectedRows, group.id]);
+              }
+            }}
           />
         </TableTbody>
       </Table>
       <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
         {selectedGroup && <EditGuest group={selectedGroup} close={close} />}
+
+        {selectedGroup === undefined && (
+          <BulkEditGroups
+            groups={groups?.filter(({ id }) => selectedRows.includes(id)) ?? []}
+          />
+        )}
       </Modal>
     </>
   );

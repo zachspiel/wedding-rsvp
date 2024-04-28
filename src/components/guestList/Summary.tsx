@@ -37,6 +37,8 @@ const Summary = ({ groups }: Props): JSX.Element => {
     [allGuests]
   );
 
+  const totalSaveTheDatesSent = groups.filter((group) => group.saveTheDateSent).length;
+
   const createSummaryItem = (title: string, total: number): JSX.Element => {
     return (
       <Flex direction="column">
@@ -54,6 +56,7 @@ const Summary = ({ groups }: Props): JSX.Element => {
       {createSummaryItem("Adults", totalAdults)}
       {createSummaryItem("Children", totalChildren)}
       {createSummaryItem("Missing Addresses", totalMissingAddress)}
+      {createSummaryItem("Save the Dates Sent", totalSaveTheDatesSent)}
     </MGroup>
   );
 };
