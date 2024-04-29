@@ -33,6 +33,15 @@ export const createGroup = async (group: Group): Promise<Group | undefined> => {
   return { ...newGroup, guests: newGuests };
 };
 
+export const bulkUpdateGroups = async (groups: TablesUpdate<"group">[]) => {
+  const { data: updatedGroups } = await supabase
+    .from(GROUP_TABLE)
+    .upsert(groups)
+    .select();
+
+  return updatedGroups;
+};
+
 export const updateGroup = async (
   group: Group,
   originalGroup: Group,
