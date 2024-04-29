@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Group, Text, Flex, Card, ActionIcon } from "@mantine/core";
+import { Group, Text, Flex, Card, ActionIcon, CardSection } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import EditMessage from "./EditMessage";
 import DeleteMessageButton from "./DeleteMessageButton";
@@ -39,15 +39,11 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
         <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
       )}
 
-      <Group>
-        <div>
-          <Flex>
-            <Text size="xs" c="dimmed">
-              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
-            </Text>
-          </Flex>
-        </div>
-      </Group>
+      <CardSection className={classes.footer}>
+        <Text size="xs" c="dimmed">
+          By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+        </Text>
+      </CardSection>
     </Card>
   );
 };

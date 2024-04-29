@@ -8,6 +8,7 @@ import { GUESTBOOK_SWR_KEY, getGuestMessages } from "@spiel-wedding/hooks/guestb
 import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
 import { useLocalStorage } from "@mantine/hooks";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { SimpleGrid } from "@mantine/core";
 
 const GuestBook = (): JSX.Element => {
   const { data } = useSWR(GUESTBOOK_SWR_KEY, getGuestMessages);
@@ -26,13 +27,15 @@ const GuestBook = (): JSX.Element => {
       <SectionTitle id="guestBook" title="Guest Book" />
       <GuestBookForm handleSubmit={saveMessage} />
 
-      {data?.map((message) => (
-        <GuestBookMessage
-          key={message.id}
-          message={message}
-          localMessages={localMessages}
-        />
-      ))}
+      <SimpleGrid cols={{ base: 1, md: 2 }}>
+        {data?.map((message) => (
+          <GuestBookMessage
+            key={message.id}
+            message={message}
+            localMessages={localMessages}
+          />
+        ))}
+      </SimpleGrid>
     </SectionContainer>
   );
 };
