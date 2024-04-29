@@ -60,9 +60,8 @@ const FilterSelection = (props: Props): JSX.Element => {
 
   const mapAffiliationToSelectItem = (affiliation: GuestAffiliation): ComboboxItem => {
     const totalGroups = filterGroupByAffiliation(affiliation, groups);
-    const label = affiliation === GuestAffiliation.NONE ? "Unknown" : affiliation;
 
-    return { value: affiliation, label: `${label} (${totalGroups})` };
+    return { value: affiliation, label: `${affiliation} (${totalGroups})` };
   };
 
   return (

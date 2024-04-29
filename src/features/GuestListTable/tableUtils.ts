@@ -32,6 +32,7 @@ const doesGroupMatchFilter = (group: Group, filters: string[]) => {
     groupMatchesRsvp(group, filters)
   );
 };
+
 const isGroupMissingValue = (group: Group, filters: string[]): boolean => {
   const validEntries = ["email", "address1"];
   const missingValueFilters = filters.filter((filter) => validEntries.includes(filter));
@@ -54,10 +55,6 @@ const groupMatchesRsvp = (group: Group, filters: string[]): boolean => {
   const rsvpFilters = filters.filter((key) => {
     return key === ACCEPTED || key === DECLINED || key === NO_RESPONSE;
   });
-
-  if (rsvpFilters.length === 0) {
-    return true;
-  }
 
   return group.guests.some((guest) => rsvpFilters.includes(guest.rsvp));
 };

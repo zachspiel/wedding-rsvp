@@ -11,13 +11,9 @@ const RsvpStatusColumn = ({ guests }: Props): JSX.Element => {
     <List listStyleType="none" withPadding>
       {guests.map((guest) => (
         <List.Item key={guest.id}>
-          {guest.rsvp === RsvpResponse.ACCEPTED && <IconCheck color="green" />}
-          {guest.rsvp === RsvpResponse.DECLINED && <IconX color="red" />}
-          {guest.rsvp === RsvpResponse.NO_RESPONSE && (
-            <Badge variant="light" size="xs" fz="xs">
-              No response
-            </Badge>
-          )}
+          {guest.rsvp === RsvpResponse.ACCEPTED && "✅"}
+          {guest.rsvp === RsvpResponse.DECLINED && "❌"}
+          {guest.rsvp === RsvpResponse.NO_RESPONSE && "🤔"}
         </List.Item>
       ))}
     </List>
