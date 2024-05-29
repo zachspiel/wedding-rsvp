@@ -18,7 +18,7 @@ async function sendRsvpConfirmation(group: Group) {
   const mail = {
     from: process.env.EMAIL_RECIPIENTS,
     to: group.email,
-    subject: `Spielberger Wedding RSVP Confirmation 🎉💍`,
+    subject: `Patriz Wedding RSVP Confirmation 🎉💍`,
     html: render(RsvpConfirmationEmailTemplate(group)),
   };
 

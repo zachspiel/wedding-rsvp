@@ -6,7 +6,7 @@ import classes from "./styles.module.css";
 import { motion } from "framer-motion";
 import cx from "clsx";
 
-const ZachAndSedona = () => {
+const PatricAndCariza = () => {
   return (
     <SectionContainer>
       <Card padding="sm" radius="md" my="xl" py="xl">
@@ -39,7 +39,7 @@ const ZachAndSedona = () => {
               }}
             >
               <Title size="xl" className={classes.titleElement}>
-                Sedona Rannells
+                Patric
               </Title>
             </motion.div>
             <motion.div
@@ -73,7 +73,7 @@ const ZachAndSedona = () => {
               }}
             >
               <Title size="xl" className={classes.titleElement}>
-                Zachary Spielberger
+                Cariza
               </Title>
             </motion.div>
           </Flex>
@@ -95,4 +95,4 @@ const ZachAndSedona = () => {
   );
 };
 
-export default ZachAndSedona;
+export default PatricAndCariza;

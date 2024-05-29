@@ -2,9 +2,9 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Spielberger Wedding 2024",
-    short_name: "Spielberger Wedding 2024",
-    description: "We're getting married! Sedona Rannells and Zachary Spielberger 2024.",
+    name: "Patriz Wedding 2024",
+    short_name: "Patriz Wedding 2024",
+    description: "We're getting married! Patric and Cariza 2024.",
     start_url: "/",
     display: "browser",
     background_color: "#fff",

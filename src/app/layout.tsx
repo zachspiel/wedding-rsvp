@@ -26,11 +26,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Spielberger Wedding 2024",
-  metadataBase: new URL("https://zachandsedona.com"),
-  description: "We're getting married! Sedona Rannells and Zachary Spielberger 2024.",
-  creator: "Zachary Spielberger",
-  keywords: ["The Spielbergers 2024"],
+  title: "Patriz Wedding 2024",
+  metadataBase: new URL("https://patrizwedding.info"),
+  description: "We're getting married! Patric and Cariza 2024.",
+  creator: "Patric Rivera",
+  keywords: ["The Riveras 2024"],
   openGraph: {
     images: ["/opengraph-image.png"],
   },
