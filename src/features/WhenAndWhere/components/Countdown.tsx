@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const WeddingCountdown = (): JSX.Element => {
-  const weddingDate = new Date("10/26/2024");
+  const weddingDate = new Date("09/07/2024");
   const currentDate = new Date();
   const differenceInTime = weddingDate.getTime() - currentDate.getTime();
   const daysRemaining = differenceInTime / (1000 * 3600 * 24);

@@ -13,7 +13,7 @@ export default function Home() {
       <Jumbotron />
       <PatricAndCariza />
       <WhenAndWhere />
-      <RSVP />
+      {/* <RSVP /> */}
       <GuestBook />
       <Registry />
       <FAQ />

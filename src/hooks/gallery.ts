@@ -29,6 +29,7 @@ export const updatePhoto = async (
 export const uploadFileToGallery = async (file: File): Promise<Photo | null> => {
   const fileExtension = file.name.split(".").pop();
   const fileName = uuid() + "." + fileExtension;
+  debugger;
 
   const { data } = await supabase.storage.from(TABLE).upload(fileName, file);
 

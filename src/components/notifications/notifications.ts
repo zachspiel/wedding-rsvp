@@ -11,8 +11,8 @@ const showSuccessNotification = (message: string): void => {
 const showFailureNotification = (): void => {
   notifications.show({
     title: "Error",
-    message: "Oh no! Better call Zach 😭",
-    color: "red",
+    message: "Oh no! Better call Patric 😭",
+    color: "pink",
   });
 };
 

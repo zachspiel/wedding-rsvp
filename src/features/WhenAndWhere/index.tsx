@@ -42,7 +42,7 @@ const WhenAndWhere = (): JSX.Element => {
           fw={400}
           className={classes.dividerBottom}
         >
-          October 26th, 2024
+          September 07, 2024
         </Title>
       </Flex>
       <WeddingCountdown />
