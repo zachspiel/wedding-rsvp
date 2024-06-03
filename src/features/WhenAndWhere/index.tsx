@@ -21,16 +21,13 @@ const WhenAndWhere = (): JSX.Element => {
           fw={400}
           className={classes.dividerTop}
         >
-          Antel Clubhouse • Grand Ballroom
-        </Title>
-        <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
           <Anchor
             href={MAP_URL}
             target="_blank"
             style={{ color: "inherit" }}
             fz="inherit"
           >
-            https://maps.app.goo.gl/2dxB3VPV3EdovU8J8
+            Antel Clubhouse • Grand Ballroom
           </Anchor>
         </Title>
         <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>

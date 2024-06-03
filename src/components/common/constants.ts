@@ -1,1 +1,1 @@
-export const MAP_URL = "https://goo.gl/maps/BtzfDmV1pqNAbrRE6";
+export const MAP_URL = "https://maps.app.goo.gl/2dxB3VPV3EdovU8J8";
