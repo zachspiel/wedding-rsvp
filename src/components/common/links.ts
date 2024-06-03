@@ -10,5 +10,4 @@ export const links: MenuItem[] = [
   { label: "Registry", link: "#registry" },
   { label: "FAQ", link: "#faq" },
   { label: "Gallery", link: "#gallery" },
-  { label: "RSVP", link: "#rsvp" },
 ];

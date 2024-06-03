@@ -21,7 +21,7 @@ const WhenAndWhere = (): JSX.Element => {
           fw={400}
           className={classes.dividerTop}
         >
-          The Wright House • Garden Ballroom
+          Antel Clubhouse • Grand Ballroom
         </Title>
         <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
           <Anchor
@@ -30,7 +30,7 @@ const WhenAndWhere = (): JSX.Element => {
             style={{ color: "inherit" }}
             fz="inherit"
           >
-            636 W University Dr, Mesa, AZ 85201
+            https://maps.app.goo.gl/2dxB3VPV3EdovU8J8
           </Anchor>
         </Title>
         <Title size={isMobile ? "h4" : "h2"} order={2} mb="md" fw={400}>
