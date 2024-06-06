@@ -1,5 +1,5 @@
 import classes from "./jumbotron.module.css";
-import engagementPhoto from "./engagement.webp";
+import engagementPhoto from "./engagement.jpg";
 import Image from "next/image";
 
 const Jumbotron = (): JSX.Element => {
