@@ -37,7 +37,7 @@ const SectionContainer = ({
         <SimpleGrid
           cols={1}
           style={{
-            paddingBottom: greenBackground ? "1rem" : "5rem",
+            paddingBottom: greenBackground ? "2rem" : "5rem",
           }}
         >
           {children}

@@ -6,7 +6,7 @@ import classes from "./navbar.module.css";
 import MenuItems from "./components/MenuItems";
 import BurgerMenu from "./components/BurgerMenu";
 
-export const HEADER_HEIGHT = rem(100);
+export const HEADER_HEIGHT = rem(80);
 
 interface Props {
   user: User | null;
