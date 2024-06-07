@@ -1,3 +1,4 @@
+import Video from "@spiel-wedding/features/Video";
 import Gallery from "@spiel-wedding/features/Gallery";
 import GuestBook from "@spiel-wedding/features/GuestBook";
 import WhenAndWhere from "@spiel-wedding/features/WhenAndWhere";
@@ -12,6 +13,7 @@ export default function Home() {
     <main>
       <Jumbotron />
       <PatricAndCariza />
+      <Video/>
       <WhenAndWhere />
       {/* <RSVP /> */}
       <GuestBook />

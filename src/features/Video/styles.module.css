@@ -1,0 +1,10 @@
+.youtubeVideo {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.youtubeVideo iframe {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  width: 100%;
+}
