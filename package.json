@@ -1,7 +1,7 @@
 {
   "name": "spiel-wedding",
-  "version": "1.2.0",
-  "private": true,
+  "version": "1.2.1",
+  "private": false,
   "license": "MIT",
   "author": {
     "name": "Zachary Spielberger",

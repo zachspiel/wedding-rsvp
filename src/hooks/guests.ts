@@ -53,10 +53,15 @@ export const updateGroup = async (
       const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
       if (guest.nameUnknown && guest.rsvp === RsvpResponse.ACCEPTED) {
-        return { ...guest, id, groupId: updatedGroup.group_id, nameUnknown: false };
+        return {
+          ...guest,
+          guest_id: id,
+          groupId: updatedGroup.group_id,
+          nameUnknown: false,
+        };
       }
 
-      return { ...guest, id };
+      return { ...guest, guest_id: id };
     }) ?? [];
 
   const guestIds = updatedGuests.map((guest) => guest.guest_id);
@@ -89,7 +94,11 @@ export const updateGroup = async (
 };
 
 export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
-  const { data } = await supabase.from(GROUP_TABLE).delete().eq("id", groupId).select();
+  const { data } = await supabase
+    .from(GROUP_TABLE)
+    .delete()
+    .eq("group_id", groupId)
+    .select();
 
   return data?.[0];
 };
