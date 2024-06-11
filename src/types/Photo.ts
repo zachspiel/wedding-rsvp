@@ -1,5 +1,5 @@
 export interface Photo {
-  id: string;
+  gallery_id: string;
   caption?: string;
   isVisible: boolean;
   imagePath: string;

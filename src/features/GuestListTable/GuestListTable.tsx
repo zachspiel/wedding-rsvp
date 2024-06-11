@@ -28,7 +28,7 @@ import {
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import classes from "./styles.module.css";
 import useSWR from "swr";
 import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
@@ -56,7 +56,7 @@ const GuestListTable = (): JSX.Element => {
   const filteredGroups = filterGroups(
     sortGroups(groups ?? [], reverseSortDirection),
     search,
-    filters,
+    filters
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -93,6 +93,7 @@ const GuestListTable = (): JSX.Element => {
     );
   };
 
+  console.log(filteredGroups);
   return (
     <>
       <MGroup justify="space-between">
@@ -142,7 +143,7 @@ const GuestListTable = (): JSX.Element => {
                 checked={selectedRows.length === groups?.length}
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
-                    setSelectedRows((groups ?? []).map(({ id }) => id));
+                    setSelectedRows((groups ?? []).map(({ group_id }) => group_id));
                   } else {
                     setSelectedRows([]);
                   }
@@ -163,11 +164,11 @@ const GuestListTable = (): JSX.Element => {
             showRsvpStatus={showRsvpStatus}
             selectedGroups={selectedRows}
             openModal={openModal}
-            toggleGroupSelected={(group) => {
-              if (selectedRows.includes(group.id)) {
-                setSelectedRows(selectedRows.filter((id) => group.id !== id));
+            toggleGroupSelected={({ group_id }) => {
+              if (selectedRows.includes(group_id)) {
+                setSelectedRows(selectedRows.filter((id) => group_id !== id));
               } else {
-                setSelectedRows([...selectedRows, group.id]);
+                setSelectedRows([...selectedRows, group_id]);
               }
             }}
           />
@@ -178,7 +179,9 @@ const GuestListTable = (): JSX.Element => {
 
         {selectedGroup === undefined && (
           <BulkEditGroups
-            groups={groups?.filter(({ id }) => selectedRows.includes(id)) ?? []}
+            groups={
+              groups?.filter(({ group_id }) => selectedRows.includes(group_id)) ?? []
+            }
           />
         )}
       </Modal>
