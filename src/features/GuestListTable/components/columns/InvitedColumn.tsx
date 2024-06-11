@@ -26,7 +26,7 @@ const InvitedColumn = ({ group }: Props): JSX.Element => {
 
   return (
     <Radio.Group
-      name={`invited-${group.id}`}
+      name={`invited-${group.group_id}`}
       mt="lg"
       value={group.invited ? "definitely" : "maybe"}
       onChange={handleChange}

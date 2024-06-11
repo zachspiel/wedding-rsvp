@@ -2,6 +2,7 @@ import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 
 export const GUESTBOOK_SWR_KEY = "guestbook";
+
 const TABLE = "guestbook";
 
 export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]> => {

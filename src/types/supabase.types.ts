@@ -2,162 +2,247 @@ export type Json =
   | string
   | number
   | boolean
+  | null
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
-      gallery: {
+      event: {
         Row: {
-          caption: string;
+          address1: string | null;
+          address2: string | null;
+          city: string | null;
           created_at: string;
-          id: string;
-          imagePath: string;
-          isVisible: boolean;
+          date: string | null;
+          event_id: string;
+          location: string | null;
+          order: number | null;
+          postal: string | null;
+          state: string | null;
+          time: string | null;
+          title: string | null;
         };
         Insert: {
-          caption?: string;
+          address1?: string | null;
+          address2?: string | null;
+          city?: string | null;
           created_at?: string;
-          id?: string;
-          imagePath?: string;
-          isVisible?: boolean;
+          date?: string | null;
+          event_id?: string;
+          location?: string | null;
+          order?: number | null;
+          postal?: string | null;
+          state?: string | null;
+          time?: string | null;
+          title?: string | null;
         };
         Update: {
-          caption?: string;
+          address1?: string | null;
+          address2?: string | null;
+          city?: string | null;
           created_at?: string;
-          id?: string;
-          imagePath?: string;
-          isVisible?: boolean;
+          date?: string | null;
+          event_id?: string;
+          location?: string | null;
+          order?: number | null;
+          postal?: string | null;
+          state?: string | null;
+          time?: string | null;
+          title?: string | null;
+        };
+        Relationships: [];
+      };
+      event_responses: {
+        Row: {
+          created_at: string;
+          eventId: string | null;
+          guestId: string | null;
+          response_id: string;
+          rsvp: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          eventId?: string | null;
+          guestId?: string | null;
+          response_id?: string;
+          rsvp?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          eventId?: string | null;
+          guestId?: string | null;
+          response_id?: string;
+          rsvp?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "event_responses_eventId_fkey";
+            columns: ["eventId"];
+            isOneToOne: false;
+            referencedRelation: "event";
+            referencedColumns: ["event_id"];
+          },
+          {
+            foreignKeyName: "event_responses_guestId_fkey";
+            columns: ["guestId"];
+            isOneToOne: false;
+            referencedRelation: "guests";
+            referencedColumns: ["guest_id"];
+          }
+        ];
+      };
+      gallery: {
+        Row: {
+          caption: string | null;
+          created_at: string;
+          gallery_id: string;
+          imagePath: string | null;
+          isVisible: boolean | null;
+        };
+        Insert: {
+          caption?: string | null;
+          created_at?: string;
+          gallery_id?: string;
+          imagePath?: string | null;
+          isVisible?: boolean | null;
+        };
+        Update: {
+          caption?: string | null;
+          created_at?: string;
+          gallery_id?: string;
+          imagePath?: string | null;
+          isVisible?: boolean | null;
         };
         Relationships: [];
       };
       group: {
         Row: {
-          address1: string;
-          address2: string;
-          affiliation: string;
-          city: string;
-          country: string;
+          address1: string | null;
+          address2: string | null;
+          affiliation: string | null;
+          city: string | null;
+          country: string | null;
           created_at: string;
-          dietaryRestrictions: string;
-          edited_at: string;
-          email: string;
-          id: string;
-          invited: boolean;
-          inviteSent: boolean;
-          message: string;
-          phone: string;
-          postal: string;
-          rsvpModifications: string[];
-          saveTheDateSent: boolean;
-          state: string;
+          dietaryRestrictions: string | null;
+          edited_at: string | null;
+          email: string | null;
+          group_id: string;
+          invited: boolean | null;
+          inviteSent: boolean | null;
+          message: string | null;
+          phone: string | null;
+          postal: string | null;
+          rsvpModifications: string[] | null;
+          saveTheDateSent: boolean | null;
+          state: string | null;
         };
         Insert: {
-          address1?: string;
-          address2?: string;
-          affiliation?: string;
-          city?: string;
-          country?: string;
+          address1?: string | null;
+          address2?: string | null;
+          affiliation?: string | null;
+          city?: string | null;
+          country?: string | null;
           created_at?: string;
-          dietaryRestrictions?: string;
-          edited_at?: string;
-          email?: string;
-          id?: string;
-          invited?: boolean;
-          inviteSent?: boolean;
-          message?: string;
-          phone?: string;
-          postal?: string;
-          rsvpModifications?: string[];
-          saveTheDateSent?: boolean;
-          state?: string;
+          dietaryRestrictions?: string | null;
+          edited_at?: string | null;
+          email?: string | null;
+          group_id?: string;
+          invited?: boolean | null;
+          inviteSent?: boolean | null;
+          message?: string | null;
+          phone?: string | null;
+          postal?: string | null;
+          rsvpModifications?: string[] | null;
+          saveTheDateSent?: boolean | null;
+          state?: string | null;
         };
         Update: {
-          address1?: string;
-          address2?: string;
-          affiliation?: string;
-          city?: string;
-          country?: string;
+          address1?: string | null;
+          address2?: string | null;
+          affiliation?: string | null;
+          city?: string | null;
+          country?: string | null;
           created_at?: string;
-          dietaryRestrictions?: string;
-          edited_at?: string;
-          email?: string;
-          id?: string;
-          invited?: boolean;
-          inviteSent?: boolean;
-          message?: string;
-          phone?: string;
-          postal?: string;
-          rsvpModifications?: string[];
-          saveTheDateSent?: boolean;
-          state?: string;
+          dietaryRestrictions?: string | null;
+          edited_at?: string | null;
+          email?: string | null;
+          group_id?: string;
+          invited?: boolean | null;
+          inviteSent?: boolean | null;
+          message?: string | null;
+          phone?: string | null;
+          postal?: string | null;
+          rsvpModifications?: string[] | null;
+          saveTheDateSent?: boolean | null;
+          state?: string | null;
         };
         Relationships: [];
       };
       guestbook: {
         Row: {
           createdAt: string;
-          editedAt: string;
+          editedAt: string | null;
           email: string;
           id: string;
-          isVisible: boolean;
-          message: string;
-          name: string;
+          isVisible: boolean | null;
+          message: string | null;
+          name: string | null;
         };
         Insert: {
           createdAt?: string;
-          editedAt?: string;
+          editedAt?: string | null;
           email: string;
           id?: string;
-          isVisible?: boolean;
-          message?: string;
-          name?: string;
+          isVisible?: boolean | null;
+          message?: string | null;
+          name?: string | null;
         };
         Update: {
           createdAt?: string;
-          editedAt?: string;
+          editedAt?: string | null;
           email?: string;
           id?: string;
-          isVisible?: boolean;
-          message?: string;
-          name?: string;
+          isVisible?: boolean | null;
+          message?: string | null;
+          name?: string | null;
         };
         Relationships: [];
       };
       guests: {
         Row: {
-          createdAt: string;
-          firstName: string;
-          groupId: string;
-          id: string;
-          lastName: string;
-          nameUnknown: boolean;
-          relationshipType: string;
-          rsvp: string;
-          title: string;
+          createdAt: string | null;
+          firstName: string | null;
+          groupId: string | null;
+          guest_id: string;
+          lastName: string | null;
+          nameUnknown: boolean | null;
+          relationshipType: string | null;
+          rsvp: string | null;
+          title: string | null;
         };
         Insert: {
-          createdAt?: string;
-          firstName?: string;
-          groupId?: string;
-          id?: string;
-          lastName?: string;
-          nameUnknown?: boolean;
-          relationshipType?: string;
-          rsvp?: string;
-          title?: string;
+          createdAt?: string | null;
+          firstName?: string | null;
+          groupId?: string | null;
+          guest_id?: string;
+          lastName?: string | null;
+          nameUnknown?: boolean | null;
+          relationshipType?: string | null;
+          rsvp?: string | null;
+          title?: string | null;
         };
         Update: {
-          createdAt?: string;
-          firstName?: string;
-          groupId?: string;
-          id?: string;
-          lastName?: string;
-          nameUnknown?: boolean;
-          relationshipType?: string;
-          rsvp?: string;
-          title?: string;
+          createdAt?: string | null;
+          firstName?: string | null;
+          groupId?: string | null;
+          guest_id?: string;
+          lastName?: string | null;
+          nameUnknown?: boolean | null;
+          relationshipType?: string | null;
+          rsvp?: string | null;
+          title?: string | null;
         };
         Relationships: [
           {
@@ -165,6 +250,13 @@ export interface Database {
             columns: ["groupId"];
             isOneToOne: false;
             referencedRelation: "group";
+            referencedColumns: ["group_id"];
+          },
+          {
+            foreignKeyName: "guests_groupId_fkey";
+            columns: ["groupId"];
+            isOneToOne: false;
+            referencedRelation: "test_groups";
             referencedColumns: ["id"];
           }
         ];
@@ -172,32 +264,64 @@ export interface Database {
       rsvp_modifications: {
         Row: {
           createdAt: string;
-          groupId: string;
+          groupId: string | null;
           id: string;
         };
         Insert: {
           createdAt?: string;
-          groupId?: string;
+          groupId?: string | null;
           id?: string;
         };
         Update: {
           createdAt?: string;
-          groupId?: string;
+          groupId?: string | null;
           id?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      test_groups: {
+        Row: {
+          address1: string | null;
+          address2: string | null;
+          affiliation: string | null;
+          city: string | null;
+          country: string | null;
+          created_at: string | null;
+          dietaryRestrictions: string | null;
+          edited_at: string | null;
+          email: string | null;
+          firstName: string | null;
+          groupId: string | null;
+          id: string | null;
+          invited: boolean | null;
+          inviteSent: boolean | null;
+          lastName: string | null;
+          message: string | null;
+          phone: string | null;
+          postal: string | null;
+          rsvpModifications: string[] | null;
+          saveTheDateSent: boolean | null;
+          state: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "rsvp_modifications_groupId_fkey";
+            foreignKeyName: "guests_groupId_fkey";
             columns: ["groupId"];
             isOneToOne: false;
             referencedRelation: "group";
+            referencedColumns: ["group_id"];
+          },
+          {
+            foreignKeyName: "guests_groupId_fkey";
+            columns: ["groupId"];
+            isOneToOne: false;
+            referencedRelation: "test_groups";
             referencedColumns: ["id"];
           }
         ];
       };
-    };
-    Views: {
-      [_ in never]: never;
     };
     Functions: {
       [_ in never]: never;
@@ -209,11 +333,13 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
+
+type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
@@ -226,10 +352,9 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+      PublicSchema["Views"])
+  ? (PublicSchema["Tables"] & PublicSchema["Views"])[PublicTableNameOrOptions] extends {
       Row: infer R;
     }
     ? R
@@ -238,7 +363,7 @@ export type Tables<
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
@@ -249,8 +374,8 @@ export type TablesInsert<
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
       Insert: infer I;
     }
     ? I
@@ -259,7 +384,7 @@ export type TablesInsert<
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
@@ -270,8 +395,8 @@ export type TablesUpdate<
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
       Update: infer U;
     }
     ? U
@@ -280,13 +405,13 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+  ? PublicSchema["Enums"][PublicEnumNameOrOptions]
   : never;

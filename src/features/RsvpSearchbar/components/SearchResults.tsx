@@ -14,12 +14,12 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
         const isModifyingRsvp = group.rsvpModifications !== null;
 
         return (
-          <Flex direction="column" key={group.id}>
+          <Flex direction="column" key={group.group_id}>
             <Divider my="sm" />
             <MGroup justify="space-between">
               <Flex direction="column">
                 {group.guests.map((guest, guestIndex) => (
-                  <Text key={`group-${group.id}-guest-${guestIndex}`}>
+                  <Text key={`group-${group.group_id}-guest-${guestIndex}`}>
                     {guest.nameUnknown && "Guest name unknown"}
                     {guest.firstName} {guest.lastName}
                   </Text>

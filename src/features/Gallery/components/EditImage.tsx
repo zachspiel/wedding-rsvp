@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Modal,
-  TextInput,
-  Group,
-  Button,
-  ActionIcon,
-  Switch,
-} from "@mantine/core";
+import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import {
@@ -17,11 +10,7 @@ import {
 import { Photo } from "@spiel-wedding/types/Photo";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
-import {
-  GALLERY_SWR_KEY,
-  removeImage,
-  updatePhoto,
-} from "@spiel-wedding/hooks/gallery";
+import { GALLERY_SWR_KEY, removeImage, updatePhoto } from "@spiel-wedding/hooks/gallery";
 
 interface Props {
   image: Photo;
@@ -37,7 +26,7 @@ const EditImage = ({ image }: Props): JSX.Element => {
   });
 
   const handleSubmit = async () => {
-    const photo = await updatePhoto(image.id, form.getTransformedValues());
+    const photo = await updatePhoto(image.gallery_id, form.getTransformedValues());
 
     if (photo) {
       showSuccessNotification("Successfully updated image!");

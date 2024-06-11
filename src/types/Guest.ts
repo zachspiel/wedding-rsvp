@@ -1,5 +1,5 @@
 export interface Group {
-  id: string;
+  group_id: string;
   email: string;
   affiliation: GuestAffiliation;
   address1: string;
@@ -19,7 +19,7 @@ export interface Group {
 }
 
 export interface Guest {
-  id: string;
+  guest_id: string;
   groupId: string;
   title: string;
   firstName: string;

@@ -26,12 +26,17 @@ const groupContainsQuery = (group: Group, query: string): boolean => {
 };
 
 const doesGroupMatchFilter = (group: Group, filters: string[]) => {
+  if (filters.length === 0) {
+    return true;
+  }
+
   return (
     isGroupMissingValue(group, filters) ||
     groupMatchesAffiliation(group, filters) ||
     groupMatchesRsvp(group, filters)
   );
 };
+
 const isGroupMissingValue = (group: Group, filters: string[]): boolean => {
   const validEntries = ["email", "address1"];
   const missingValueFilters = filters.filter((filter) => validEntries.includes(filter));
@@ -55,32 +60,33 @@ const groupMatchesRsvp = (group: Group, filters: string[]): boolean => {
     return key === ACCEPTED || key === DECLINED || key === NO_RESPONSE;
   });
 
-  if (rsvpFilters.length === 0) {
-    return true;
-  }
-
   return group.guests.some((guest) => rsvpFilters.includes(guest.rsvp));
 };
 
 const guestsContainQuery = (guests: Guest[], query: string): boolean => {
-  return guests.some(
-    (guest) =>
-      Object.keys(guest)
-        .filter(isGuestFilterableKey)
-        .some((key) => guest[key].toLowerCase().includes(query)) ||
-      `${guest.firstName.toLowerCase()} ${guest.lastName.toLowerCase()}`.includes(query),
-  );
+  return guests.some((guest) => {
+    const fullName = `${guest.firstName} ${guest.lastName}`.toLowerCase();
+    const guestNameMatches = fullName.includes(query.toLowerCase());
+
+    if (guestNameMatches) {
+      return true;
+    }
+
+    return Object.keys(guest)
+      .filter(isGuestFilterableKey)
+      .some((key) => guest[key].toLowerCase().includes(query));
+  });
 };
 
 const isGroupFilterableKey = (
-  key: GroupFilterableKey | string,
+  key: GroupFilterableKey | string
 ): key is GroupFilterableKey => {
   const validKeys = ["email", "address1", "address2", "city", "state"];
   return validKeys.includes(key);
 };
 
 const isGuestFilterableKey = (
-  key: GuestFilterableKey | string,
+  key: GuestFilterableKey | string
 ): key is GuestFilterableKey => {
   const validKeys = ["firstName", "lastName", "rsvp"];
   return validKeys.includes(key);

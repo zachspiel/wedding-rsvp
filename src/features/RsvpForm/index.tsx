@@ -102,7 +102,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
           {form.values.guests.map((guest, guestIndex) => (
-            <Flex direction="column" key={`${guest.id}-rsvp-form`}>
+            <Flex direction="column" key={`${guest.guest_id}-rsvp-form`}>
               <Divider my="sm" />
               <MGroup justify="space-between">
                 <Text>

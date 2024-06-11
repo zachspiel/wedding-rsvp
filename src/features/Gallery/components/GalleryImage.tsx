@@ -20,7 +20,7 @@ interface Props {
 
 const getPlaceholder = async (url: string) => {
   const { data } = await fetch(`/api/placeholder?imageUrl=${url}`).then((res) =>
-    res.json(),
+    res.json()
   );
 
   return data;
@@ -36,7 +36,7 @@ const GalleryImage = ({
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
   const { data: placeholder } = useSWR(
     [`placeholder-${data.publicUrl}`, data.publicUrl],
-    ([key, url]) => getPlaceholder(url),
+    ([key, url]) => getPlaceholder(url)
   );
 
   return (
@@ -50,7 +50,7 @@ const GalleryImage = ({
       <Image
         key={data.publicUrl}
         src={data.publicUrl}
-        alt={image.caption ?? image.id}
+        alt={image.caption ?? image.gallery_id}
         className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
