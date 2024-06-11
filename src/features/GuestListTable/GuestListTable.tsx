@@ -93,7 +93,6 @@ const GuestListTable = (): JSX.Element => {
     );
   };
 
-  console.log(filteredGroups);
   return (
     <>
       <MGroup justify="space-between">
