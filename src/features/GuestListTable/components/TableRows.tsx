@@ -18,12 +18,12 @@ const TableRows = (props: Props): JSX.Element => {
   return (
     <>
       {props.groups.map((group) => (
-        <TableTr key={group.id}>
+        <TableTr key={group.group_id}>
           <TableTd>
             <Checkbox
               checked={
                 props.selectedGroups.length === props.groups.length ||
-                props.selectedGroups.includes(group.id)
+                props.selectedGroups.includes(group.group_id)
               }
               onChange={(e) => props.toggleGroupSelected(group)}
             />

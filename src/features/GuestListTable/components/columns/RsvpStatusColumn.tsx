@@ -10,7 +10,7 @@ const RsvpStatusColumn = ({ guests }: Props): JSX.Element => {
   return (
     <List listStyleType="none" withPadding>
       {guests.map((guest) => (
-        <List.Item key={guest.id}>
+        <List.Item key={guest.guest_id}>
           {guest.rsvp === RsvpResponse.ACCEPTED && "✅"}
           {guest.rsvp === RsvpResponse.DECLINED && "❌"}
           {guest.rsvp === RsvpResponse.NO_RESPONSE && "🤔"}

@@ -75,7 +75,7 @@ const EditGuest = ({ group, close }: Props): JSX.Element => {
                 form={form}
                 groupType="family"
                 index={index}
-                key={`${guest.id}-edit-guest`}
+                key={`${guest.guest_id}-edit-guest`}
               />
             );
           })}
@@ -133,7 +133,7 @@ const EditGuest = ({ group, close }: Props): JSX.Element => {
               guest={guest}
               index={index}
               form={form}
-              key={`${guest.id}-rsvp-status`}
+              key={`${guest.guest_id}-rsvp-status`}
             />
           ))}
         </Tabs.Panel>

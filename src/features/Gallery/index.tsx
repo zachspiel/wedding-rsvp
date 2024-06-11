@@ -29,7 +29,7 @@ const Gallery = (): JSX.Element => {
     return images
       ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
       .map((photo) => (
-        <Carousel.Slide key={photo.id}>
+        <Carousel.Slide key={photo.gallery_id}>
           <GalleryImage
             image={photo}
             displayAdminView={isAdminViewEnabled}
@@ -37,7 +37,9 @@ const Gallery = (): JSX.Element => {
             objectFit={objectFit}
             openImage={() => {
               if (updateOrderedPhotos) {
-                const newOrderedPhotos = images.filter((item) => item.id !== photo.id);
+                const newOrderedPhotos = images.filter(
+                  (item) => item.gallery_id !== photo.gallery_id
+                );
                 newOrderedPhotos.unshift(photo);
 
                 setOpenModal(true);

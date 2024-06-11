@@ -28,7 +28,7 @@ export const createGroup = async (group: Group): Promise<Group | undefined> => {
   }
 
   const newGroup = data?.[0] ?? ({} as Group);
-  const newGuests = await createGuests(guests, newGroup.id);
+  const newGuests = await createGuests(guests, newGroup.group_id);
 
   return { ...newGroup, guests: newGuests };
 };
@@ -59,7 +59,7 @@ export const updateGroup = async (
       return { ...guest, id };
     }) ?? [];
 
-  const guestIds = updatedGuests.map((guest) => guest.id);
+  const guestIds = updatedGuests.map((guest) => guest.guest_id);
 
   const removedGuests = originalGroup.guests.filter(
     (guest) => !guestIds.includes(guest.guest_id)
@@ -69,7 +69,9 @@ export const updateGroup = async (
     await deleteGuests(removedGuests);
   }
 
-  const remainingGuests = updatedGuests.filter((guest) => guestIds.includes(guest.id));
+  const remainingGuests = updatedGuests.filter((guest) =>
+    guestIds.includes(guest.guest_id)
+  );
 
   const updatedGuestsResult = await upsertGuests(remainingGuests);
 

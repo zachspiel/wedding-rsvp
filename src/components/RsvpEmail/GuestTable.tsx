@@ -32,7 +32,7 @@ const GuestTable = ({ guests }: Props): JSX.Element => {
       </Row>
 
       {guests.map((guest) => (
-        <Row key={guest.id} style={tableRow}>
+        <Row key={guest.guest_id} style={tableRow}>
           {createColumn(`${guest.firstName} ${guest.lastName}`)}
           {createColumn(guest.rsvp)}
         </Row>
