@@ -19,7 +19,7 @@ export const getGroups = async (): Promise<Group[]> => {
 };
 
 export const createGroup = async (group: Group): Promise<Group | undefined> => {
-  const { id, guests, rsvpModifications, ...groupData } = group;
+  const { group_id, guests, rsvpModifications, ...groupData } = group;
 
   const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
 
@@ -28,7 +28,7 @@ export const createGroup = async (group: Group): Promise<Group | undefined> => {
   }
 
   const newGroup = data?.[0] ?? ({} as Group);
-  const newGuests = await createGuests(guests, newGroup.id);
+  const newGuests = await createGuests(guests, newGroup.group_id);
 
   return { ...newGroup, guests: newGuests };
 };
@@ -44,39 +44,46 @@ export const bulkUpdateGroups = async (groups: TablesUpdate<"group">[]) => {
 
 export const updateGroup = async (
   group: Group,
-  originalGroup: Group,
+  originalGroup: Group
 ): Promise<Group | undefined> => {
   const { guests, rsvpModifications, ...updatedGroup } = group;
 
   const updatedGuests =
     guests?.map((guest) => {
-      const id = (guest?.id?.length ?? 0) === 0 ? uuid() : guest.id;
+      const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
       if (guest.nameUnknown && guest.rsvp === RsvpResponse.ACCEPTED) {
-        return { ...guest, id, groupId: updatedGroup.id, nameUnknown: false };
+        return {
+          ...guest,
+          guest_id: id,
+          groupId: updatedGroup.group_id,
+          nameUnknown: false,
+        };
       }
 
-      return { ...guest, id };
+      return { ...guest, guest_id: id };
     }) ?? [];
 
-  const guestIds = updatedGuests.map((guest) => guest.id);
+  const guestIds = updatedGuests.map((guest) => guest.guest_id);
 
   const removedGuests = originalGroup.guests.filter(
-    (guest) => !guestIds.includes(guest.id),
+    (guest) => !guestIds.includes(guest.guest_id)
   );
 
   if (removedGuests.length > 0) {
     await deleteGuests(removedGuests);
   }
 
-  const remainingGuests = updatedGuests.filter((guest) => guestIds.includes(guest.id));
+  const remainingGuests = updatedGuests.filter((guest) =>
+    guestIds.includes(guest.guest_id)
+  );
 
   const updatedGuestsResult = await upsertGuests(remainingGuests);
 
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .update(updatedGroup)
-    .eq("id", group.id)
+    .eq("group_id", group.group_id)
     .select();
 
   if (error) {
@@ -87,17 +94,21 @@ export const updateGroup = async (
 };
 
 export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
-  const { data } = await supabase.from(GROUP_TABLE).delete().eq("id", groupId).select();
+  const { data } = await supabase
+    .from(GROUP_TABLE)
+    .delete()
+    .eq("group_id", groupId)
+    .select();
 
   return data?.[0];
 };
 
 export const createGuests = async (
   guests: TablesInsert<"guests">[],
-  groupId: string,
+  groupId: string
 ): Promise<Guest[] | undefined> => {
   const formattedGuests = guests.map((guest) => {
-    const { id, ...values } = guest;
+    const { guest_id, ...values } = guest;
     return { ...values, groupId: groupId };
   });
 
@@ -114,19 +125,19 @@ export const createGuests = async (
 };
 
 export const updateGuest = async (
-  guest: Tables<"guests">,
+  guest: Tables<"guests">
 ): Promise<Guest | undefined> => {
   const { data } = await supabase
     .from(GUEST_TABLE)
     .update({ ...guest })
-    .eq("id", guest.id)
+    .eq("guest_id", guest.guest_id)
     .select();
 
   return data?.[0];
 };
 
 export const upsertGuests = async (
-  guests: TablesUpdate<"guests">[],
+  guests: TablesUpdate<"guests">[]
 ): Promise<Guest[]> => {
   const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
 
@@ -134,14 +145,14 @@ export const upsertGuests = async (
 };
 
 export const deleteGuests = async (
-  guests: TablesUpdate<"guests">[],
+  guests: TablesUpdate<"guests">[]
 ): Promise<Guest[]> => {
   const { data } = await supabase
     .from(GUEST_TABLE)
     .delete()
     .in(
-      "id",
-      guests.map((guest) => guest.id),
+      "guest_id",
+      guests.map((guest) => guest.guest_id)
     )
     .select();
 
@@ -149,7 +160,7 @@ export const deleteGuests = async (
 };
 
 export const addEntryToRsvpModifications = async (
-  groupId: string,
+  groupId: string
 ): Promise<RsvpModification | undefined> => {
   const { data } = await supabase.from(RSVP_TABLE).insert({ groupId }).select();
 

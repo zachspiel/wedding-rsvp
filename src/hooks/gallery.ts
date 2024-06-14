@@ -4,6 +4,7 @@ import { FileObject } from "@supabase/storage-js";
 import { createClient } from "@spiel-wedding/database/client";
 
 export const GALLERY_SWR_KEY = "gallery";
+
 const supabase = createClient();
 const TABLE = "gallery";
 
@@ -20,7 +21,7 @@ export const updatePhoto = async (
   const { data } = await supabase
     .from(TABLE)
     .update({ ...photo })
-    .eq("id", id)
+    .eq("gallery_id", id)
     .select();
 
   return data?.[0];
@@ -40,7 +41,7 @@ export const uploadFileToGallery = async (file: File): Promise<Photo | null> => 
 };
 
 export const addImageCaption = async (imagePath: string): Promise<Photo | null> => {
-  const newImage: Omit<Photo, "id"> = {
+  const newImage: Omit<Photo, "gallery_id"> = {
     caption: "",
     isVisible: false,
     imagePath: imagePath,
@@ -58,7 +59,10 @@ export const addImageCaption = async (imagePath: string): Promise<Photo | null> 
 export const removeImage = async (photo: Photo): Promise<FileObject[] | null> => {
   const { data } = await supabase.storage.from("gallery").remove([photo.imagePath]);
 
-  const { error } = await supabase.from(TABLE).delete().eq("id", photo.id);
+  const { error } = await supabase
+    .from(TABLE)
+    .delete()
+    .eq("gallery_id", photo.gallery_id);
 
   if (error) {
     return null;

@@ -142,7 +142,7 @@ const GuestListTable = (): JSX.Element => {
                 checked={selectedRows.length === groups?.length}
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
-                    setSelectedRows((groups ?? []).map(({ id }) => id));
+                    setSelectedRows((groups ?? []).map(({ group_id }) => group_id));
                   } else {
                     setSelectedRows([]);
                   }
@@ -163,11 +163,11 @@ const GuestListTable = (): JSX.Element => {
             showRsvpStatus={showRsvpStatus}
             selectedGroups={selectedRows}
             openModal={openModal}
-            toggleGroupSelected={(group) => {
-              if (selectedRows.includes(group.id)) {
-                setSelectedRows(selectedRows.filter((id) => group.id !== id));
+            toggleGroupSelected={({ group_id }) => {
+              if (selectedRows.includes(group_id)) {
+                setSelectedRows(selectedRows.filter((id) => group_id !== id));
               } else {
-                setSelectedRows([...selectedRows, group.id]);
+                setSelectedRows([...selectedRows, group_id]);
               }
             }}
           />
@@ -178,7 +178,9 @@ const GuestListTable = (): JSX.Element => {
 
         {selectedGroup === undefined && (
           <BulkEditGroups
-            groups={groups?.filter(({ id }) => selectedRows.includes(id)) ?? []}
+            groups={
+              groups?.filter(({ group_id }) => selectedRows.includes(group_id)) ?? []
+            }
           />
         )}
       </Modal>

@@ -12,11 +12,11 @@ const createDefaultGroup = (): Group => {
   const groupId = uuid();
 
   return {
-    id: groupId,
+    group_id: groupId,
     email: "",
     guests: [
       {
-        id: uuid(),
+        guest_id: uuid(),
         groupId: groupId,
         title: "",
         firstName: "",
@@ -42,7 +42,7 @@ const createDefaultGroup = (): Group => {
 
 const createGuest = (form: UseFormReturnType<Group>): Partial<Guest> => {
   return {
-    groupId: form.values.id,
+    groupId: form.values.group_id,
     firstName: "",
     lastName: "",
     rsvp: RsvpResponse.NO_RESPONSE,

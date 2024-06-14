@@ -20,7 +20,6 @@ const Gallery = (): JSX.Element => {
   const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
   const [openModal, setOpenModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
-  const [activeIndex, setIndex] = useState(0);
 
   const createSlides = (
     objectFit: "cover" | "contain",
@@ -29,17 +28,18 @@ const Gallery = (): JSX.Element => {
   ) => {
     return images
       ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
-      .map((photo, index) => (
-        <Carousel.Slide key={photo.id}>
+      .map((photo) => (
+        <Carousel.Slide key={photo.gallery_id}>
           <GalleryImage
             image={photo}
             displayAdminView={isAdminViewEnabled}
             isOpen={!updateOrderedPhotos ? openModal : false}
             objectFit={objectFit}
-            isActive={index === activeIndex}
             openImage={() => {
               if (updateOrderedPhotos) {
-                const newOrderedPhotos = images.filter((item) => item.id !== photo.id);
+                const newOrderedPhotos = images.filter(
+                  (item) => item.gallery_id !== photo.gallery_id
+                );
                 newOrderedPhotos.unshift(photo);
 
                 setOpenModal(true);
@@ -92,7 +92,6 @@ const Gallery = (): JSX.Element => {
           loop
           withIndicators
           classNames={classes}
-          onSlideChange={setIndex}
         >
           {createSlides("contain", orderedPhotos)}
         </Carousel>

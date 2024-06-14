@@ -1,10 +1,4 @@
-import {
-  ActionIcon,
-  Button,
-  Group as MGroup,
-  Modal,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Button, Group as MGroup, Modal, Text } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { Group } from "@spiel-wedding/types/Guest";
 import { useDisclosure } from "@mantine/hooks";
@@ -25,7 +19,7 @@ const ActionColumn = ({ group, onEdit }: Props): JSX.Element => {
   const { mutate } = useSWRConfig();
 
   const handleDelete = async () => {
-    const removedGroup = await deleteGroup(group.id);
+    const removedGroup = await deleteGroup(group.group_id);
 
     if (removedGroup) {
       showSuccessNotification("Successfully deleted guests 🎉");
@@ -48,9 +42,7 @@ const ActionColumn = ({ group, onEdit }: Props): JSX.Element => {
         </ActionIcon>
       </MGroup>
       <Modal opened={opened} onClose={close} centered>
-        <Text>
-          This will permanently delete this group. Do you wish to continue?
-        </Text>
+        <Text>This will permanently delete this group. Do you wish to continue?</Text>
         <MGroup align="flex-end" mt="lg">
           <Button variant="subtle" onClick={close}>
             Cancel

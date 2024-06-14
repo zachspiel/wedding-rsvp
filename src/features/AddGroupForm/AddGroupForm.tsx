@@ -118,7 +118,7 @@ const AddGroupForm = () => {
                 form={form}
                 groupType={groupType}
                 index={index}
-                key={`${guest.id}-guest-input-${index}`}
+                key={`${guest.guest_id}-guest-input-${index}`}
               />
             );
           })}

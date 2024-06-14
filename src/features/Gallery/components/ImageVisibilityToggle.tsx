@@ -20,7 +20,7 @@ const ImageVisibilityToggle = ({ photo }: Props): JSX.Element => {
   const theme = useMantineTheme();
 
   const toggleVisibility = async (isVisible: boolean) => {
-    const updatedPhoto = await updatePhoto(photo.id, { isVisible });
+    const updatedPhoto = await updatePhoto(photo.gallery_id, { isVisible });
     const successMessage = isVisible ? "public" : "hidden";
 
     if (updatedPhoto) {

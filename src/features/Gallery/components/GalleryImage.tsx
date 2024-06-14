@@ -13,7 +13,6 @@ import useSWR from "swr";
 interface Props {
   image: Photo;
   displayAdminView: boolean;
-  isActive: boolean;
   isOpen?: boolean;
   objectFit?: "contain" | "cover";
   openImage?: () => void;
@@ -30,7 +29,6 @@ const getPlaceholder = async (url: string) => {
 const GalleryImage = ({
   image,
   displayAdminView,
-  isActive,
   isOpen,
   objectFit,
   openImage,
@@ -52,11 +50,8 @@ const GalleryImage = ({
       <Image
         key={data.publicUrl}
         src={data.publicUrl}
-        alt={image.caption ?? image.id}
-        className={cx(
-          classes.cardImage,
-          !isOpen && isActive ? classes.cardWithHover : ""
-        )}
+        alt={image.caption ?? image.gallery_id}
+        className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         style={{
