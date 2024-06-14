@@ -15,6 +15,7 @@
     "analyze": "cross-env ANALYZE=true yarn build"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^16.6.0",
     "@mantine/carousel": "^7.6.2",
     "@mantine/core": "^7.6.2",
     "@mantine/dropzone": "^7.6.2",

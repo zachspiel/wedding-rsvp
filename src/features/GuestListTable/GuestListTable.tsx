@@ -28,7 +28,7 @@ import {
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import classes from "./styles.module.css";
 import useSWR from "swr";
 import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
@@ -56,7 +56,7 @@ const GuestListTable = (): JSX.Element => {
   const filteredGroups = filterGroups(
     sortGroups(groups ?? [], reverseSortDirection),
     search,
-    filters,
+    filters
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {

@@ -13,6 +13,7 @@ import useSWR from "swr";
 interface Props {
   image: Photo;
   displayAdminView: boolean;
+  isActive: boolean;
   isOpen?: boolean;
   objectFit?: "contain" | "cover";
   openImage?: () => void;
@@ -20,7 +21,7 @@ interface Props {
 
 const getPlaceholder = async (url: string) => {
   const { data } = await fetch(`/api/placeholder?imageUrl=${url}`).then((res) =>
-    res.json(),
+    res.json()
   );
 
   return data;
@@ -29,6 +30,7 @@ const getPlaceholder = async (url: string) => {
 const GalleryImage = ({
   image,
   displayAdminView,
+  isActive,
   isOpen,
   objectFit,
   openImage,
@@ -36,7 +38,7 @@ const GalleryImage = ({
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
   const { data: placeholder } = useSWR(
     [`placeholder-${data.publicUrl}`, data.publicUrl],
-    ([key, url]) => getPlaceholder(url),
+    ([key, url]) => getPlaceholder(url)
   );
 
   return (
@@ -51,7 +53,10 @@ const GalleryImage = ({
         key={data.publicUrl}
         src={data.publicUrl}
         alt={image.caption ?? image.id}
-        className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
+        className={cx(
+          classes.cardImage,
+          !isOpen && isActive ? classes.cardWithHover : ""
+        )}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         style={{
