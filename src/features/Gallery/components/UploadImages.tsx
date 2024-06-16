@@ -30,7 +30,7 @@ const UploadImages = (): JSX.Element => {
 
   const uploadImage = async (file: File) => {
     new Compressor(file, {
-      quality: 0.6,
+      quality: 0.7,
 
       success(result) {
         uploadFileToGallery(result as File)

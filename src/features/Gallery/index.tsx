@@ -16,7 +16,9 @@ import { IconX } from "@tabler/icons-react";
 
 const Gallery = (): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery);
+  const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery, {
+    revalidateOnFocus: false,
+  });
   const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
   const [openModal, setOpenModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");

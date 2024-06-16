@@ -36,7 +36,8 @@ const GalleryImage = ({
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
   const { data: placeholder } = useSWR(
     [`placeholder-${data.publicUrl}`, data.publicUrl],
-    ([key, url]) => getPlaceholder(url)
+    ([key, url]) => getPlaceholder(url),
+    { revalidateOnFocus: false }
   );
 
   return (

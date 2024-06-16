@@ -12,7 +12,17 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["@mantine/core", "@mantine/hooks", "@supabase/supabase-js"],
+    optimizePackageImports: [
+      "@hello-pangea/dnd",
+      "@mantine/core",
+      "@mantine/hooks",
+      "@mantine/tiptap",
+      "@react-email/components",
+      "@supabase/supabase-js",
+      "@tiptap/react",
+      "embla-carousel-react",
+      "react-countdown",
+    ],
   },
 };
 
