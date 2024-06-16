@@ -28,7 +28,9 @@ export async function GET(request: NextRequest) {
   if (!firstName || !lastName) {
     return NextResponse.json([]);
   }
-  const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
+  const { data, error } = await supabase
+    .from(GROUP_TABLE)
+    .select("*, guests(*, event_responses(*))");
 
   if (error) {
     return NextResponse.json([]);

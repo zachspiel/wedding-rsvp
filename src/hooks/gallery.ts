@@ -1,11 +1,10 @@
 import { Photo } from "@spiel-wedding/types/Photo";
 import { v4 as uuid } from "uuid";
 import { FileObject } from "@supabase/storage-js";
-import { createClient } from "@spiel-wedding/database/client";
+import { supabase } from "@spiel-wedding/database/database";
 
 export const GALLERY_SWR_KEY = "gallery";
 
-const supabase = createClient();
 const TABLE = "gallery";
 
 export const getPhotoGallery = async (): Promise<Photo[]> => {

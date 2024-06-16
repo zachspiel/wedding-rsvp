@@ -37,6 +37,7 @@ import AddGroupForm from "../AddGroupForm/AddGroupForm";
 import { SectionTitle } from "@spiel-wedding/components/common";
 import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
+import { getEvents } from "@spiel-wedding/hooks/events";
 
 interface ThProps {
   children: React.ReactNode;
@@ -45,6 +46,8 @@ interface ThProps {
 
 const GuestListTable = (): JSX.Element => {
   const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
+  const { data: events } = useSWR("events", getEvents);
+
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
   const [showRsvpStatus, setShowRsvpStatus] = useState(false);
@@ -174,13 +177,23 @@ const GuestListTable = (): JSX.Element => {
         </TableTbody>
       </Table>
       <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
-        {selectedGroup && <EditGuest group={selectedGroup} close={close} />}
+        {selectedGroup && (
+          <EditGuest
+            group={selectedGroup}
+            close={() => {
+              close();
+              setSelectedGroup(undefined);
+            }}
+            events={events ?? []}
+          />
+        )}
 
         {selectedGroup === undefined && (
           <BulkEditGroups
             groups={
               groups?.filter(({ group_id }) => selectedRows.includes(group_id)) ?? []
             }
+            events={events ?? []}
           />
         )}
       </Modal>

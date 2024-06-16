@@ -1,10 +1,18 @@
 "use client";
 
 import React from "react";
-import { Button, Group as MGroup, Radio, Tabs } from "@mantine/core";
+import {
+  Accordion,
+  Button,
+  Flex,
+  Group as MGroup,
+  Radio,
+  Tabs,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import RsvpStatus from "./RsvpStatus";
-import { Group } from "@spiel-wedding/types/Guest";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import {
   showSuccessNotification,
   showFailureNotification,
@@ -16,13 +24,16 @@ import {
   GuestInput,
   MailingAddressForm,
 } from "@spiel-wedding/components/form";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { createEventResponse, deleteEventResponse } from "@spiel-wedding/hooks/events";
 
 interface Props {
   group: Group;
+  events: Event[];
   close: () => void;
 }
 
-const EditGuest = ({ group, close }: Props): JSX.Element => {
+const EditGuest = ({ group, events, close }: Props): JSX.Element => {
   const [isInvited, setIsInvited] = React.useState(
     group.invited ? "definitely" : "maybe"
   );
@@ -129,12 +140,90 @@ const EditGuest = ({ group, close }: Props): JSX.Element => {
 
         <Tabs.Panel value="rsvpStatus" pt="xs">
           {form.values.guests.map((guest, index) => (
-            <RsvpStatus
-              guest={guest}
-              index={index}
-              form={form}
-              key={`${guest.guest_id}-rsvp-status`}
-            />
+            <Accordion key={`${guest.guest_id}-rsvp-status`} mb="md">
+              <Title order={4} fw="normal">
+                {guest.firstName} {guest.lastName}
+                {guest.nameUnknown && "Guest"}
+              </Title>
+              {guest.event_responses.map((eventResponse, responseIndex) => {
+                const matchingEvent = events.filter(
+                  (event) => event.event_id === eventResponse.eventId
+                )[0];
+
+                return (
+                  <Accordion.Item
+                    key={eventResponse.response_id}
+                    value={matchingEvent.event_id}
+                  >
+                    <Accordion.Control>{matchingEvent.title}</Accordion.Control>
+                    <Accordion.Panel>
+                      <RsvpStatus
+                        guest={guest}
+                        index={index}
+                        responseIndex={responseIndex}
+                        form={form}
+                        key={`${guest.guest_id}-rsvp-status`}
+                      />
+
+                      <Button
+                        color="red"
+                        leftSection={<IconTrash />}
+                        onClick={async () => {
+                          await deleteEventResponse(eventResponse.response_id).then(
+                            async (result) => {
+                              if (result) {
+                                await mutate("events");
+                                showSuccessNotification("Guest removed from event");
+                              } else {
+                                showFailureNotification();
+                              }
+                            }
+                          );
+                        }}
+                      >
+                        Remove guest
+                      </Button>
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                );
+              })}
+
+              <Flex direction="column">
+                {events
+                  .filter(
+                    (event) =>
+                      !guest.event_responses
+                        .map((response) => response.eventId)
+                        .includes(event.event_id)
+                  )
+                  .map((event) => {
+                    return (
+                      <div key={`add=${guest.guest_id}-to-${event.event_id}`}>
+                        <Button
+                          leftSection={<IconPlus />}
+                          mt="md"
+                          onClick={async () => {
+                            await createEventResponse({
+                              eventId: event.event_id,
+                              guestId: guest.guest_id,
+                              rsvp: RsvpResponse.NO_RESPONSE,
+                            }).then(async (result) => {
+                              if (result) {
+                                await mutate("events");
+                                showSuccessNotification("Guest added to event");
+                              } else {
+                                showFailureNotification();
+                              }
+                            });
+                          }}
+                        >
+                          {`Add to ${event.title}`}
+                        </Button>
+                      </div>
+                    );
+                  })}
+              </Flex>
+            </Accordion>
           ))}
         </Tabs.Panel>
       </Tabs>

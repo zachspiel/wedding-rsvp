@@ -1,15 +1,15 @@
 import { Group as MGroup, Select, Text } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { EventResponse, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 interface Props {
   guest: Guest;
+  responseIndex: number;
   index: number;
   form: UseFormReturnType<Group>;
 }
 
-const RsvpStatus = (props: Props): JSX.Element => {
-  const { form, guest, index } = props;
+const RsvpStatus = ({ form, guest, index, responseIndex }: Props): JSX.Element => {
   const dropdownItems = Object.values(RsvpResponse).map((response) => {
     return { value: response, label: response };
   });
@@ -22,10 +22,10 @@ const RsvpStatus = (props: Props): JSX.Element => {
       </Text>
       <Select
         name={`rsvp-${index}`}
-        {...form.getInputProps(`guests.${index}.rsvp`)}
-        value={form.values.guests[index].rsvp}
+        {...form.getInputProps(`guests.${index}.event_responses.${responseIndex}.rsvp`)}
+        value={form.values.guests[index].event_responses[responseIndex].rsvp}
         data={dropdownItems}
-      ></Select>
+      />
     </MGroup>
   );
 };

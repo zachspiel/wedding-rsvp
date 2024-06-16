@@ -23,6 +23,7 @@ const createDefaultGroup = (): Group => {
         lastName: "",
         nameUnknown: false,
         rsvp: RsvpResponse.NO_RESPONSE,
+        event_responses: [],
         relationshipType: RelationshipType.PRIMARY,
       },
     ],

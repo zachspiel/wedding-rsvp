@@ -1,7 +1,14 @@
-import { Group, Guest, RsvpModification, RsvpResponse } from "@spiel-wedding/types/Guest";
+import {
+  EventResponse,
+  Group,
+  Guest,
+  RsvpModification,
+  RsvpResponse,
+} from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 import { v4 as uuid } from "uuid";
 import { Tables, TablesInsert, TablesUpdate } from "@spiel-wedding/types/supabase.types";
+import { bulkUpsertEventResponse } from "./events";
 
 export const GROUP_SWR_KEY = "group";
 export const GROUP_TABLE = "group";
@@ -9,7 +16,9 @@ export const GUEST_TABLE = "guests";
 export const RSVP_TABLE = "rsvp_modifications";
 
 export const getGroups = async (): Promise<Group[]> => {
-  const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
+  const { data, error } = await supabase
+    .from(GROUP_TABLE)
+    .select("*, guests(*, event_responses(*))");
 
   if (error) {
     throw new Error(error.message);
@@ -47,21 +56,25 @@ export const updateGroup = async (
   originalGroup: Group
 ): Promise<Group | undefined> => {
   const { guests, rsvpModifications, ...updatedGroup } = group;
+  const eventResponses: EventResponse[] = [];
 
   const updatedGuests =
     guests?.map((guest) => {
+      const { event_responses, ...values } = guest;
       const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
       if (guest.nameUnknown && guest.rsvp === RsvpResponse.ACCEPTED) {
         return {
-          ...guest,
+          ...values,
           guest_id: id,
           groupId: updatedGroup.group_id,
           nameUnknown: false,
         };
       }
 
-      return { ...guest, guest_id: id };
+      eventResponses.push(...event_responses);
+
+      return { ...values, guest_id: id };
     }) ?? [];
 
   const guestIds = updatedGuests.map((guest) => guest.guest_id);
@@ -72,6 +85,10 @@ export const updateGroup = async (
 
   if (removedGuests.length > 0) {
     await deleteGuests(removedGuests);
+  }
+
+  if (eventResponses.length > 0) {
+    await bulkUpsertEventResponse(eventResponses);
   }
 
   const remainingGuests = updatedGuests.filter((guest) =>
