@@ -6,4 +6,4 @@ export interface FrequentlyAskedQuestion {
   element?: FaqElement;
 }
 
-export type FaqElement = "dark-mode-toggle" | "color-palette";
+export type FaqElement = "dark-mode-toggle" | "color-palette" | "dress-code";

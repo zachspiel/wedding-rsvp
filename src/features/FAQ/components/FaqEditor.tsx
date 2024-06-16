@@ -2,14 +2,12 @@
 
 import {
   Accordion,
-  AccordionControl,
-  AccordionItem,
-  AccordionPanel,
   ActionIcon,
   Button,
   Group,
   Modal,
   TextInput,
+  Textarea,
   Title,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
@@ -23,6 +21,7 @@ import {
 } from "@spiel-wedding/components/notifications/notifications";
 import { mutate } from "swr";
 import classes from "../faq.module.css";
+import FaqPanel from "./FaqPanel";
 
 interface Props {
   initialValues?: FrequentlyAskedQuestion;
@@ -80,9 +79,13 @@ const FaqEditor = ({ initialValues, icon, label }: Props) => {
             placeholder="Enter question"
             {...form.getInputProps("question")}
           />
-          <TextInput
+          <Textarea
             label="Answer"
             placeholder="Enter answer"
+            className={classes.textArea}
+            autosize
+            minRows={5}
+            maxRows={10}
             {...form.getInputProps("answer")}
           />
 
@@ -102,10 +105,7 @@ const FaqEditor = ({ initialValues, icon, label }: Props) => {
             </Group>
 
             <Accordion variant="separated" classNames={classes}>
-              <AccordionItem value={form.values.question}>
-                <AccordionControl>{form.values.question}</AccordionControl>
-                <AccordionPanel>{form.values.answer}</AccordionPanel>
-              </AccordionItem>
+              <FaqPanel faq={form.values} />
             </Accordion>
           </>
         )}

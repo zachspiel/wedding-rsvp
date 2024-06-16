@@ -61,7 +61,13 @@ const ModifyFaqOrder = ({ faqs }: Props) => {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Modify FAQ Order">
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Modify FAQ Order"
+        size="calc(50vw - 3rem)"
+        centered
+      >
         <DragDropContext
           onDragEnd={({ destination, source }) =>
             handlers.reorder({ from: source.index, to: destination?.index || 0 })

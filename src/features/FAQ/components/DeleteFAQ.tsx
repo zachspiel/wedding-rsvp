@@ -32,7 +32,7 @@ const DeleteFAQ = ({ faq }: Props) => {
 
   return (
     <>
-      <Modal opened={opened} onClose={close}>
+      <Modal opened={opened} onClose={close} size="calc(50vw - 3rem)" centered>
         <Text>Are you sure you want to delete this FAQ?</Text>
         <Group justify="end" mt="md">
           <Button variant="default" onClick={close}>
