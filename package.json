@@ -17,6 +17,7 @@
   "dependencies": {
     "@mantine/carousel": "^7.6.2",
     "@mantine/core": "^7.6.2",
+    "@mantine/dates": "^7.10.2",
     "@mantine/dropzone": "^7.6.2",
     "@mantine/form": "^7.6.2",
     "@mantine/hooks": "^7.6.2",
@@ -33,6 +34,7 @@
     "@vercel/analytics": "^1.1.1",
     "bufferutil": "^4.0.8",
     "compressorjs": "^1.2.1",
+    "dayjs": "^1.11.11",
     "embla-carousel-react": "^8.0.0-rc14",
     "encoding": "^0.1.13",
     "eslint": "8.43.0",

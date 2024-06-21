@@ -18,7 +18,8 @@ const WhenAndWhere = (): JSX.Element => {
           size={isMobile ? "h4" : "h2"}
           order={2}
           mb="md"
-          fw={400}
+          fw={300}
+          style={{ fontSize: "2.1rem" }}
           className={classes.dividerTop}
         >
           The Wright House • Garden Ballroom

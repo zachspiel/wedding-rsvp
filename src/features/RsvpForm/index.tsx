@@ -1,50 +1,27 @@
 "use client";
 
-import {
-  Alert,
-  Button,
-  Divider,
-  Flex,
-  Group as MGroup,
-  Stepper,
-  Text,
-  Title,
-  TextInput,
-  Skeleton,
-  Card,
-  Center,
-  SimpleGrid,
-} from "@mantine/core";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Alert, Button, Flex, Group as MGroup, Stepper, Title } from "@mantine/core";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import RsvpSelection from "./components/RsvpSelectionInput";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { useState } from "react";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { sendMail } from "./action";
 import GuestBookForm from "../GuestBookForm";
-import {
-  IconBuildingArch,
-  IconCalendar,
-  IconChevronLeft,
-  IconChevronRight,
-  IconClock,
-  IconMapPin,
-} from "@tabler/icons-react";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import useSWR from "swr";
-import { getEvents } from "@spiel-wedding/hooks/events";
 import classes from "./rsvpFormStyles.module.css";
+import EventCard from "./components/EventCard";
 
 interface Props {
+  events: Event[];
   selectedGroup: Group;
 }
 
 const TOTAL_STEPS = 3;
 
-const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
-  const { data: events, isLoading } = useSWR("events", getEvents);
+const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery("(max-width: 50em)");
 
@@ -55,7 +32,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
           return { ...response, rsvp: RsvpResponse.ACCEPTED };
         }
 
-        return { ...response };
+        return response;
       });
 
       return { ...guest, event_responses: updatedResponses };
@@ -83,8 +60,9 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
 
   const isNameInvalid = (value: string, group: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
+    const { event_responses } = group.guests[index];
 
-    if (group.guests[index].rsvp === RsvpResponse.ACCEPTED) {
+    if (event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED)) {
       return value.length === 0;
     }
 
@@ -98,7 +76,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
       showCustomFailureNotification("An error occurred. Please try again later");
     } else {
       nextStep();
-      await sendMail(form.values);
+      await sendMail({ group: form.values, events });
     }
   };
 
@@ -121,151 +99,35 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
     <>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
-          {isLoading && (
-            <>
-              <Skeleton w="100%" h={20} mt="mb" />
-              <Skeleton w="100%" h={20} mt="mb" />
-            </>
-          )}
+          <Flex direction="column">
+            <Title order={2} ta="center" className={classes.title}>
+              Events
+            </Title>
 
-          {!isLoading && (
-            <Flex direction="column">
-              <Title order={2} ta="center" className={classes.title}>
-                Events
-              </Title>
-              {form.values.guests
-                .filter((guest) => guest.nameUnknown)
-                .map((guest, guestIndex) => (
-                  <Flex direction="column" key={`${guest.guest_id}-rsvp-form`}>
-                    <Divider my="sm" />
-
-                    {guest.nameUnknown &&
-                      form.values.guests[guestIndex].rsvp === RsvpResponse.ACCEPTED && (
-                        <Flex>
-                          <TextInput
-                            label="First Name"
-                            placeholder="First Name"
-                            required
-                            mr="lg"
-                            {...form.getInputProps(`guests.${guestIndex}.firstName`)}
-                          />
-                          <TextInput
-                            label="Last Name"
-                            placeholder="Last Name"
-                            required
-                            {...form.getInputProps(`guests.${guestIndex}.lastName`)}
-                          />
-                        </Flex>
-                      )}
-                    {guestIndex === form.values.guests.length - 1 && <Divider my="sm" />}
-                  </Flex>
-                ))}
-
-              {(events ?? [])
-                .sort((a, b) => a.order - b.order)
-                .map((event) => {
-                  const guestsInvitedToEvent = form.values.guests.filter((guest) =>
+            {events
+              .sort((a, b) => a.order - b.order)
+              .map((event) => {
+                const guestsInvitedToEvent = form.values.guests.filter(
+                  (guest) =>
                     guest.event_responses.some(
                       (response) => response.eventId === event.event_id
-                    )
-                  );
+                    ) || guest.nameUnknown
+                );
 
-                  if (guestsInvitedToEvent.length === 0) {
-                    return <></>;
-                  }
+                if (guestsInvitedToEvent.length === 0) {
+                  return <></>;
+                }
 
-                  return (
-                    <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
-                      <Card.Section bg="#8e9386" c="white" p="sm">
-                        <Title order={4} fw="normal" ta="center">
-                          {event.emoji}
-                          {event.title}
-                        </Title>
-                      </Card.Section>
-                      <Card.Section p="md" withBorder>
-                        <SimpleGrid cols={2}>
-                          <div>
-                            <MGroup gap={8} mb={8}>
-                              <Center>
-                                <IconBuildingArch className={classes.icon} stroke={1.5} />
-                                <Text size="sm" ml="xs">
-                                  {event.location}
-                                </Text>
-                              </Center>
-                            </MGroup>
-
-                            <MGroup gap={8} mb={8}>
-                              <Center>
-                                <IconMapPin className={classes.icon} stroke={1.5} />
-                                <Text size="sm" ml="xs">
-                                  {event.address1} {event.address2} {event.city}
-                                  {", "}
-                                  {event.state} {event.postal}
-                                </Text>
-                              </Center>
-                            </MGroup>
-                          </div>
-                          <div>
-                            <MGroup gap={8} mb={8}>
-                              <Center>
-                                <IconCalendar className={classes.icon} stroke={1.5} />
-                                <Text size="sm" ml="xs">
-                                  {new Date(event.date).toDateString()}
-                                </Text>
-                              </Center>
-                            </MGroup>
-
-                            <MGroup gap={8} mb={8}>
-                              <Center>
-                                <IconClock
-                                  size="1.05rem"
-                                  className={classes.icon}
-                                  stroke={1.5}
-                                />
-                                <Text size="sm" ml="xs">
-                                  {event.time}
-                                </Text>
-                              </Center>
-                            </MGroup>
-                          </div>
-                        </SimpleGrid>
-                      </Card.Section>
-
-                      <Card.Section p="md">
-                        {guestsInvitedToEvent.map((guest, guestIndex) => {
-                          const eventResponse = guest.event_responses.filter(
-                            (response) => response.eventId === event.event_id
-                          )[0];
-                          const eventIndex = guest.event_responses.findIndex(
-                            (response) =>
-                              response.response_id === eventResponse.response_id
-                          );
-
-                          return (
-                            <MGroup
-                              justify="space-between"
-                              key={`guest-${guest.guest_id}-${event.event_id}`}
-                              my="md"
-                            >
-                              <Text>
-                                {guest.nameUnknown && "Guest name unknown"}
-                                {!guest.nameUnknown &&
-                                  `${guest.firstName} ${guest.lastName}`}
-                              </Text>
-                              <RsvpSelection
-                                form={form}
-                                guestIndex={guestIndex}
-                                responseIndex={eventIndex}
-                              />
-                            </MGroup>
-                          );
-                        })}
-                      </Card.Section>
-                    </Card>
-                  );
-                })}
-            </Flex>
-          )}
+                return (
+                  <EventCard
+                    guests={guestsInvitedToEvent}
+                    event={event}
+                    form={form}
+                    key={`${event.event_id}`}
+                  />
+                );
+              })}
+          </Flex>
         </Stepper.Step>
 
         <Stepper.Step label="Contact Information">

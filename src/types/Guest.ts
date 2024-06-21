@@ -43,6 +43,7 @@ export interface Event {
   postal: string;
   location: string;
   emoji: string;
+  auto_invite: boolean;
 }
 
 export interface EventResponse {
@@ -50,10 +51,6 @@ export interface EventResponse {
   eventId: string;
   rsvp: RsvpResponse;
   guestId: string;
-}
-
-export interface EventWithResponses extends Event {
-  event_responses: EventResponse[];
 }
 
 export interface RsvpModification {

@@ -6,18 +6,32 @@ import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import ZachAndSedona from "@spiel-wedding/features/ZachAndSedona";
 import RSVP from "@spiel-wedding/features/RSVP";
 import FAQ from "@spiel-wedding/features/FAQ";
+import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
+import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
+import { getEvents } from "@spiel-wedding/hooks/events";
 
-export default function Home() {
+async function getProps() {
+  const [events, gallery, guestMessages] = await Promise.all([
+    getEvents(),
+    getPhotoGallery(),
+    getGuestMessages(),
+  ]);
+  return { events, gallery, guestMessages };
+}
+
+export default async function Home() {
+  const { events, gallery, guestMessages } = await getProps();
+
   return (
     <main>
       <Jumbotron />
       <ZachAndSedona />
       <WhenAndWhere />
-      <RSVP />
-      <GuestBook />
+      <RSVP events={events} />
+      <GuestBook guestMessages={guestMessages} />
       <Registry />
       <FAQ />
-      <Gallery />
+      <Gallery gallery={gallery} />
     </main>
   );
 }

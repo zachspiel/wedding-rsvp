@@ -1,6 +1,6 @@
 import { Group as MGroup, Select, Text } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { EventResponse, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 interface Props {
   guest: Guest;

@@ -1,4 +1,5 @@
 import {
+  Event,
   EventResponse,
   Group,
   Guest,
@@ -7,7 +8,7 @@ import {
 } from "@spiel-wedding/types/Guest";
 import { supabase } from "@spiel-wedding/database/database";
 import { v4 as uuid } from "uuid";
-import { Tables, TablesInsert, TablesUpdate } from "@spiel-wedding/types/supabase.types";
+import { Tables, TablesUpdate } from "@spiel-wedding/types/supabase.types";
 import { bulkUpsertEventResponse } from "./events";
 
 export const GROUP_SWR_KEY = "group";
@@ -27,7 +28,10 @@ export const getGroups = async (): Promise<Group[]> => {
   return data ?? [];
 };
 
-export const createGroup = async (group: Group): Promise<Group | undefined> => {
+export const createGroup = async (
+  group: Group,
+  events: Event[]
+): Promise<Group | undefined> => {
   const { group_id, guests, rsvpModifications, ...groupData } = group;
 
   const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
@@ -37,7 +41,7 @@ export const createGroup = async (group: Group): Promise<Group | undefined> => {
   }
 
   const newGroup = data?.[0] ?? ({} as Group);
-  const newGuests = await createGuests(guests, newGroup.group_id);
+  const newGuests = await createGuests(guests, newGroup.group_id, events);
 
   return { ...newGroup, guests: newGuests };
 };
@@ -56,58 +60,61 @@ export const updateGroup = async (
   originalGroup: Group
 ): Promise<Group | undefined> => {
   const { guests, rsvpModifications, ...updatedGroup } = group;
-  const eventResponses: EventResponse[] = [];
+
+  const updatedGuestsResult = await updateGuests(guests, group.group_id, originalGroup);
+
+  const { data, error } = await supabase
+    .from(GROUP_TABLE)
+    .update(updatedGroup)
+    .eq("group_id", group.group_id)
+    .select()
+    .single();
+
+  if (error) {
+    return;
+  }
+
+  return { ...data, guests: updatedGuestsResult };
+};
+
+const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Group) => {
+  const eventResponses: EventResponse[] = guests.flatMap(
+    (guest) => guest.event_responses
+  );
 
   const updatedGuests =
-    guests?.map((guest) => {
+    guests.map((guest) => {
       const { event_responses, ...values } = guest;
       const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
-      if (guest.nameUnknown && guest.rsvp === RsvpResponse.ACCEPTED) {
+      if (guest.nameUnknown && guest.firstName.length > 0 && guest.lastName.length > 0) {
         return {
           ...values,
           guest_id: id,
-          groupId: updatedGroup.group_id,
+          groupId,
           nameUnknown: false,
         };
       }
 
-      eventResponses.push(...event_responses);
-
       return { ...values, guest_id: id };
     }) ?? [];
 
-  const guestIds = updatedGuests.map((guest) => guest.guest_id);
-
   const removedGuests = originalGroup.guests.filter(
-    (guest) => !guestIds.includes(guest.guest_id)
+    (guest) =>
+      !updatedGuests.some((updatedGuest) => updatedGuest.guest_id === guest.guest_id)
   );
 
   if (removedGuests.length > 0) {
     await deleteGuests(removedGuests);
   }
 
-  if (eventResponses.length > 0) {
+  const updatedGuestsResult = await upsertGuests(updatedGuests);
+
+  if (updatedGuestsResult.length > 0 && eventResponses.length > 0) {
     await bulkUpsertEventResponse(eventResponses);
   }
 
-  const remainingGuests = updatedGuests.filter((guest) =>
-    guestIds.includes(guest.guest_id)
-  );
-
-  const updatedGuestsResult = await upsertGuests(remainingGuests);
-
-  const { data, error } = await supabase
-    .from(GROUP_TABLE)
-    .update(updatedGroup)
-    .eq("group_id", group.group_id)
-    .select();
-
-  if (error) {
-    return;
-  }
-
-  return { ...data?.[0], guests: updatedGuestsResult };
+  return updatedGuestsResult;
 };
 
 export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
@@ -115,21 +122,24 @@ export const deleteGroup = async (groupId: string): Promise<Group | undefined> =
     .from(GROUP_TABLE)
     .delete()
     .eq("group_id", groupId)
-    .select();
+    .select()
+    .single();
 
-  return data?.[0];
+  return data;
 };
 
 export const createGuests = async (
-  guests: TablesInsert<"guests">[],
-  groupId: string
+  guests: Guest[],
+  groupId: string,
+  events: Event[]
 ): Promise<Guest[] | undefined> => {
   const formattedGuests = guests.map((guest) => {
-    const { guest_id, ...values } = guest;
+    const { guest_id, event_responses, ...values } = guest;
+
     return { ...values, groupId: groupId };
   });
 
-  const { data, error } = await supabase
+  const { data: newGuests, error } = await supabase
     .from(GUEST_TABLE)
     .insert(formattedGuests)
     .select();
@@ -138,7 +148,22 @@ export const createGuests = async (
     throw new Error(error.message);
   }
 
-  return data ?? [];
+  if (newGuests.length > 0) {
+    const eventResponses: EventResponse[] = events
+      .filter((event) => event.auto_invite)
+      .flatMap((event) => {
+        return newGuests.map((guest) => ({
+          response_id: uuid(),
+          rsvp: RsvpResponse.NO_RESPONSE,
+          eventId: event.event_id,
+          guestId: guest.guest_id,
+        }));
+      });
+
+    await bulkUpsertEventResponse(eventResponses);
+  }
+
+  return newGuests ?? [];
 };
 
 export const updateGuest = async (

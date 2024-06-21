@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Modal, Text } from "@mantine/core";
-import { Group } from "@spiel-wedding/types/Guest";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import RsvpForm from "@spiel-wedding/features/RsvpForm";
 import { useEffect, useState } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
@@ -9,7 +9,11 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
 import { useMediaQuery } from "@mantine/hooks";
 
-const RSVP = (): JSX.Element => {
+interface Props {
+  events: Event[];
+}
+
+const RSVP = ({ events }: Props): JSX.Element => {
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [opened, setOpened] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
@@ -72,7 +76,7 @@ const RSVP = (): JSX.Element => {
         }}
         size="calc(50vw - 3rem)"
       >
-        {selectedGroup && <RsvpForm selectedGroup={selectedGroup} />}
+        {selectedGroup && <RsvpForm events={events} selectedGroup={selectedGroup} />}
       </Modal>
     </SectionContainer>
   );

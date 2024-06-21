@@ -45,8 +45,8 @@ interface ThProps {
 }
 
 const GuestListTable = (): JSX.Element => {
-  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups);
-  const { data: events } = useSWR("events", getEvents);
+  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups, { fallbackData: [] });
+  const { data: events } = useSWR("events", getEvents, { fallbackData: [] });
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
@@ -57,7 +57,7 @@ const GuestListTable = (): JSX.Element => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   const filteredGroups = filterGroups(
-    sortGroups(groups ?? [], reverseSortDirection),
+    sortGroups(groups, reverseSortDirection),
     search,
     filters
   );
@@ -101,17 +101,13 @@ const GuestListTable = (): JSX.Element => {
       <MGroup justify="space-between">
         <SectionTitle title="All Guests" hideFlowers />
         <MGroup>
-          <DownloadGuestList groups={groups ?? []} />
-          <AddGroupForm />
+          <DownloadGuestList groups={groups} />
+          <AddGroupForm events={events} />
         </MGroup>
       </MGroup>
-      <Summary groups={groups ?? []} />
+      <Summary groups={groups} />
       <MGroup justify="space-between">
-        <FilterSelection
-          groups={groups ?? []}
-          filters={filters}
-          setFilters={setFilters}
-        />
+        <FilterSelection groups={groups} filters={filters} setFilters={setFilters} />
         <Switch
           label="Show RSVP Status"
           checked={showRsvpStatus}
@@ -145,7 +141,7 @@ const GuestListTable = (): JSX.Element => {
                 checked={selectedRows.length === groups?.length}
                 onChange={(e) => {
                   if (e.currentTarget.checked) {
-                    setSelectedRows((groups ?? []).map(({ group_id }) => group_id));
+                    setSelectedRows(groups.map(({ group_id }) => group_id));
                   } else {
                     setSelectedRows([]);
                   }

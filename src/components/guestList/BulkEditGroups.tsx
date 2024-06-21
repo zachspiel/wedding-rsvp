@@ -95,33 +95,6 @@ const BulkEditGroups = ({ groups, events }: Props) => {
     }
   };
 
-  const updateGuestsWithExistingData = async () => {
-    const guests = groups
-      .flatMap((group) => group.guests)
-      .filter((guest) => guest.rsvp === RsvpResponse.NO_RESPONSE);
-
-    const eventResponses: EventResponse[] = guests.flatMap((guest) => {
-      return [
-        {
-          response_id: uuid(),
-          eventId: "787ad523-c368-4cba-9df5-fd0c55554462",
-          guestId: guest.guest_id,
-          rsvp: RsvpResponse.NO_RESPONSE,
-        },
-        {
-          response_id: uuid(),
-          eventId: "a806fce3-4232-42c1-b8b8-6d8f6da7e1dc",
-          guestId: guest.guest_id,
-          rsvp: RsvpResponse.NO_RESPONSE,
-        },
-      ];
-    });
-
-    await bulkUpsertEventResponse(eventResponses).then((response) => {
-      console.log(response?.length);
-    });
-  };
-
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Checkbox
@@ -149,10 +122,6 @@ const BulkEditGroups = ({ groups, events }: Props) => {
       <Flex justify="end">
         <Button type="submit">Submit</Button>
       </Flex>
-
-      <Button color="pink" onClick={updateGuestsWithExistingData}>
-        Full send
-      </Button>
     </form>
   );
 };

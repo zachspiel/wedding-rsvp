@@ -1,5 +1,7 @@
 import { UseFormReturnType } from "@mantine/form";
 import {
+  Event,
+  EventResponse,
   Group,
   Guest,
   GuestAffiliation,
@@ -8,8 +10,9 @@ import {
 } from "@spiel-wedding/types/Guest";
 import { v4 as uuid } from "uuid";
 
-const createDefaultGroup = (): Group => {
+const createDefaultGroup = (events: Event[]): Group => {
   const groupId = uuid();
+  const guestId = uuid();
 
   return {
     group_id: groupId,
@@ -23,7 +26,7 @@ const createDefaultGroup = (): Group => {
         lastName: "",
         nameUnknown: false,
         rsvp: RsvpResponse.NO_RESPONSE,
-        event_responses: [],
+        event_responses: getDefaultEventsForGuest(guestId, events),
         relationshipType: RelationshipType.PRIMARY,
       },
     ],
@@ -41,19 +44,34 @@ const createDefaultGroup = (): Group => {
   };
 };
 
-const createGuest = (form: UseFormReturnType<Group>): Partial<Guest> => {
+const createGuest = (form: UseFormReturnType<Group>, events: Event[]): Partial<Guest> => {
+  const id = uuid();
+
   return {
+    guest_id: id,
     groupId: form.values.group_id,
     firstName: "",
     lastName: "",
     rsvp: RsvpResponse.NO_RESPONSE,
+    event_responses: getDefaultEventsForGuest(id, events),
     relationshipType: RelationshipType.PARTNER,
     nameUnknown: false,
   };
 };
 
-const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
-  const newGuest = createGuest(form);
+const getDefaultEventsForGuest = (guestId: string, events: Event[]) => {
+  return events
+    .filter((event) => event.auto_invite)
+    .map((event) => ({
+      response_id: uuid(),
+      eventId: event.event_id,
+      guestId: guestId,
+      rsvp: RsvpResponse.NO_RESPONSE,
+    }));
+};
+
+const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): void => {
+  const newGuest = createGuest(form, events);
 
   form.insertListItem(
     "guests",
@@ -65,8 +83,8 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>): void => {
   );
 };
 
-const addChildToGuests = (form: UseFormReturnType<Group>): void => {
-  const newGuest = createGuest(form);
+const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void => {
+  const newGuest = createGuest(form, events);
 
   form.insertListItem("guests", {
     ...newGuest,
@@ -74,4 +92,17 @@ const addChildToGuests = (form: UseFormReturnType<Group>): void => {
   });
 };
 
-export { createDefaultGroup, addPartnerToGuests, addChildToGuests };
+const createDefaultEventResponse = (): EventResponse => ({
+  response_id: uuid(),
+  guestId: "",
+  eventId: uuid(),
+  rsvp: RsvpResponse.NO_RESPONSE,
+});
+
+export {
+  createDefaultGroup,
+  createGuest,
+  addPartnerToGuests,
+  addChildToGuests,
+  createDefaultEventResponse,
+};

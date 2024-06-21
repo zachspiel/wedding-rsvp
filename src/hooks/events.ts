@@ -69,3 +69,15 @@ export const deleteEventResponse = async (
 
   return data?.[0];
 };
+
+export const deleteEventResponses = async (
+  responseIds: string[]
+): Promise<EventResponse[] | null> => {
+  const { data } = await supabase
+    .from(EVENT_RESPONSE_TABLE)
+    .delete()
+    .in("response_id", responseIds)
+    .select();
+
+  return data;
+};

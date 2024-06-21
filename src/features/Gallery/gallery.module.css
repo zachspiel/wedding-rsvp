@@ -30,6 +30,10 @@
   @media (max-width: $mantine-breakpoint-sm) {
     height: 500px;
   }
+
+  @media (min-width: $mantine-breakpoint-xl) {
+    height: 800px;
+  }
 }
 
 .cardModal {

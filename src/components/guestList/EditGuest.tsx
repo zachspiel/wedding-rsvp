@@ -87,6 +87,7 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
                 groupType="family"
                 index={index}
                 key={`${guest.guest_id}-edit-guest`}
+                events={events}
               />
             );
           })}
