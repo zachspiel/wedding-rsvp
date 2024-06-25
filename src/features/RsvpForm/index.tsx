@@ -1,18 +1,18 @@
 "use client";
 
 import { Alert, Button, Flex, Group as MGroup, Stepper, Title } from "@mantine/core";
-import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { useState } from "react";
-import { updateGroup } from "@spiel-wedding/hooks/guests";
-import { sendMail } from "./action";
-import GuestBookForm from "../GuestBookForm";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import classes from "./rsvpFormStyles.module.css";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
+import { updateGroup } from "@spiel-wedding/hooks/guests";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useState } from "react";
+import GuestBookForm from "../GuestBookForm";
+import { sendMail } from "./action";
 import EventCard from "./components/EventCard";
+import classes from "./rsvpFormStyles.module.css";
 
 interface Props {
   events: Event[];
@@ -24,6 +24,7 @@ const TOTAL_STEPS = 3;
 const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery("(max-width: 50em)");
+  const [error, setError] = useState<string | null>();
 
   const getInitialValues = () => {
     const formattedGuests = selectedGroup.guests.map((guest) => {
@@ -73,10 +74,11 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
     const updatedGroup = await updateGroup(form.getTransformedValues(), selectedGroup);
 
     if (updatedGroup === undefined) {
-      showCustomFailureNotification("An error occurred. Please try again later");
+      setError("An error occurred while saving your RSVP. Please try again later");
     } else {
       nextStep();
       await sendMail({ group: form.values, events });
+      await revalidatePage("/");
     }
   };
 
@@ -154,10 +156,17 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
         </Stepper.Step>
 
         <Stepper.Completed>
-          <Alert title="Success!" color="teal" variant="filled">
-            Your reservation has been completed successfully, feel free to come back here
-            and edit it anytime before September 26th!
-          </Alert>
+          {!error && (
+            <Alert title="Success!" color="teal" variant="filled">
+              Your reservation has been completed successfully, feel free to come back
+              here and edit it anytime before September 26th!
+            </Alert>
+          )}
+          {error && (
+            <Alert title="Error" color="red" variant="filled">
+              {error}
+            </Alert>
+          )}
         </Stepper.Completed>
       </Stepper>
 
@@ -166,7 +175,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
         mt="xl"
         style={{ borderTop: "1px solid --var(--mantine-color-gray-3)" }}
       >
-        {currentStep > 0 && (
+        {currentStep > 0 && currentStep < TOTAL_STEPS && (
           <Button variant="default" onClick={prevStep} leftSection={<IconChevronLeft />}>
             Back
           </Button>

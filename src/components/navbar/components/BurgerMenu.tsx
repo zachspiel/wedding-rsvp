@@ -1,16 +1,11 @@
 "use client";
 
-import { Burger, Transition, Paper } from "@mantine/core";
+import { Burger, Paper, Transition } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../navbar.module.css";
 import MenuItems from "./MenuItems";
-import { User } from "@supabase/supabase-js";
 
-interface Props {
-  user: User | null;
-}
-
-const BurgerMenu = ({ user }: Props): JSX.Element => {
+const BurgerMenu = (): JSX.Element => {
   const [opened, { toggle, close }] = useDisclosure(false);
 
   return (
@@ -25,7 +20,7 @@ const BurgerMenu = ({ user }: Props): JSX.Element => {
       <Transition transition="pop-top-right" duration={200} mounted={opened}>
         {(styles): JSX.Element => (
           <Paper className={classes.dropdown} withBorder style={styles}>
-            <MenuItems onClick={close} user={user} />
+            <MenuItems onClick={close} />
           </Paper>
         )}
       </Transition>

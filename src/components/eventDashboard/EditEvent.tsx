@@ -1,8 +1,5 @@
 "use client";
 
-import { isNotEmpty, useForm } from "@mantine/form";
-import { Event, EventResponse, Group as Party, RsvpResponse } from "../../types/Guest";
-import { getGuestsForEvent } from "@spiel-wedding/util";
 import {
   Button,
   CheckIcon,
@@ -18,28 +15,33 @@ import {
   TextInput,
   useCombobox,
 } from "@mantine/core";
+import "@mantine/dates/styles.css";
+import { isNotEmpty, useForm } from "@mantine/form";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { STATES } from "@spiel-wedding/components/form/states";
-import { useState } from "react";
-import {
-  bulkUpsertEventResponse,
-  deleteEventResponses,
-  updateEvent,
-} from "@spiel-wedding/hooks/events";
-import { v4 as uuid } from "uuid";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import {
+  createEventResponses,
+  deleteEventResponses,
+  updateEvent,
+} from "@spiel-wedding/hooks/events";
+import { getGuestsForEvent } from "@spiel-wedding/util";
+import isEqual from "lodash.isequal";
+import { useState } from "react";
+import { v4 as uuid } from "uuid";
+import { Event, EventResponse, Group as Party, RsvpResponse } from "../../types/Guest";
 
 interface Props {
   event: Event;
   groups: Party[];
 }
 
-interface EditEventForm extends Event {
+type EditEventForm = Event & {
   guests: string[];
-}
+};
 
 const EditEvent = ({ event, groups }: Props) => {
   const [search, setSearch] = useState("");
@@ -56,6 +58,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     return {
       ...event,
+      attire: event.attire || "",
       guests: guestsInvitedToEvent,
     };
   };
@@ -70,6 +73,8 @@ const EditEvent = ({ event, groups }: Props) => {
 
   const handleSubmit = async (formValues: EditEventForm) => {
     const { guests, ...updatedEvent } = formValues;
+    const isEventUnmodified = isEqual(updatedEvent, event);
+
     const allGuests = groups.flatMap((group) => group.guests);
     const guestsForEvent = getGuestsForEvent(event, allGuests).map(
       (guest) => guest.guest_id
@@ -77,9 +82,6 @@ const EditEvent = ({ event, groups }: Props) => {
 
     const responsesToRemove = getGuestsForEvent(event, allGuests)
       .filter((guest) => !guests.includes(guest.guest_id))
-      .filter((guest) =>
-        guest.event_responses.some((response) => response.eventId === event.event_id)
-      )
       .flatMap(
         (guest) =>
           guest.event_responses.find(
@@ -95,18 +97,16 @@ const EditEvent = ({ event, groups }: Props) => {
         rsvp: RsvpResponse.NO_RESPONSE,
       }));
 
-    const updateEventResult = await updateEvent(updatedEvent);
+    const updateEventResult = isEventUnmodified
+      ? updatedEvent
+      : await updateEvent(updatedEvent);
 
     const removedResponses = await deleteEventResponses(
       responsesToRemove.map((response) => response.response_id)
     );
-    const newResponses = await bulkUpsertEventResponse(newEventResponses);
+    const newResponses = await createEventResponses(newEventResponses);
 
-    if (
-      updateEventResult !== null &&
-      removedResponses !== null &&
-      newResponses !== null
-    ) {
+    if (updateEventResult && removedResponses !== null && newResponses !== null) {
       showSuccessNotification("Updated event");
       await revalidatePage("/events");
     } else {
@@ -151,12 +151,17 @@ const EditEvent = ({ event, groups }: Props) => {
           />
         </Grid.Col>
       </Grid>
-      {/**<DateInput label="Date" {...form.getInputProps("date")} />**/}
 
       <TextInput
         label="Time"
         placeholder="Enter time of event"
         {...form.getInputProps("time")}
+      />
+
+      <TextInput
+        label="Attire"
+        placeholder="Enter event attire"
+        {...form.getInputProps("attire")}
       />
 
       <Grid>

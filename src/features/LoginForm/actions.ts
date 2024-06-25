@@ -1,8 +1,9 @@
 "use server";
 
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { createClient } from "@spiel-wedding/database/server";
-import { LoginFormData } from "./types";
 import { redirect } from "next/navigation";
+import { LoginFormData } from "./types";
 
 export async function login(formData: LoginFormData) {
   const supabase = createClient();
@@ -13,5 +14,6 @@ export async function login(formData: LoginFormData) {
     redirect("/error");
   }
 
+  await revalidatePage("/");
   redirect("/");
 }

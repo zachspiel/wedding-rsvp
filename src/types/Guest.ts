@@ -44,6 +44,7 @@ export interface Event {
   location: string;
   emoji: string;
   auto_invite: boolean;
+  attire: string;
 }
 
 export interface EventResponse {

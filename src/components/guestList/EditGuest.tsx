@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Accordion,
   Button,
@@ -11,21 +10,22 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import RsvpStatus from "./RsvpStatus";
-import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
-import {
-  showSuccessNotification,
-  showFailureNotification,
-} from "@spiel-wedding/components/notifications/notifications";
-import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
-import { useSWRConfig } from "swr";
 import {
   GuestAffiliationSelection,
   GuestInput,
   MailingAddressForm,
 } from "@spiel-wedding/components/form";
+import {
+  showFailureNotification,
+  showSuccessNotification,
+} from "@spiel-wedding/components/notifications/notifications";
+import { createEventResponses, deleteEventResponse } from "@spiel-wedding/hooks/events";
+import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import { createEventResponse, deleteEventResponse } from "@spiel-wedding/hooks/events";
+import React from "react";
+import { useSWRConfig } from "swr";
+import RsvpStatus from "./RsvpStatus";
 
 interface Props {
   group: Group;
@@ -204,11 +204,13 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
                           leftSection={<IconPlus />}
                           mt="md"
                           onClick={async () => {
-                            await createEventResponse({
-                              eventId: event.event_id,
-                              guestId: guest.guest_id,
-                              rsvp: RsvpResponse.NO_RESPONSE,
-                            }).then(async (result) => {
+                            await createEventResponses([
+                              {
+                                eventId: event.event_id,
+                                guestId: guest.guest_id,
+                                rsvp: RsvpResponse.NO_RESPONSE,
+                              },
+                            ]).then(async (result) => {
                               if (result) {
                                 await mutate("events");
                                 showSuccessNotification("Guest added to event");

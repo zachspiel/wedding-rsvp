@@ -1,18 +1,19 @@
 "use client";
 
-import { Card, Title, Group, Stack, rem, Text, Table, Button } from "@mantine/core";
+import { Button, Card, Group, Stack, Table, Text, Title, rem } from "@mantine/core";
+import { UseFormReturnType } from "@mantine/form";
 import { Event, Guest, Group as Party } from "@spiel-wedding/types/Guest";
+import { getGuestsForEvent } from "@spiel-wedding/util";
 import {
   IconBuildingCastle,
   IconCalendarHeart,
-  IconClock,
   IconMapPin,
+  IconTie,
   IconUsers,
 } from "@tabler/icons-react";
-import RsvpSelection from "./RsvpSelectionInput";
 import { CSSProperties } from "react";
-import { UseFormReturnType } from "@mantine/form";
 import classes from "../rsvpFormStyles.module.css";
+import RsvpSelection from "./RsvpSelectionInput";
 
 interface Props {
   event: Event;
@@ -54,8 +55,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
       <Card.Section bg="#8e9386" c="white" p="sm">
         <Title order={4} fw="normal" ta="center" className={classes.eventTitle}>
-          {event.emoji}
-          {event.title}
+          {event.emoji} {event.title}
         </Title>
       </Card.Section>
 
@@ -66,35 +66,30 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
       )}
 
       {createDetailSection(
-        <IconCalendarHeart style={iconStyles} stroke={1.5} />,
-        "Date",
-        new Date(event.date).toDateString()
-      )}
-
-      {createDetailSection(
-        <IconClock style={iconStyles} stroke={1.5} />,
-        "Time",
-        event.time
-      )}
-
-      {createDetailSection(
         <IconMapPin style={iconStyles} stroke={1.5} />,
         "Address",
-        `${event.address1} ${event.address2 || ""} ${event.city}, ${event.postal || ""}`,
-        form !== undefined
+        `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
+          event.postal || ""
+        }`
+      )}
+
+      {createDetailSection(
+        <IconCalendarHeart style={iconStyles} stroke={1.5} />,
+        "Date & Time",
+        `${new Date(event.date).toDateString()} • ${event.time}`
+      )}
+
+      {createDetailSection(
+        <IconTie style={iconStyles} stroke={1.5} />,
+        "Attire",
+        event.attire
       )}
 
       {form === undefined
         ? createDetailSection(
             <IconUsers style={iconStyles} stroke={1.5} />,
             "Invited Guests",
-            guests
-              .filter((guest) =>
-                guest.event_responses.some(
-                  (response) => response.eventId === event.event_id
-                )
-              )
-              .length.toString(),
+            getGuestsForEvent(event, guests).length.toString(),
             true
           )
         : null}

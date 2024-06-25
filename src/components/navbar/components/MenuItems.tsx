@@ -1,43 +1,83 @@
 "use client";
 
-import { Anchor } from "@mantine/core";
+import { Center, Menu } from "@mantine/core";
+import useAdminView from "@spiel-wedding/hooks/adminView";
+import { IconChevronDown } from "@tabler/icons-react";
+import cx from "clsx";
 import { MenuItem, links } from "../../common";
 import classes from "../navbar.module.css";
-import cx from "clsx";
-import { User } from "@supabase/supabase-js";
 import SignOutButton from "./SignOutButton";
 
 interface Props {
-  user: User | null;
   onClick?: () => void;
 }
 
-const MenuItems = ({ user, onClick }: Props): JSX.Element => {
-  const createMenuItem = (item: MenuItem) => {
-    return (
-      <Anchor<"a">
-        href={item.link}
-        key={item.label}
-        onClick={onClick}
-        className={cx(
-          classes.link,
-          item.className,
-          item.label === "RSVP" ? classes.highlightedLink : undefined,
-        )}
-      >
-        {item.label}
-      </Anchor>
-    );
-  };
+const MenuItems = ({ onClick }: Props): JSX.Element => {
+  const { user } = useAdminView();
 
+  const createMenuLinks = (items: MenuItem[]) => {
+    return items.map((link) => {
+      const menuItems = link.links?.map((item) => (
+        <Menu.Item key={item.link}>
+          <a href={item.link} className={classes.adminLink}>
+            {item.label}
+          </a>
+        </Menu.Item>
+      ));
+
+      if (menuItems) {
+        return (
+          <Menu
+            key={link.label}
+            trigger="hover"
+            transitionProps={{ exitDuration: 0 }}
+            withinPortal
+          >
+            <Menu.Target>
+              <a href={link.link} onClick={onClick} className={classes.link}>
+                <Center>
+                  <span className={classes.linkLabel}>{link.label}</span>
+                  <IconChevronDown size="0.9rem" stroke={1.5} />
+                </Center>
+              </a>
+            </Menu.Target>
+            <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+          </Menu>
+        );
+      }
+
+      return (
+        <a
+          key={link.label}
+          href={link.link}
+          onClick={onClick}
+          className={cx(
+            classes.link,
+            link.className,
+            link.label === "RSVP" ? classes.highlightedLink : undefined
+          )}
+        >
+          {link.label}
+        </a>
+      );
+    });
+  };
   const createMenuItems = () => {
-    const menuItems = links.map(createMenuItem);
+    const menuItems = [...links];
 
     if (user) {
-      menuItems.push(createMenuItem({ label: "Guest List", link: "/guestList" }));
+      const adminMenuItem: MenuItem = {
+        label: "Admin",
+        links: [
+          { label: "Events", link: "/events" },
+          { label: "Guest List", link: "/guestList" },
+        ],
+      };
+
+      menuItems.push(adminMenuItem);
     }
 
-    return menuItems;
+    return createMenuLinks(menuItems);
   };
 
   return (

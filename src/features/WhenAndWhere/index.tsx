@@ -1,10 +1,10 @@
 "use client";
 
 import { Anchor, em, Flex, Title } from "@mantine/core";
-import WeddingCountdown from "./components/Countdown";
-import { SectionContainer, SectionTitle } from "../../components/common";
 import { useMediaQuery } from "@mantine/hooks";
 import { MAP_URL } from "@spiel-wedding/components/common/constants";
+import { SectionContainer, SectionTitle } from "../../components/common";
+import WeddingCountdown from "./components/Countdown";
 import classes from "./styles.module.css";
 
 const WhenAndWhere = (): JSX.Element => {
@@ -18,8 +18,7 @@ const WhenAndWhere = (): JSX.Element => {
           size={isMobile ? "h4" : "h2"}
           order={2}
           mb="md"
-          fw={300}
-          style={{ fontSize: "2.1rem" }}
+          fw={400}
           className={classes.dividerTop}
         >
           The Wright House • Garden Ballroom

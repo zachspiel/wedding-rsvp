@@ -9,14 +9,21 @@ import FAQ from "@spiel-wedding/features/FAQ";
 import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
 import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
 import { getEvents } from "@spiel-wedding/hooks/events";
+import { createClient } from "@spiel-wedding/database/server";
 
 async function getProps() {
+  const supabase = createClient();
+  const { data: user } = await supabase.auth.getUser();
+
   const [events, gallery, guestMessages] = await Promise.all([
     getEvents(),
     getPhotoGallery(),
     getGuestMessages(),
   ]);
-  return { events, gallery, guestMessages };
+
+  const filteredGallery = user ? gallery : gallery.filter((item) => item.isVisible);
+
+  return { events, gallery: filteredGallery, guestMessages };
 }
 
 export default async function Home() {

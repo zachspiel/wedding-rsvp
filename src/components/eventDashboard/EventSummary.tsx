@@ -1,6 +1,6 @@
 "use client";
 
-import { SimpleGrid, Modal } from "@mantine/core";
+import { Modal, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import EventCard from "@spiel-wedding/features/RsvpForm/components/EventCard";
 import { Event, Group as Party } from "@spiel-wedding/types/Guest";
