@@ -1,12 +1,23 @@
 "use client";
 
-import { Button, Card, Group, Stack, Table, Text, Title, rem } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Group,
+  Stack,
+  Table,
+  Text,
+  Title,
+  rem,
+} from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Event, Guest, Group as Party } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import {
   IconBuildingCastle,
   IconCalendarHeart,
+  IconExternalLink,
   IconMapPin,
   IconTie,
   IconUsers,
@@ -29,10 +40,16 @@ const iconStyles: CSSProperties = {
 };
 
 const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
+  const getAddressURL = () => {
+    const { address1, address2, city, state, postal } = event;
+    const query = [address1, address2 || "", city, state, postal];
+    return `https://www.google.com/maps/search/?api=1&query=${query.join("%20")}`;
+  };
+
   const createDetailSection = (
     icon: JSX.Element,
     label: string,
-    detail: string,
+    detail: JSX.Element,
     withBorder?: boolean
   ) => {
     return (
@@ -44,13 +61,16 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
 
               {label}
             </Text>
-            <Text size="sm">{detail}</Text>
+            {detail}
           </Stack>
         </Group>
       </Card.Section>
     );
   };
 
+  const createDefaulDetailElement = (detail: string) => {
+    return <Text size="sm">{detail}</Text>;
+  };
   return (
     <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
       <Card.Section bg="#8e9386" c="white" p="sm">
@@ -62,34 +82,51 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
       {createDetailSection(
         <IconBuildingCastle style={iconStyles} stroke={1.5} />,
         "Location",
-        event.location
+        createDefaulDetailElement(event.location)
       )}
 
       {createDetailSection(
         <IconMapPin style={iconStyles} stroke={1.5} />,
         "Address",
-        `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
-          event.postal || ""
-        }`
+        <Group gap="xs" align="center" justify="space-between">
+          <Text size="sm">
+            {`${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
+              event.postal || ""
+            }`}
+          </Text>
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            component="a"
+            href={getAddressURL()}
+            target="_blank"
+            display="flex"
+          >
+            <IconExternalLink style={iconStyles} stroke={1.5} />
+          </ActionIcon>
+        </Group>
       )}
 
       {createDetailSection(
         <IconCalendarHeart style={iconStyles} stroke={1.5} />,
         "Date & Time",
-        `${new Date(event.date).toDateString()} • ${event.time}`
+        createDefaulDetailElement(
+          `${new Date(event.date).toDateString()} • ${event.time}`
+        )
       )}
 
       {createDetailSection(
         <IconTie style={iconStyles} stroke={1.5} />,
         "Attire",
-        event.attire
+        createDefaulDetailElement(event.attire),
+        form !== undefined
       )}
 
       {form === undefined
         ? createDetailSection(
             <IconUsers style={iconStyles} stroke={1.5} />,
             "Invited Guests",
-            getGuestsForEvent(event, guests).length.toString(),
+            createDefaulDetailElement(getGuestsForEvent(event, guests).length.toString()),
             true
           )
         : null}

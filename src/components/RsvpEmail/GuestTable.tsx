@@ -1,5 +1,5 @@
 import { rem } from "@mantine/core";
-import { Section, Row, Column, Text, Heading } from "@react-email/components";
+import { Column, Heading, Row, Section, Text } from "@react-email/components";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import { CSSProperties } from "react";
@@ -59,7 +59,6 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
     <>
       {events
         .filter((event) => getGuestsForEvent(event, guests).length > 0)
-        .sort((a, b) => a.order - b.order)
         .map((event) => {
           return (
             <>

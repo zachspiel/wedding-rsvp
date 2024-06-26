@@ -34,10 +34,9 @@ const AdminViewProvider = ({ children }: Props): JSX.Element => {
     };
   }, []);
 
-  console.log(user);
   return (
     <AdminViewContext.Provider
-      value={{ isAdminViewEnabled, user, toggleIsAdminViewEnabled }}
+      value={{ isAdminViewEnabled, user, setUser, toggleIsAdminViewEnabled }}
     >
       {children}
     </AdminViewContext.Provider>

@@ -32,7 +32,7 @@
   }
 
   @media (min-width: $mantine-breakpoint-xl) {
-    height: 800px;
+    height: 700px;
   }
 }
 

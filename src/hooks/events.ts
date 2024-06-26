@@ -7,7 +7,10 @@ const EVENT_RESPONSE_TABLE = "event_responses";
 
 export const getEvents = async (): Promise<Event[]> => {
   const supabase = createClient();
-  const { data } = await supabase.from(EVENT_TABLE).select("*");
+  const { data } = await supabase
+    .from(EVENT_TABLE)
+    .select("*")
+    .order("order", { ascending: true });
 
   return data ?? [];
 };

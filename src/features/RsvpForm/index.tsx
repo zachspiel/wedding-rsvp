@@ -106,29 +106,27 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
               Events
             </Title>
 
-            {events
-              .sort((a, b) => a.order - b.order)
-              .map((event) => {
-                const guestsInvitedToEvent = form.values.guests.filter(
-                  (guest) =>
-                    guest.event_responses.some(
-                      (response) => response.eventId === event.event_id
-                    ) || guest.nameUnknown
-                );
+            {events.map((event) => {
+              const guestsInvitedToEvent = form.values.guests.filter(
+                (guest) =>
+                  guest.event_responses.some(
+                    (response) => response.eventId === event.event_id
+                  ) || guest.nameUnknown
+              );
 
-                if (guestsInvitedToEvent.length === 0) {
-                  return <></>;
-                }
+              if (guestsInvitedToEvent.length === 0) {
+                return <></>;
+              }
 
-                return (
-                  <EventCard
-                    guests={guestsInvitedToEvent}
-                    event={event}
-                    form={form}
-                    key={`${event.event_id}`}
-                  />
-                );
-              })}
+              return (
+                <EventCard
+                  guests={guestsInvitedToEvent}
+                  event={event}
+                  form={form}
+                  key={`${event.event_id}`}
+                />
+              );
+            })}
           </Flex>
         </Stepper.Step>
 
