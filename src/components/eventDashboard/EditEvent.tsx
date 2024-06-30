@@ -58,6 +58,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     return {
       ...event,
+      imageUrl: event.imageUrl || "",
       attire: event.attire || "",
       guests: guestsInvitedToEvent,
     };
@@ -165,6 +166,22 @@ const EditEvent = ({ event, groups }: Props) => {
       />
 
       <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            label="Location"
+            name="location"
+            {...form.getInputProps("location")}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            label="Image URL"
+            name="imageUrl"
+            {...form.getInputProps("imageUrl")}
+          />
+        </Grid.Col>
+
         <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             label="Street Address"

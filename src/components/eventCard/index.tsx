@@ -18,13 +18,13 @@ import {
   IconBuildingCastle,
   IconCalendarHeart,
   IconExternalLink,
+  IconHanger,
   IconMapPin,
-  IconTie,
   IconUsers,
 } from "@tabler/icons-react";
 import { CSSProperties } from "react";
-import classes from "../rsvpFormStyles.module.css";
-import RsvpSelection from "./RsvpSelectionInput";
+import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
+import classes from "./eventCard.module.css";
 
 interface Props {
   event: Event;
@@ -68,9 +68,28 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     );
   };
 
-  const createDefaulDetailElement = (detail: string) => {
+  const createDefaultDetailElement = (detail: string) => {
     return <Text size="sm">{detail}</Text>;
   };
+
+  const createAnchorElement = (detail: string, url: string) => {
+    return (
+      <Group gap="xs" align="center" justify="space-between">
+        <Text size="sm">{detail}</Text>
+        <ActionIcon
+          variant="subtle"
+          color="gray"
+          component="a"
+          href={url}
+          target="_blank"
+          display="flex"
+        >
+          <IconExternalLink style={iconStyles} stroke={1.5} />
+        </ActionIcon>
+      </Group>
+    );
+  };
+
   return (
     <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
       <Card.Section bg="#8e9386" c="white" p="sm">
@@ -82,43 +101,34 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
       {createDetailSection(
         <IconBuildingCastle style={iconStyles} stroke={1.5} />,
         "Location",
-        createDefaulDetailElement(event.location)
+        event.imageUrl
+          ? createAnchorElement(event.location, event.imageUrl)
+          : createDefaultDetailElement(event.location)
       )}
 
       {createDetailSection(
         <IconMapPin style={iconStyles} stroke={1.5} />,
         "Address",
-        <Group gap="xs" align="center" justify="space-between">
-          <Text size="sm">
-            {`${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
-              event.postal || ""
-            }`}
-          </Text>
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            component="a"
-            href={getAddressURL()}
-            target="_blank"
-            display="flex"
-          >
-            <IconExternalLink style={iconStyles} stroke={1.5} />
-          </ActionIcon>
-        </Group>
+        createAnchorElement(
+          `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
+            event.postal || ""
+          }`,
+          getAddressURL()
+        )
       )}
 
       {createDetailSection(
         <IconCalendarHeart style={iconStyles} stroke={1.5} />,
         "Date & Time",
-        createDefaulDetailElement(
+        createDefaultDetailElement(
           `${new Date(event.date).toDateString()} • ${event.time}`
         )
       )}
 
       {createDetailSection(
-        <IconTie style={iconStyles} stroke={1.5} />,
+        <IconHanger style={iconStyles} stroke={1.5} />,
         "Attire",
-        createDefaulDetailElement(event.attire),
+        createDefaultDetailElement(event.attire),
         form !== undefined
       )}
 
@@ -126,7 +136,9 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
         ? createDetailSection(
             <IconUsers style={iconStyles} stroke={1.5} />,
             "Invited Guests",
-            createDefaulDetailElement(getGuestsForEvent(event, guests).length.toString()),
+            createDefaultDetailElement(
+              getGuestsForEvent(event, guests).length.toString()
+            ),
             true
           )
         : null}

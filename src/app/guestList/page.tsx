@@ -1,32 +1,19 @@
 import { Container, SimpleGrid } from "@mantine/core";
+import { createClient } from "@spiel-wedding/database/server";
 import GuestListTable from "@spiel-wedding/features/GuestListTable/GuestListTable";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-async function getUser() {
-  const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-      },
-    }
-  );
+async function checkLoginStatus() {
+  const supabase = createClient();
   const { data } = await supabase.auth.getUser();
-  return { user: data?.user };
+
+  if (!data?.user) {
+    return redirect("/");
+  }
 }
 
 export default async function GuestList() {
-  const { user } = await getUser();
-
-  if (!user) {
-    redirect("/");
-  }
+  await checkLoginStatus();
 
   return (
     <Container>

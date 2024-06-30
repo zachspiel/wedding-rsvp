@@ -4,6 +4,7 @@ import { Alert, Button, Flex, Group as MGroup, Stepper, Title } from "@mantine/c
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
@@ -11,7 +12,6 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useState } from "react";
 import GuestBookForm from "../GuestBookForm";
 import { sendMail } from "./action";
-import EventCard from "./components/EventCard";
 import classes from "./rsvpFormStyles.module.css";
 
 interface Props {

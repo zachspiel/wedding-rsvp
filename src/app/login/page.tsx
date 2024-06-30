@@ -2,13 +2,17 @@ import { createClient } from "@spiel-wedding/database/server";
 import { LoginForm } from "@spiel-wedding/features/LoginForm";
 import { redirect } from "next/navigation";
 
-export default async function Login() {
+const checkLoginStatus = async () => {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
 
   if (data?.user) {
-    redirect("/");
+    return redirect("/");
   }
+};
+
+export default async function Login() {
+  await checkLoginStatus();
 
   return <LoginForm />;
 }

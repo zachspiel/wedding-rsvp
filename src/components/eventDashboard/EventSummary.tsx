@@ -2,9 +2,9 @@
 
 import { Modal, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import EventCard from "@spiel-wedding/features/RsvpForm/components/EventCard";
 import { Event, Group as Party } from "@spiel-wedding/types/Guest";
 import { useState } from "react";
+import EventCard from "../eventCard";
 import EditEvent from "./EditEvent";
 import classes from "./dashboard.module.css";
 
