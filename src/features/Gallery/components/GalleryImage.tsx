@@ -1,14 +1,14 @@
 "use client";
 
 import { Flex, Paper, Title } from "@mantine/core";
+import { createClient } from "@spiel-wedding/database/client";
 import { Photo } from "@spiel-wedding/types/Photo";
-import ImageVisibilityToggle from "./ImageVisibilityToggle";
-import EditImage from "./EditImage";
-import Image from "next/image";
-import { supabase } from "@spiel-wedding/database/database";
 import cx from "clsx";
-import classes from "../gallery.module.css";
+import Image from "next/image";
 import useSWR from "swr";
+import classes from "../gallery.module.css";
+import EditImage from "./EditImage";
+import ImageVisibilityToggle from "./ImageVisibilityToggle";
 
 interface Props {
   image: Photo;
@@ -33,6 +33,7 @@ const GalleryImage = ({
   objectFit,
   openImage,
 }: Props): JSX.Element => {
+  const supabase = createClient();
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
   const { data: placeholder } = useSWR(
     [`placeholder-${data.publicUrl}`, data.publicUrl],

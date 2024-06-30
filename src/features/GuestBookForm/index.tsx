@@ -3,10 +3,10 @@
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
+import { addMessageToGuestBook } from "@spiel-wedding/hooks/guestbook";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { mutate } from "swr";
 import { useLocalStorage } from "@mantine/hooks";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 
 interface Props {
   name?: string;
@@ -59,7 +59,7 @@ const GuestBookForm = ({
         );
       } else {
         handleSubmit(guestMessage);
-        await mutate(GUESTBOOK_SWR_KEY);
+        await revalidatePage("/");
       }
     }
   };

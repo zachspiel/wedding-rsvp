@@ -5,7 +5,6 @@ import { Playfair, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "@spiel-wedding/components/navbar";
 import { Footer } from "@spiel-wedding/components/footer";
-import { createClient } from "@spiel-wedding/database/server";
 import { AppShell, AppShellHeader, AppShellMain, AppShellFooter } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
@@ -50,11 +49,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   return (
     <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
       <head>
@@ -65,7 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers poppins={poppins}>
           <AppShell header={{ height: rem(100) }}>
             <AppShellHeader>
-              <Navbar user={user} />
+              <Navbar />
             </AppShellHeader>
             <AppShellMain>{children}</AppShellMain>
             <AppShellFooter pos="relative" zIndex={10}>

@@ -1,23 +1,29 @@
-import { createClient } from "@spiel-wedding/database/client";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { showFailureNotification } from "../../notifications/notifications";
 import { ActionIcon } from "@mantine/core";
 import { User } from "@supabase/supabase-js";
 import { IconLogout } from "@tabler/icons-react";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import { createClient } from "@spiel-wedding/database/client";
 
 interface Props {
-  user: User | null;
+  user?: User;
 }
 
 const SignOutButton = ({ user }: Props): JSX.Element => {
   const supabase = createClient();
+  const router = useRouter();
+
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut({ scope: "local" });
+    const { error } = await supabase.auth.signOut();
 
     if (error) {
       showFailureNotification();
     } else {
-      redirect("/login");
+      router.push("/");
+      await revalidatePage("/");
     }
   };
 

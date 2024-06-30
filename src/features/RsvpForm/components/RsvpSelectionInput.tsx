@@ -7,11 +7,10 @@ import { RsvpResponse, Group } from "@spiel-wedding/types/Guest";
 interface Props {
   form: UseFormReturnType<Group>;
   guestIndex: number;
+  responseIndex: number;
 }
 
-const RsvpSelection = (props: Props): JSX.Element => {
-  const { form, guestIndex } = props;
-
+const RsvpSelection = ({ form, guestIndex, responseIndex }: Props): JSX.Element => {
   const resetUnknownGuest = (index: number): void => {
     const guest = form.values.guests[index];
     if (guest.nameUnknown) {
@@ -21,7 +20,11 @@ const RsvpSelection = (props: Props): JSX.Element => {
   };
 
   return (
-    <Radio.Group {...form.getInputProps(`guests.${guestIndex}.rsvp`)}>
+    <Radio.Group
+      {...form.getInputProps(
+        `guests.${guestIndex}.event_responses.${responseIndex}.rsvp`
+      )}
+    >
       <MGroup mt="xs">
         <Radio value={RsvpResponse.ACCEPTED} label="Will Attend" />
         <Radio

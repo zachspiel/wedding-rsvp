@@ -1,3 +1,5 @@
+"use client";
+
 import { UseFormReturnType } from "@mantine/form";
 import { Accordion, Grid, TextInput, Select, Alert, NumberInput } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
@@ -17,10 +19,36 @@ const MailingAddressForm = ({
   emailRequired,
 }: Props): JSX.Element => {
   const openAllTabs = openTabsByDefault ?? false;
-  const defaultValue = openAllTabs ? ["mailing", "contact"] : ["mailing"];
+  const defaultValue = openAllTabs
+    ? ["guestNames", "mailing", "contact"]
+    : ["guestNames", "mailing"];
 
   return (
     <Accordion defaultValue={defaultValue} variant="separated" mt="xl" multiple>
+      <Accordion.Item value="guestNames">
+        <Accordion.Control>Guest Names</Accordion.Control>
+        <Accordion.Panel>
+          {form.values.guests.map((guest, guestIndex) => {
+            return (
+              <Grid key={`guest-${guest.guest_id}-name-input`}>
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <TextInput
+                    label="First Name"
+                    {...form.getInputProps(`guests.${guestIndex}.firstName`)}
+                  />
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <TextInput
+                    label="Last Name"
+                    {...form.getInputProps(`guests.${guestIndex}.lastName`)}
+                  />
+                </Grid.Col>
+              </Grid>
+            );
+          })}
+        </Accordion.Panel>
+      </Accordion.Item>
+
       <Accordion.Item value="mailing">
         <Accordion.Control>Mailing Address</Accordion.Control>
         <Accordion.Panel>

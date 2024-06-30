@@ -1,18 +1,20 @@
 "use client";
 
+import { Button, Container, Paper, PasswordInput, TextInput, Title } from "@mantine/core";
+import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import {
-  Container,
-  Title,
-  Paper,
-  TextInput,
-  PasswordInput,
-  Button,
-} from "@mantine/core";
-import { useForm, isEmail, isNotEmpty } from "@mantine/form";
-import { LoginFormData } from "./types";
+  showCustomFailureNotification,
+  showSuccessNotification,
+} from "@spiel-wedding/components/notifications/notifications";
+import useAdminView from "@spiel-wedding/hooks/adminView";
+import { useRouter } from "next/navigation";
 import { login } from "./actions";
+import { LoginFormData } from "./types";
 
 const LoginForm = () => {
+  const { setUser } = useAdminView();
+  const router = useRouter();
+
   const form = useForm<LoginFormData>({
     initialValues: {
       email: "",
@@ -25,7 +27,15 @@ const LoginForm = () => {
   });
 
   const handleSubmit = async (formData: LoginFormData) => {
-    await login(formData);
+    const user = await login(formData);
+
+    if (user) {
+      showSuccessNotification("Signed in");
+      setUser(user);
+      router.push("/");
+    } else {
+      showCustomFailureNotification("Error signinging in");
+    }
   };
 
   return (
