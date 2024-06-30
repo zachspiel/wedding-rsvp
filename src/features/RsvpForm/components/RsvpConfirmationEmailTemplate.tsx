@@ -1,6 +1,6 @@
 import { Html } from "@react-email/html";
 import { Text, Link, Container, Head, Preview, Body } from "@react-email/components";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { Img } from "@react-email/img";
 import { MAP_URL } from "@spiel-wedding/components/common/constants";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
@@ -29,9 +29,14 @@ const portrait = {
   marginLeft: "auto",
 };
 
-const RsvpConfirmationEmailTemplate = (group: Group) => {
-  const anyGuestAccepted = group.guests.some(
-    (guest) => guest.rsvp === RsvpResponse.ACCEPTED,
+interface Props {
+  group: Group;
+  events: Event[];
+}
+
+const RsvpConfirmationEmailTemplate = ({ group, events }: Props) => {
+  const anyGuestAccepted = group.guests.some((guest) =>
+    guest.event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED)
   );
 
   const previewText = anyGuestAccepted
@@ -59,7 +64,7 @@ const RsvpConfirmationEmailTemplate = (group: Group) => {
 
           <Text style={paragraph}>A copy of your RSVP can be found below:</Text>
 
-          <GuestTable guests={group.guests} />
+          <GuestTable guests={group.guests} events={events} />
 
           <Text style={paragraph}>Thank you,</Text>
           <Text style={paragraph}>Sedona & Zach</Text>

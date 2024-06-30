@@ -26,7 +26,33 @@ export interface Guest {
   lastName: string;
   nameUnknown: boolean;
   rsvp: RsvpResponse;
+  event_responses: EventResponse[];
   relationshipType: RelationshipType;
+}
+
+export interface Event {
+  event_id: string;
+  order: number;
+  title: string;
+  date: string;
+  time: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  postal: string;
+  location: string;
+  emoji: string;
+  auto_invite: boolean;
+  imageUrl: string | null;
+  attire: string;
+}
+
+export interface EventResponse {
+  response_id: string;
+  eventId: string;
+  rsvp: RsvpResponse;
+  guestId: string;
 }
 
 export interface RsvpModification {

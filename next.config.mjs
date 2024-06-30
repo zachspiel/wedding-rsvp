@@ -12,7 +12,12 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["@mantine/core", "@mantine/hooks", "@supabase/supabase-js"],
+    optimizePackageImports: [
+      "@mantine/core",
+      "@mantine/dates",
+      "@mantine/hooks",
+      "framer-motion",
+    ],
   },
 };
 

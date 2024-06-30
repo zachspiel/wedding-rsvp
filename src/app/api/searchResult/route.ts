@@ -1,4 +1,4 @@
-import { supabase } from "@spiel-wedding/database/database";
+import { createClient } from "@spiel-wedding/database/server";
 import { GROUP_TABLE } from "@spiel-wedding/hooks/guests";
 import { Guest } from "@spiel-wedding/types/Guest";
 import { NextRequest, NextResponse } from "next/server";
@@ -24,11 +24,14 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const firstName = searchParams.get("firstName");
   const lastName = searchParams.get("lastName");
+  const supabase = createClient();
 
   if (!firstName || !lastName) {
     return NextResponse.json([]);
   }
-  const { data, error } = await supabase.from(GROUP_TABLE).select("*, guests(*)");
+  const { data, error } = await supabase
+    .from(GROUP_TABLE)
+    .select("*, guests(*, event_responses(*))");
 
   if (error) {
     return NextResponse.json([]);

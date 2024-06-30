@@ -8,7 +8,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Group, RelationshipType } from "@spiel-wedding/types/Guest";
+import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { UseFormReturnType } from "@mantine/form";
 import { IconX } from "@tabler/icons-react";
 import { addChildToGuests, addPartnerToGuests } from "../../features/AddGroupForm/util";
@@ -18,11 +18,12 @@ interface Props {
   form: UseFormReturnType<Group>;
   index: number;
   groupType: string;
+  events: Event[];
 }
 
 const { CHILD, PARTNER, PRIMARY } = RelationshipType;
 
-const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
+const GuestInput = ({ form, index, groupType, events }: Props): JSX.Element => {
   const { guests } = form.values;
   const guest = guests[index];
 
@@ -114,7 +115,7 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
       {guest.relationshipType === PRIMARY && showAddPlusOneButton && (
         <Button
           variant="outline"
-          onClick={(): void => addPartnerToGuests(form)}
+          onClick={(): void => addPartnerToGuests(form, events)}
           mt="lg"
           mr="md"
         >
@@ -131,7 +132,11 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
       )}
 
       {showAddAdultButton && (
-        <Button variant="outline" onClick={(): void => addPartnerToGuests(form)} mt="lg">
+        <Button
+          variant="outline"
+          onClick={(): void => addPartnerToGuests(form, events)}
+          mt="lg"
+        >
           Add Adult
         </Button>
       )}
@@ -139,7 +144,7 @@ const GuestInput = ({ form, index, groupType }: Props): JSX.Element => {
       {showAddChildButton && (
         <Button
           variant="outline"
-          onClick={(): void => addChildToGuests(form)}
+          onClick={(): void => addChildToGuests(form, events)}
           mt="lg"
           ml="sm"
         >

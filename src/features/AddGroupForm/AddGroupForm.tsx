@@ -15,7 +15,7 @@ import {
   showCustomFailureNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
-import { Group, RelationshipType } from "@spiel-wedding/types/Guest";
+import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { useState, useEffect } from "react";
 import { useSWRConfig } from "swr";
 import {
@@ -25,14 +25,18 @@ import {
 } from "@spiel-wedding/components/form";
 import { addPartnerToGuests, addChildToGuests, createDefaultGroup } from "./util";
 
-const AddGroupForm = () => {
+interface Props {
+  events: Event[];
+}
+
+const AddGroupForm = ({ events }: Props) => {
   const [groupType, setGroupType] = useState("single");
   const [isInvited, setIsInvited] = useState("definitely");
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
-    initialValues: createDefaultGroup(),
+    initialValues: createDefaultGroup(events),
     validate: {
       guests: {
         firstName: (value, group, path) => isNameInvalid(value, group, path),
@@ -56,14 +60,14 @@ const AddGroupForm = () => {
     } else if (groupType === "couple") {
       removeGuestsFromGroup([RelationshipType.CHILD]);
       if (form.values.guests.length === 1) {
-        addPartnerToGuests(form);
+        addPartnerToGuests(form, events);
       }
     } else {
       if (form.values.guests.length === 1) {
-        addPartnerToGuests(form);
+        addPartnerToGuests(form, events);
       }
 
-      addChildToGuests(form);
+      addChildToGuests(form, events);
     }
   }, [groupType]);
 
@@ -83,7 +87,7 @@ const AddGroupForm = () => {
 
   const handleSubmit = async () => {
     try {
-      await createGroup(form.values);
+      await createGroup(form.values, events);
       showSuccessNotification(
         `Successfully added ${form.values.guests.length} guests 🎉!`
       );
@@ -93,14 +97,14 @@ const AddGroupForm = () => {
     }
 
     form.reset();
-    form.setInitialValues(createDefaultGroup());
+    form.setInitialValues(createDefaultGroup(events));
   };
 
   return (
     <>
       <Modal opened={opened} onClose={close} title="Add Guest" size="xl">
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Center>
+          <Center my="md">
             <SegmentedControl
               value={groupType}
               onChange={setGroupType}
@@ -119,6 +123,7 @@ const AddGroupForm = () => {
                 groupType={groupType}
                 index={index}
                 key={`${guest.guest_id}-guest-input-${index}`}
+                events={events}
               />
             );
           })}

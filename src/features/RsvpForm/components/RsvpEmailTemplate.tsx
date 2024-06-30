@@ -1,6 +1,6 @@
 import { Html } from "@react-email/html";
 import { Body, Head, Preview, Text } from "@react-email/components";
-import { Group } from "@spiel-wedding/types/Guest";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
 
 const paragraph = {
@@ -8,7 +8,12 @@ const paragraph = {
   lineHeight: "1.4",
 };
 
-const RsvpEmailTemplate = (group: Group) => {
+interface Props {
+  group: Group;
+  events: Event[];
+}
+
+const RsvpEmailTemplate = ({ group, events }: Props) => {
   return (
     <Html lang="en">
       <Head />
@@ -16,7 +21,7 @@ const RsvpEmailTemplate = (group: Group) => {
       <Preview>{group.guests[0].firstName} has RSVPed</Preview>
       <Body>
         <Text style={paragraph}>A copy of the RSVP can be found below:</Text>
-        <GuestTable guests={group.guests} />
+        <GuestTable guests={group.guests} events={events} />
       </Body>
     </Html>
   );

@@ -8,12 +8,9 @@ import {
 } from "@spiel-wedding/components/notifications/notifications";
 import { IconTrash } from "@tabler/icons-react";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
-import { mutate } from "swr";
-import {
-  GUESTBOOK_SWR_KEY,
-  removeGuestBookMessage,
-} from "@spiel-wedding/hooks/guestbook";
+import { removeGuestBookMessage } from "@spiel-wedding/hooks/guestbook";
 import { modals } from "@mantine/modals";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 
 interface Props {
   message: PublicGuestMessage;
@@ -25,7 +22,7 @@ const DeleteMessageButton = ({ message }: Props): JSX.Element => {
 
     if (removedMessage) {
       showSuccessNotification("Successfully deleted the message!");
-      await mutate(GUESTBOOK_SWR_KEY);
+      await revalidatePage("/");
     } else {
       showCustomFailureNotification(
         "An error occurred while deleting the message. Please try again later."
