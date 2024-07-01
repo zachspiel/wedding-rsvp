@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, Group as MGroup, TextInput, Text, Skeleton } from "@mantine/core";
-import { useForm, isNotEmpty } from "@mantine/form";
+import { Button, Group as MGroup, Skeleton, Text, TextInput } from "@mantine/core";
+import { isNotEmpty, useForm } from "@mantine/form";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import { useState } from "react";
 import useSWR from "swr";
+import RsvpForm from "../RsvpForm";
 import SearchResults from "./components/SearchResults";
-import { Group } from "@spiel-wedding/types/Guest";
 
 interface SearchForm {
   firstName: string;
@@ -31,15 +32,16 @@ const getMatchingGuests = async (
 };
 
 interface Props {
-  selectedGroup?: Group;
-  setSelectedGroup: (group?: Group) => void;
+  events: Event[];
 }
 
-const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
+const RsvpSearchbar = ({ events }: Props): JSX.Element => {
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchForm, setSearchForm] = useState<SearchForm>();
   const { data, error, isLoading, mutate } = useSWR(
     searchForm ? ["searchResults", searchForm] : null,
-    ([url, params]) => getMatchingGuests(params.firstName, params.lastName)
+    ([url, params]) => getMatchingGuests(params.firstName, params.lastName),
+    { fallbackData: [] }
   );
 
   const form = useForm({
@@ -104,19 +106,18 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
         </>
       )}
 
-      {selectedGroup === undefined && (data ?? []).length > 0 && (
+      {!selectedGroup && data.length > 0 && (
         <>
           <Text>Select your party below or try searching again.</Text>
           <Text>
             If none of these are you, please reach out to Sedona and Zach to see exactly
             how they entered your details.
           </Text>
+          <SearchResults searchResults={data} setSelectedGroup={selectGroup} />
         </>
       )}
 
-      {!selectedGroup && (
-        <SearchResults searchResults={data ?? []} setSelectedGroup={selectGroup} />
-      )}
+      {selectedGroup && <RsvpForm selectedGroup={selectedGroup} events={events} />}
     </>
   );
 };

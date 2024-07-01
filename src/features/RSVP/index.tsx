@@ -1,29 +1,14 @@
-"use client";
-
-import { Alert, Modal, Text } from "@mantine/core";
-import { Event, Group } from "@spiel-wedding/types/Guest";
-import RsvpForm from "@spiel-wedding/features/RsvpForm";
-import { useEffect, useState } from "react";
-import { SectionContainer, SectionTitle } from "../../components/common";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Alert, Text } from "@mantine/core";
+import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
-import { useMediaQuery } from "@mantine/hooks";
+import { Event } from "@spiel-wedding/types/Guest";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 interface Props {
   events: Event[];
 }
 
 const RSVP = ({ events }: Props): JSX.Element => {
-  const [selectedGroup, setSelectedGroup] = useState<Group>();
-  const [opened, setOpened] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 50em)");
-
-  useEffect(() => {
-    if (!opened && selectedGroup !== undefined) {
-      setSelectedGroup(undefined);
-    }
-  }, [opened]);
-
   return (
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
@@ -52,32 +37,7 @@ const RSVP = ({ events }: Props): JSX.Element => {
         Please RSVP no later than September 26th 2024.
       </Alert>
 
-      <RsvpSearchbar
-        selectedGroup={selectedGroup}
-        setSelectedGroup={(group) => {
-          setSelectedGroup(group);
-
-          if (group) {
-            setOpened(true);
-          }
-        }}
-      />
-
-      <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        transitionProps={{ transition: "slide-up", duration: 200 }}
-        centered
-        fullScreen={isMobile}
-        closeButtonProps={{
-          bg: "sage-green",
-          c: "white",
-          size: "lg",
-        }}
-        size="calc(50vw - 3rem)"
-      >
-        {selectedGroup && <RsvpForm events={events} selectedGroup={selectedGroup} />}
-      </Modal>
+      <RsvpSearchbar events={events} />
     </SectionContainer>
   );
 };

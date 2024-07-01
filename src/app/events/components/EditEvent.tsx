@@ -28,11 +28,16 @@ import {
   deleteEventResponses,
   updateEvent,
 } from "@spiel-wedding/hooks/events";
+import {
+  Event,
+  EventResponse,
+  Group as Party,
+  RsvpResponse,
+} from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import isEqual from "lodash.isequal";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Event, EventResponse, Group as Party, RsvpResponse } from "../../types/Guest";
 
 interface Props {
   event: Event;

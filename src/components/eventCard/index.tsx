@@ -4,6 +4,8 @@ import {
   ActionIcon,
   Button,
   Card,
+  Drawer,
+  Flex,
   Group,
   Stack,
   Table,
@@ -12,16 +14,23 @@ import {
   rem,
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
 import { Event, Guest, Group as Party } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import {
   IconBuildingCastle,
   IconCalendarHeart,
-  IconExternalLink,
+  IconCopy,
+  IconDownload,
+  IconEye,
   IconHanger,
   IconMapPin,
   IconUsers,
 } from "@tabler/icons-react";
+import copy from "copy-to-clipboard";
+import { saveAs } from "file-saver";
+import Image from "next/image";
 import { CSSProperties } from "react";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
 import classes from "./eventCard.module.css";
@@ -40,10 +49,11 @@ const iconStyles: CSSProperties = {
 };
 
 const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
-  const getAddressURL = () => {
-    const { address1, address2, city, state, postal } = event;
-    const query = [address1, address2 || "", city, state, postal];
-    return `https://www.google.com/maps/search/?api=1&query=${query.join("%20")}`;
+  const [opened, { open, close }] = useDisclosure(false);
+  const createFormattedURL = () => {
+    return `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
+      event.postal || ""
+    }`;
   };
 
   const createDetailSection = (
@@ -72,124 +82,180 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     return <Text size="sm">{detail}</Text>;
   };
 
-  const createAnchorElement = (detail: string, url: string) => {
+  const createPreviewElement = (detail: string, url: string) => {
+    return (
+      <Group gap="xs" align="center" justify="space-between">
+        <Text size="sm">{detail}</Text>
+        <ActionIcon variant="subtle" color="gray" onClick={open}>
+          <IconEye style={iconStyles} stroke={1.5} />
+        </ActionIcon>
+      </Group>
+    );
+  };
+
+  const createCopyElement = (detail: string) => {
     return (
       <Group gap="xs" align="center" justify="space-between">
         <Text size="sm">{detail}</Text>
         <ActionIcon
           variant="subtle"
           color="gray"
-          component="a"
-          href={url}
-          target="_blank"
           display="flex"
+          onClick={() => handleCopy(detail)}
         >
-          <IconExternalLink style={iconStyles} stroke={1.5} />
+          <IconCopy style={iconStyles} stroke={1.5} />
         </ActionIcon>
       </Group>
     );
   };
 
+  const handleCopy = (value: string) => {
+    copy(value, {
+      onCopy: () => {
+        showNotification({
+          color: "blue",
+          message: "Copied to clipboard",
+        });
+      },
+    });
+  };
+
+  const handleDownload = () => {
+    if (event.imageUrl) {
+      saveAs(event.imageUrl, `${event.title}.png`);
+    }
+  };
+
   return (
-    <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
-      <Card.Section bg="#8e9386" c="white" p="sm">
-        <Title order={4} fw="normal" ta="center" className={classes.eventTitle}>
-          {event.emoji} {event.title}
-        </Title>
-      </Card.Section>
+    <>
+      <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
+        <Card.Section bg="#8e9386" c="white" p="sm">
+          <Title order={4} fw="normal" ta="center" className={classes.eventTitle}>
+            {event.emoji} {event.title}
+          </Title>
+        </Card.Section>
 
-      {createDetailSection(
-        <IconBuildingCastle style={iconStyles} stroke={1.5} />,
-        "Location",
-        event.imageUrl
-          ? createAnchorElement(event.location, event.imageUrl)
-          : createDefaultDetailElement(event.location)
-      )}
+        {createDetailSection(
+          <IconBuildingCastle style={iconStyles} stroke={1.5} />,
+          "Location",
+          event.imageUrl
+            ? createPreviewElement(event.location, event.imageUrl)
+            : createDefaultDetailElement(event.location)
+        )}
 
-      {createDetailSection(
-        <IconMapPin style={iconStyles} stroke={1.5} />,
-        "Address",
-        createAnchorElement(
-          `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
-            event.postal || ""
-          }`,
-          getAddressURL()
-        )
-      )}
+        {createDetailSection(
+          <IconMapPin style={iconStyles} stroke={1.5} />,
+          "Address",
+          createCopyElement(createFormattedURL())
+        )}
 
-      {createDetailSection(
-        <IconCalendarHeart style={iconStyles} stroke={1.5} />,
-        "Date & Time",
-        createDefaultDetailElement(
-          `${new Date(event.date).toDateString()} • ${event.time}`
-        )
-      )}
-
-      {createDetailSection(
-        <IconHanger style={iconStyles} stroke={1.5} />,
-        "Attire",
-        createDefaultDetailElement(event.attire),
-        form !== undefined
-      )}
-
-      {form === undefined
-        ? createDetailSection(
-            <IconUsers style={iconStyles} stroke={1.5} />,
-            "Invited Guests",
-            createDefaultDetailElement(
-              getGuestsForEvent(event, guests).length.toString()
-            ),
-            true
+        {createDetailSection(
+          <IconCalendarHeart style={iconStyles} stroke={1.5} />,
+          "Date & Time",
+          createDefaultDetailElement(
+            `${new Date(event.date).toDateString()} • ${event.time}`
           )
-        : null}
+        )}
 
-      {!form && (
-        <Card.Section>
-          <Group justify="flex-end" p="sm">
-            <Button onClick={openUpdateModal}>Edit</Button>
-          </Group>
-        </Card.Section>
-      )}
-      {form && (
-        <Card.Section p="md">
-          <Table
-            highlightOnHover
-            horizontalSpacing="md"
-            verticalSpacing="xs"
-            layout="fixed"
-          >
-            <Table.Tbody>
-              {guests.map((guest, guestIndex) => {
-                const eventResponse = guest.event_responses.filter(
-                  (response) => response.eventId === event.event_id
-                )[0];
-                const eventIndex = guest.event_responses.findIndex(
-                  (response) => response.response_id === eventResponse.response_id
-                );
+        {createDetailSection(
+          <IconHanger style={iconStyles} stroke={1.5} />,
+          "Attire",
+          createDefaultDetailElement(event.attire),
+          form !== undefined
+        )}
 
-                return (
-                  <Table.Tr key={`guest-${guest.guest_id}-${event.event_id}`}>
-                    <Table.Td>
-                      <Text>
-                        {guest.nameUnknown && "Guest name unknown"}
-                        {!guest.nameUnknown && `${guest.firstName} ${guest.lastName}`}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <RsvpSelection
-                        form={form}
-                        guestIndex={guestIndex}
-                        responseIndex={eventIndex}
-                      />
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-        </Card.Section>
+        {form === undefined
+          ? createDetailSection(
+              <IconUsers style={iconStyles} stroke={1.5} />,
+              "Invited Guests",
+              createDefaultDetailElement(
+                getGuestsForEvent(event, guests).length.toString()
+              ),
+              true
+            )
+          : null}
+
+        {!form && (
+          <Card.Section>
+            <Group justify="flex-end" p="sm">
+              <Button onClick={openUpdateModal}>Edit</Button>
+            </Group>
+          </Card.Section>
+        )}
+        {form && (
+          <Card.Section p="md">
+            <Table
+              highlightOnHover
+              horizontalSpacing="md"
+              verticalSpacing="xs"
+              layout="fixed"
+            >
+              <Table.Tbody>
+                {guests.map((guest, guestIndex) => {
+                  const eventResponse = guest.event_responses.filter(
+                    (response) => response.eventId === event.event_id
+                  )[0];
+                  const eventIndex = guest.event_responses.findIndex(
+                    (response) => response.response_id === eventResponse.response_id
+                  );
+
+                  return (
+                    <Table.Tr key={`guest-${guest.guest_id}-${event.event_id}`}>
+                      <Table.Td>
+                        <Text>
+                          {guest.nameUnknown && "Guest name unknown"}
+                          {!guest.nameUnknown && `${guest.firstName} ${guest.lastName}`}
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <RsvpSelection
+                          form={form}
+                          guestIndex={guestIndex}
+                          responseIndex={eventIndex}
+                        />
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                })}
+              </Table.Tbody>
+            </Table>
+          </Card.Section>
+        )}
+      </Card>
+      {event.imageUrl && (
+        <Drawer
+          opened={opened}
+          onClose={close}
+          title={`${event.location} Map`}
+          overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+        >
+          <Flex direction="column" h="100%" p="xs">
+            <Button
+              size="sm"
+              ml="auto"
+              leftSection={<IconDownload strokeWidth={1.5} />}
+              onClick={handleDownload}
+            >
+              Save Map
+            </Button>
+            <div
+              style={{
+                minHeight: 400,
+                zIndex: -1,
+              }}
+            >
+              <Image
+                src={event.imageUrl}
+                fill
+                alt={event.location}
+                style={{ objectFit: "contain" }}
+                sizes="(min-width: 808px) 75vh"
+              />
+            </div>
+          </Flex>
+        </Drawer>
       )}
-    </Card>
+    </>
   );
 };
 

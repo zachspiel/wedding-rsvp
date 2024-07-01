@@ -1,10 +1,9 @@
-import { Event, Group, Guest, RsvpModification } from "@spiel-wedding/types/Guest";
-
-import { v4 as uuid } from "uuid";
-import { TablesUpdate } from "@spiel-wedding/types/supabase.types";
-import { bulkUpsertEventResponse, createEventResponses } from "./events";
-import { createNewResponse } from "@spiel-wedding/util";
 import { createClient } from "@spiel-wedding/database/client";
+import { Event, Group, Guest, RsvpModification } from "@spiel-wedding/types/Guest";
+import { TablesUpdate } from "@spiel-wedding/types/supabase.types";
+import { createNewResponse } from "@spiel-wedding/util";
+import { v4 as uuid } from "uuid";
+import { bulkUpsertEventResponse, createEventResponses } from "./events";
 
 export const GROUP_SWR_KEY = "group";
 export const GROUP_TABLE = "group";
@@ -18,10 +17,25 @@ export const getGroups = async (): Promise<Group[]> => {
     .select("*, guests(*, event_responses(*))");
 
   if (error) {
-    throw new Error(error.message);
+    return [];
   }
 
   return data ?? [];
+};
+
+export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from(GROUP_TABLE)
+    .select("*, guests(*, event_responses(*))")
+    .eq("group_id", groupId)
+    .single();
+
+  if (error) {
+    return;
+  }
+
+  return data;
 };
 
 export const createGroup = async (
