@@ -28,12 +28,7 @@ const RSVP = ({ events }: Props): JSX.Element => {
         Please reach out to Sedona or Zach if you have any questions about guest
         attendance.
       </Text>
-      <Alert
-        variant="light"
-        color="teal"
-        icon={<IconInfoCircle />}
-        style={{ width: "fit-content" }}
-      >
+      <Alert variant="light" color="teal" icon={<IconInfoCircle />}>
         Please RSVP no later than September 26th 2024.
       </Alert>
 

@@ -28,10 +28,10 @@ import {
   IconMapPin,
   IconUsers,
 } from "@tabler/icons-react";
-import copy from "copy-to-clipboard";
 import { saveAs } from "file-saver";
 import Image from "next/image";
 import { CSSProperties } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
 import classes from "./eventCard.module.css";
 
@@ -97,27 +97,22 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     return (
       <Group gap="xs" align="center" justify="space-between">
         <Text size="sm">{detail}</Text>
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          display="flex"
-          onClick={() => handleCopy(detail)}
+
+        <CopyToClipboard
+          text={detail}
+          onCopy={() => {
+            showNotification({
+              color: "blue",
+              message: "Copied to clipboard",
+            });
+          }}
         >
-          <IconCopy style={iconStyles} stroke={1.5} />
-        </ActionIcon>
+          <ActionIcon variant="subtle" color="gray" display="flex">
+            <IconCopy style={iconStyles} stroke={1.5} />
+          </ActionIcon>
+        </CopyToClipboard>
       </Group>
     );
-  };
-
-  const handleCopy = (value: string) => {
-    copy(value, {
-      onCopy: () => {
-        showNotification({
-          color: "blue",
-          message: "Copied to clipboard",
-        });
-      },
-    });
   };
 
   const handleDownload = () => {

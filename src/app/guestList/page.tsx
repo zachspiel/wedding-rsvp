@@ -7,7 +7,7 @@ const checkLoginStatus = async () => {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
 
-  if (data?.user) {
+  if (!data?.user) {
     return redirect("/");
   }
 };
