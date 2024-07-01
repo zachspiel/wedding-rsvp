@@ -1,4 +1,6 @@
-import { Flex, Group as MGroup, Divider, Button, Text } from "@mantine/core";
+"use client";
+
+import { Button, Divider, Flex, Group as MGroup, Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 
 interface Props {
@@ -25,11 +27,7 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
                   </Text>
                 ))}
               </Flex>
-              <Button
-                onClick={(): void => {
-                  setSelectedGroup(group);
-                }}
-              >
+              <Button onClick={() => setSelectedGroup(group)}>
                 {isModifyingRsvp ? "Edit RSVP" : "Select"}
               </Button>
             </MGroup>
