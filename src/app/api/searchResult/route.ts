@@ -3,30 +3,24 @@ import { GROUP_TABLE } from "@spiel-wedding/hooks/guests";
 import { Guest } from "@spiel-wedding/types/Guest";
 import { NextRequest, NextResponse } from "next/server";
 
-const guestMatchesSearch = (
-  firstName: string,
-  lastName: string,
-  guest: Guest
-): boolean => {
-  const firstNameLowerCase = firstName.toLowerCase().trim();
-  const lastNameLowerCase = lastName.toLowerCase().trim();
+const guestMatchesSearch = (name: string, guest: Guest): boolean => {
+  const nameLowerCase = name.toLowerCase().trim();
   const guestFirstName = guest.firstName.toLowerCase();
   const guestLastName = guest.lastName.toLowerCase();
 
-  if (firstName.length === 0 || lastName.length === 0) {
+  if (name.length === 0) {
     return false;
   }
 
-  return guestFirstName == firstNameLowerCase && guestLastName == lastNameLowerCase;
+  return guestFirstName + " " + guestLastName === nameLowerCase;
 };
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const firstName = searchParams.get("firstName");
-  const lastName = searchParams.get("lastName");
+  const name = searchParams.get("name");
   const supabase = createClient();
 
-  if (!firstName || !lastName) {
+  if (!name) {
     return NextResponse.json([]);
   }
   const { data, error } = await supabase
@@ -40,9 +34,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(
     data?.filter(
       (group) =>
-        group.guests.filter((guest: Guest) =>
-          guestMatchesSearch(firstName, lastName, guest)
-        ).length > 0
+        group.guests.filter((guest: Guest) => guestMatchesSearch(name, guest)).length > 0
     ) ?? []
   );
 }
