@@ -12,6 +12,7 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useState } from "react";
 import GuestBookForm from "../GuestBookForm";
 import { sendMail } from "./action";
+import RsvpModal from "./components/RsvpModal";
 import classes from "./rsvpFormStyles.module.css";
 
 interface Props {
@@ -98,7 +99,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   };
 
   return (
-    <>
+    <RsvpModal selectedGroup={selectedGroup}>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
           <Flex direction="column">
@@ -185,7 +186,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
           </Button>
         )}
       </MGroup>
-    </>
+    </RsvpModal>
   );
 };
 

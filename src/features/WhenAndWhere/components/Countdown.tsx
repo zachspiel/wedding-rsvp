@@ -1,43 +1,40 @@
 "use client";
 
-import { Container, Flex, Text } from "@mantine/core";
+import { Container, Flex, SimpleGrid, Skeleton, Text } from "@mantine/core";
+import MotionContainer from "@spiel-wedding/components/common/MotionContainer";
+import React from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import classes from "../styles.module.css";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 const WeddingCountdown = (): JSX.Element => {
   const weddingDate = new Date("10/26/2024");
   const currentDate = new Date();
   const differenceInTime = weddingDate.getTime() - currentDate.getTime();
   const daysRemaining = differenceInTime / (1000 * 3600 * 24);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   const getCountdownBox = (
     title: string,
     value: number,
     index: number,
-    className?: string,
+    className?: string
   ): JSX.Element => {
     return (
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 100,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.7,
-            delay: 0.1 * index,
+      <MotionContainer
+        motionProps={{
+          initial: {
+            opacity: 0,
+            y: 100,
           },
+          whileInView: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 0.7,
+              delay: 0.1 * index,
+            },
+          },
+          viewport: { once: true },
         }}
-        viewport={{ once: true }}
       >
         <Container
           style={{
@@ -59,7 +56,7 @@ const WeddingCountdown = (): JSX.Element => {
             {title}
           </Text>
         </Container>
-      </motion.div>
+      </MotionContainer>
     );
   };
 
@@ -73,7 +70,19 @@ const WeddingCountdown = (): JSX.Element => {
     );
   };
 
-  return <>{isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}</>;
+  return (
+    <React.Suspense
+      fallback={
+        <SimpleGrid cols={3}>
+          <Skeleton width="111px" />
+          <Skeleton width="111px" />
+          <Skeleton width="111px" />
+        </SimpleGrid>
+      }
+    >
+      <Countdown date={weddingDate} renderer={renderCountdown} />
+    </React.Suspense>
+  );
 };
 
 export default WeddingCountdown;
