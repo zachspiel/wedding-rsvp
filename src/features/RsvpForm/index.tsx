@@ -99,7 +99,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   };
 
   return (
-    <RsvpModal events={events} selectedGroup={selectedGroup}>
+    <RsvpModal selectedGroup={selectedGroup}>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
           <Flex direction="column">

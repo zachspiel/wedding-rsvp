@@ -2,16 +2,15 @@
 
 import { Modal } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { Event, Group } from "@spiel-wedding/types/Guest";
+import { Group } from "@spiel-wedding/types/Guest";
 import { useEffect, useState } from "react";
 
 interface Props {
-  events: Event[];
   selectedGroup: Group;
   children: React.ReactNode;
 }
 
-const RsvpModal = ({ events, selectedGroup, children }: Props) => {
+const RsvpModal = ({ selectedGroup, children }: Props) => {
   const [opened, setOpened] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
 

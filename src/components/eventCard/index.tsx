@@ -31,7 +31,7 @@ import {
 import { saveAs } from "file-saver";
 import Image from "next/image";
 import { CSSProperties } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import CopyToClipboard from "react-copy-to-clipboard";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
 import classes from "./eventCard.module.css";
 
@@ -223,6 +223,11 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
           onClose={close}
           title={`${event.location} Map`}
           overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+          closeButtonProps={{
+            bg: "sage-green",
+            c: "white",
+            size: "lg",
+          }}
         >
           <Flex direction="column" h="100%" p="xs">
             <Button
