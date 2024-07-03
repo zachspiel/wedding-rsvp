@@ -28,7 +28,11 @@
   overflow: hidden;
 
   @media (max-width: $mantine-breakpoint-sm) {
-    height: 500px;
+    height: 65vh;
+  }
+
+  @media (min-width: $mantine-breakpoint-xl) {
+    height: 60vh;
   }
 
   @media (min-width: $mantine-breakpoint-xl) {

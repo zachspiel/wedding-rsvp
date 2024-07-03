@@ -21,7 +21,7 @@ const SectionContainer = ({
       }}
       fluid
       pos="relative"
-      h={flowerImages ? "75vh" : undefined}
+      mih={flowerImages ? "75vh" : undefined}
     >
       <Container style={{ padding: 0 }}>
         {flowerImages && (

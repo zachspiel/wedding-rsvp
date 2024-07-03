@@ -49,7 +49,7 @@ export function Providers({
   });
 
   return (
-    <MantineProvider defaultColorScheme="light" theme={theme} forceColorScheme="light">
+    <MantineProvider defaultColorScheme="light" theme={theme}>
       <ModalsProvider>
         <AdminViewProvider>{children}</AdminViewProvider>
       </ModalsProvider>

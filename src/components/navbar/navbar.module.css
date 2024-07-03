@@ -2,7 +2,7 @@
   position: fixed;
   width: 100%;
   z-index: 1;
-  background-color: #ffffff;
+  background-color: var(--mantine-color-body);
   border-bottom: 1px solid #717769;
 }
 
@@ -47,13 +47,20 @@
   text-decoration: none;
   padding: rem(8) rem(12);
   border-radius: var(--mantine-radius-sm);
-  color: var(--mantine-color-gray-7);
   font-size: var(--mantine-font-size-md);
   font-weight: 500;
 
   @media (max-width: $mantine-breakpoint-sm) {
     border-radius: 0;
     padding: var(--mantine-spacing-md);
+  }
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
+
+  @mixin light {
+    color: var(--mantine-color-gray-7);
   }
 }
 
@@ -66,7 +73,7 @@
 
 .highlightedLink {
   background-color: #717769;
-  color: #ffffff;
+  color: #ffffff !important;
 
   &:hover {
     opacity: 0.9;

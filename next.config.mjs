@@ -13,9 +13,15 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: [
+      "@hello-pangea/dnd",
       "@mantine/core",
-      "@mantine/dates",
       "@mantine/hooks",
+      "@mantine/tiptap",
+      "@react-email/components",
+      "@supabase/supabase-js",
+      "@tiptap/react",
+      "embla-carousel-react",
+      "react-countdown",
       "framer-motion",
     ],
   },

@@ -1,16 +1,16 @@
 "use client";
 
 import { Carousel } from "@mantine/carousel";
+import { Modal } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import useAdminView from "@spiel-wedding/hooks/adminView";
+import { Photo } from "@spiel-wedding/types/Photo";
+import { IconX } from "@tabler/icons-react";
+import { useState } from "react";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
-import useAdminView from "@spiel-wedding/hooks/adminView";
-import { SectionContainer, SectionTitle } from "../../components/common";
 import classes from "./gallery.module.css";
-import { Modal } from "@mantine/core";
-import { useState } from "react";
-import { Photo } from "@spiel-wedding/types/Photo";
-import { useMediaQuery } from "@mantine/hooks";
-import { IconX } from "@tabler/icons-react";
 
 interface Props {
   gallery: Photo[];
