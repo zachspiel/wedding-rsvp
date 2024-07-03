@@ -1,32 +1,27 @@
-import { Container, Group, rem, Anchor } from "@mantine/core";
-import Logo from "./components/Logo";
+import { Anchor, Container, Group, rem } from "@mantine/core";
 import { AdminViewToggle } from "../common";
-import { User } from "@supabase/supabase-js";
-import classes from "./navbar.module.css";
-import MenuItems from "./components/MenuItems";
 import BurgerMenu from "./components/BurgerMenu";
+import Logo from "./components/Logo";
+import MenuItems from "./components/MenuItems";
+import classes from "./navbar.module.css";
 
 export const HEADER_HEIGHT = rem(100);
 
-interface Props {
-  user: User | null;
-}
-
-const Navbar = ({ user }: Props): JSX.Element => {
+const Navbar = (): JSX.Element => {
   return (
     <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
       <Container className={classes.header} style={{ maxWidth: "100%" }}>
         <Anchor href="/" p="xs">
           <Logo />
         </Anchor>
-        <Group gap="md" className={classes.navbarLinks}>
-          <MenuItems user={user} />
+        <Group gap="sm" className={classes.navbarLinks}>
+          <MenuItems />
         </Group>
 
-        <BurgerMenu user={user} />
+        <BurgerMenu />
       </Container>
 
-      {user && <AdminViewToggle />}
+      <AdminViewToggle />
     </header>
   );
 };

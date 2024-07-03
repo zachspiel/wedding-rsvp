@@ -1,12 +1,12 @@
 "use client";
 
-import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import { addMessageToGuestBook, GUESTBOOK_SWR_KEY } from "@spiel-wedding/hooks/guestbook";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { mutate } from "swr";
 import { useLocalStorage } from "@mantine/hooks";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
+import { addMessageToGuestBook } from "@spiel-wedding/hooks/guestbook";
+import { GuestMessage } from "@spiel-wedding/types/Guest";
 
 interface Props {
   name?: string;
@@ -59,7 +59,7 @@ const GuestBookForm = ({
         );
       } else {
         handleSubmit(guestMessage);
-        await mutate(GUESTBOOK_SWR_KEY);
+        await revalidatePage("/");
       }
     }
   };
@@ -81,15 +81,17 @@ const GuestBookForm = ({
           label="Name"
           placeholder="Your name"
           name="name"
-          required={!handleSubmitWithoutMessage}
+          withAsterisk
           {...form.getInputProps("name")}
+          error={form.errors["name"]}
         />
         <TextInput
           label="Email"
           placeholder="Your email"
           name="email"
-          required={!handleSubmitWithoutMessage}
+          withAsterisk
           {...form.getInputProps("email")}
+          error={form.errors["email"]}
         />
       </SimpleGrid>
 
@@ -99,10 +101,11 @@ const GuestBookForm = ({
         maxRows={10}
         minRows={5}
         autosize
-        required={!handleSubmitWithoutMessage}
         name="message"
         mt="md"
+        withAsterisk
         {...form.getInputProps("message")}
+        error={form.errors["message"]}
       />
 
       {customButtonLabel && (
@@ -114,7 +117,7 @@ const GuestBookForm = ({
       )}
 
       {!customButtonLabel && (
-        <Button type="submit" size="md" mt="md" disabled={!form.isValid()}>
+        <Button type="submit" size="md" mt="md">
           Sign guest book
         </Button>
       )}

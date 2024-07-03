@@ -4,7 +4,7 @@
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-<img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="200">
+<img src="./public/assets/images/The-Spielbergers-Wedding-Logo.webp" alt="Spielberger Wedding Logo" height="156">
 
 Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
@@ -39,7 +39,7 @@ NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
-6. Add the following variables to the `.env` file. These are used to send emails to guests when they RSVP. 
+6. Add the following variables to the `.env` file. These are used to send emails to guests when they RSVP.
 
 ```
 EMAIL (email that will send mail)
@@ -47,12 +47,18 @@ PASS (password for email to send mail)
 EMAIL_RECIPIENTS (email that will recieve mail once guests RSVP)
 ```
 
-# Running the Project
+## Running the Project
 
 Run the following command to start the app locally:
 
 ```bash
 yarn dev
+```
+
+## Testing
+
+```bash
+yarn test
 ```
 
 ## Project Structure

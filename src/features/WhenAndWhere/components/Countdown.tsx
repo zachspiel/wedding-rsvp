@@ -1,43 +1,41 @@
 "use client";
 
 import { Container, Flex, Text } from "@mantine/core";
+import MotionContainer from "@spiel-wedding/components/common/MotionContainer";
+import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import classes from "../styles.module.css";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 const WeddingCountdown = (): JSX.Element => {
-  const weddingDate = new Date("10/26/2024");
-  const currentDate = new Date();
-  const differenceInTime = weddingDate.getTime() - currentDate.getTime();
-  const daysRemaining = differenceInTime / (1000 * 3600 * 24);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setIsLoaded(true);
+    setLoaded(true);
   }, []);
 
   const getCountdownBox = (
     title: string,
     value: number,
     index: number,
-    className?: string,
+    className?: string
   ): JSX.Element => {
     return (
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 100,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.7,
-            delay: 0.1 * index,
+      <MotionContainer
+        motionProps={{
+          initial: {
+            opacity: 0,
+            y: 100,
           },
+          whileInView: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 0.7,
+              delay: 0.1 * index,
+            },
+          },
+          viewport: { once: true },
         }}
-        viewport={{ once: true }}
       >
         <Container
           style={{
@@ -59,21 +57,25 @@ const WeddingCountdown = (): JSX.Element => {
             {title}
           </Text>
         </Container>
-      </motion.div>
+      </MotionContainer>
     );
   };
 
-  const renderCountdown = ({ hours, minutes }: CountdownRenderProps): JSX.Element => {
+  const renderCountdown = ({
+    days,
+    hours,
+    minutes,
+  }: CountdownRenderProps): JSX.Element => {
     return (
       <Flex className={classes.countdownContainer} wrap="wrap" gap="md">
-        {getCountdownBox("Days", Math.ceil(daysRemaining), 1)}
+        {getCountdownBox("Days", days, 1)}
         {getCountdownBox("Hours", hours, 2, classes.countdownContainerMiddle)}
         {getCountdownBox("Minutes", minutes, 3)}
       </Flex>
     );
   };
 
-  return <>{isLoaded && <Countdown date={weddingDate} renderer={renderCountdown} />}</>;
+  return <>{loaded && <Countdown date={"10/26/2024"} renderer={renderCountdown} />}</>;
 };
 
 export default WeddingCountdown;

@@ -1,24 +1,28 @@
 "use client";
 
-import { Button, Group as MGroup, TextInput, Text, Skeleton } from "@mantine/core";
-import { useForm, isNotEmpty } from "@mantine/form";
+import {
+  ActionIcon,
+  Group as MGroup,
+  Skeleton,
+  Text,
+  TextInput,
+  rem,
+} from "@mantine/core";
+import { isNotEmpty, useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { Event, Group } from "@spiel-wedding/types/Guest";
+import { IconArrowRight, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import useSWR from "swr";
+import RsvpForm from "../RsvpForm";
 import SearchResults from "./components/SearchResults";
-import { Group } from "@spiel-wedding/types/Guest";
 
 interface SearchForm {
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
-const getMatchingGuests = async (
-  firstName: string,
-  lastName: string
-): Promise<Group[]> => {
-  const result = await fetch(
-    `/api/searchResult?firstName=${firstName}&lastName=${lastName}`
-  ).then((res) => res.json());
+const getMatchingGuests = async (name: string): Promise<Group[]> => {
+  const result = await fetch(`/api/searchResult?name=${name}`).then((res) => res.json());
 
   if (result.length === 0) {
     throw {
@@ -31,25 +35,26 @@ const getMatchingGuests = async (
 };
 
 interface Props {
-  selectedGroup?: Group;
-  setSelectedGroup: (group?: Group) => void;
+  events: Event[];
 }
 
-const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
+const RsvpSearchbar = ({ events }: Props): JSX.Element => {
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchForm, setSearchForm] = useState<SearchForm>();
+  const isMobile = useMediaQuery("(max-width: 50em)");
+
   const { data, error, isLoading, mutate } = useSWR(
     searchForm ? ["searchResults", searchForm] : null,
-    ([url, params]) => getMatchingGuests(params.firstName, params.lastName)
+    ([url, params]) => getMatchingGuests(params.name),
+    { fallbackData: [] }
   );
 
   const form = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
     },
     validate: {
-      firstName: isNotEmpty("Please enter a first name"),
-      lastName: isNotEmpty("Please enter a last name"),
+      name: isNotEmpty("Please enter your full name"),
     },
   });
 
@@ -67,29 +72,38 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <MGroup pb="lg" align="end">
+        <MGroup justify={isMobile ? "" : "center"}>
           <TextInput
-            label="First name"
-            placeholder="First name"
-            fz="lg"
-            {...form.getInputProps("firstName")}
+            radius="xl"
+            size="md"
+            w={isMobile ? "100%" : "initial"}
+            placeholder="Enter your first and last name"
+            rightSectionWidth={42}
+            {...form.getInputProps("name")}
+            error={form.errors.name}
+            leftSection={
+              <IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+            }
+            rightSection={
+              <ActionIcon
+                size={32}
+                radius="xl"
+                variant="filled"
+                component="button"
+                type="submit"
+              >
+                <IconArrowRight
+                  style={{ width: rem(18), height: rem(18) }}
+                  stroke={1.5}
+                />
+              </ActionIcon>
+            }
           />
-
-          <TextInput
-            label="Last name"
-            placeholder="Last name"
-            fz="lg"
-            {...form.getInputProps("lastName")}
-          />
-
-          <Button type="submit" disabled={!form.isValid()}>
-            Search
-          </Button>
         </MGroup>
       </form>
 
       {error && (
-        <Text c="red" fz="sm">
+        <Text c="red" fz="sm" ta="center">
           {error.info}
         </Text>
       )}
@@ -104,19 +118,18 @@ const RsvpSearchbar = ({ selectedGroup, setSelectedGroup }: Props) => {
         </>
       )}
 
-      {selectedGroup === undefined && (data ?? []).length > 0 && (
+      {!selectedGroup && data.length > 0 && (
         <>
           <Text>Select your party below or try searching again.</Text>
           <Text>
             If none of these are you, please reach out to Sedona and Zach to see exactly
             how they entered your details.
           </Text>
+          <SearchResults searchResults={data} setSelectedGroup={selectGroup} />
         </>
       )}
 
-      {!selectedGroup && (
-        <SearchResults searchResults={data ?? []} setSelectedGroup={selectGroup} />
-      )}
+      {selectedGroup && <RsvpForm selectedGroup={selectedGroup} events={events} />}
     </>
   );
 };

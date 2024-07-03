@@ -40,18 +40,15 @@
   }
 }
 
-.link {
+.link,
+.adminLink {
   display: block;
   line-height: 1;
+  text-decoration: none;
   padding: rem(8) rem(12);
   border-radius: var(--mantine-radius-sm);
   font-size: var(--mantine-font-size-md);
   font-weight: 500;
-
-  &:hover {
-    background-color: hsl(86, 6.3%, 80%);
-    text-decoration: none;
-  }
 
   @media (max-width: $mantine-breakpoint-sm) {
     border-radius: 0;
@@ -64,6 +61,13 @@
 
   @mixin light {
     color: var(--mantine-color-gray-7);
+  }
+}
+
+.link {
+  &:hover {
+    background-color: hsl(86, 6.3%, 80%);
+    text-decoration: none;
   }
 }
 

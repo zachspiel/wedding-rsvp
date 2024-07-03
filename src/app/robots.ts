@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: ["/"],
-      disallow: ["/login/", "/guestList/"],
+      disallow: ["/login/", "/guestList/", "/events/"],
     },
     sitemap: ["https://zachandsedona.com/sitemap.xml"],
   };

@@ -8,11 +8,8 @@ import {
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
-import { mutate } from "swr";
-import {
-  GUESTBOOK_SWR_KEY,
-  updateGuestBookMessage,
-} from "@spiel-wedding/hooks/guestbook";
+import { updateGuestBookMessage } from "@spiel-wedding/hooks/guestbook";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 
 interface Props {
   message: PublicGuestMessage;
@@ -36,7 +33,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
 
     if (guestMessage.length > 0) {
       showSuccessNotification("Successfully updated message in guest book!");
-      await mutate(GUESTBOOK_SWR_KEY);
+      await revalidatePage("/");
     } else {
       showCustomFailureNotification(
         "An error occurred while updating the message. Please try again later."

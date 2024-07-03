@@ -2,7 +2,7 @@
 
 import * as nodemailer from "nodemailer";
 import { render } from "@react-email/render";
-import { Group } from "@spiel-wedding/types/Guest";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import RsvpEmailTemplate from "./components/RsvpEmailTemplate";
 import RsvpConfirmationEmailTemplate from "./components/RsvpConfirmationEmailTemplate";
 
@@ -14,26 +14,31 @@ const contactEmail = nodemailer.createTransport({
   },
 });
 
-async function sendRsvpConfirmation(group: Group) {
+interface Props {
+  group: Group;
+  events: Event[];
+}
+
+async function sendRsvpConfirmation(props: Props) {
   const mail = {
     from: process.env.EMAIL_RECIPIENTS,
-    to: group.email,
+    to: props.group.email,
     subject: `Spielberger Wedding RSVP Confirmation 🎉💍`,
-    html: render(RsvpConfirmationEmailTemplate(group)),
+    html: render(RsvpConfirmationEmailTemplate(props)),
   };
 
   await contactEmail.sendMail(mail);
 }
 
-export async function sendMail(group: Group) {
+export async function sendMail(props: Props) {
   const mail = {
-    from: group.email,
+    from: props.group.email,
     to: process.env.EMAIL_RECIPIENTS,
-    subject: `${group.guests[0].firstName} RSVPed`,
-    html: render(RsvpEmailTemplate(group)),
+    subject: `${props.group.guests[0].firstName} RSVPed`,
+    html: render(RsvpEmailTemplate(props)),
   };
 
-  await sendRsvpConfirmation(group);
+  await sendRsvpConfirmation(props);
   const result = await contactEmail.sendMail(mail);
 
   return result.accepted;

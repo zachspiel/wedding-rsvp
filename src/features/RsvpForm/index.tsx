@@ -1,44 +1,43 @@
 "use client";
 
-import {
-  Alert,
-  Button,
-  Divider,
-  Flex,
-  Group as MGroup,
-  Stepper,
-  Text,
-  Title,
-  TextInput,
-} from "@mantine/core";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Alert, Button, Flex, Group as MGroup, Stepper, Title } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
-import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import RsvpSelection from "./components/RsvpSelectionInput";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { useState } from "react";
-import { updateGroup } from "@spiel-wedding/hooks/guests";
-import { sendMail } from "./action";
-import GuestBookForm from "../GuestBookForm";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import EventCard from "@spiel-wedding/components/eventCard";
+import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
+import { updateGroup } from "@spiel-wedding/hooks/guests";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useState } from "react";
+import GuestBookForm from "../GuestBookForm";
+import { sendMail } from "./action";
+import RsvpModal from "./components/RsvpModal";
+import classes from "./rsvpFormStyles.module.css";
 
 interface Props {
+  events: Event[];
   selectedGroup: Group;
 }
 
 const TOTAL_STEPS = 3;
 
-const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
+const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery("(max-width: 50em)");
+  const [error, setError] = useState<string | null>();
 
   const getInitialValues = () => {
     const formattedGuests = selectedGroup.guests.map((guest) => {
-      if (guest.rsvp === RsvpResponse.NO_RESPONSE) {
-        return { ...guest, rsvp: RsvpResponse.ACCEPTED };
-      }
-      return guest;
+      const updatedResponses = guest.event_responses.map((response) => {
+        if (response.rsvp === RsvpResponse.NO_RESPONSE) {
+          return { ...response, rsvp: RsvpResponse.ACCEPTED };
+        }
+
+        return response;
+      });
+
+      return { ...guest, event_responses: updatedResponses };
     });
 
     return { ...selectedGroup, guests: formattedGuests };
@@ -63,8 +62,9 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
 
   const isNameInvalid = (value: string, group: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
+    const { event_responses } = group.guests[index];
 
-    if (group.guests[index].rsvp === RsvpResponse.ACCEPTED) {
+    if (event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED)) {
       return value.length === 0;
     }
 
@@ -75,10 +75,11 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
     const updatedGroup = await updateGroup(form.getTransformedValues(), selectedGroup);
 
     if (updatedGroup === undefined) {
-      showCustomFailureNotification("An error occurred. Please try again later");
+      setError("An error occurred while saving your RSVP. Please try again later");
     } else {
       nextStep();
-      await sendMail(form.values);
+      await sendMail({ group: form.values, events });
+      await revalidatePage("/");
     }
   };
 
@@ -98,40 +99,36 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
   };
 
   return (
-    <>
+    <RsvpModal selectedGroup={selectedGroup}>
       <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
         <Stepper.Step label="RSVP">
-          {form.values.guests.map((guest, guestIndex) => (
-            <Flex direction="column" key={`${guest.guest_id}-rsvp-form`}>
-              <Divider my="sm" />
-              <MGroup justify="space-between">
-                <Text>
-                  {guest.nameUnknown && "Guest name unknown"}
-                  {!guest.nameUnknown && `${guest.firstName} ${guest.lastName}`}
-                </Text>
-                <RsvpSelection form={form} guestIndex={guestIndex} />
-              </MGroup>
-              {guest.nameUnknown &&
-                form.values.guests[guestIndex].rsvp === RsvpResponse.ACCEPTED && (
-                  <Flex>
-                    <TextInput
-                      label="First Name"
-                      placeholder="First Name"
-                      required
-                      mr="lg"
-                      {...form.getInputProps(`guests.${guestIndex}.firstName`)}
-                    />
-                    <TextInput
-                      label="Last Name"
-                      placeholder="Last Name"
-                      required
-                      {...form.getInputProps(`guests.${guestIndex}.lastName`)}
-                    />
-                  </Flex>
-                )}
-              {guestIndex === form.values.guests.length - 1 && <Divider my="sm" />}
-            </Flex>
-          ))}
+          <Flex direction="column">
+            <Title order={2} ta="center" className={classes.title}>
+              Events
+            </Title>
+
+            {events.map((event) => {
+              const guestsInvitedToEvent = form.values.guests.filter(
+                (guest) =>
+                  guest.event_responses.some(
+                    (response) => response.eventId === event.event_id
+                  ) || guest.nameUnknown
+              );
+
+              if (guestsInvitedToEvent.length === 0) {
+                return <></>;
+              }
+
+              return (
+                <EventCard
+                  guests={guestsInvitedToEvent}
+                  event={event}
+                  form={form}
+                  key={`${event.event_id}`}
+                />
+              );
+            })}
+          </Flex>
         </Stepper.Step>
 
         <Stepper.Step label="Contact Information">
@@ -158,10 +155,17 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         </Stepper.Step>
 
         <Stepper.Completed>
-          <Alert title="Success!" color="teal" variant="filled">
-            Your reservation has been completed successfully, feel free to come back here
-            and edit it anytime before September 26th!
-          </Alert>
+          {!error && (
+            <Alert title="Success!" color="teal" variant="filled">
+              Your reservation has been completed successfully, feel free to come back
+              here and edit it anytime before September 26th!
+            </Alert>
+          )}
+          {error && (
+            <Alert title="Error" color="red" variant="filled">
+              {error}
+            </Alert>
+          )}
         </Stepper.Completed>
       </Stepper>
 
@@ -170,7 +174,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
         mt="xl"
         style={{ borderTop: "1px solid --var(--mantine-color-gray-3)" }}
       >
-        {currentStep > 0 && (
+        {currentStep > 0 && currentStep < TOTAL_STEPS && (
           <Button variant="default" onClick={prevStep} leftSection={<IconChevronLeft />}>
             Back
           </Button>
@@ -182,7 +186,7 @@ const RsvpForm = ({ selectedGroup }: Props): JSX.Element => {
           </Button>
         )}
       </MGroup>
-    </>
+    </RsvpModal>
   );
 };
 

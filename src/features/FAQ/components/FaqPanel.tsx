@@ -1,20 +1,21 @@
 "use client";
 
 import {
-  Anchor,
-  AccordionItem,
   AccordionControl,
+  AccordionItem,
   AccordionPanel,
+  Anchor,
+  Group,
   Text,
 } from "@mantine/core";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { FaqElement, FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
 import { IconPencil } from "@tabler/icons-react";
+import classes from "../faq.module.css";
 import DarkModeToggle from "./DarkModeToggle";
 import DeleteFAQ from "./DeleteFAQ";
 import FaqEditor from "./FaqEditor";
 import WeddingColors from "./WeddingColors";
-import classes from "../faq.module.css";
 
 interface Props {
   faq: FrequentlyAskedQuestion;
@@ -54,9 +55,10 @@ const FaqPanel = ({ faq, showControls = false }: Props) => {
     <AccordionItem key={faq.question} value={faq.question}>
       <AccordionControl>{faq.question}</AccordionControl>
       <AccordionPanel className={classes.textArea}>
-        <Text c="dimmed">
-          {faq.answer} {faq.element && getElement(faq.element)}
-        </Text>
+        <Group gap="xs">
+          <Text c="dimmed">{faq.answer}</Text>
+          {faq.element && getElement(faq.element)}
+        </Group>
         {isAdminViewEnabled && showControls && (
           <>
             <FaqEditor icon={<IconPencil />} initialValues={faq} label="" />

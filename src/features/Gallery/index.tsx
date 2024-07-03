@@ -1,24 +1,23 @@
 "use client";
 
 import { Carousel } from "@mantine/carousel";
+import { Modal } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import useAdminView from "@spiel-wedding/hooks/adminView";
+import { Photo } from "@spiel-wedding/types/Photo";
+import { IconX } from "@tabler/icons-react";
+import { useState } from "react";
+import { SectionContainer, SectionTitle } from "../../components/common";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
-import useAdminView from "@spiel-wedding/hooks/adminView";
-import { SectionContainer, SectionTitle } from "../../components/common";
-import { getPhotoGallery, GALLERY_SWR_KEY } from "@spiel-wedding/hooks/gallery";
-import useSWR from "swr";
 import classes from "./gallery.module.css";
-import { Modal } from "@mantine/core";
-import { useState } from "react";
-import { Photo } from "@spiel-wedding/types/Photo";
-import { useMediaQuery } from "@mantine/hooks";
-import { IconX } from "@tabler/icons-react";
 
-const Gallery = (): JSX.Element => {
+interface Props {
+  gallery: Photo[];
+}
+
+const Gallery = ({ gallery }: Props): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const { data: photos } = useSWR(GALLERY_SWR_KEY, getPhotoGallery, {
-    revalidateOnFocus: false,
-  });
   const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
   const [openModal, setOpenModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
@@ -67,7 +66,7 @@ const Gallery = (): JSX.Element => {
         previousControlProps={{ "aria-label": "Previous Image" }}
         nextControlProps={{ "aria-label": "Next Image" }}
       >
-        {createSlides("cover", photos, true)}
+        {createSlides("cover", gallery, true)}
       </Carousel>
 
       <Modal

@@ -1,31 +1,23 @@
 "use client";
 
+import { Accordion, ActionIcon, Center, Group, TextInput, rem } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
-import {
-  Accordion,
-  ActionIcon,
-  Card,
-  Center,
-  Group,
-  Skeleton,
-  TextInput,
-  Title,
-  rem,
-} from "@mantine/core";
-import classes from "./faq.module.css";
-import useSWR from "swr";
-import { getFAQs } from "@spiel-wedding/hooks/faq";
 import useAdminView from "@spiel-wedding/hooks/adminView";
+import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
 import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
-import FaqEditor from "./components/FaqEditor";
-import ModifyFaqOrder from "./components/ModifyFaqOrder";
-import FaqPanel from "./components/FaqPanel";
 import { useState } from "react";
+import FaqEditor from "./components/FaqEditor";
+import FaqPanel from "./components/FaqPanel";
+import ModifyFaqOrder from "./components/ModifyFaqOrder";
+import classes from "./faq.module.css";
 
-const FAQ = () => {
-  const { data: faqs, isLoading } = useSWR("faq", getFAQs, { fallbackData: [] });
+interface Props {
+  faqs: FrequentlyAskedQuestion[];
+}
+
+const FAQ = ({ faqs }: Props) => {
   const { isAdminViewEnabled } = useAdminView();
-  const [searcValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   return (
     <SectionContainer greenBackground flowerImages>
@@ -38,44 +30,38 @@ const FAQ = () => {
         </Center>
       )}
 
-      {isLoading && (
-        <>
-          <Skeleton w={100} m="md" />
-          <Skeleton w={100} m="md" />
-          <Skeleton w={100} m="md" />
-        </>
-      )}
-
-      <Card h={100}>
-        <Card.Section p="md">
-          <Title order={4} fw="normal">
-            Search for a FAQ
-          </Title>
-          <TextInput
-            placeholder="Enter a question, topic or keyword"
-            value={searcValue}
-            size="md"
-            leftSection={
-              <IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
-            }
-            rightSection={
-              searcValue.length > 0 && (
-                <ActionIcon onClick={() => setSearchValue("")} variant="subtle">
-                  <IconX />
-                </ActionIcon>
-              )
-            }
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-        </Card.Section>
-      </Card>
+      <Group p="md">
+        <TextInput
+          radius="xl"
+          w="100%"
+          placeholder="Enter a question, topic or keyword"
+          value={searchValue}
+          size="md"
+          leftSection={
+            <IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+          }
+          rightSection={
+            searchValue.length > 0 && (
+              <ActionIcon
+                size={32}
+                radius="xl"
+                variant="filled"
+                onClick={() => setSearchValue("")}
+              >
+                <IconX />
+              </ActionIcon>
+            )
+          }
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+      </Group>
 
       <Accordion variant="separated" classNames={classes}>
         {faqs
           .filter(
             (faq) =>
-              faq.question.toLowerCase().includes(searcValue.toLowerCase()) ||
-              faq.answer?.toLowerCase()?.includes(searcValue.toLowerCase() ?? false)
+              faq.question.toLowerCase().includes(searchValue.toLowerCase()) ||
+              faq.answer?.toLowerCase()?.includes(searchValue.toLowerCase() ?? false)
           )
           .sort((a, b) => a.position - b.position)
 

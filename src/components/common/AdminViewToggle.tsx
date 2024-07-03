@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
 import { ActionIcon } from "@mantine/core";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import useAdminView from "@spiel-wedding/hooks/adminView";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import classes from "./common.module.css";
 
 const AdminViewToggle = (): JSX.Element => {
-  const { isAdminViewEnabled, toggleIsAdminViewEnabled } = useAdminView();
+  const { isAdminViewEnabled, user, toggleIsAdminViewEnabled } = useAdminView();
 
   const icon = isAdminViewEnabled ? <IconEye /> : <IconEyeOff />;
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <ActionIcon

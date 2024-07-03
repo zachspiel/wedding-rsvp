@@ -22,6 +22,7 @@ const nextConfig = {
       "@tiptap/react",
       "embla-carousel-react",
       "react-countdown",
+      "framer-motion",
     ],
   },
 };
