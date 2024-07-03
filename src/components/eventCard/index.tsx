@@ -30,7 +30,7 @@ import {
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
 import Image from "next/image";
-import { CSSProperties } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
 import classes from "./eventCard.module.css";
@@ -50,6 +50,12 @@ const iconStyles: CSSProperties = {
 
 const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [date, setDate] = useState<string>("");
+
+  useEffect(() => {
+    setDate(new Date(event.date).toDateString());
+  }, []);
+
   const createFormattedURL = () => {
     return `${event.address1} ${event.address2 || ""} ${event.city}, ${event.state} ${
       event.postal || ""
@@ -147,9 +153,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
         {createDetailSection(
           <IconCalendarHeart style={iconStyles} stroke={1.5} />,
           "Date & Time",
-          createDefaultDetailElement(
-            `${new Date(event.date).toDateString()} • ${event.time}`
-          )
+          createDefaultDetailElement(`${date} • ${event.time}`)
         )}
 
         {createDetailSection(
