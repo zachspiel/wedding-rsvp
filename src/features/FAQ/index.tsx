@@ -34,7 +34,7 @@ const FAQ = ({ faqs }: Props) => {
         <TextInput
           radius="xl"
           w="100%"
-          placeholder="Enter a question, topic or keyword"
+          placeholder="Search for question, topic or keyword"
           value={searchValue}
           size="md"
           leftSection={
