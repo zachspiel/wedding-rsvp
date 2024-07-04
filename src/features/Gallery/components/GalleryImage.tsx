@@ -47,6 +47,7 @@ const GalleryImage = ({
           zIndex: 0,
           transform: "translate3d(0, 0, 0)",
         }}
+        loading="lazy"
         blurDataURL={image.blurDataUrl}
         placeholder={image.blurDataUrl === undefined ? "empty" : "blur"}
       />
