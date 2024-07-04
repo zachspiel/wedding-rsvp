@@ -1,16 +1,17 @@
 "use client";
 
-import { Container, Flex, SimpleGrid, Skeleton, Text } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 import MotionContainer from "@spiel-wedding/components/common/MotionContainer";
-import React from "react";
+import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import classes from "../styles.module.css";
 
 const WeddingCountdown = (): JSX.Element => {
-  const weddingDate = new Date("10/26/2024");
-  const currentDate = new Date();
-  const differenceInTime = weddingDate.getTime() - currentDate.getTime();
-  const daysRemaining = differenceInTime / (1000 * 3600 * 24);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
   const getCountdownBox = (
     title: string,
@@ -60,29 +61,21 @@ const WeddingCountdown = (): JSX.Element => {
     );
   };
 
-  const renderCountdown = ({ hours, minutes }: CountdownRenderProps): JSX.Element => {
+  const renderCountdown = ({
+    days,
+    hours,
+    minutes,
+  }: CountdownRenderProps): JSX.Element => {
     return (
       <Flex className={classes.countdownContainer} wrap="wrap" gap="md">
-        {getCountdownBox("Days", Math.ceil(daysRemaining), 1)}
+        {getCountdownBox("Days", days, 1)}
         {getCountdownBox("Hours", hours, 2, classes.countdownContainerMiddle)}
         {getCountdownBox("Minutes", minutes, 3)}
       </Flex>
     );
   };
 
-  return (
-    <React.Suspense
-      fallback={
-        <SimpleGrid cols={3}>
-          <Skeleton width="111px" />
-          <Skeleton width="111px" />
-          <Skeleton width="111px" />
-        </SimpleGrid>
-      }
-    >
-      <Countdown date={weddingDate} renderer={renderCountdown} />
-    </React.Suspense>
-  );
+  return <>{loaded && <Countdown date={"10/26/2024"} renderer={renderCountdown} />}</>;
 };
 
 export default WeddingCountdown;

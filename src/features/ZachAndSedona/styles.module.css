@@ -42,7 +42,6 @@
 }
 
 .titleElement {
-  color: rgb(10, 61, 31);
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.24;
@@ -53,11 +52,18 @@
   @media (max-width: $mantine-breakpoint-md) {
     font-size: 24px;
   }
+
+  @mixin dark {
+    color: white;
+  }
+
+  @mixin light {
+    color: rgb(10, 61, 31);
+  }
 }
 
 .dividerText {
   font-family: var(--font-poppins);
-  color: rgb(10, 61, 31);
   font-weight: 400;
   text-transform: none;
   line-height: 1.63;
@@ -72,5 +78,13 @@
 
   @media (max-width: $mantine-breakpoint-sm) {
     margin: 6px 0;
+  }
+
+  @mixin dark {
+    color: white;
+  }
+
+  @mixin light {
+    color: rgb(10, 61, 31);
   }
 }
