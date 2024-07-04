@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Group, Text, Flex, Card, ActionIcon } from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
-import EditMessage from "./EditMessage";
-import DeleteMessageButton from "./DeleteMessageButton";
-import classes from "../guestbook.module.css";
+import { ActionIcon, Card, Flex, Group, Text } from "@mantine/core";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
+import { IconPencil } from "@tabler/icons-react";
+import { useState } from "react";
+import classes from "../guestbook.module.css";
+import DeleteMessageButton from "./DeleteMessageButton";
+import EditMessage from "./EditMessage";
 
 interface Props {
   message: PublicGuestMessage;
