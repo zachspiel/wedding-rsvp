@@ -76,10 +76,6 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
         centered
         fullScreen
         size="calc(100vw - 3rem)"
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
         closeButtonProps={{
           icon: <IconX color="#ffffff" />,
           bg: "#717769",
@@ -88,8 +84,8 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
         classNames={classes}
       >
         <Carousel
-          slideSize={{ base: "100%" }}
-          slideGap={{ base: 0, sm: "md" }}
+          slideSize={{ base: "100%", lg: "50%" }}
+          slideGap={"sm"}
           loop
           withIndicators
           classNames={classes}

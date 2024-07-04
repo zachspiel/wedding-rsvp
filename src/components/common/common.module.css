@@ -10,7 +10,13 @@
 }
 
 .sectionContainerGreenBackground {
-  backgroundcolor: hsl(86, 6.3%, 80%) !important;
+  @mixin dark {
+    background-color: var(--mantine-color-sage-green-5) !important;
+  }
+
+  @mixin light {
+    background-color: hsl(86, 6.3%, 80%) !important;
+  }
 
   .sectionTitle {
     @mixin dark {

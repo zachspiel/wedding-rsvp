@@ -64,7 +64,6 @@ const FAQ = ({ faqs }: Props) => {
               faq.answer?.toLowerCase()?.includes(searchValue.toLowerCase() ?? false)
           )
           .sort((a, b) => a.position - b.position)
-
           .map((faq) => (
             <FaqPanel faq={faq} key={faq.faq_id} showControls={true} />
           ))}

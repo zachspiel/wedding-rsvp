@@ -3,4 +3,5 @@ export interface Photo {
   caption?: string;
   isVisible: boolean;
   imagePath: string;
+  blurDataUrl?: string;
 }

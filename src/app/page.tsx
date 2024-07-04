@@ -11,6 +11,7 @@ import { getEvents } from "@spiel-wedding/hooks/events";
 import { getFAQs } from "@spiel-wedding/hooks/faq";
 import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
 import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
+import getBase64ImageUrl from "@spiel-wedding/util/generateBlurPlaceholder";
 
 async function getProps() {
   const supabase = createClient();
@@ -24,8 +25,10 @@ async function getProps() {
   ]);
 
   const filteredGallery = user ? gallery : gallery.filter((item) => item.isVisible);
+  const blurImagePromises = filteredGallery.map((image) => getBase64ImageUrl(image));
+  const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
 
-  return { events, gallery: filteredGallery, guestMessages, faqs };
+  return { events, gallery: imagesWithBlurDataUrls, guestMessages, faqs };
 }
 
 export default async function Home() {

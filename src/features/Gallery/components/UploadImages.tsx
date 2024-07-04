@@ -1,21 +1,20 @@
 "use client";
 
 import { Card, Group, rem, Text, useMantineTheme } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import {
-  showSuccessNotification,
-  showFailureNotification,
-  showCustomFailureNotification,
-} from "@spiel-wedding/components/notifications/notifications";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { IconX, IconPhoto, IconUpload } from "@tabler/icons-react";
-import { useSWRConfig } from "swr";
-import { GALLERY_SWR_KEY, uploadFileToGallery } from "@spiel-wedding/hooks/gallery";
+import { notifications } from "@mantine/notifications";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import {
+  showCustomFailureNotification,
+  showFailureNotification,
+  showSuccessNotification,
+} from "@spiel-wedding/components/notifications/notifications";
+import { uploadFileToGallery } from "@spiel-wedding/hooks/gallery";
+import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import Compressor from "compressorjs";
 
 const UploadImages = (): JSX.Element => {
   const theme = useMantineTheme();
-  const { mutate } = useSWRConfig();
 
   const handleUpload = async (files: File[]): Promise<void> => {
     notifications.show({
@@ -30,14 +29,14 @@ const UploadImages = (): JSX.Element => {
 
   const uploadImage = async (file: File) => {
     new Compressor(file, {
-      quality: 0.7,
+      quality: 0.8,
 
       success(result) {
         uploadFileToGallery(result as File)
           .then(async (newImage) => {
             if (newImage) {
               showSuccessNotification("Successfully uploaded image.");
-              await mutate(GALLERY_SWR_KEY);
+              await revalidatePage("/");
             } else {
               showFailureNotification();
             }

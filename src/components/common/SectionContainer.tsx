@@ -1,7 +1,7 @@
 import { Container, SimpleGrid } from "@mantine/core";
-import classes from "./common.module.css";
-import Image from "next/image";
 import cx from "clsx";
+import Image from "next/image";
+import classes from "./common.module.css";
 
 interface Props {
   children: React.ReactNode;
@@ -16,9 +16,7 @@ const SectionContainer = ({
 }: Props): JSX.Element => {
   return (
     <Container
-      style={{
-        backgroundColor: greenBackground ? "hsl(86, 6.3%, 80%)" : "",
-      }}
+      className={greenBackground ? classes.sectionContainerGreenBackground : ""}
       fluid
       pos="relative"
       mih={flowerImages ? "75vh" : undefined}
