@@ -39,15 +39,9 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
         <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
       )}
 
-      <Group>
-        <div>
-          <Flex>
-            <Text size="xs" c="dimmed">
-              By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
-            </Text>
-          </Flex>
-        </div>
-      </Group>
+      <Text size="xs" c="dimmed">
+        By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+      </Text>
     </Card>
   );
 };
