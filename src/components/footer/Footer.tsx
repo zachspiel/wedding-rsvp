@@ -1,10 +1,10 @@
-import { Container, Group, Anchor } from "@mantine/core";
-import classes from "./footer.module.css";
+import { Anchor, Container, Group } from "@mantine/core";
 import { links } from "../common";
+import classes from "./footer.module.css";
 
 const Footer = (): JSX.Element => {
   const items = links.map((link) => (
-    <Anchor<"a">
+    <Anchor
       c="white"
       key={link.label}
       href={link.link}

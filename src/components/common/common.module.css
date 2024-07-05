@@ -9,6 +9,22 @@
   scroll-margin-top: 110px;
 }
 
+.sectionContainerGreenBackground {
+  @mixin dark {
+    background-color: var(--mantine-color-sage-green-5) !important;
+  }
+
+  @mixin light {
+    background-color: hsl(86, 6.3%, 80%) !important;
+  }
+
+  .sectionTitle {
+    @mixin dark {
+      color: var(--mantine-color-black) !important;
+    }
+  }
+}
+
 .sectionTitle {
   font-family: var(--font-playfair);
   margin: 0px 0px 1rem 0x;
@@ -16,6 +32,10 @@
   line-height: 1.2;
   font-size: 2.66rem;
   padding: 27px 0;
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
 }
 
 .flowerImage {

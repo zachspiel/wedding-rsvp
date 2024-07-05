@@ -1,8 +1,7 @@
-import { Photo } from "@spiel-wedding/types/Photo";
-import { v4 as uuid } from "uuid";
-import { FileObject } from "@supabase/storage-js";
-
 import { createClient } from "@spiel-wedding/database/client";
+import { Photo } from "@spiel-wedding/types/Photo";
+import { FileObject } from "@supabase/storage-js";
+import { v4 as uuid } from "uuid";
 
 export const GALLERY_SWR_KEY = "gallery";
 

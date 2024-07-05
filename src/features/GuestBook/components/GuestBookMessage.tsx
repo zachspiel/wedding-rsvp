@@ -3,7 +3,7 @@
 import { ActionIcon, Card, Flex, Group, Text } from "@mantine/core";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { IconPencil } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classes from "../guestbook.module.css";
 import DeleteMessageButton from "./DeleteMessageButton";
 import EditMessage from "./EditMessage";
@@ -16,13 +16,6 @@ interface Props {
 const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
   const isEditable = localMessages.includes(message.id);
   const [isEditing, setIsEditing] = useState(false);
-  const [date, setDate] = useState<string>();
-
-  useEffect(() => {
-    if (message.createdAt) {
-      setDate(new Date(message.createdAt).toDateString());
-    }
-  }, []);
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -46,15 +39,9 @@ const GuestBookMessage = ({ message, localMessages }: Props): JSX.Element => {
         <EditMessage message={message} closeEditor={(): void => setIsEditing(false)} />
       )}
 
-      <Group>
-        <div>
-          <Flex>
-            <Text size="xs" c="dimmed">
-              By {message.name} - {date}
-            </Text>
-          </Flex>
-        </div>
-      </Group>
+      <Text size="xs" c="dimmed">
+        By {message.name} - {new Date(message.createdAt ?? "").toDateString()}
+      </Text>
     </Card>
   );
 };

@@ -1,8 +1,8 @@
-import { Card, Text, Flex, Anchor, Button } from "@mantine/core";
-import { SectionContainer, SectionTitle } from "../../components/common";
-import Image from "next/image";
-import classes from "./registry.module.css";
+import { Anchor, Button, Card, Flex, Text } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
+import Image from "next/image";
+import { SectionContainer, SectionTitle } from "../../components/common";
+import classes from "./registry.module.css";
 
 const Registry = (): JSX.Element => {
   return (
@@ -39,11 +39,16 @@ const Registry = (): JSX.Element => {
         </Text>
         <Text>Thanks for visiting and we can&apos;t wait to see you on our big day!</Text>
 
-        <Anchor href="https://withjoy.com/sedona-and-zach/registry" target="_blank">
-          <Button className="primaryButton" rightSection={<IconExternalLink />} mt="md">
-            Open registry
-          </Button>
-        </Anchor>
+        <Button
+          component="a"
+          href="https://withjoy.com/sedona-and-zach/registry"
+          target="_blank"
+          className="primaryButton"
+          rightSection={<IconExternalLink />}
+          mt="md"
+        >
+          Open registry
+        </Button>
 
         <Flex justify="center">
           <Image

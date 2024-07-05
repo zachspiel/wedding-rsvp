@@ -76,7 +76,7 @@ const RsvpSearchbar = ({ events }: Props): JSX.Element => {
           <TextInput
             radius="xl"
             size="md"
-            w={isMobile ? "100%" : "initial"}
+            w={isMobile ? "100%" : "75%"}
             placeholder="Enter your first and last name"
             rightSectionWidth={42}
             {...form.getInputProps("name")}
@@ -91,6 +91,7 @@ const RsvpSearchbar = ({ events }: Props): JSX.Element => {
                 variant="filled"
                 component="button"
                 type="submit"
+                aria-label="Submit search"
               >
                 <IconArrowRight
                   style={{ width: rem(18), height: rem(18) }}
