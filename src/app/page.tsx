@@ -1,10 +1,6 @@
 import { createClient } from "@spiel-wedding/database/server";
-import FAQ from "@spiel-wedding/features/FAQ";
-import Gallery from "@spiel-wedding/features/Gallery";
-import GuestBook from "@spiel-wedding/features/GuestBook";
 import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import RSVP from "@spiel-wedding/features/RSVP";
-import Registry from "@spiel-wedding/features/Registry";
 import WhenAndWhere from "@spiel-wedding/features/WhenAndWhere";
 import ZachAndSedona from "@spiel-wedding/features/ZachAndSedona";
 import { getEvents } from "@spiel-wedding/hooks/events";
@@ -40,10 +36,10 @@ export default async function Home() {
       <ZachAndSedona />
       <WhenAndWhere />
       <RSVP events={events} />
-      <GuestBook guestMessages={guestMessages} />
+      {/*<GuestBook guestMessages={guestMessages} />
       <Registry />
       <FAQ faqs={faqs} />
-      <Gallery gallery={gallery} />
+      <Gallery gallery={gallery} />*/}
     </main>
   );
 }
