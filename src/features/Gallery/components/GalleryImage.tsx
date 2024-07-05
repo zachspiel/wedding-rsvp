@@ -2,6 +2,7 @@
 
 import { Flex, Paper, Title } from "@mantine/core";
 import { createClient } from "@spiel-wedding/database/client";
+import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import cx from "clsx";
 import Image from "next/image";
@@ -11,19 +12,13 @@ import ImageVisibilityToggle from "./ImageVisibilityToggle";
 
 interface Props {
   image: Photo;
-  displayAdminView: boolean;
   isOpen?: boolean;
   objectFit?: "contain" | "cover";
   openImage?: () => void;
 }
 
-const GalleryImage = ({
-  image,
-  displayAdminView,
-  isOpen,
-  objectFit,
-  openImage,
-}: Props): JSX.Element => {
+const GalleryImage = ({ image, isOpen, objectFit, openImage }: Props): JSX.Element => {
+  const { isAdminViewEnabled } = useAdminView();
   const supabase = createClient();
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
 
@@ -47,7 +42,7 @@ const GalleryImage = ({
           zIndex: 0,
           transform: "translate3d(0, 0, 0)",
         }}
-        quality={100}
+        quality={90}
         loading="lazy"
         blurDataURL={image.blurDataUrl}
         placeholder={image.blurDataUrl === undefined ? "empty" : "blur"}
@@ -58,7 +53,7 @@ const GalleryImage = ({
         <Title order={2} className={classes.title}>
           {image.caption}
         </Title>
-        {displayAdminView && <EditImage image={image} />}
+        {isAdminViewEnabled && <EditImage image={image} />}
       </Flex>
     </Paper>
   );

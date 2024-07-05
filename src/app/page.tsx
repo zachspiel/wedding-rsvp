@@ -4,6 +4,7 @@ import Gallery from "@spiel-wedding/features/Gallery";
 import GuestBook from "@spiel-wedding/features/GuestBook";
 import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import RSVP from "@spiel-wedding/features/RSVP";
+import Registry from "@spiel-wedding/features/Registry";
 import WhenAndWhere from "@spiel-wedding/features/WhenAndWhere";
 import ZachAndSedona from "@spiel-wedding/features/ZachAndSedona";
 import { getEvents } from "@spiel-wedding/hooks/events";
@@ -40,7 +41,7 @@ export default async function Home() {
       <WhenAndWhere />
       <RSVP events={events} />
       <GuestBook guestMessages={guestMessages} />
-      {/* <Registry />*/}
+      <Registry />
       <FAQ faqs={faqs} />
       <Gallery gallery={gallery} />
     </main>

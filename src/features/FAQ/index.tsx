@@ -1,14 +1,12 @@
 "use client";
 
-import { Accordion, ActionIcon, Center, Group, TextInput, rem } from "@mantine/core";
+import { Accordion, ActionIcon, Group, TextInput, rem } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
-import useAdminView from "@spiel-wedding/hooks/adminView";
 import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
-import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
-import { useState } from "react";
-import FaqEditor from "./components/FaqEditor";
+import { IconSearch, IconX } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import FaqAdminControls from "./components/FaqAdminControls";
 import FaqPanel from "./components/FaqPanel";
-import ModifyFaqOrder from "./components/ModifyFaqOrder";
 import classes from "./faq.module.css";
 
 interface Props {
@@ -16,19 +14,30 @@ interface Props {
 }
 
 const FAQ = ({ faqs }: Props) => {
-  const { isAdminViewEnabled } = useAdminView();
+  const [filteredFaqs, setFilteredFaqs] = useState(faqs);
   const [searchValue, setSearchValue] = useState("");
+
+  useEffect(() => {
+    if (searchValue.length > 0) {
+      setFilteredFaqs(
+        faqs
+          .filter(
+            (faq) =>
+              faq.question.toLowerCase().includes(searchValue.toLowerCase()) ||
+              faq.answer?.toLowerCase()?.includes(searchValue.toLowerCase() ?? false)
+          )
+          .sort((a, b) => a.position - b.position)
+      );
+    } else {
+      setFilteredFaqs(faqs);
+    }
+  }, [searchValue]);
 
   return (
     <SectionContainer greenBackground flowerImages>
       <SectionTitle title="FAQs" id="faq" hideFlowers />
 
-      {isAdminViewEnabled && (
-        <Center>
-          <FaqEditor icon={<IconPlus />} label="Add FAQ" />
-          <ModifyFaqOrder faqs={faqs} />
-        </Center>
-      )}
+      <FaqAdminControls faqs={faqs} />
 
       <Group p="md">
         <TextInput
@@ -57,16 +66,9 @@ const FAQ = ({ faqs }: Props) => {
       </Group>
 
       <Accordion variant="separated" classNames={classes}>
-        {faqs
-          .filter(
-            (faq) =>
-              faq.question.toLowerCase().includes(searchValue.toLowerCase()) ||
-              faq.answer?.toLowerCase()?.includes(searchValue.toLowerCase() ?? false)
-          )
-          .sort((a, b) => a.position - b.position)
-          .map((faq) => (
-            <FaqPanel faq={faq} key={faq.faq_id} showControls={true} />
-          ))}
+        {filteredFaqs.map((faq) => (
+          <FaqPanel faq={faq} key={faq.faq_id} showControls={true} />
+        ))}
       </Accordion>
     </SectionContainer>
   );

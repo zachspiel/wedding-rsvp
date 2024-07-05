@@ -9,11 +9,13 @@ import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
+import useAdminView from "@spiel-wedding/hooks/adminView";
 import { uploadFileToGallery } from "@spiel-wedding/hooks/gallery";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import Compressor from "compressorjs";
 
 const UploadImages = (): JSX.Element => {
+  const { isAdminViewEnabled } = useAdminView();
   const theme = useMantineTheme();
 
   const handleUpload = async (files: File[]): Promise<void> => {
@@ -50,6 +52,10 @@ const UploadImages = (): JSX.Element => {
       },
     });
   };
+
+  if (!isAdminViewEnabled) {
+    return null;
+  }
 
   return (
     <Dropzone

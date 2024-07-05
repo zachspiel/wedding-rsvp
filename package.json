@@ -55,7 +55,6 @@
     "plaiceholder": "^3.0.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "sharp": "^0.32.6",
     "swr": "^2.2.4",

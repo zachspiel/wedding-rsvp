@@ -2,7 +2,7 @@
 
 import { Carousel } from "@mantine/carousel";
 import { Modal } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { IconX } from "@tabler/icons-react";
@@ -18,23 +18,22 @@ interface Props {
 
 const Gallery = ({ gallery }: Props): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
-  const [openModal, setOpenModal] = useState(false);
+  const [orderedPhotos, setOrderedPhotos] = useState<Photo[]>(gallery);
+  const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
 
   const createSlides = (
     objectFit: "cover" | "contain",
-    images?: Photo[],
+    images: Photo[],
     updateOrderedPhotos?: boolean
   ) => {
     return images
-      ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
+      .filter((image) => (!isAdminViewEnabled ? image.isVisible : true))
       .map((photo) => (
         <Carousel.Slide key={photo.gallery_id}>
           <GalleryImage
             image={photo}
-            displayAdminView={isAdminViewEnabled}
-            isOpen={!updateOrderedPhotos ? openModal : false}
+            isOpen={!updateOrderedPhotos ? opened : false}
             objectFit={objectFit}
             openImage={() => {
               if (updateOrderedPhotos) {
@@ -43,7 +42,7 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
                 );
                 newOrderedPhotos.unshift(photo);
 
-                setOpenModal(true);
+                open();
                 setOrderedPhotos(newOrderedPhotos);
               }
             }}
@@ -55,7 +54,7 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
   return (
     <SectionContainer>
       <SectionTitle id="gallery" title="Gallery" />
-      {isAdminViewEnabled && <UploadImages />}
+      <UploadImages />
 
       <Carousel
         slideSize={{ base: "100%", sm: "60%" }}
@@ -66,12 +65,12 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
         previousControlProps={{ "aria-label": "Previous Image" }}
         nextControlProps={{ "aria-label": "Next Image" }}
       >
-        {createSlides("cover", gallery, true)}
+        {createSlides("cover", orderedPhotos, true)}
       </Carousel>
 
       <Modal
-        opened={openModal}
-        onClose={() => setOpenModal(false)}
+        opened={opened}
+        onClose={close}
         transitionProps={{ transition: "slide-up", duration: 200 }}
         centered
         fullScreen
