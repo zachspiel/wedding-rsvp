@@ -13,7 +13,7 @@ interface CountdownTimeLeft {
 
 const WEDDING_DATE = new Date("10/26/2024");
 
-const WeddingCountdown = (): JSX.Element => {
+const WeddingCountdown = () => {
   const [timeLeft, setTimeLeft] = useState<CountdownTimeLeft | undefined>({
     days: 0,
     hours: 0,

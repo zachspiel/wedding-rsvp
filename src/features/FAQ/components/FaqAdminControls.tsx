@@ -15,7 +15,7 @@ const FaqAdminControls = ({ faqs }: Props) => {
   const { isAdminViewEnabled } = useAdminView();
 
   if (!isAdminViewEnabled) {
-    return <></>;
+    return null;
   }
 
   return (

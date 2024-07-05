@@ -14,7 +14,7 @@ import { uploadFileToGallery } from "@spiel-wedding/hooks/gallery";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import Compressor from "compressorjs";
 
-const UploadImages = (): JSX.Element => {
+const UploadImages = () => {
   const { isAdminViewEnabled } = useAdminView();
   const theme = useMantineTheme();
 

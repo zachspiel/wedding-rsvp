@@ -15,7 +15,7 @@ interface Props {
   photo: Photo;
 }
 
-const ImageVisibilityToggle = ({ photo }: Props): JSX.Element => {
+const ImageVisibilityToggle = ({ photo }: Props) => {
   const { isAdminViewEnabled } = useAdminView();
   const theme = useMantineTheme();
 
