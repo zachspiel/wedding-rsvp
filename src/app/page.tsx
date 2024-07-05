@@ -40,7 +40,7 @@ export default async function Home() {
       <RSVP events={events} />
       <GuestBook guestMessages={guestMessages} />
       <Registry />
-      {/* <FAQ faqs={faqs} />
+      {/*<FAQ faqs={faqs} />
       <Gallery gallery={gallery} />*/}
     </main>
   );
