@@ -34,7 +34,7 @@ const GuestBookMessage = ({ message }: Props): JSX.Element => {
     <Card shadow="sm" p="lg" radius="md" withBorder>
       {!isEditing ? (
         <Group justify="space-between" mt="md" mb="xs">
-          <span className={classes.content}>"{message.message}"</span>
+          <span className={classes.content}>&#34;{message.message}&#34;</span>
 
           {isEditable && (
             <Flex>
