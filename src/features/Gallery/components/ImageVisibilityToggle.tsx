@@ -15,7 +15,7 @@ interface Props {
   photo: Photo;
 }
 
-const ImageVisibilityToggle = ({ photo }: Props): JSX.Element => {
+const ImageVisibilityToggle = ({ photo }: Props) => {
   const { isAdminViewEnabled } = useAdminView();
   const theme = useMantineTheme();
 
@@ -31,28 +31,28 @@ const ImageVisibilityToggle = ({ photo }: Props): JSX.Element => {
     }
   };
 
+  if (!isAdminViewEnabled) {
+    return null;
+  }
+
   return (
-    <>
-      {isAdminViewEnabled && (
-        <Switch
-          checked={photo.isVisible}
-          onChange={(event): void => {
-            toggleVisibility(event.currentTarget.checked);
-          }}
-          color="teal"
-          size="md"
-          mt="md"
-          mr="md"
-          thumbIcon={
-            photo.isVisible ? (
-              <IconCheck size="0.8rem" color={theme.colors.teal[6]} stroke={3} />
-            ) : (
-              <IconX size="0.8rem" color={theme.colors.red[6]} stroke={3} />
-            )
-          }
-        />
-      )}
-    </>
+    <Switch
+      checked={photo.isVisible}
+      onChange={(event): void => {
+        toggleVisibility(event.currentTarget.checked);
+      }}
+      color="teal"
+      size="md"
+      mt="md"
+      mr="md"
+      thumbIcon={
+        photo.isVisible ? (
+          <IconCheck size="0.8rem" color={theme.colors.teal[6]} stroke={3} />
+        ) : (
+          <IconX size="0.8rem" color={theme.colors.red[6]} stroke={3} />
+        )
+      }
+    />
   );
 };
 

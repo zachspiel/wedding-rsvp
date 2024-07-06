@@ -1,15 +1,14 @@
 "use client";
 
-import React from "react";
-import { Textarea, Group, Button } from "@mantine/core";
+import { Button, Group, Textarea } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
-import { updateGuestBookMessage } from "@spiel-wedding/hooks/guestbook";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import { updateGuestMessage } from "../actions";
 
 interface Props {
   message: PublicGuestMessage;
@@ -19,16 +18,15 @@ interface Props {
 const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
   const form = useForm({
     initialValues: message,
-
     validate: {
       message: isNotEmpty("Please enter a message."),
     },
   });
 
   const updateMessage = async (updatedEntry: PublicGuestMessage) => {
-    const guestMessage = await updateGuestBookMessage(
+    const guestMessage = await updateGuestMessage(
       updatedEntry.id,
-      updatedEntry.message
+      updatedEntry.message.trim()
     );
 
     if (guestMessage.length > 0) {

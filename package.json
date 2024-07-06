@@ -1,6 +1,6 @@
 {
   "name": "spiel-wedding",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "private": false,
   "license": "MIT",
   "author": {
@@ -26,7 +26,6 @@
     "@mantine/notifications": "^7.6.2",
     "@mantine/tiptap": "^7.10.2",
     "@next/bundle-analyzer": "^14.1.4",
-    "@plaiceholder/next": "^3.0.0",
     "@react-email/components": "^0.0.15",
     "@react-email/html": "^0.0.7",
     "@react-email/img": "^0.0.7",
@@ -52,10 +51,8 @@
     "next": "14.2.0",
     "nodemailer": "^6.9.12",
     "papaparse": "^5.4.1",
-    "plaiceholder": "^3.0.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "sharp": "^0.32.6",
     "swr": "^2.2.4",

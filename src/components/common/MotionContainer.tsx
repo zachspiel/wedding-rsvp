@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLMotionProps, motion } from "framer-motion";
+import { HTMLMotionProps, m } from "framer-motion";
 
 interface Props {
   motionProps: HTMLMotionProps<"div">;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const MotionContainer = ({ children, motionProps }: Props) => {
-  return <motion.div {...motionProps}>{children}</motion.div>;
+  return <m.div {...motionProps}>{children}</m.div>;
 };
 
 export default MotionContainer;

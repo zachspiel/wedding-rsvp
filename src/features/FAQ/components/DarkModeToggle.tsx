@@ -1,8 +1,8 @@
 "use client";
 
-import { ActionIcon, useComputedColorScheme, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, useMantineColorScheme } from "@mantine/core";
+import { IconMoon, IconSun } from "@tabler/icons-react";
 import cx from "clsx";
-import { IconSun, IconMoon } from "@tabler/icons-react";
 import classes from "../faq.module.css";
 
 const DarkModeToggle = () => {

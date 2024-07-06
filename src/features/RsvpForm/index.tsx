@@ -1,6 +1,14 @@
 "use client";
 
-import { Alert, Button, Flex, Group as MGroup, Stepper, Title } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Flex,
+  Group as MGroup,
+  Stepper,
+  Textarea,
+  Title,
+} from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
@@ -20,7 +28,7 @@ interface Props {
   selectedGroup: Group;
 }
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -100,7 +108,15 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
 
   return (
     <RsvpModal selectedGroup={selectedGroup}>
-      <Stepper active={currentStep} orientation={isMobile ? "vertical" : "horizontal"}>
+      <Stepper
+        active={currentStep}
+        orientation={isMobile ? "vertical" : "horizontal"}
+        styles={{
+          stepLabel: {
+            marginTop: isMobile ? "15px" : undefined,
+          },
+        }}
+      >
         <Stepper.Step label="RSVP">
           <Flex direction="column">
             <Title order={2} ta="center" className={classes.title}>
@@ -137,6 +153,15 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
             openTabsByDefault
             showEmailTooltip
             emailRequired
+          />
+        </Stepper.Step>
+
+        <Stepper.Step label="Dietary Restrictions">
+          <Textarea
+            label="Dietary Restrictions"
+            placeholder="Please enter any dietary restrictions"
+            rows={2}
+            {...form.getInputProps("dietaryRestrictions")}
           />
         </Stepper.Step>
 

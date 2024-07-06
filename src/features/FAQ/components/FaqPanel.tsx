@@ -15,7 +15,6 @@ import classes from "../faq.module.css";
 import DarkModeToggle from "./DarkModeToggle";
 import DeleteFAQ from "./DeleteFAQ";
 import FaqEditor from "./FaqEditor";
-import WeddingColors from "./WeddingColors";
 
 interface Props {
   faq: FrequentlyAskedQuestion;
@@ -26,29 +25,23 @@ const FaqPanel = ({ faq, showControls = false }: Props) => {
   const { isAdminViewEnabled } = useAdminView();
 
   const getElement = (element: FaqElement) => {
-    switch (element) {
-      case "dark-mode-toggle": {
-        return <DarkModeToggle />;
-      }
-      case "dress-code": {
-        return (
-          <Text c="dimmed">
-            Our dress code is formal/cocktail attire. Please check out this{" "}
-            <Anchor
-              href="https://www.brides.com/story/wedding-dress-code-explained"
-              target="_blank"
-              c="blue"
-            >
-              cheat sheet
-            </Anchor>{" "}
-            if you need further explanation.
-          </Text>
-        );
-      }
-      default: {
-        return <WeddingColors />;
-      }
+    if (element === "dark-mode-toggle") {
+      return <DarkModeToggle />;
     }
+
+    return (
+      <Text c="dimmed">
+        Our dress code is formal/cocktail attire. Please check out this{" "}
+        <Anchor
+          href="https://www.brides.com/story/wedding-dress-code-explained"
+          target="_blank"
+          c="blue"
+        >
+          cheat sheet
+        </Anchor>{" "}
+        if you need further explanation.
+      </Text>
+    );
   };
 
   return (

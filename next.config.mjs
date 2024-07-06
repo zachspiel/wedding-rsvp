@@ -1,8 +1,12 @@
-import withPlaiceholder from "@plaiceholder/next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -14,17 +18,19 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       "@hello-pangea/dnd",
+      "@mantine/carousel",
       "@mantine/core",
       "@mantine/hooks",
       "@mantine/tiptap",
       "@react-email/components",
+      "@supabase/ssr",
       "@supabase/supabase-js",
       "@tiptap/react",
+      "dayjs",
       "embla-carousel-react",
-      "react-countdown",
       "framer-motion",
     ],
   },
 };
 
-export default withPlaiceholder(nextConfig);
+export default bundleAnalyzer(nextConfig);
