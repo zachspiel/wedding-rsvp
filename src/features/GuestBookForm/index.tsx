@@ -108,15 +108,13 @@ const GuestBookForm = ({
         error={form.errors["message"]}
       />
 
-      {customButtonLabel && (
+      {customButtonLabel ? (
         <Group justify="end">
           <Button type="submit" mt="md">
             {customButtonLabel}
           </Button>
         </Group>
-      )}
-
-      {!customButtonLabel && (
+      ) : (
         <Button type="submit" size="md" mt="md">
           Sign guest book
         </Button>
