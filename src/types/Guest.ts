@@ -12,6 +12,7 @@ export interface Group {
   invited: boolean;
   message: string;
   saveTheDateSent: boolean;
+  dietaryRestrictions: string;
   guests: Guest[];
   rsvpModifications?: RsvpModification[];
   edited_at?: string;

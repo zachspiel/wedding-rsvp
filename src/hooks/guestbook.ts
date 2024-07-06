@@ -15,11 +15,11 @@ export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]>
 
 export const addMessageToGuestBook = async (
   message: Omit<GuestMessage, "id">
-): Promise<GuestMessage[]> => {
+): Promise<GuestMessage> => {
   const supabase = createClient();
-  const { data } = await supabase.from(TABLE).insert(message).select();
+  const { data } = await supabase.from(TABLE).insert(message).select().single();
 
-  return data ?? [];
+  return data;
 };
 
 export const updateGuestBookMessage = async (

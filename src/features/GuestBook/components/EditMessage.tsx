@@ -7,8 +7,8 @@ import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { updateGuestBookMessage } from "@spiel-wedding/hooks/guestbook";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
+import { updateGuestMessage } from "../actions";
 
 interface Props {
   message: PublicGuestMessage;
@@ -24,7 +24,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
   });
 
   const updateMessage = async (updatedEntry: PublicGuestMessage) => {
-    const guestMessage = await updateGuestBookMessage(
+    const guestMessage = await updateGuestMessage(
       updatedEntry.id,
       updatedEntry.message.trim()
     );
