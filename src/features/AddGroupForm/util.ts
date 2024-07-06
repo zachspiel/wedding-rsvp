@@ -41,6 +41,7 @@ const createDefaultGroup = (events: Event[]): Group => {
     invited: true,
     inviteSent: false,
     saveTheDateSent: false,
+    dietaryRestrictions: "",
   };
 };
 
@@ -100,9 +101,9 @@ const createDefaultEventResponse = (): EventResponse => ({
 });
 
 export {
+  addChildToGuests,
+  addPartnerToGuests,
+  createDefaultEventResponse,
   createDefaultGroup,
   createGuest,
-  addPartnerToGuests,
-  addChildToGuests,
-  createDefaultEventResponse,
 };
