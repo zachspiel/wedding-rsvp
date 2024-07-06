@@ -16,6 +16,7 @@ interface Props {
 const GuestBookMessage = ({ message }: Props): JSX.Element => {
   const [canModify, setCanModify] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [date, setDate] = useState<string>("");
 
   useEffect(() => {
     const localMessages: string[] = readLocalStorageValue({
@@ -23,6 +24,9 @@ const GuestBookMessage = ({ message }: Props): JSX.Element => {
       defaultValue: [],
     });
 
+    if (message.createdAt) {
+      setDate(new Date(message.createdAt).toDateString());
+    }
     setCanModify(localMessages.includes(message.id));
   }, []);
 
@@ -49,8 +53,7 @@ const GuestBookMessage = ({ message }: Props): JSX.Element => {
       )}
 
       <Text size="xs" c="dimmed">
-        By {message.name} -{" "}
-        {message.createdAt ? new Date(message.createdAt).toDateString() : null}
+        By {message.name} - {date}
       </Text>
     </Card>
   );

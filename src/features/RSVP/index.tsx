@@ -14,8 +14,8 @@ const RSVP = ({ events }: Props): JSX.Element => {
       <SectionTitle title="RSVP" id="rsvp" />
       <Text>
         Please enter the first and last name of one member of your party below. If
-        you&apos;re responding for you and a guest (or your family), you&apos;ll be able
-        to RSVP for your entire group on the next page.
+        you&#39;re responding for you and a guest (or your family), you&#39;ll be able to
+        RSVP for your entire group on the next page.
       </Text>
 
       <Text>

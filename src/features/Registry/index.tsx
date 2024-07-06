@@ -26,8 +26,7 @@ const Registry = (): JSX.Element => {
             target="_blank"
             c="blue"
           >
-            {" "}
-            We&apos;ve also put together a wish-list to help you out
+            We&#39;ve also put together a wish-list to help you out
           </Anchor>
           . Our dream honeymoon would be in Tahiti. Anything you want to contribute is
           greatly appreciated!
@@ -37,7 +36,7 @@ const Registry = (): JSX.Element => {
           ship it to yourself and bring it to the reception or reach out to Sedona and
           Zach for their address.
         </Text>
-        <Text>Thanks for visiting and we can&apos;t wait to see you on our big day!</Text>
+        <Text>Thanks for visiting and we can&#39;t wait to see you on our big day!</Text>
 
         <Button
           component="a"
