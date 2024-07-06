@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
 import { Flex, Title } from "@mantine/core";
-import classes from "./common.module.css";
-import Image from "next/image";
 import cx from "clsx";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import Image from "next/image";
+import classes from "./common.module.css";
 
 interface Props {
   title: string;
@@ -25,7 +24,7 @@ const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
       className={classes.sectionTitleContainer}
       id={id}
     >
-      <motion.div
+      <m.div
         initial={{
           opacity: 0,
         }}
@@ -62,7 +61,7 @@ const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
           height={100}
           className={cx(classes.flowerDivider, hideFlowers ? classes.hidden : "")}
         />
-      </motion.div>
+      </m.div>
     </Flex>
   );
 };

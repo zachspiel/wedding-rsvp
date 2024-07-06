@@ -1,12 +1,13 @@
 "use client";
 
-import AdminViewProvider from "../context/AdminView";
 import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
+import { displayEasterEggs } from "@spiel-wedding/components/easterEggs";
+import { LazyMotion } from "framer-motion";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 import { useEffect } from "react";
-import { displayEasterEggs } from "@spiel-wedding/components/easterEggs";
-import { ModalsProvider } from "@mantine/modals";
+import AdminViewProvider from "../context/AdminView";
 
 export function Providers({
   children,
@@ -48,12 +49,16 @@ export function Providers({
     primaryColor: "sage-green",
   });
 
+  const loadFeatures = () => import("../util/framerFeature").then((res) => res.default);
+
   return (
     <MantineProvider defaultColorScheme="light" theme={theme}>
-      <ModalsProvider>
-        <AdminViewProvider>{children}</AdminViewProvider>
-      </ModalsProvider>
-      <Notifications />
+      <LazyMotion strict features={loadFeatures}>
+        <ModalsProvider>
+          <AdminViewProvider>{children}</AdminViewProvider>
+        </ModalsProvider>
+        <Notifications />
+      </LazyMotion>
     </MantineProvider>
   );
 }

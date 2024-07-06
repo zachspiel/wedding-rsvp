@@ -1,12 +1,12 @@
 "use client";
 
-import { Carousel } from "@mantine/carousel";
+import { Carousel, Embla } from "@mantine/carousel";
 import { Modal } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { IconX } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
@@ -18,33 +18,35 @@ interface Props {
 
 const Gallery = ({ gallery }: Props): JSX.Element => {
   const { isAdminViewEnabled } = useAdminView();
-  const [orderedPhotos, setOrderedPhotos] = useState<Photo[] | undefined>();
-  const [openModal, setOpenModal] = useState(false);
+  const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
+  const [embla, setEmbla] = useState<Embla | null>(null);
+  const [scrollToIndex, setScrollToIndex] = useState<number | null>();
 
-  const createSlides = (
-    objectFit: "cover" | "contain",
-    images?: Photo[],
-    updateOrderedPhotos?: boolean
-  ) => {
-    return images
-      ?.filter((photo) => (isAdminViewEnabled ? true : photo.isVisible))
-      .map((photo) => (
+  useEffect(() => {
+    if (!opened) {
+      setScrollToIndex(null);
+    }
+
+    if (scrollToIndex && embla) {
+      embla?.scrollTo(scrollToIndex, true);
+    }
+  }, [opened, embla]);
+
+  const createSlides = (objectFit: "cover" | "contain", updateOrderedPhotos = false) => {
+    return gallery
+      .filter((image) => (!isAdminViewEnabled ? image.isVisible : true))
+      .map((photo, index) => (
         <Carousel.Slide key={photo.gallery_id}>
           <GalleryImage
             image={photo}
             displayAdminView={isAdminViewEnabled}
-            isOpen={!updateOrderedPhotos ? openModal : false}
+            isOpen={!updateOrderedPhotos ? opened : false}
             objectFit={objectFit}
             openImage={() => {
               if (updateOrderedPhotos) {
-                const newOrderedPhotos = images.filter(
-                  (item) => item.gallery_id !== photo.gallery_id
-                );
-                newOrderedPhotos.unshift(photo);
-
-                setOpenModal(true);
-                setOrderedPhotos(newOrderedPhotos);
+                setScrollToIndex(index);
+                open();
               }
             }}
           />
@@ -55,7 +57,7 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
   return (
     <SectionContainer>
       <SectionTitle id="gallery" title="Gallery" />
-      {isAdminViewEnabled && <UploadImages />}
+      <UploadImages />
 
       <Carousel
         slideSize={{ base: "100%", sm: "60%" }}
@@ -66,12 +68,12 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
         previousControlProps={{ "aria-label": "Previous Image" }}
         nextControlProps={{ "aria-label": "Next Image" }}
       >
-        {createSlides("cover", gallery, true)}
+        {createSlides("cover", true)}
       </Carousel>
 
       <Modal
-        opened={openModal}
-        onClose={() => setOpenModal(false)}
+        opened={opened}
+        onClose={close}
         transitionProps={{ transition: "slide-up", duration: 200 }}
         centered
         fullScreen
@@ -89,8 +91,9 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
           loop
           withIndicators
           classNames={classes}
+          getEmblaApi={setEmbla}
         >
-          {createSlides("contain", orderedPhotos)}
+          {createSlides("contain")}
         </Carousel>
       </Modal>
     </SectionContainer>

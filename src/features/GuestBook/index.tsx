@@ -1,6 +1,5 @@
 "use client";
 
-import { useLocalStorage } from "@mantine/hooks";
 import { showSuccessNotification } from "@spiel-wedding/components/notifications/notifications";
 import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
@@ -12,11 +11,6 @@ interface Props {
 }
 
 const GuestBook = ({ guestMessages }: Props): JSX.Element => {
-  const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
-    key: "guestMessages",
-    defaultValue: [],
-  });
-
   const saveMessage = async (messages: PublicGuestMessage[]): Promise<void> => {
     showSuccessNotification("Successfully signed guest book!");
   };
@@ -27,11 +21,7 @@ const GuestBook = ({ guestMessages }: Props): JSX.Element => {
       <GuestBookForm handleSubmit={saveMessage} />
 
       {guestMessages.map((message) => (
-        <GuestBookMessage
-          key={message.id}
-          message={message}
-          localMessages={localMessages}
-        />
+        <GuestBookMessage key={message.id} message={message} />
       ))}
     </SectionContainer>
   );

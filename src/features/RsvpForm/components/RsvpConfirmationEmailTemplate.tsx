@@ -1,9 +1,9 @@
+import { Body, Container, Head, Link, Preview, Text } from "@react-email/components";
 import { Html } from "@react-email/html";
-import { Text, Link, Container, Head, Preview, Body } from "@react-email/components";
-import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { Img } from "@react-email/img";
-import { MAP_URL } from "@spiel-wedding/components/common/constants";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
+import { MAP_URL } from "@spiel-wedding/components/common/constants";
+import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 const main = {
   backgroundColor: "#ffffff",
@@ -55,7 +55,7 @@ const RsvpConfirmationEmailTemplate = ({ group, events }: Props) => {
             <>
               <Text style={paragraph}>{previewText}</Text>
               <Text style={paragraph}>
-                We can&apos;t wait to see you on Saturday, October 26th at 4:00 PM at the
+                We can&#39;t wait to see you on Saturday, October 26th at 4:00 PM at the
                 Wright House in Mesa (
                 <Link href={MAP_URL}>636 W University Dr, Mesa, AZ 85201</Link>).
               </Text>
