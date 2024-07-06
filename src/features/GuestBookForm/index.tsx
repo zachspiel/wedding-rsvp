@@ -5,8 +5,8 @@ import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useLocalStorage } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
-import { addMessageToGuestBook } from "@spiel-wedding/hooks/guestbook";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
+import saveGuestMessage from "./action";
 
 interface Props {
   name?: string;
@@ -50,15 +50,15 @@ const GuestBookForm = ({
     if (handleSubmitWithoutMessage && isAnyFieldEmpty(newGuestMessage)) {
       handleSubmit([]);
     } else {
-      const guestMessage = await addMessageToGuestBook(newGuestMessage);
-      setLocalMessages([...localMessages, guestMessage[0].id]);
+      const guestMessage = await saveGuestMessage(newGuestMessage);
 
-      if (guestMessage.length === 0) {
+      if (!guestMessage) {
         showCustomFailureNotification(
           "An error occurred while signing the guest book. Please try again later!"
         );
       } else {
-        handleSubmit(guestMessage);
+        setLocalMessages([...localMessages, guestMessage.id]);
+        handleSubmit([guestMessage]);
         await revalidatePage("/");
       }
     }

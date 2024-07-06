@@ -1,16 +1,15 @@
 "use client";
 
-import React from "react";
-import { Text, ActionIcon } from "@mantine/core";
-import {
-  showSuccessNotification,
-  showCustomFailureNotification,
-} from "@spiel-wedding/components/notifications/notifications";
-import { IconTrash } from "@tabler/icons-react";
-import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
-import { removeGuestBookMessage } from "@spiel-wedding/hooks/guestbook";
+import { ActionIcon, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
+import {
+  showCustomFailureNotification,
+  showSuccessNotification,
+} from "@spiel-wedding/components/notifications/notifications";
+import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
+import { IconTrash } from "@tabler/icons-react";
+import { deleteGuestMessage } from "../actions";
 
 interface Props {
   message: PublicGuestMessage;
@@ -18,7 +17,7 @@ interface Props {
 
 const DeleteMessageButton = ({ message }: Props): JSX.Element => {
   const deleteMessage = async () => {
-    const removedMessage = await removeGuestBookMessage(message.id);
+    const removedMessage = await deleteGuestMessage(message.id);
 
     if (removedMessage) {
       showSuccessNotification("Successfully deleted the message!");

@@ -1,7 +1,7 @@
 "use client";
 
+import { Accordion, Alert, Grid, Select, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { Accordion, Grid, TextInput, Select, Alert, NumberInput } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
 import { STATES } from "./states";
 
@@ -79,7 +79,7 @@ const MailingAddressForm = ({
               />
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4 }}>
-              <NumberInput
+              <TextInput
                 label="Zip Code"
                 name="postal"
                 {...form.getInputProps("postal")}
