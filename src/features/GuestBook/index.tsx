@@ -1,7 +1,6 @@
 "use client";
 
 import { showSuccessNotification } from "@spiel-wedding/components/notifications/notifications";
-import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import GuestBookMessage from "./components/GuestBookMessage";
@@ -18,7 +17,6 @@ const GuestBook = ({ guestMessages }: Props): JSX.Element => {
   return (
     <SectionContainer greenBackground>
       <SectionTitle id="guestBook" title="Guest Book" />
-      <GuestBookForm handleSubmit={saveMessage} />
 
       {guestMessages.map((message) => (
         <GuestBookMessage key={message.id} message={message} />
