@@ -27,10 +27,14 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const { data: user, error } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.redirect("/login");
+  if (!data.user && request.nextUrl.pathname.startsWith("/guestList")) {
+    return NextResponse.rewrite(new URL("/", request.url));
+  }
+
+  if (!data.user && request.nextUrl.pathname.startsWith("/events")) {
+    return NextResponse.rewrite(new URL("/", request.url));
   }
 
   return supabaseResponse;

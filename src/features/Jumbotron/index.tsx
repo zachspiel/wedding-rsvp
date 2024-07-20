@@ -1,6 +1,6 @@
-import classes from "./jumbotron.module.css";
-import engagementPhoto from "./engagement-photo.webp";
 import Image from "next/image";
+import engagementPhoto from "./engagement-photo.webp";
+import classes from "./jumbotron.module.css";
 
 const Jumbotron = (): JSX.Element => {
   return (
@@ -11,7 +11,7 @@ const Jumbotron = (): JSX.Element => {
           alt="Engagement Photo"
           priority
           placeholder="blur"
-          quality={100}
+          quality={80}
           fill
           style={{ objectFit: "cover", transform: "translate3d(0, 0, 0)" }}
         />
