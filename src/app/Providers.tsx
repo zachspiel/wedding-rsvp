@@ -37,6 +37,18 @@ export function Providers({
         "#656b5c",
         "#555d4b",
       ],
+      "old-rose": [
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+        "#ecc5c0",
+      ],
     },
     breakpoints: {
       xs: "30em",
@@ -45,7 +57,7 @@ export function Providers({
       lg: "74em",
       xl: "90em",
     },
-    primaryColor: "sage-green",
+    primaryColor: "old-rose",
   });
 
   return (

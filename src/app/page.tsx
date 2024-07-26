@@ -17,7 +17,6 @@ export default function Home() {
       <WhenAndWhere />
       {/* <RSVP /> */}
       <GuestBook />
-      <Registry />
       <FAQ />
       <Gallery />
     </main>

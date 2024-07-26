@@ -7,7 +7,7 @@ export interface MenuItem {
 export const links: MenuItem[] = [
   { label: "When & Where", link: "#whenAndWhere" },
   { label: "Guest Book", link: "#guestBook" },
-  { label: "Registry", link: "#registry" },
+  // { label: "Registry", link: "#registry" },
   { label: "FAQ", link: "#faq" },
   { label: "Gallery", link: "#gallery" },
 ];

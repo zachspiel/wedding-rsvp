@@ -27,7 +27,7 @@ const GuestBook = (): JSX.Element => {
   };
 
   return (
-    <SectionContainer greenBackground>
+    <SectionContainer>
       <SectionTitle id="guestBook" title="Guest Book" />
       <GuestBookForm handleSubmit={saveMessage} />
 

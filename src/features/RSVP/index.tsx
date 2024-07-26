@@ -66,7 +66,7 @@ const RSVP = (): JSX.Element => {
         centered
         fullScreen={isMobile}
         closeButtonProps={{
-          bg: "sage-green",
+          bg: "old-rose",
           c: "white",
           size: "lg",
         }}

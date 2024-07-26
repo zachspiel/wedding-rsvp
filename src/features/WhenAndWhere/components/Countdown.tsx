@@ -47,7 +47,7 @@ const WeddingCountdown = (): JSX.Element => {
             minWidth: "110px",
             borderRadius: "var(--mantine-radius-sm)",
           }}
-          bg="sage-green"
+          bg="old-rose"
           c="white"
           m={0}
           className={className}

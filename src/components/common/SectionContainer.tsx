@@ -17,7 +17,7 @@ const SectionContainer = ({
   return (
     <Container
       style={{
-        backgroundColor: greenBackground ? "hsl(86, 6.3%, 80%)" : "",
+        backgroundColor: greenBackground ? "#dd9a9b" : "",
       }}
       fluid
       pos="relative"
