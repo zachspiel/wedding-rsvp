@@ -68,6 +68,7 @@ export interface GuestMessage {
   isVisible: boolean;
   createdAt?: string;
   editedAt?: string;
+  deletedAt?: string;
 }
 
 export type PublicGuestMessage = Omit<GuestMessage, "email">;

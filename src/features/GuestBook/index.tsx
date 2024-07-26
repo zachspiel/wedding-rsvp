@@ -1,6 +1,7 @@
 "use client";
 
 import GuestBookMessage from "./components/GuestBookMessage";
+import useAdminView from "@spiel-wedding/hooks/adminView";
 import { showSuccessNotification } from "@spiel-wedding/components/notifications/notifications";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import useSWR from "swr";
@@ -10,7 +11,11 @@ import { useLocalStorage } from "@mantine/hooks";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 
 const GuestBook = (): JSX.Element => {
-  const { data } = useSWR(GUESTBOOK_SWR_KEY, getGuestMessages);
+  const { isAdminViewEnabled } = useAdminView();
+  const { data, error } = useSWR(
+    [GUESTBOOK_SWR_KEY, isAdminViewEnabled],
+    async ([key, isAdmin]) => getGuestMessages(isAdmin)
+  );
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
     key: "guestMessages",
     defaultValue: [],
@@ -30,6 +35,7 @@ const GuestBook = (): JSX.Element => {
         <GuestBookMessage
           key={message.id}
           message={message}
+          isAdmin={isAdminViewEnabled}
           localMessages={localMessages}
         />
       ))}

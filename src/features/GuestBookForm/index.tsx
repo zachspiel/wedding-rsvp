@@ -33,7 +33,7 @@ const GuestBookForm = ({
       name: name ?? "",
       email: email ?? "",
       message: "",
-      isVisible: true,
+      isVisible: false,
     },
     validate: !handleSubmitWithoutMessage
       ? {

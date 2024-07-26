@@ -99,6 +99,7 @@ export interface Database {
         Row: {
           createdAt: string;
           editedAt: string;
+          deletedAt: string;
           email: string;
           id: string;
           isVisible: boolean;
@@ -108,6 +109,7 @@ export interface Database {
         Insert: {
           createdAt?: string;
           editedAt?: string;
+          deletedAt?: string;
           email: string;
           id?: string;
           isVisible?: boolean;
@@ -117,6 +119,7 @@ export interface Database {
         Update: {
           createdAt?: string;
           editedAt?: string;
+          deletedAt?: string;
           email?: string;
           id?: string;
           isVisible?: boolean;
