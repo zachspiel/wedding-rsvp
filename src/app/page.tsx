@@ -31,10 +31,7 @@ async function getProps() {
   return { events, gallery: imagesWithBlurDataUrls, guestMessages, faqs };
 }
 
-interface Props {
-  searchParams: { query: string };
-}
-export default async function Home({ searchParams }: Props) {
+export default async function Home() {
   const { events, gallery, guestMessages, faqs } = await getProps();
 
   return (
@@ -45,7 +42,7 @@ export default async function Home({ searchParams }: Props) {
       <RSVP events={events} />
       <GuestBook guestMessages={guestMessages} />
       <Registry />
-      <FAQ faqs={faqs} query={searchParams.query} />
+      <FAQ faqs={faqs} />
       <Gallery gallery={gallery} />
     </main>
   );
