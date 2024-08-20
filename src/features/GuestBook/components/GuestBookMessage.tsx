@@ -53,7 +53,7 @@ const GuestBookMessage = ({ message }: Props): JSX.Element => {
       )}
 
       <Text size="xs" c="dimmed">
-        By {message.name} - {date}
+        {message.name} • {date}
       </Text>
     </Card>
   );
