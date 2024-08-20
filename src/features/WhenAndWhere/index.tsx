@@ -15,6 +15,10 @@ const WhenAndWhere = (): JSX.Element => {
           className={classes.dividerTop}
         />
 
+        <DetailTitle detail="October 26th, 2024" />
+
+        <DetailTitle detail="Formal or Cocktail Attire" />
+
         <DetailTitle
           detail={
             <Anchor
@@ -26,11 +30,8 @@ const WhenAndWhere = (): JSX.Element => {
               636 W University Dr, Mesa, AZ 85201
             </Anchor>
           }
+          className={classes.dividerBottom}
         />
-
-        <DetailTitle detail="Formal Attire" />
-
-        <DetailTitle detail="October 26th, 2024" className={classes.dividerBottom} />
       </Flex>
       <WeddingCountdown />
     </SectionContainer>

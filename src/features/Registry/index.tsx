@@ -26,6 +26,7 @@ const Registry = (): JSX.Element => {
             target="_blank"
             c="blue"
           >
+            {" "}
             We&#39;ve also put together a wish-list to help you out
           </Anchor>
           . Our dream honeymoon would be in Tahiti. Anything you want to contribute is
