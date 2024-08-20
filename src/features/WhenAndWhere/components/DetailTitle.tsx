@@ -12,7 +12,7 @@ const DetailTitle = ({ detail, className }: Props) => {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   return (
-    <Title order={isMobile ? 4 : 2} mb="md" fw={400} className={className}>
+    <Title order={isMobile ? 4 : 3} mb="md" fw={400} className={className}>
       {detail}
     </Title>
   );
