@@ -1,13 +1,14 @@
-import { Group } from "@spiel-wedding/types/Guest";
+import { Checkbox, TableTd, TableTr, Text } from "@mantine/core";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import ActionColumn from "./columns/ActionColumn";
 import AddressColumn from "./columns/AddressColumn";
 import GuestsColumn from "./columns/GuestsColumn";
 import RsvpStatusColumn from "./columns/RsvpStatusColumn";
-import { Checkbox, TableTd, TableTr, Text } from "@mantine/core";
 import SaveTheDateColumn from "./columns/SaveTheDateColumn";
 
 interface Props {
   groups: Group[];
+  events: Event[];
   showRsvpStatus: boolean;
   selectedGroups: string[];
   openModal: (group: Group) => void;
@@ -44,9 +45,13 @@ const TableRows = (props: Props): JSX.Element => {
             <AddressColumn group={group} />
           </TableTd>
           {props.showRsvpStatus && (
-            <TableTd>
-              <RsvpStatusColumn guests={group.guests} />
-            </TableTd>
+            <>
+              {props.events.map((event) => (
+                <TableTd key={group.group_id + "_" + event.event_id}>
+                  <RsvpStatusColumn guests={group.guests} event={event} />
+                </TableTd>
+              ))}
+            </>
           )}
           <TableTd>
             <SaveTheDateColumn group={group} />
