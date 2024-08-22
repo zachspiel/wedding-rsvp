@@ -85,6 +85,14 @@ The structure for this project is based off of [Bulletproof React](https://githu
     └── types
 ```
 
+## Database Schema
+
+The current database schema can be found below. This current design allows groups to have any number of guests who can individually RSVP to multiple events.
+
+The other tables (guestbook, faq, gallery) allow admin users to dynamically modify content on the homepage without having to redeploy the project.
+
+![Database Schema](./images/database-schema.png)
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE.md).

@@ -1,43 +1,44 @@
 "use client";
 
 import {
-  Group as MGroup,
-  TextInput,
   ActionIcon,
+  Badge,
+  Button,
+  Center,
+  Checkbox,
+  Group as MGroup,
+  Modal,
+  Switch,
   Table,
+  TableTbody,
+  TableTh,
   TableThead,
   TableTr,
-  TableTh,
-  TableTbody,
-  Switch,
-  Modal,
-  UnstyledButton,
   Text,
-  Center,
+  TextInput,
+  UnstyledButton,
   rem,
-  Checkbox,
-  Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { SectionTitle } from "@spiel-wedding/components/common";
+import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
 import FilterSelection from "@spiel-wedding/components/guestList/filters/FilterSelection";
+import Summary from "@spiel-wedding/components/guestList/Summary";
+import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import TableRows from "@spiel-wedding/features/GuestListTable/components/TableRows";
 import {
   filterGroups,
   sortGroups,
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
+import { getEvents } from "@spiel-wedding/hooks/events";
+import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
 import { Group } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
 import { ChangeEvent, useState } from "react";
-import classes from "./styles.module.css";
 import useSWR from "swr";
-import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
-import Summary from "@spiel-wedding/components/guestList/Summary";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
-import { SectionTitle } from "@spiel-wedding/components/common";
-import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
-import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
-import { getEvents } from "@spiel-wedding/hooks/events";
+import classes from "./styles.module.css";
 
 interface ThProps {
   children: React.ReactNode;
@@ -105,9 +106,17 @@ const GuestListTable = (): JSX.Element => {
           <AddGroupForm events={events} />
         </MGroup>
       </MGroup>
-      <Summary groups={groups} />
+      <Summary
+        groups={groups}
+        ceremonyEvent={events.find((event) => event.order === 1)}
+      />
       <MGroup justify="space-between">
-        <FilterSelection groups={groups} filters={filters} setFilters={setFilters} />
+        <FilterSelection
+          groups={groups}
+          events={events}
+          filters={filters}
+          setFilters={setFilters}
+        />
         <Switch
           label="Show RSVP Status"
           checked={showRsvpStatus}
@@ -133,8 +142,12 @@ const GuestListTable = (): JSX.Element => {
           Edit Groups
         </Button>
       </MGroup>
-      <Table highlightOnHover>
-        <TableThead>
+      <Badge variant="dot" color="blue" fw="normal" size="lg" my="md">
+        Showing {filteredGroups.flatMap((group) => group.guests).length} Guests
+      </Badge>
+
+      <Table miw={700} highlightOnHover stickyHeader stickyHeaderOffset={100}>
+        <TableThead bg="sage-green" c="white">
           <TableTr>
             <TableTh>
               <Checkbox
@@ -151,7 +164,15 @@ const GuestListTable = (): JSX.Element => {
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
-            {showRsvpStatus && <TableTh>RSVP Status</TableTh>}
+            {showRsvpStatus && (
+              <>
+                {events.map((event) => (
+                  <TableTh key={`${event.event_id}_table_header`}>
+                    {event.title} {event.emoji}
+                  </TableTh>
+                ))}
+              </>
+            )}
             <TableTh>Save the Date Sent?</TableTh>
             <TableTh />
           </TableTr>
@@ -159,6 +180,7 @@ const GuestListTable = (): JSX.Element => {
         <TableTbody>
           <TableRows
             groups={filteredGroups}
+            events={events}
             showRsvpStatus={showRsvpStatus}
             selectedGroups={selectedRows}
             openModal={openModal}
