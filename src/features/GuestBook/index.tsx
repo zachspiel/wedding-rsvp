@@ -18,7 +18,7 @@ const GuestBook = ({ guestMessages }: Props): JSX.Element => {
   return (
     <SectionContainer greenBackground>
       <SectionTitle id="guestBook" title="Guest Book" />
-      <GuestBookForm handleSubmit={saveMessage} />
+      <GuestBookForm handleSubmit={saveMessage} isMessageRequred={true} />
 
       {guestMessages.map((message) => (
         <GuestBookMessage key={message.id} message={message} />

@@ -167,14 +167,18 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
 
         <Stepper.Step label="Leave a note">
           <Title order={4} fw="normal" ta="center">
-            Leave a note for Sedona and Zach. (Optional)
+            Leave a note for Sedona and Zach
           </Title>
+
+          <Alert color="blue" my="md" w="fit-content">
+            Feel free to leave a message below! This is not required to save your RSVP.
+          </Alert>
 
           <GuestBookForm
             name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
             email={form.values.email}
             handleSubmit={handleSubmit}
-            handleSubmitWithoutMessage
+            isMessageRequred={false}
             customButtonLabel="Save RSVP"
           />
         </Stepper.Step>
