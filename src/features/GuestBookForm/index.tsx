@@ -13,7 +13,7 @@ interface Props {
   email?: string;
   handleSubmit: (message: GuestMessage[]) => void;
   customButtonLabel?: string;
-  handleSubmitWithoutMessage?: boolean;
+  isMessageRequred?: boolean;
 }
 
 const GuestBookForm = ({
@@ -21,7 +21,7 @@ const GuestBookForm = ({
   email,
   handleSubmit,
   customButtonLabel,
-  handleSubmitWithoutMessage,
+  isMessageRequred,
 }: Props): JSX.Element => {
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
     key: "guestMessages",
@@ -35,7 +35,7 @@ const GuestBookForm = ({
       message: "",
       isVisible: true,
     },
-    validate: !handleSubmitWithoutMessage
+    validate: isMessageRequred
       ? {
           name: isNotEmpty("Please enter your name to sign the guest book."),
           email: isEmail("Please enter a valid email."),
@@ -47,7 +47,7 @@ const GuestBookForm = ({
   const saveMessage = async (
     newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
-    if (handleSubmitWithoutMessage && isAnyFieldEmpty(newGuestMessage)) {
+    if (!isMessageRequred && isAnyFieldEmpty(newGuestMessage)) {
       handleSubmit([]);
     } else {
       const guestMessage = await saveGuestMessage(newGuestMessage);
@@ -82,7 +82,7 @@ const GuestBookForm = ({
           label="Name"
           placeholder="Your name"
           name="name"
-          withAsterisk
+          withAsterisk={isMessageRequred}
           {...form.getInputProps("name")}
           error={form.errors["name"]}
         />
@@ -90,7 +90,7 @@ const GuestBookForm = ({
           label="Email"
           placeholder="Your email"
           name="email"
-          withAsterisk
+          withAsterisk={isMessageRequred}
           {...form.getInputProps("email")}
           error={form.errors["email"]}
         />
@@ -104,7 +104,7 @@ const GuestBookForm = ({
         autosize
         name="message"
         mt="md"
-        withAsterisk
+        withAsterisk={isMessageRequred}
         {...form.getInputProps("message")}
         error={form.errors["message"]}
       />
