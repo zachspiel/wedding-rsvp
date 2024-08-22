@@ -6,7 +6,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import saveGuestMessage from "./action";
+import { saveGuestMessage, sendEmailForNewComment } from "./action";
 
 interface Props {
   name?: string;
@@ -59,6 +59,7 @@ const GuestBookForm = ({
       } else {
         setLocalMessages([...localMessages, guestMessage.id]);
         handleSubmit([guestMessage]);
+        await sendEmailForNewComment(guestMessage);
         await revalidatePage("/");
       }
     }
