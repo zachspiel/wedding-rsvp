@@ -12,10 +12,10 @@ const filterGroups = (groups: Group[], search: string, filters: string[]): Group
   }
 
   return groups.filter((group) => {
-    const containsQuery =
+    const containsSearchTerm =
       guestsContainQuery(group.guests, query) || groupContainsQuery(group, query);
 
-    return containsQuery && doesGroupMatchFilter(group, filters);
+    return containsSearchTerm && doesGroupMatchFilter(group, filters);
   });
 };
 
@@ -33,7 +33,8 @@ const doesGroupMatchFilter = (group: Group, filters: string[]) => {
   return (
     isGroupMissingValue(group, filters) ||
     groupMatchesAffiliation(group, filters) ||
-    groupMatchesRsvp(group, filters)
+    groupMatchesRsvp(group, filters) ||
+    guestsMatchEvent(group, filters)
   );
 };
 
@@ -61,6 +62,12 @@ const groupMatchesRsvp = (group: Group, filters: string[]): boolean => {
   });
 
   return group.guests.some((guest) => rsvpFilters.includes(guest.rsvp));
+};
+
+const guestsMatchEvent = (group: Group, filters: string[]): boolean => {
+  return group.guests.some((guest) =>
+    guest.event_responses.some((response) => filters.includes(response.eventId))
+  );
 };
 
 const guestsContainQuery = (guests: Guest[], query: string): boolean => {

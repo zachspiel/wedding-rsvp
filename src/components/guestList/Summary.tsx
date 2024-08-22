@@ -1,12 +1,13 @@
 import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
-import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Event, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { useMemo } from "react";
 
 interface Props {
   groups: Group[];
+  ceremonyEvent?: Event;
 }
 
-const Summary = ({ groups }: Props): JSX.Element => {
+const Summary = ({ groups, ceremonyEvent }: Props): JSX.Element => {
   const groupGuestLengths = groups
     .filter((group) => group.invited)
     .map((group) => group.guests.length);
@@ -18,13 +19,19 @@ const Summary = ({ groups }: Props): JSX.Element => {
     return 0;
   }, [groupGuestLengths]);
 
+  const getRsvpStatusForCeremony = (guest: Guest) => {
+    return guest.event_responses.find(
+      (response) => response.eventId === ceremonyEvent?.event_id
+    )?.rsvp;
+  };
+
   const totalAccepted = groups
     .flatMap((group) => group.guests)
-    .filter((guest) => guest.rsvp === RsvpResponse.ACCEPTED).length;
+    .filter((guest) => getRsvpStatusForCeremony(guest) === RsvpResponse.ACCEPTED).length;
 
   const totalDeclined = groups
     .flatMap((group) => group.guests)
-    .filter((guest) => guest.rsvp === RsvpResponse.DECLINED).length;
+    .filter((guest) => getRsvpStatusForCeremony(guest) === RsvpResponse.DECLINED).length;
 
   const totalMissingResponse = totalInvited - totalAccepted - totalDeclined;
 
@@ -42,7 +49,7 @@ const Summary = ({ groups }: Props): JSX.Element => {
   return (
     <MGroup align="apart" grow pb="xl" pt="xl">
       {createSummaryItem("Definitely Invited", totalInvited)}
-      {createSummaryItem("Accepted", totalAccepted)}
+      {createSummaryItem("Coming to Ceremony", totalAccepted)}
       {createSummaryItem("Declined", totalDeclined)}
       {createSummaryItem("No Response", totalMissingResponse)}
     </MGroup>
