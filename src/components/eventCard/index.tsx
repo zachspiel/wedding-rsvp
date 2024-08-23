@@ -187,11 +187,12 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
             >
               <Table.Tbody>
                 {guests.map((guest, guestIndex) => {
-                  const eventResponse = guest.event_responses.filter(
+                  const eventResponse = guest.event_responses.find(
                     (response) => response.eventId === event.event_id
-                  )[0];
+                  );
+
                   const eventIndex = guest.event_responses.findIndex(
-                    (response) => response.response_id === eventResponse.response_id
+                    (response) => response.response_id === eventResponse?.response_id
                   );
 
                   return (
