@@ -16,6 +16,7 @@ import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { getGuestsForEvent } from "@spiel-wedding/util";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useState } from "react";
 import GuestBookForm from "../GuestBookForm";
@@ -124,12 +125,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
             </Title>
 
             {events.map((event) => {
-              const guestsInvitedToEvent = form.values.guests.filter(
-                (guest) =>
-                  guest.event_responses.some(
-                    (response) => response.eventId === event.event_id
-                  ) || guest.nameUnknown
-              );
+              const guestsInvitedToEvent = getGuestsForEvent(event, form.values.guests);
 
               if (guestsInvitedToEvent.length === 0) {
                 return <></>;
