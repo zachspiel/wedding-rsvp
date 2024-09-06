@@ -65,7 +65,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     return (
       <Card.Section mt="xs" withBorder={withBorder}>
         <Group mx="md" gap="lg" mb={withBorder ? "xs" : ""}>
-          <Stack gap="xs">
+          <Stack gap={0}>
             <Text size="sm" c="dimmed" display="flex" style={{ alignItems: "center" }}>
               {icon}
 
