@@ -11,11 +11,13 @@ import {
 } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { getGuestsForEvent } from "@spiel-wedding/util";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useState } from "react";
 import GuestBookForm from "../GuestBookForm";
@@ -70,7 +72,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
 
   const isNameInvalid = (value: string, group: Group, path: string): boolean => {
     const index = Number(path.split(".")[1]);
-    const { event_responses } = group.guests[index];
+    const { event_responses, nameUnknown } = group.guests[index];
 
     if (event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED)) {
       return value.length === 0;
@@ -93,10 +95,11 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
 
   const nextStep = (): void =>
     setCurrentStep((current) => {
-      if (
-        (current === 0 && !form.isValid("guests")) ||
-        (current !== 0 && form.validate().hasErrors)
-      ) {
+      if (current !== 0 && form.validate().hasErrors) {
+        showNotification({
+          color: "yellow",
+          message: "Please fill out all required fields.",
+        });
         return current;
       }
       return current < TOTAL_STEPS ? current + 1 : current;
@@ -124,12 +127,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
             </Title>
 
             {events.map((event) => {
-              const guestsInvitedToEvent = form.values.guests.filter(
-                (guest) =>
-                  guest.event_responses.some(
-                    (response) => response.eventId === event.event_id
-                  ) || guest.nameUnknown
-              );
+              const guestsInvitedToEvent = getGuestsForEvent(event, form.values.guests);
 
               if (guestsInvitedToEvent.length === 0) {
                 return <></>;

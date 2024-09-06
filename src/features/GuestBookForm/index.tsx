@@ -61,6 +61,8 @@ const GuestBookForm = ({
         handleSubmit([guestMessage]);
         await sendEmailForNewComment(guestMessage);
         await revalidatePage("/");
+
+        form.reset();
       }
     }
   };
@@ -71,12 +73,7 @@ const GuestBookForm = ({
   };
 
   return (
-    <form
-      onSubmit={form.onSubmit(() => {
-        saveMessage(form.values);
-        form.reset();
-      })}
-    >
+    <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
       <SimpleGrid cols={{ xs: 1, sm: 2 }} mt="xl">
         <TextInput
           label="Name"
