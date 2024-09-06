@@ -150,7 +150,8 @@ export const createGuests = async (
   const { data: newGuests, error } = await supabase
     .from(GUEST_TABLE)
     .insert(formattedGuests)
-    .select();
+    .select()
+    .returns<Guest[]>();
 
   if (error) {
     throw new Error(error.message);
@@ -160,7 +161,7 @@ export const createGuests = async (
     const eventResponses = events
       .filter((event) => event.auto_invite)
       .flatMap((event) =>
-        newGuests.map((guest) => createNewResponse(guest, event.event_id))
+        newGuests.map((guest) => createNewResponse(guest.guest_id, event.event_id))
       );
 
     await createEventResponses(eventResponses);
