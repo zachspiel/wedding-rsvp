@@ -1,11 +1,20 @@
 "use client";
 
-import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Progress,
+  SimpleGrid,
+  Text,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useLocalStorage } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { useState } from "react";
 import { saveGuestMessage, sendEmailForNewComment } from "./action";
 
 interface Props {
@@ -23,10 +32,12 @@ const GuestBookForm = ({
   customButtonLabel,
   isMessageRequred,
 }: Props): JSX.Element => {
+  const [isSaving, setIsSaving] = useState(false);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
     key: "guestMessages",
     defaultValue: [],
   });
+  const [progress, setProgress] = useState(0);
 
   const form = useForm({
     initialValues: {
@@ -47,24 +58,41 @@ const GuestBookForm = ({
   const saveMessage = async (
     newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
     if (!isMessageRequred && isAnyFieldEmpty(newGuestMessage)) {
+      setProgress(100);
       handleSubmit([]);
     } else {
       const guestMessage = await saveGuestMessage(newGuestMessage);
+      setProgress(33);
 
       if (!guestMessage) {
         showCustomFailureNotification(
           "An error occurred while signing the guest book. Please try again later!"
         );
+
+        setProgress(100);
       } else {
         setLocalMessages([...localMessages, guestMessage.id]);
+
+        setProgress(66);
+
         handleSubmit([guestMessage]);
+
         await sendEmailForNewComment(guestMessage);
+        setProgress(80);
+
         await revalidatePage("/");
+        setProgress(100);
 
         form.reset();
       }
     }
+    setIsSaving(false);
   };
 
   const isAnyFieldEmpty = (newMessage: Omit<GuestMessage, "id">) => {
@@ -74,6 +102,13 @@ const GuestBookForm = ({
 
   return (
     <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
+      {isSaving && progress !== 100 && (
+        <>
+          <Text>Saving...</Text>
+          <Progress color="teal" striped animated value={progress} />
+        </>
+      )}
+
       <SimpleGrid cols={{ xs: 1, sm: 2 }} mt="xl">
         <TextInput
           label="Name"
@@ -82,6 +117,7 @@ const GuestBookForm = ({
           withAsterisk={isMessageRequred}
           {...form.getInputProps("name")}
           error={form.errors["name"]}
+          disabled={isSaving}
         />
         <TextInput
           label="Email"
@@ -90,6 +126,7 @@ const GuestBookForm = ({
           withAsterisk={isMessageRequred}
           {...form.getInputProps("email")}
           error={form.errors["email"]}
+          disabled={isSaving}
         />
       </SimpleGrid>
 
@@ -104,11 +141,12 @@ const GuestBookForm = ({
         withAsterisk={isMessageRequred}
         {...form.getInputProps("message")}
         error={form.errors["message"]}
+        disabled={isSaving}
       />
 
       {customButtonLabel && (
         <Group justify="end">
-          <Button type="submit" mt="md">
+          <Button type="submit" mt="md" disabled={isSaving}>
             {customButtonLabel}
           </Button>
         </Group>
