@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     .returns<Group[]>();
 
   if (error || !data) {
-    return [];
+    return NextResponse.json([] as Group[]);
   }
 
   const matchingResults = data.filter(
