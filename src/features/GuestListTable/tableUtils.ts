@@ -2,12 +2,19 @@ import { Group, Guest, GuestAffiliation, RsvpResponse } from "@spiel-wedding/typ
 
 type GroupFilterableKey = "email" | "address1" | "address2" | "city" | "state";
 
-type GuestFilterableKey = "firstName" | "lastName" | "title" | "rsvp";
+type GuestFilterableKey = "firstName" | "lastName" | "title";
 
-const filterGroups = (groups: Group[], search: string, filters: string[]): Group[] => {
+export type RsvpFilter = Record<string, RsvpResponse[]>;
+
+const filterGroups = (
+  groups: Group[],
+  search: string,
+  filters: string[],
+  rsvpFilters?: RsvpFilter
+): Group[] => {
   const query = search.toLowerCase().trim();
 
-  if (query.length === 0 && filters.length === 0) {
+  if (query.length === 0 && filters.length === 0 && !rsvpFilters) {
     return groups;
   }
 
@@ -15,7 +22,11 @@ const filterGroups = (groups: Group[], search: string, filters: string[]): Group
     const containsSearchTerm =
       guestsContainQuery(group.guests, query) || groupContainsQuery(group, query);
 
-    return containsSearchTerm && doesGroupMatchFilter(group, filters);
+    return (
+      containsSearchTerm &&
+      doesGroupMatchFilter(group, filters) &&
+      groupMatchesRsvp(group, rsvpFilters)
+    );
   });
 };
 
@@ -33,7 +44,6 @@ const doesGroupMatchFilter = (group: Group, filters: string[]) => {
   return (
     isGroupMissingValue(group, filters) ||
     groupMatchesAffiliation(group, filters) ||
-    groupMatchesRsvp(group, filters) ||
     guestsMatchEvent(group, filters)
   );
 };
@@ -55,13 +65,23 @@ const groupMatchesAffiliation = (group: Group, filters: string[]): boolean => {
   return relationshipFilters.includes(group.affiliation);
 };
 
-const groupMatchesRsvp = (group: Group, filters: string[]): boolean => {
-  const { ACCEPTED, DECLINED, NO_RESPONSE } = RsvpResponse;
-  const rsvpFilters = filters.filter((key) => {
-    return key === ACCEPTED || key === DECLINED || key === NO_RESPONSE;
-  });
+/**
+ * Check if any guest in group is invited to event and that the response
+ * value exists within the filter map.
+ */
+const groupMatchesRsvp = (group: Group, rsvpFilters?: RsvpFilter): boolean => {
+  if (
+    !rsvpFilters ||
+    Object.values(rsvpFilters).every((filters) => filters.length === 0)
+  ) {
+    return true;
+  }
 
-  return group.guests.some((guest) => rsvpFilters.includes(guest.rsvp));
+  return group.guests.some((guest) =>
+    guest.event_responses.some((response) =>
+      rsvpFilters?.[response.eventId]?.includes(response.rsvp)
+    )
+  );
 };
 
 const guestsMatchEvent = (group: Group, filters: string[]): boolean => {
@@ -95,7 +115,7 @@ const isGroupFilterableKey = (
 const isGuestFilterableKey = (
   key: GuestFilterableKey | string
 ): key is GuestFilterableKey => {
-  const validKeys = ["firstName", "lastName", "rsvp"];
+  const validKeys = ["firstName", "lastName"];
   return validKeys.includes(key);
 };
 

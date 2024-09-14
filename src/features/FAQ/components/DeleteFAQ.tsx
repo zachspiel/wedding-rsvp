@@ -23,7 +23,7 @@ const DeleteFAQ = ({ faq }: Props) => {
 
     if (deletedFAQ) {
       showSuccessNotification("Removed FAQ!");
-      mutate("faq");
+      await mutate("faq");
       close();
     } else {
       showFailureNotification();

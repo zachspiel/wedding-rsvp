@@ -2,16 +2,26 @@ import { Event, EventResponse, Guest, RsvpResponse } from "@spiel-wedding/types/
 import { v4 as uuid } from "uuid";
 
 export const getGuestsForEvent = (event: Event, guests: Guest[]) => {
-  return guests.filter((guest) =>
-    guest.event_responses.some((response) => response.eventId === event.event_id)
-  );
+  return guests.filter((guest) => guest.responseMap[event.event_id] !== undefined);
+};
+
+export const addEventResponseMapToGuest = (guests: Guest[]): Guest[] => {
+  return guests.map((guest) => {
+    const responseMap: Record<string, EventResponse> = {};
+
+    guest.event_responses.forEach(
+      (response) => (responseMap[response.eventId] = response)
+    );
+
+    return { ...guest, responseMap };
+  });
 };
 
 export const createNewResponse = (guestId: string, eventId: string): EventResponse => {
   return {
     response_id: uuid(),
     guestId,
-    eventId: eventId,
+    eventId,
     rsvp: RsvpResponse.NO_RESPONSE,
   };
 };

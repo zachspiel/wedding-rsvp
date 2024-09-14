@@ -33,7 +33,6 @@ import Image from "next/image";
 import { CSSProperties } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
-import classes from "./eventCard.module.css";
 
 interface Props {
   event: Event;
@@ -125,7 +124,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     <>
       <Card key={`event-${event.event_id}-rsvp`} withBorder mb="lg">
         <Card.Section bg="#8e9386" c="white" p="sm">
-          <Title order={4} fw="normal" ta="center" className={classes.eventTitle}>
+          <Title order={4} fw="normal" ta="center">
             {event.emoji} {event.title}
           </Title>
         </Card.Section>
@@ -187,10 +186,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
             >
               <Table.Tbody>
                 {guests.map((guest, guestIndex) => {
-                  const eventResponse = guest.event_responses.find(
-                    (response) => response.eventId === event.event_id
-                  );
-
+                  const eventResponse = guest.responseMap[event.event_id];
                   const eventIndex = guest.event_responses.findIndex(
                     (response) => response.response_id === eventResponse?.response_id
                   );
