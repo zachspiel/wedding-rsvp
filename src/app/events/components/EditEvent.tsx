@@ -91,12 +91,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     const responsesToRemove = getGuestsForEvent(event, allGuests)
       .filter((guest) => !guests.includes(guest.guest_id))
-      .flatMap(
-        (guest) =>
-          guest.event_responses.find(
-            (response) => response.eventId === event.event_id
-          ) as EventResponse
-      );
+      .flatMap((guest) => guest.responseMap[event.event_id].response_id);
 
     const newEventResponses: EventResponse[] = guests
       .filter((guest) => !guestsForEvent.includes(guest))
@@ -112,9 +107,7 @@ const EditEvent = ({ event, groups }: Props) => {
         ? updatedEvent
         : await updateEvent({ ...updatedEvent, date: date?.toISOString() ?? event.date });
 
-    const removedResponses = await deleteEventResponses(
-      responsesToRemove.map((response) => response.response_id)
-    );
+    const removedResponses = await deleteEventResponses(responsesToRemove);
     const newResponses = await createEventResponses(newEventResponses);
 
     if (updateEventResult && removedResponses !== null && newResponses !== null) {

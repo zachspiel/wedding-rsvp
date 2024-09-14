@@ -1,5 +1,5 @@
 import { createClient } from "@spiel-wedding/database/client";
-import { Event, EventResponse, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Event, EventResponse } from "@spiel-wedding/types/Guest";
 import { Database } from "@spiel-wedding/types/supabase.types";
 
 const EVENT_TABLE = "event";
@@ -27,37 +27,27 @@ export const updateEvent = async (event: Event): Promise<Event | undefined> => {
   return data?.[0];
 };
 
-export const updateEventResponse = async (
-  responseId: string,
-  response: RsvpResponse
-): Promise<EventResponse | null> => {
-  const supabase = createClient();
-  const { data } = await supabase
-    .from(EVENT_RESPONSE_TABLE)
-    .update({ rsvp: response })
-    .eq("response_id", responseId)
-    .select();
-
-  return data?.[0];
-};
-
 export const bulkUpsertEventResponse = async (
   eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][]
 ): Promise<EventResponse[] | null> => {
+  if (eventResponses.length === 0) {
+    return [];
+  }
+
   const supabase = createClient();
   const { data, error } = await supabase
     .from(EVENT_RESPONSE_TABLE)
     .upsert(eventResponses)
     .select();
 
-  console.log(error);
+  console.error(error);
 
   return data;
 };
 
 export const createEventResponses = async (
   eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][]
-): Promise<Event[] | null> => {
+): Promise<EventResponse[] | null> => {
   const supabase = createClient();
   const { data } = await supabase
     .from(EVENT_RESPONSE_TABLE)

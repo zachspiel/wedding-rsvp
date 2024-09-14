@@ -1,26 +1,31 @@
 import { createClient } from "@spiel-wedding/database/client";
-import { Event, Group, Guest, RsvpModification } from "@spiel-wedding/types/Guest";
+import { Event, Group, Guest } from "@spiel-wedding/types/Guest";
 import { TablesUpdate } from "@spiel-wedding/types/supabase.types";
-import { createNewResponse } from "@spiel-wedding/util";
+import { addEventResponseMapToGuest, createNewResponse } from "@spiel-wedding/util";
 import { v4 as uuid } from "uuid";
 import { bulkUpsertEventResponse, createEventResponses } from "./events";
 
 export const GROUP_SWR_KEY = "group";
 export const GROUP_TABLE = "group";
 export const GUEST_TABLE = "guests";
-export const RSVP_TABLE = "rsvp_modifications";
 
 export const getGroups = async (): Promise<Group[]> => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from(GROUP_TABLE)
-    .select("*, guests(*, event_responses(*))");
+    .select("*, guests(*, event_responses(*))")
+    .returns<Group[]>();
 
   if (error) {
     return [];
   }
 
-  return data ?? [];
+  return (
+    data?.map((group) => ({
+      ...group,
+      guests: addEventResponseMapToGuest(group.guests),
+    })) ?? []
+  );
 };
 
 export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
@@ -43,7 +48,7 @@ export const createGroup = async (
   events: Event[]
 ): Promise<Group | undefined> => {
   const supabase = createClient();
-  const { group_id, guests, rsvpModifications, ...groupData } = group;
+  const { group_id, guests, ...groupData } = group;
 
   const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
 
@@ -68,7 +73,7 @@ export const updateGroup = async (
   originalGroup: Group
 ): Promise<Group | undefined> => {
   const supabase = createClient();
-  const { guests, rsvpModifications, ...updatedGroup } = group;
+  const { guests, ...updatedGroup } = group;
   const updatedGuests = await updateGuests(guests, group.group_id, originalGroup);
 
   const { data, error } = await supabase
@@ -86,7 +91,9 @@ export const updateGroup = async (
 };
 
 const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Group) => {
-  const eventResponses = guests.flatMap((guest) => guest.event_responses);
+  const eventResponses = guests
+    .flatMap((guest) => guest.event_responses)
+    .filter((response) => response !== undefined);
 
   const updatedGuests =
     guests.map((guest) => {
@@ -142,7 +149,7 @@ export const createGuests = async (
 ): Promise<Guest[] | undefined> => {
   const supabase = createClient();
   const formattedGuests = guests.map((guest) => {
-    const { guest_id, event_responses, ...values } = guest;
+    const { guest_id, event_responses, responseMap, ...values } = guest;
 
     return { ...values, groupId: groupId };
   });
@@ -192,13 +199,4 @@ export const deleteGuests = async (
     .select();
 
   return data ?? [];
-};
-
-export const addEntryToRsvpModifications = async (
-  groupId: string
-): Promise<RsvpModification | undefined> => {
-  const supabase = createClient();
-  const { data } = await supabase.from(RSVP_TABLE).insert({ groupId }).select();
-
-  return data?.[0];
 };

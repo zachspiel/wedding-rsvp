@@ -2,15 +2,15 @@
 
 import { Button, Checkbox, Flex, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { bulkUpsertEventResponse } from "@spiel-wedding/hooks/events";
 import { GROUP_SWR_KEY, bulkUpdateGroups } from "@spiel-wedding/hooks/guests";
+import { Event, EventResponse, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { useEffect } from "react";
+import { mutate } from "swr";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "../notifications/notifications";
-import { Group, Event, RsvpResponse, EventResponse } from "@spiel-wedding/types/Guest";
-import { mutate } from "swr";
-import { useEffect } from "react";
-import { bulkUpsertEventResponse } from "@spiel-wedding/hooks/events";
 
 import { v4 as uuid } from "uuid";
 
@@ -45,7 +45,7 @@ const BulkEditGroups = ({ groups, events }: Props) => {
   const handleSubmit = async ({ saveTheDateSent, events }: FormValues) => {
     const result = await bulkUpdateGroups(
       groups.map((group) => {
-        const { guests, rsvpModifications, ...values } = group;
+        const { guests, ...values } = group;
         return { ...values, saveTheDateSent };
       })
     );

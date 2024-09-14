@@ -1,7 +1,7 @@
 "use client";
 
 import { ComboboxItem, ComboboxItemGroup, MultiSelect } from "@mantine/core";
-import { Event, Group, GuestAffiliation, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { Event, Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 import React from "react";
 import {
   filterGroupByAffiliation,
@@ -38,11 +38,6 @@ const FilterSelection = (props: Props): JSX.Element => {
         label: `${key} (${value})`,
       }));
 
-    newSelectItems.push({
-      group: "RSVP STATUS",
-      items: [RsvpResponse.ACCEPTED, RsvpResponse.DECLINED, RsvpResponse.NO_RESPONSE],
-    });
-
     if (missingItemOptions.length > 0) {
       newSelectItems.push({
         group: "BY MISSING INFORMATION",
@@ -56,14 +51,6 @@ const FilterSelection = (props: Props): JSX.Element => {
       items: affiliations,
     });
 
-    newSelectItems.push({
-      group: "BY EVENT",
-      items: props.events.map((event) => ({
-        value: event.event_id,
-        label: `${event.title} ${event.emoji}`,
-      })),
-    });
-
     setSelectItems(newSelectItems);
   }, [groups]);
 
@@ -75,8 +62,7 @@ const FilterSelection = (props: Props): JSX.Element => {
 
   return (
     <MultiSelect
-      w="50%"
-      mb="md"
+      w={{ base: "100%", md: "25%" }}
       data={selectItems}
       placeholder={`Filter Guests (${totalGuests})`}
       value={filters}

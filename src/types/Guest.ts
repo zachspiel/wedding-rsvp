@@ -14,7 +14,6 @@ export interface Group {
   saveTheDateSent: boolean;
   dietaryRestrictions: string;
   guests: Guest[];
-  rsvpModifications?: RsvpModification[];
   edited_at?: string;
   created_at?: string;
 }
@@ -26,9 +25,9 @@ export interface Guest {
   firstName: string;
   lastName: string;
   nameUnknown: boolean;
-  rsvp: RsvpResponse;
   event_responses: EventResponse[];
   relationshipType: RelationshipType;
+  responseMap: Record<string, EventResponse>;
 }
 
 export interface Event {
@@ -54,12 +53,6 @@ export interface EventResponse {
   eventId: string;
   rsvp: RsvpResponse;
   guestId: string;
-}
-
-export interface RsvpModification {
-  id: string;
-  createdAt: string;
-  groupId: string;
 }
 
 export enum RsvpResponse {

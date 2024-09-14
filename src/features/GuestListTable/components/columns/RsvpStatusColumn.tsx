@@ -9,11 +9,9 @@ interface Props {
 
 const RsvpStatusColumn = ({ guests, event }: Props): JSX.Element => {
   return (
-    <List listStyleType="none" withPadding>
+    <List listStyleType="none" withPadding size="lg">
       {getGuestsForEvent(event, guests).map((guest) => {
-        const eventResponse = guest.event_responses.find(
-          (response) => response.eventId === event.event_id
-        );
+        const eventResponse = guest.responseMap[event.event_id];
 
         if (!eventResponse) {
           return <></>;
@@ -23,7 +21,7 @@ const RsvpStatusColumn = ({ guests, event }: Props): JSX.Element => {
           <List.Item key={guest.guest_id}>
             {eventResponse.rsvp === RsvpResponse.ACCEPTED && "✅"}
             {eventResponse.rsvp === RsvpResponse.DECLINED && "❌"}
-            {eventResponse.rsvp === RsvpResponse.NO_RESPONSE && "No Response"}
+            {eventResponse.rsvp === RsvpResponse.NO_RESPONSE && "🤷"}
           </List.Item>
         );
       })}
