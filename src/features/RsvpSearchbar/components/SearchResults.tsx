@@ -15,7 +15,7 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
         const displayBottomDivider = index === searchResults.length - 1;
 
         return (
-          <Flex direction="column" key={group.group_id}>
+          <Flex direction="column" key={group.group_id} data-testid="search-result-row">
             <Divider my="sm" />
             <MGroup justify="space-between">
               <Flex direction="column">

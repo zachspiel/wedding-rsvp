@@ -104,7 +104,7 @@ const RsvpSearchbar = ({ events }: Props): JSX.Element => {
       </form>
 
       {error && (
-        <Text c="red" fz="sm" ta="center">
+        <Text c="red" fz="sm" ta="center" data-testid="search-error-text">
           {error.info}
         </Text>
       )}
