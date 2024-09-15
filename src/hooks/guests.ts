@@ -97,7 +97,7 @@ const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Gro
 
   const updatedGuests =
     guests.map((guest) => {
-      const { event_responses, ...values } = guest;
+      const { event_responses, responseMap, ...values } = guest;
       const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
       if (guest.nameUnknown && guest.firstName.length > 0 && guest.lastName.length > 0) {
