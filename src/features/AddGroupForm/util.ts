@@ -1,7 +1,6 @@
 import { UseFormReturnType } from "@mantine/form";
 import {
   Event,
-  EventResponse,
   Group,
   Guest,
   GuestAffiliation,
@@ -25,9 +24,9 @@ const createDefaultGroup = (events: Event[]): Group => {
         firstName: "",
         lastName: "",
         nameUnknown: false,
-        rsvp: RsvpResponse.NO_RESPONSE,
         event_responses: getDefaultEventsForGuest(guestId, events),
         relationshipType: RelationshipType.PRIMARY,
+        responseMap: {},
       },
     ],
     affiliation: GuestAffiliation.NONE,
@@ -45,15 +44,14 @@ const createDefaultGroup = (events: Event[]): Group => {
   };
 };
 
-const createGuest = (form: UseFormReturnType<Group>, events: Event[]): Partial<Guest> => {
+const createGuest = (groupId: string, events: Event[]): Partial<Guest> => {
   const id = uuid();
 
   return {
     guest_id: id,
-    groupId: form.values.group_id,
+    groupId: groupId,
     firstName: "",
     lastName: "",
-    rsvp: RsvpResponse.NO_RESPONSE,
     event_responses: getDefaultEventsForGuest(id, events),
     relationshipType: RelationshipType.PARTNER,
     nameUnknown: false,
@@ -72,7 +70,7 @@ const getDefaultEventsForGuest = (guestId: string, events: Event[]) => {
 };
 
 const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): void => {
-  const newGuest = createGuest(form, events);
+  const newGuest = createGuest(form.values.group_id, events);
 
   form.insertListItem(
     "guests",
@@ -85,7 +83,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): vo
 };
 
 const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void => {
-  const newGuest = createGuest(form, events);
+  const newGuest = createGuest(form.values.group_id, events);
 
   form.insertListItem("guests", {
     ...newGuest,
@@ -93,17 +91,4 @@ const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void
   });
 };
 
-const createDefaultEventResponse = (): EventResponse => ({
-  response_id: uuid(),
-  guestId: "",
-  eventId: uuid(),
-  rsvp: RsvpResponse.NO_RESPONSE,
-});
-
-export {
-  addChildToGuests,
-  addPartnerToGuests,
-  createDefaultEventResponse,
-  createDefaultGroup,
-  createGuest,
-};
+export { addChildToGuests, addPartnerToGuests, createDefaultGroup, createGuest };

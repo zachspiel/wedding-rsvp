@@ -8,7 +8,9 @@
 
 Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
-This project also includes an admin page for managing the guest list, RSVP status updates, and content modification on the homepage.
+Admin users can also manage the guest list, update RSVP statuses, events, and modify content on the homepage.
+
+The latest published version of the website can be found at [https://www.zachandsedona.com](https://www.zachandsedona.com)
 
 ## Getting Started
 
@@ -57,8 +59,16 @@ yarn dev
 
 ## Testing
 
+This project uses [vitest](https://vitest.dev) to test various operations on the database (add guests, modify RSVPs, view events, etc.).
+
 ```bash
 yarn test
+```
+
+A coverage report can also be generated with the following command.
+
+```bash
+yarn coverage
 ```
 
 ## Project Structure

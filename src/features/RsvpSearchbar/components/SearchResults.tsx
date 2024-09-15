@@ -13,7 +13,6 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
     <>
       {searchResults.map((group, index) => {
         const displayBottomDivider = index === searchResults.length - 1;
-        const isModifyingRsvp = group.rsvpModifications !== null;
 
         return (
           <Flex direction="column" key={group.group_id}>
@@ -27,9 +26,7 @@ const SearchResults = ({ searchResults, setSelectedGroup }: Props) => {
                   </Text>
                 ))}
               </Flex>
-              <Button onClick={() => setSelectedGroup(group)}>
-                {isModifyingRsvp ? "Edit RSVP" : "Select"}
-              </Button>
+              <Button onClick={() => setSelectedGroup(group)}>Select</Button>
             </MGroup>
             {displayBottomDivider && <Divider my="sm" />}
           </Flex>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
 import { Event, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { useMemo } from "react";
@@ -20,9 +22,11 @@ const Summary = ({ groups, ceremonyEvent }: Props): JSX.Element => {
   }, [groupGuestLengths]);
 
   const getRsvpStatusForCeremony = (guest: Guest) => {
-    return guest.event_responses.find(
-      (response) => response.eventId === ceremonyEvent?.event_id
-    )?.rsvp;
+    if (!ceremonyEvent) {
+      return undefined;
+    }
+
+    return guest.responseMap[ceremonyEvent.event_id]?.rsvp;
   };
 
   const totalAccepted = groups
@@ -48,7 +52,7 @@ const Summary = ({ groups, ceremonyEvent }: Props): JSX.Element => {
 
   return (
     <MGroup align="apart" grow pb="xl" pt="xl">
-      {createSummaryItem("Definitely Invited", totalInvited)}
+      {createSummaryItem("Invited", totalInvited)}
       {createSummaryItem("Coming to Ceremony", totalAccepted)}
       {createSummaryItem("Declined", totalDeclined)}
       {createSummaryItem("No Response", totalMissingResponse)}

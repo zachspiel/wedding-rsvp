@@ -2,13 +2,14 @@
 
 import {
   ActionIcon,
-  Badge,
   Button,
   Center,
   Checkbox,
+  Chip,
+  Divider,
+  Flex,
   Group as MGroup,
   Modal,
-  Switch,
   Table,
   TableTbody,
   TableTh,
@@ -25,17 +26,17 @@ import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
 import FilterSelection from "@spiel-wedding/components/guestList/filters/FilterSelection";
 import Summary from "@spiel-wedding/components/guestList/Summary";
-import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
 import TableRows from "@spiel-wedding/features/GuestListTable/components/TableRows";
 import {
+  RsvpFilter,
   filterGroups,
   sortGroups,
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
 import { getEvents } from "@spiel-wedding/hooks/events";
 import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
-import { Group } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import useSWR from "swr";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
 import classes from "./styles.module.css";
@@ -51,16 +52,31 @@ const GuestListTable = (): JSX.Element => {
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
-  const [showRsvpStatus, setShowRsvpStatus] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [eventRsvpFilters, setEventRsvpFilters] = useState<RsvpFilter>();
+
+  useEffect(() => {
+    if (eventRsvpFilters) {
+      return;
+    }
+
+    const newFilters: RsvpFilter = {};
+
+    events.forEach((event) => {
+      newFilters[event.event_id] = [];
+    });
+
+    setEventRsvpFilters(newFilters);
+  }, [events]);
 
   const filteredGroups = filterGroups(
     sortGroups(groups, reverseSortDirection),
     search,
-    filters
+    filters,
+    eventRsvpFilters
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -99,34 +115,24 @@ const GuestListTable = (): JSX.Element => {
 
   return (
     <>
-      <MGroup justify="space-between">
-        <SectionTitle title="All Guests" hideFlowers />
-        <MGroup>
-          <DownloadGuestList groups={groups} />
-          <AddGroupForm events={events} />
-        </MGroup>
-      </MGroup>
+      <SectionTitle title="All Guests" hideFlowers />
+
       <Summary
         groups={groups}
         ceremonyEvent={events.find((event) => event.order === 1)}
       />
-      <MGroup justify="space-between">
-        <FilterSelection
-          groups={groups}
-          events={events}
-          filters={filters}
-          setFilters={setFilters}
-        />
-        <Switch
-          label="Show RSVP Status"
-          checked={showRsvpStatus}
-          onChange={(e): void => setShowRsvpStatus(e.currentTarget.checked)}
-        />
+
+      <MGroup justify="end" mx="xl" mb="md">
+        <AddGroupForm events={events} />
+        <Button disabled={selectedRows.length === 0} onClick={open}>
+          Edit Groups
+        </Button>
       </MGroup>
-      <MGroup mb="md">
+
+      <MGroup>
         <TextInput
           placeholder="Search by any field"
-          w="75%"
+          w={{ base: "100%", md: "50%" }}
           value={search}
           onChange={handleSearchChange}
           leftSection={<IconSearch size="0.9rem" stroke={1.5} />}
@@ -138,13 +144,87 @@ const GuestListTable = (): JSX.Element => {
             )
           }
         />
-        <Button disabled={selectedRows.length === 0} onClick={open}>
-          Edit Groups
+        <FilterSelection
+          groups={groups}
+          events={events}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      </MGroup>
+
+      <Divider my="md" />
+
+      <MGroup justify="space-between">
+        <span>
+          Showing <b> {filteredGroups.flatMap((group) => group.guests).length}</b> of{" "}
+          <b>{groups.flatMap((group) => group.guests).length}</b> Guests
+        </span>
+
+        <Button
+          variant="outline"
+          size="sm"
+          radius="xl"
+          display={
+            Object.values(eventRsvpFilters ?? {}).every((filter) => filter.length === 0)
+              ? "none"
+              : ""
+          }
+          leftSection={<IconX stroke={1.5} />}
+          onClick={() => setEventRsvpFilters(undefined)}
+        >
+          Clear
         </Button>
       </MGroup>
-      <Badge variant="dot" color="blue" fw="normal" size="lg" my="md">
-        Showing {filteredGroups.flatMap((group) => group.guests).length} Guests
-      </Badge>
+
+      <MGroup mt="lg">
+        {events.map((event, index) => {
+          const handleChange = (responses: string | string[]) => {
+            const updatedFilter = Array.isArray(responses) ? responses : [responses];
+
+            setEventRsvpFilters((current) => ({
+              ...current,
+              [event.event_id]: updatedFilter as RsvpResponse[],
+            }));
+          };
+
+          return (
+            <div key={`event-${event.event_id}-rsvpFilters`}>
+              <Text ta="center">{event.title}</Text>
+              <Chip.Group
+                multiple
+                value={eventRsvpFilters?.[event.event_id] ?? []}
+                onChange={handleChange}
+              >
+                <Flex gap="xs" pb="md">
+                  <Chip
+                    key={`event-${event.event_id}.accepted`}
+                    size="sm"
+                    value={RsvpResponse.ACCEPTED}
+                  >
+                    ✅ Accepted
+                  </Chip>
+                  <Chip
+                    key={`event-${event.event_id}.declined`}
+                    size="sm"
+                    value={RsvpResponse.DECLINED}
+                  >
+                    ❌ Declined
+                  </Chip>
+                  <Chip
+                    key={`event-${event.event_id}.noResponse`}
+                    size="sm"
+                    value={RsvpResponse.NO_RESPONSE}
+                  >
+                    🤷 No Response
+                  </Chip>
+
+                  {index !== events.length - 1 && <Divider orientation="vertical" />}
+                </Flex>
+              </Chip.Group>
+            </div>
+          );
+        })}
+      </MGroup>
 
       <Table miw={700} highlightOnHover stickyHeader stickyHeaderOffset={100}>
         <TableThead bg="sage-green" c="white">
@@ -164,16 +244,15 @@ const GuestListTable = (): JSX.Element => {
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
-            {showRsvpStatus && (
-              <>
-                {events.map((event) => (
-                  <TableTh key={`${event.event_id}_table_header`}>
-                    {event.title} {event.emoji}
-                  </TableTh>
-                ))}
-              </>
-            )}
-            <TableTh>Save the Date Sent?</TableTh>
+
+            <>
+              {events.map((event) => (
+                <TableTh key={`${event.event_id}_table_header`}>
+                  {event.title} {event.emoji}
+                </TableTh>
+              ))}
+            </>
+
             <TableTh />
           </TableTr>
         </TableThead>
@@ -181,7 +260,6 @@ const GuestListTable = (): JSX.Element => {
           <TableRows
             groups={filteredGroups}
             events={events}
-            showRsvpStatus={showRsvpStatus}
             selectedGroups={selectedRows}
             openModal={openModal}
             toggleGroupSelected={({ group_id }) => {

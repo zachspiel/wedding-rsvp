@@ -88,9 +88,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                   <Row key={guest.guest_id} style={tableRow}>
                     {createColumn(`${guest.firstName} ${guest.lastName}`)}
                     {createColumn(
-                      guest.event_responses.find(
-                        (response) => response.eventId === event.event_id
-                      )?.rsvp ?? "No Response"
+                      guest.responseMap[event.event_id]?.rsvp ?? "No Response"
                     )}
                   </Row>
                 ))}

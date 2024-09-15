@@ -134,7 +134,6 @@ export type Database = {
           message: string | null;
           phone: string | null;
           postal: string | null;
-          rsvpModifications: string[] | null;
           saveTheDateSent: boolean | null;
           state: string | null;
         };
@@ -154,7 +153,6 @@ export type Database = {
           message?: string | null;
           phone?: string | null;
           postal?: string | null;
-          rsvpModifications?: string[] | null;
           saveTheDateSent?: boolean | null;
           state?: string | null;
         };
@@ -174,7 +172,6 @@ export type Database = {
           message?: string | null;
           phone?: string | null;
           postal?: string | null;
-          rsvpModifications?: string[] | null;
           saveTheDateSent?: boolean | null;
           state?: string | null;
         };
@@ -301,7 +298,6 @@ export type Database = {
           message: string | null;
           phone: string | null;
           postal: string | null;
-          rsvpModifications: string[] | null;
           saveTheDateSent: boolean | null;
           state: string | null;
         };

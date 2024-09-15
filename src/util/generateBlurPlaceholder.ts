@@ -1,5 +1,6 @@
 "use server";
-import { createClient } from "@spiel-wedding/database/server";
+
+import { createClient } from "@spiel-wedding/database/client";
 import { Photo } from "@spiel-wedding/types/Photo";
 import sharp from "sharp";
 

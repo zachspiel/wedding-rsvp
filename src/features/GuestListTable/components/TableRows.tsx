@@ -4,12 +4,10 @@ import ActionColumn from "./columns/ActionColumn";
 import AddressColumn from "./columns/AddressColumn";
 import GuestsColumn from "./columns/GuestsColumn";
 import RsvpStatusColumn from "./columns/RsvpStatusColumn";
-import SaveTheDateColumn from "./columns/SaveTheDateColumn";
 
 interface Props {
   groups: Group[];
   events: Event[];
-  showRsvpStatus: boolean;
   selectedGroups: string[];
   openModal: (group: Group) => void;
   toggleGroupSelected: (group: Group) => void;
@@ -44,18 +42,14 @@ const TableRows = (props: Props): JSX.Element => {
           <TableTd>
             <AddressColumn group={group} />
           </TableTd>
-          {props.showRsvpStatus && (
-            <>
-              {props.events.map((event) => (
-                <TableTd key={group.group_id + "_" + event.event_id}>
-                  <RsvpStatusColumn guests={group.guests} event={event} />
-                </TableTd>
-              ))}
-            </>
-          )}
-          <TableTd>
-            <SaveTheDateColumn group={group} />
-          </TableTd>
+          <>
+            {props.events.map((event) => (
+              <TableTd key={group.group_id + "_" + event.event_id}>
+                <RsvpStatusColumn guests={group.guests} event={event} />
+              </TableTd>
+            ))}
+          </>
+
           <TableTd>
             <ActionColumn group={group} onEdit={() => props.openModal(group)} />
           </TableTd>
