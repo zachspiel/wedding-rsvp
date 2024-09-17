@@ -36,11 +36,14 @@ export const getGroupById = async (groupId: string): Promise<Group | undefined> 
     .eq("group_id", groupId)
     .single();
 
-  if (error) {
+  if (error || !data) {
     return;
   }
 
-  return data;
+  return {
+    ...data,
+    guests: addEventResponseMapToGuest(data.guests),
+  };
 };
 
 export const createGroup = async (

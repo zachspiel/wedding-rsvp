@@ -53,6 +53,7 @@ export interface EventResponse {
   eventId: string;
   rsvp: RsvpResponse;
   guestId: string;
+  response_created_at?: string;
 }
 
 export enum RsvpResponse {
