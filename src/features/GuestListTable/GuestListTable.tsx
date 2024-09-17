@@ -25,7 +25,6 @@ import { SectionTitle } from "@spiel-wedding/components/common";
 import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
 import FilterSelection from "@spiel-wedding/components/guestList/filters/FilterSelection";
-import Summary from "@spiel-wedding/components/guestList/Summary";
 import TableRows from "@spiel-wedding/features/GuestListTable/components/TableRows";
 import {
   RsvpFilter,
@@ -39,6 +38,7 @@ import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons
 import { ChangeEvent, useEffect, useState } from "react";
 import useSWR from "swr";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
+import RsvpGraph from "./components/RsvpGraph";
 import classes from "./styles.module.css";
 
 interface ThProps {
@@ -113,14 +113,15 @@ const GuestListTable = (): JSX.Element => {
     );
   };
 
+  const isEventFilterEmpty = () => {
+    return Object.values(eventRsvpFilters ?? {}).every((filter) => filter.length === 0);
+  };
+
   return (
     <>
       <SectionTitle title="All Guests" hideFlowers />
 
-      <Summary
-        groups={groups}
-        ceremonyEvent={events.find((event) => event.order === 1)}
-      />
+      <RsvpGraph groups={groups} events={events} />
 
       <MGroup justify="end" mx="xl" mb="md">
         <AddGroupForm events={events} />
@@ -156,19 +157,29 @@ const GuestListTable = (): JSX.Element => {
 
       <MGroup justify="space-between">
         <span>
-          Showing <b> {filteredGroups.flatMap((group) => group.guests).length}</b> of{" "}
-          <b>{groups.flatMap((group) => group.guests).length}</b> Guests
+          Showing{" "}
+          <b>
+            {" "}
+            {
+              filteredGroups
+                .flatMap((group) => group.guests)
+                .filter((guest) =>
+                  isEventFilterEmpty()
+                    ? true
+                    : Object.entries(eventRsvpFilters ?? {}).some(([key, filters]) =>
+                        filters.includes(guest.responseMap?.[key]?.rsvp)
+                      )
+                ).length
+            }
+          </b>{" "}
+          of <b>{groups.flatMap((group) => group.guests).length}</b> Guests
         </span>
 
         <Button
           variant="outline"
           size="sm"
           radius="xl"
-          display={
-            Object.values(eventRsvpFilters ?? {}).every((filter) => filter.length === 0)
-              ? "none"
-              : ""
-          }
+          display={isEventFilterEmpty() ? "none" : ""}
           leftSection={<IconX stroke={1.5} />}
           onClick={() => setEventRsvpFilters(undefined)}
         >

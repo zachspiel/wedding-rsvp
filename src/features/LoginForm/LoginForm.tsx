@@ -34,7 +34,7 @@ const LoginForm = () => {
       setUser(user);
       router.push("/");
     } else {
-      showCustomFailureNotification("Error signinging in");
+      showCustomFailureNotification("Error signing in");
     }
   };
 

@@ -15,7 +15,7 @@ import { showNotification } from "@mantine/notifications";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import { updateGroup } from "@spiel-wedding/hooks/guests";
+import { getGroupById, updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -88,8 +88,13 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
       setError("An error occurred while saving your RSVP. Please try again later");
     } else {
       nextStep();
-      await sendMail({ group: form.values, events });
-      await revalidatePage("/");
+
+      const groupWithUpdatedResponses = await getGroupById(updatedGroup.group_id);
+
+      if (groupWithUpdatedResponses) {
+        await sendMail({ group: groupWithUpdatedResponses, events });
+        await revalidatePage("/");
+      }
     }
   };
 
