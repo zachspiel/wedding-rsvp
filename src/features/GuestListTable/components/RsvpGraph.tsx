@@ -43,7 +43,7 @@ const RsvpGraph = ({ groups, events }: Props) => {
           ];
 
           return (
-            <Stack ta="center" align="center">
+            <Stack ta="center" align="center" key={`event-${event.event_id}-graph`}>
               <Title order={5}>{event.title}</Title>
               <DonutChart
                 withLabelsLine
