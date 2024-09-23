@@ -42,6 +42,9 @@ const TableRows = (props: Props): JSX.Element => {
           <TableTd>
             <AddressColumn group={group} />
           </TableTd>
+
+          <TableTd>{group.dietaryRestrictions}</TableTd>
+
           <>
             {props.events.map((event) => (
               <TableTd key={group.group_id + "_" + event.event_id}>

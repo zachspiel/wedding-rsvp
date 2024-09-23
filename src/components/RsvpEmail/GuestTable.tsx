@@ -1,4 +1,3 @@
-import { rem } from "@mantine/core";
 import { Column, Heading, Row, Section, Text } from "@react-email/components";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
@@ -15,15 +14,10 @@ const detailParagraph = {
 };
 
 const dimmedParagraph = {
-  ...detailParagraph,
+  ...paragraph,
   color: "#868e96",
-  marginBottom: "0.625rem",
-};
-
-const iconStyles: CSSProperties = {
-  width: rem(18),
-  height: rem(18),
-  marginRight: rem(5),
+  marginTop: "5px",
+  marginBottom: "0.1rem",
 };
 
 const tableRow = {
