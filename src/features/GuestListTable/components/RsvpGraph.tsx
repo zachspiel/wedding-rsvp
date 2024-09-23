@@ -12,33 +12,6 @@ interface Props {
 const RsvpGraph = ({ groups, events }: Props) => {
   const allGuests = groups.flatMap((group) => group.guests);
 
-  const rsvpTotals = events.map((event) => {
-    const guests = getGuestsForEvent(event, allGuests);
-
-    const rsvpMatchesFilter = (rsvpResponse: RsvpResponse) =>
-      guests.filter(
-        ({ responseMap }) => responseMap[event.event_id].rsvp === rsvpResponse
-      ).length;
-
-    const data = [
-      {
-        name: "Accepted",
-        value: rsvpMatchesFilter(RsvpResponse.ACCEPTED),
-        color: "teal.6",
-      },
-      {
-        name: "Declined",
-        value: rsvpMatchesFilter(RsvpResponse.DECLINED),
-        color: "read.6",
-      },
-      {
-        name: "No Response",
-        value: rsvpMatchesFilter(RsvpResponse.NO_RESPONSE),
-        color: "gray.6",
-      },
-    ];
-  });
-
   return (
     <div>
       <Title order={3}>RSVP Totals</Title>
