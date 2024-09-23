@@ -1,18 +1,19 @@
 "use client";
 
-import { Flex, Group as MGroup, Text, Title } from "@mantine/core";
+import { Group as MGroup, Text } from "@mantine/core";
 import { Event, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { getGuestsForEvent } from "@spiel-wedding/util";
 import { useMemo } from "react";
 
 interface Props {
   groups: Group[];
-  ceremonyEvent?: Event;
+  event: Event;
 }
 
-const Summary = ({ groups, ceremonyEvent }: Props): JSX.Element => {
-  const groupGuestLengths = groups
-    .filter((group) => group.invited)
-    .map((group) => group.guests.length);
+const Summary = ({ groups, event }: Props): JSX.Element => {
+  const groupGuestLengths = groups.map(
+    (group) => getGuestsForEvent(event, group.guests).length
+  );
 
   const totalInvited = useMemo(() => {
     if (groupGuestLengths.length > 0) {
@@ -21,41 +22,47 @@ const Summary = ({ groups, ceremonyEvent }: Props): JSX.Element => {
     return 0;
   }, [groupGuestLengths]);
 
-  const getRsvpStatusForCeremony = (guest: Guest) => {
-    if (!ceremonyEvent) {
+  const getRsvpStatusForEvent = (guest: Guest) => {
+    if (!event) {
       return undefined;
     }
 
-    return guest.responseMap[ceremonyEvent.event_id]?.rsvp;
+    return guest.responseMap[event.event_id]?.rsvp;
   };
 
   const totalAccepted = groups
     .flatMap((group) => group.guests)
-    .filter((guest) => getRsvpStatusForCeremony(guest) === RsvpResponse.ACCEPTED).length;
+    .filter((guest) => getRsvpStatusForEvent(guest) === RsvpResponse.ACCEPTED).length;
 
   const totalDeclined = groups
     .flatMap((group) => group.guests)
-    .filter((guest) => getRsvpStatusForCeremony(guest) === RsvpResponse.DECLINED).length;
+    .filter((guest) => getRsvpStatusForEvent(guest) === RsvpResponse.DECLINED).length;
 
   const totalMissingResponse = totalInvited - totalAccepted - totalDeclined;
 
-  const createSummaryItem = (title: string, total: number): JSX.Element => {
+  const createSummaryItem = (
+    title: string,
+    total: number,
+    color: string
+  ): JSX.Element => {
     return (
-      <Flex direction="column">
-        <Title order={3} style={{ textAlign: "center" }}>
+      <div>
+        <Text ta="center" fw="bold">
           {total}
-        </Title>
-        <Text style={{ textAlign: "center" }}>{title}</Text>
-      </Flex>
+        </Text>
+        <Text c={color} style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
+          {title}
+        </Text>
+      </div>
     );
   };
 
   return (
-    <MGroup align="apart" grow pb="xl" pt="xl">
-      {createSummaryItem("Invited", totalInvited)}
-      {createSummaryItem("Coming to Ceremony", totalAccepted)}
-      {createSummaryItem("Declined", totalDeclined)}
-      {createSummaryItem("No Response", totalMissingResponse)}
+    <MGroup mt="sm" style={{ overflow: "auto" }} wrap="nowrap">
+      {createSummaryItem("Invited", totalInvited, "")}
+      {createSummaryItem("Coming", totalAccepted, "green.6")}
+      {createSummaryItem("Declined", totalDeclined, "red.6")}
+      {createSummaryItem("No Response", totalMissingResponse, "yellow.6")}
     </MGroup>
   );
 };

@@ -13,7 +13,6 @@ import {
   Table,
   TableTbody,
   TableTh,
-  TableThead,
   TableTr,
   Text,
   TextInput,
@@ -57,6 +56,7 @@ const GuestListTable = (): JSX.Element => {
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [eventRsvpFilters, setEventRsvpFilters] = useState<RsvpFilter>();
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (eventRsvpFilters) {
@@ -98,7 +98,7 @@ const GuestListTable = (): JSX.Element => {
     const Icon = reverseSortDirection ? IconChevronUp : IconChevronDown;
 
     return (
-      <Table.Th className={classes.th}>
+      <Table.Th>
         <UnstyledButton onClick={onSort} className={classes.control}>
           <MGroup justify="space-between">
             <Text fw={500} fz="sm">
@@ -159,7 +159,6 @@ const GuestListTable = (): JSX.Element => {
         <span>
           Showing{" "}
           <b>
-            {" "}
             {
               filteredGroups
                 .flatMap((group) => group.guests)
@@ -238,7 +237,7 @@ const GuestListTable = (): JSX.Element => {
       </MGroup>
 
       <Table miw={700} highlightOnHover stickyHeader stickyHeaderOffset={100}>
-        <TableThead bg="sage-green" c="white">
+        <Table.Thead bg="sage-green" c="white">
           <TableTr>
             <TableTh>
               <Checkbox
@@ -255,7 +254,7 @@ const GuestListTable = (): JSX.Element => {
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
-
+            <TableTh>Dietary Restrictions</TableTh>
             <>
               {events.map((event) => (
                 <TableTh key={`${event.event_id}_table_header`}>
@@ -266,7 +265,7 @@ const GuestListTable = (): JSX.Element => {
 
             <TableTh />
           </TableTr>
-        </TableThead>
+        </Table.Thead>
         <TableTbody>
           <TableRows
             groups={filteredGroups}
