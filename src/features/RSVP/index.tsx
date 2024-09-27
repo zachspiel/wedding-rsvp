@@ -6,9 +6,14 @@ import { IconInfoCircle } from "@tabler/icons-react";
 
 interface Props {
   events: Event[];
+  alertMessage: {
+    info: string;
+    color: string;
+    hideSearch: boolean;
+  };
 }
 
-const RSVP = ({ events }: Props): JSX.Element => {
+const RSVP = ({ events, alertMessage }: Props): JSX.Element => {
   return (
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
@@ -28,11 +33,12 @@ const RSVP = ({ events }: Props): JSX.Element => {
         Please reach out to Sedona or Zach if you have any questions about guest
         attendance.
       </Text>
-      <Alert variant="light" color="teal" icon={<IconInfoCircle />}>
-        Please RSVP no later than September 26th 2024.
+
+      <Alert variant="light" color={alertMessage.color} icon={<IconInfoCircle />}>
+        {alertMessage.info}
       </Alert>
 
-      <RsvpSearchbar events={events} />
+      {!alertMessage.hideSearch && <RsvpSearchbar events={events} />}
     </SectionContainer>
   );
 };

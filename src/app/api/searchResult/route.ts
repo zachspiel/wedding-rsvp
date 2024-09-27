@@ -16,21 +16,31 @@ const guestMatchesSearch = (name: string, guest: Guest): boolean => {
   return guestFirstName + " " + guestLastName === nameLowerCase;
 };
 
+const createCantFindGuestErrorMessage = () => {
+  return NextResponse.json(
+    {
+      info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
+    },
+    { status: 400 }
+  );
+};
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const name = searchParams.get("name");
   const supabase = createClient();
 
   if (!name) {
-    return NextResponse.json([]);
+    return createCantFindGuestErrorMessage();
   }
+
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .select("*, guests(*, event_responses(*))")
     .returns<Group[]>();
 
   if (error || !data) {
-    return NextResponse.json([] as Group[]);
+    return createCantFindGuestErrorMessage();
   }
 
   const matchingResults = data.filter(
