@@ -22,13 +22,11 @@ interface SearchForm {
 }
 
 const getMatchingGuests = async (name: string): Promise<Group[]> => {
-  const result = await fetch(`/api/searchResult?name=${name}`).then((res) => res.json());
+  const response = await fetch(`/api/searchResult?name=${name}`);
+  const result = await response.json();
 
-  if (result.length === 0) {
-    throw {
-      info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
-      status: 400,
-    };
+  if (response.status !== 200) {
+    throw result;
   }
 
   return result;
