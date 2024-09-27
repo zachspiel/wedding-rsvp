@@ -4,7 +4,6 @@ import {
   ActionIcon,
   Button,
   Center,
-  Checkbox,
   Chip,
   Divider,
   Flex,
@@ -21,7 +20,6 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SectionTitle } from "@spiel-wedding/components/common";
-import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
 import FilterSelection from "@spiel-wedding/components/guestList/filters/FilterSelection";
 import TableRows from "@spiel-wedding/features/GuestListTable/components/TableRows";
@@ -54,9 +52,7 @@ const GuestListTable = (): JSX.Element => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [eventRsvpFilters, setEventRsvpFilters] = useState<RsvpFilter>();
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (eventRsvpFilters) {
@@ -125,9 +121,6 @@ const GuestListTable = (): JSX.Element => {
 
       <MGroup justify="end" mx="xl" mb="md">
         <AddGroupForm events={events} />
-        <Button disabled={selectedRows.length === 0} onClick={open}>
-          Edit Groups
-        </Button>
       </MGroup>
 
       <MGroup>
@@ -239,18 +232,6 @@ const GuestListTable = (): JSX.Element => {
       <Table miw={700} highlightOnHover stickyHeader stickyHeaderOffset={100}>
         <Table.Thead bg="sage-green" c="white">
           <TableTr>
-            <TableTh>
-              <Checkbox
-                checked={selectedRows.length === groups?.length}
-                onChange={(e) => {
-                  if (e.currentTarget.checked) {
-                    setSelectedRows(groups.map(({ group_id }) => group_id));
-                  } else {
-                    setSelectedRows([]);
-                  }
-                }}
-              />
-            </TableTh>
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
@@ -267,19 +248,7 @@ const GuestListTable = (): JSX.Element => {
           </TableTr>
         </Table.Thead>
         <TableTbody>
-          <TableRows
-            groups={filteredGroups}
-            events={events}
-            selectedGroups={selectedRows}
-            openModal={openModal}
-            toggleGroupSelected={({ group_id }) => {
-              if (selectedRows.includes(group_id)) {
-                setSelectedRows(selectedRows.filter((id) => group_id !== id));
-              } else {
-                setSelectedRows([...selectedRows, group_id]);
-              }
-            }}
-          />
+          <TableRows groups={filteredGroups} events={events} openModal={openModal} />
         </TableTbody>
       </Table>
       <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
@@ -290,15 +259,6 @@ const GuestListTable = (): JSX.Element => {
               close();
               setSelectedGroup(undefined);
             }}
-            events={events ?? []}
-          />
-        )}
-
-        {selectedGroup === undefined && (
-          <BulkEditGroups
-            groups={
-              groups?.filter(({ group_id }) => selectedRows.includes(group_id)) ?? []
-            }
             events={events ?? []}
           />
         )}

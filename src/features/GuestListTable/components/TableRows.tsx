@@ -1,4 +1,4 @@
-import { Checkbox, TableTd, TableTr, Text } from "@mantine/core";
+import { TableTd, TableTr, Text } from "@mantine/core";
 import { Event, Group } from "@spiel-wedding/types/Guest";
 import ActionColumn from "./columns/ActionColumn";
 import AddressColumn from "./columns/AddressColumn";
@@ -8,9 +8,7 @@ import RsvpStatusColumn from "./columns/RsvpStatusColumn";
 interface Props {
   groups: Group[];
   events: Event[];
-  selectedGroups: string[];
   openModal: (group: Group) => void;
-  toggleGroupSelected: (group: Group) => void;
 }
 
 const TableRows = (props: Props): JSX.Element => {
@@ -18,15 +16,6 @@ const TableRows = (props: Props): JSX.Element => {
     <>
       {props.groups.map((group) => (
         <TableTr key={group.group_id}>
-          <TableTd>
-            <Checkbox
-              checked={
-                props.selectedGroups.length === props.groups.length ||
-                props.selectedGroups.includes(group.group_id)
-              }
-              onChange={(e) => props.toggleGroupSelected(group)}
-            />
-          </TableTd>
           <TableTd>
             <GuestsColumn guests={group.guests} affiliation={group.affiliation} />
           </TableTd>
