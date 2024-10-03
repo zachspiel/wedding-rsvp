@@ -1,29 +1,29 @@
 "use client";
 
 import {
+  Button,
+  Center,
   Group as MGroup,
   Modal,
-  Center,
-  SegmentedControl,
   Radio,
-  Button,
+  SegmentedControl,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  showSuccessNotification,
-  showCustomFailureNotification,
-} from "@spiel-wedding/components/notifications/notifications";
-import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
-import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
-import { useState, useEffect } from "react";
-import { useSWRConfig } from "swr";
+import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   GuestAffiliationSelection,
   GuestInput,
   MailingAddressForm,
 } from "@spiel-wedding/components/form";
-import { addPartnerToGuests, addChildToGuests, createDefaultGroup } from "./util";
+import {
+  showCustomFailureNotification,
+  showSuccessNotification,
+} from "@spiel-wedding/components/notifications/notifications";
+import { createGroup } from "@spiel-wedding/hooks/guests";
+import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
+import { useEffect, useState } from "react";
+import { addChildToGuests, addPartnerToGuests, createDefaultGroup } from "./util";
 
 interface Props {
   events: Event[];
@@ -33,7 +33,6 @@ const AddGroupForm = ({ events }: Props) => {
   const [groupType, setGroupType] = useState("single");
   const [isInvited, setIsInvited] = useState("definitely");
   const [opened, { open, close }] = useDisclosure(false);
-  const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
     initialValues: createDefaultGroup(events),
@@ -91,7 +90,7 @@ const AddGroupForm = ({ events }: Props) => {
       showSuccessNotification(
         `Successfully added ${form.values.guests.length} guests 🎉!`
       );
-      await mutate(GROUP_SWR_KEY);
+      await revalidatePage("/guestList");
     } catch (error) {
       showCustomFailureNotification(`${error}`);
     }

@@ -1,8 +1,8 @@
 "use client";
 
+import { ComboboxItem, ComboboxItemGroup, MultiSelect } from "@mantine/core";
+import { Event, Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
 import React from "react";
-import { MultiSelect, ComboboxItemGroup, ComboboxItem } from "@mantine/core";
-import { Group, GuestAffiliation, RsvpResponse } from "@spiel-wedding/types/Guest";
 import {
   filterGroupByAffiliation,
   getMissingValueTotals,
@@ -11,6 +11,7 @@ import {
 
 interface Props {
   groups: Group[];
+  events: Event[];
   filters: string[];
   setFilters: (filters: string[]) => void;
 }
@@ -23,7 +24,7 @@ const FilterSelection = (props: Props): JSX.Element => {
       groups
         .map((group) => group.guests.length)
         .reduce((total, current) => total + current, 0),
-    [groups],
+    [groups]
   );
 
   React.useEffect(() => {
@@ -36,11 +37,6 @@ const FilterSelection = (props: Props): JSX.Element => {
         value: key,
         label: `${key} (${value})`,
       }));
-
-    newSelectItems.push({
-      group: "RSVP STATUS",
-      items: [RsvpResponse.ACCEPTED, RsvpResponse.DECLINED, RsvpResponse.NO_RESPONSE],
-    });
 
     if (missingItemOptions.length > 0) {
       newSelectItems.push({
@@ -66,7 +62,7 @@ const FilterSelection = (props: Props): JSX.Element => {
 
   return (
     <MultiSelect
-      w="50%"
+      w={{ base: "100%", md: "25%" }}
       data={selectItems}
       placeholder={`Filter Guests (${totalGuests})`}
       value={filters}

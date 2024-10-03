@@ -11,11 +11,13 @@ import {
 } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
-import { updateGroup } from "@spiel-wedding/hooks/guests";
+import { getGroupById, updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { getGuestsForEvent } from "@spiel-wedding/util";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useState } from "react";
 import GuestBookForm from "../GuestBookForm";
@@ -86,17 +88,23 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
       setError("An error occurred while saving your RSVP. Please try again later");
     } else {
       nextStep();
-      await sendMail({ group: form.values, events });
-      await revalidatePage("/");
+
+      const groupWithUpdatedResponses = await getGroupById(updatedGroup.group_id);
+
+      if (groupWithUpdatedResponses) {
+        await sendMail({ group: groupWithUpdatedResponses, events });
+        await revalidatePage("/");
+      }
     }
   };
 
   const nextStep = (): void =>
     setCurrentStep((current) => {
-      if (
-        (current === 0 && !form.isValid("guests")) ||
-        (current !== 0 && form.validate().hasErrors)
-      ) {
+      if (current > 0 && form.validate().hasErrors) {
+        showNotification({
+          color: "yellow",
+          message: "Please fill out all required fields.",
+        });
         return current;
       }
       return current < TOTAL_STEPS ? current + 1 : current;
@@ -124,12 +132,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
             </Title>
 
             {events.map((event) => {
-              const guestsInvitedToEvent = form.values.guests.filter(
-                (guest) =>
-                  guest.event_responses.some(
-                    (response) => response.eventId === event.event_id
-                  ) || guest.nameUnknown
-              );
+              const guestsInvitedToEvent = getGuestsForEvent(event, form.values.guests);
 
               if (guestsInvitedToEvent.length === 0) {
                 return <></>;
@@ -167,14 +170,18 @@ const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
 
         <Stepper.Step label="Leave a note">
           <Title order={4} fw="normal" ta="center">
-            Leave a note for Sedona and Zach. (Optional)
+            Leave a note for Sedona and Zach
           </Title>
+
+          <Alert color="blue" my="md" w="fit-content">
+            Feel free to leave a message below! This is not required to save your RSVP.
+          </Alert>
 
           <GuestBookForm
             name={`${form.values.guests[0].firstName} ${form.values.guests[0].lastName}`}
             email={form.values.email}
             handleSubmit={handleSubmit}
-            handleSubmitWithoutMessage
+            isMessageRequred={false}
             customButtonLabel="Save RSVP"
           />
         </Stepper.Step>

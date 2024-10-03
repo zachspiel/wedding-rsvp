@@ -1,19 +1,28 @@
 "use client";
 
-import { Button, Group, SimpleGrid, Textarea, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Progress,
+  SimpleGrid,
+  Text,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useLocalStorage } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import saveGuestMessage from "./action";
+import { useState } from "react";
+import { saveGuestMessage, sendEmailForNewComment } from "./action";
 
 interface Props {
   name?: string;
   email?: string;
   handleSubmit: (message: GuestMessage[]) => void;
   customButtonLabel?: string;
-  handleSubmitWithoutMessage?: boolean;
+  isMessageRequred?: boolean;
 }
 
 const GuestBookForm = ({
@@ -21,12 +30,14 @@ const GuestBookForm = ({
   email,
   handleSubmit,
   customButtonLabel,
-  handleSubmitWithoutMessage,
+  isMessageRequred,
 }: Props): JSX.Element => {
+  const [isSaving, setIsSaving] = useState(false);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
     key: "guestMessages",
     defaultValue: [],
   });
+  const [progress, setProgress] = useState(0);
 
   const form = useForm({
     initialValues: {
@@ -35,7 +46,7 @@ const GuestBookForm = ({
       message: "",
       isVisible: true,
     },
-    validate: !handleSubmitWithoutMessage
+    validate: isMessageRequred
       ? {
           name: isNotEmpty("Please enter your name to sign the guest book."),
           email: isEmail("Please enter a valid email."),
@@ -47,21 +58,41 @@ const GuestBookForm = ({
   const saveMessage = async (
     newGuestMessage: Omit<GuestMessage, "id">
   ): Promise<void> => {
-    if (handleSubmitWithoutMessage && isAnyFieldEmpty(newGuestMessage)) {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+    if (!isMessageRequred && isAnyFieldEmpty(newGuestMessage)) {
+      setProgress(100);
       handleSubmit([]);
     } else {
       const guestMessage = await saveGuestMessage(newGuestMessage);
+      setProgress(33);
 
       if (!guestMessage) {
         showCustomFailureNotification(
           "An error occurred while signing the guest book. Please try again later!"
         );
+
+        setProgress(100);
       } else {
         setLocalMessages([...localMessages, guestMessage.id]);
+
+        setProgress(66);
+
         handleSubmit([guestMessage]);
+
+        await sendEmailForNewComment(guestMessage);
+        setProgress(80);
+
         await revalidatePage("/");
+        setProgress(100);
+
+        form.reset();
       }
     }
+    setIsSaving(false);
   };
 
   const isAnyFieldEmpty = (newMessage: Omit<GuestMessage, "id">) => {
@@ -70,28 +101,32 @@ const GuestBookForm = ({
   };
 
   return (
-    <form
-      onSubmit={form.onSubmit(() => {
-        saveMessage(form.values);
-        form.reset();
-      })}
-    >
+    <form onSubmit={form.onSubmit(() => saveMessage(form.values))}>
+      {isSaving && progress !== 100 && (
+        <>
+          <Text>Saving...</Text>
+          <Progress color="teal" striped animated value={progress} />
+        </>
+      )}
+
       <SimpleGrid cols={{ xs: 1, sm: 2 }} mt="xl">
         <TextInput
           label="Name"
           placeholder="Your name"
           name="name"
-          withAsterisk
+          withAsterisk={isMessageRequred}
           {...form.getInputProps("name")}
           error={form.errors["name"]}
+          disabled={isSaving}
         />
         <TextInput
           label="Email"
           placeholder="Your email"
           name="email"
-          withAsterisk
+          withAsterisk={isMessageRequred}
           {...form.getInputProps("email")}
           error={form.errors["email"]}
+          disabled={isSaving}
         />
       </SimpleGrid>
 
@@ -103,14 +138,15 @@ const GuestBookForm = ({
         autosize
         name="message"
         mt="md"
-        withAsterisk
+        withAsterisk={isMessageRequred}
         {...form.getInputProps("message")}
         error={form.errors["message"]}
+        disabled={isSaving}
       />
 
       {customButtonLabel && (
         <Group justify="end">
-          <Button type="submit" mt="md">
+          <Button type="submit" mt="md" disabled={isSaving}>
             {customButtonLabel}
           </Button>
         </Group>

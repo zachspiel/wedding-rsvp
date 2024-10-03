@@ -32,24 +32,39 @@ async function getProps() {
   const blurImagePromises = filteredGallery.map((image) => getPlaceholderImage(image));
   const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
 
-  return { events, gallery: imagesWithBlurDataUrls, guestMessages, faqs };
+  const deadline = new Date("9/26/2024");
+  const currentDate = new Date();
+
+  const difference = deadline.getTime() - currentDate.getTime();
+
+  const alertMessage = {
+    info: "Please RSVP no later than September 26th 2024.",
+    color: "teal",
+    hideSearch: false,
+  };
+
+  if (difference < 0) {
+    alertMessage.info = `The RSVP deadline has passed. Please reach out to the bride or groom to make any changes to your RSVP status.`;
+    alertMessage.color = "red";
+    alertMessage.hideSearch = true;
+  }
+
+  return { events, gallery: imagesWithBlurDataUrls, guestMessages, faqs, alertMessage };
 }
 
-interface Props {
-  searchParams: { query: string };
-}
-export default async function Home({ searchParams }: Props) {
-  const { events, gallery, guestMessages, faqs } = await getProps();
+export default async function Home() {
+  const { events, gallery, guestMessages, faqs, alertMessage } = await getProps();
 
   return (
     <main>
       <Jumbotron />
       <ZachAndSedona />
       <WhenAndWhere />
-      <RSVP events={events} />
+      <RSVP events={events} alertMessage={alertMessage} />
       <GuestBook guestMessages={guestMessages} />
       <Registry />
-      <FAQ faqs={faqs} query={searchParams.query} />
+
+      <FAQ faqs={faqs} />
 
       <SectionContainer>
         <SectionTitle id="weddingGallery" title="Upload Reception Photos" />

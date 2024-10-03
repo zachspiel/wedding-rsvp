@@ -1,17 +1,24 @@
-import { ColorSchemeScript, rem } from "@mantine/core";
-import { Providers } from "./Providers";
-import { Metadata } from "next";
-import { Playfair, Poppins } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
-import { Navbar } from "@spiel-wedding/components/navbar";
-import { Footer } from "@spiel-wedding/components/footer";
-import { AppShell, AppShellHeader, AppShellMain, AppShellFooter } from "@mantine/core";
+import "@mantine/carousel/styles.css";
+import "@mantine/charts/styles.css";
+import {
+  AppShell,
+  AppShellFooter,
+  AppShellHeader,
+  AppShellMain,
+  ColorSchemeScript,
+  rem,
+} from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
-import "@mantine/carousel/styles.css";
+import { Footer } from "@spiel-wedding/components/footer";
+import { Navbar } from "@spiel-wedding/components/navbar";
+import { Analytics } from "@vercel/analytics/react";
+import { Metadata } from "next";
+import { Playfair_Display, Poppins } from "next/font/google";
+import { Providers } from "./Providers";
 import "./globals.css";
 
-const playfair = Playfair({
+const playfair = Playfair_Display({
   display: "swap",
   variable: "--font-playfair",
   subsets: ["latin"],

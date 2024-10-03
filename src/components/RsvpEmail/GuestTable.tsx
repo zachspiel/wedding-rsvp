@@ -1,4 +1,3 @@
-import { rem } from "@mantine/core";
 import { Column, Heading, Row, Section, Text } from "@react-email/components";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
@@ -15,9 +14,10 @@ const detailParagraph = {
 };
 
 const dimmedParagraph = {
-  ...detailParagraph,
+  ...paragraph,
   color: "#868e96",
-  marginBottom: "0.625rem",
+  marginTop: "5px",
+  marginBottom: "0.1rem",
 };
 
 const tableRow = {
@@ -69,7 +69,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                 "Address",
                 `${event.address1} ${event.address2 || ""} ${event.city}, ${
                   event.state
-                } ${event.postal}`,
+                } ${event.postal}`
               )}
 
               <Section style={{ marginBottom: "1rem" }} key={event.event_id}>
@@ -82,9 +82,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                   <Row key={guest.guest_id} style={tableRow}>
                     {createColumn(`${guest.firstName} ${guest.lastName}`)}
                     {createColumn(
-                      guest.event_responses.find(
-                        (response) => response.eventId === event.event_id,
-                      )?.rsvp ?? "No Response",
+                      guest.responseMap[event.event_id]?.rsvp ?? "No Response"
                     )}
                   </Row>
                 ))}

@@ -1,43 +1,42 @@
 "use client";
 
 import {
-  Group as MGroup,
-  TextInput,
   ActionIcon,
-  Table,
-  TableThead,
-  TableTr,
-  TableTh,
-  TableTbody,
-  Switch,
-  Modal,
-  UnstyledButton,
-  Text,
-  Center,
-  rem,
-  Checkbox,
   Button,
+  Center,
+  Chip,
+  Divider,
+  Flex,
+  Group as MGroup,
+  Modal,
+  Table,
+  TableTbody,
+  TableTh,
+  TableTr,
+  Text,
+  TextInput,
+  UnstyledButton,
+  rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { SectionTitle } from "@spiel-wedding/components/common";
 import EditGuest from "@spiel-wedding/components/guestList/EditGuest";
 import FilterSelection from "@spiel-wedding/components/guestList/filters/FilterSelection";
 import TableRows from "@spiel-wedding/features/GuestListTable/components/TableRows";
 import {
+  RsvpFilter,
   filterGroups,
   sortGroups,
 } from "@spiel-wedding/features/GuestListTable/tableUtils";
-import { Group } from "@spiel-wedding/types/Guest";
-import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useState } from "react";
-import classes from "./styles.module.css";
-import useSWR from "swr";
-import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
-import Summary from "@spiel-wedding/components/guestList/Summary";
-import AddGroupForm from "../AddGroupForm/AddGroupForm";
-import { SectionTitle } from "@spiel-wedding/components/common";
-import { DownloadGuestList } from "@spiel-wedding/features/DownloadGuestList";
-import BulkEditGroups from "@spiel-wedding/components/guestList/BulkEditGroups";
 import { getEvents } from "@spiel-wedding/hooks/events";
+import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import useSWR from "swr";
+import AddGroupForm from "../AddGroupForm/AddGroupForm";
+import RsvpGraph from "./components/RsvpGraph";
+import classes from "./styles.module.css";
 
 interface ThProps {
   children: React.ReactNode;
@@ -50,16 +49,30 @@ const GuestListTable = (): JSX.Element => {
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
-  const [showRsvpStatus, setShowRsvpStatus] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [eventRsvpFilters, setEventRsvpFilters] = useState<RsvpFilter>();
+
+  useEffect(() => {
+    if (eventRsvpFilters) {
+      return;
+    }
+
+    const newFilters: RsvpFilter = {};
+
+    events.forEach((event) => {
+      newFilters[event.event_id] = [];
+    });
+
+    setEventRsvpFilters(newFilters);
+  }, [events]);
 
   const filteredGroups = filterGroups(
     sortGroups(groups, reverseSortDirection),
     search,
-    filters
+    filters,
+    eventRsvpFilters
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -81,7 +94,7 @@ const GuestListTable = (): JSX.Element => {
     const Icon = reverseSortDirection ? IconChevronUp : IconChevronDown;
 
     return (
-      <Table.Th className={classes.th}>
+      <Table.Th>
         <UnstyledButton onClick={onSort} className={classes.control}>
           <MGroup justify="space-between">
             <Text fw={500} fz="sm">
@@ -96,28 +109,24 @@ const GuestListTable = (): JSX.Element => {
     );
   };
 
+  const isEventFilterEmpty = () => {
+    return Object.values(eventRsvpFilters ?? {}).every((filter) => filter.length === 0);
+  };
+
   return (
     <>
-      <MGroup justify="space-between">
-        <SectionTitle title="All Guests" hideFlowers />
-        <MGroup>
-          <DownloadGuestList groups={groups} />
-          <AddGroupForm events={events} />
-        </MGroup>
+      <SectionTitle title="All Guests" hideFlowers />
+
+      <RsvpGraph groups={groups} events={events} />
+
+      <MGroup justify="end" mx="xl" mb="md">
+        <AddGroupForm events={events} />
       </MGroup>
-      <Summary groups={groups} />
-      <MGroup justify="space-between">
-        <FilterSelection groups={groups} filters={filters} setFilters={setFilters} />
-        <Switch
-          label="Show RSVP Status"
-          checked={showRsvpStatus}
-          onChange={(e): void => setShowRsvpStatus(e.currentTarget.checked)}
-        />
-      </MGroup>
-      <MGroup mb="md">
+
+      <MGroup>
         <TextInput
           placeholder="Search by any field"
-          w="75%"
+          w={{ base: "100%", md: "50%" }}
           value={search}
           onChange={handleSearchChange}
           leftSection={<IconSearch size="0.9rem" stroke={1.5} />}
@@ -129,47 +138,117 @@ const GuestListTable = (): JSX.Element => {
             )
           }
         />
-        <Button disabled={selectedRows.length === 0} onClick={open}>
-          Edit Groups
+        <FilterSelection
+          groups={groups}
+          events={events}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      </MGroup>
+
+      <Divider my="md" />
+
+      <MGroup justify="space-between">
+        <span>
+          Showing{" "}
+          <b>
+            {
+              filteredGroups
+                .flatMap((group) => group.guests)
+                .filter((guest) =>
+                  isEventFilterEmpty()
+                    ? true
+                    : Object.entries(eventRsvpFilters ?? {}).some(([key, filters]) =>
+                        filters.includes(guest.responseMap?.[key]?.rsvp)
+                      )
+                ).length
+            }
+          </b>{" "}
+          of <b>{groups.flatMap((group) => group.guests).length}</b> Guests
+        </span>
+
+        <Button
+          variant="outline"
+          size="sm"
+          radius="xl"
+          display={isEventFilterEmpty() ? "none" : ""}
+          leftSection={<IconX stroke={1.5} />}
+          onClick={() => setEventRsvpFilters(undefined)}
+        >
+          Clear
         </Button>
       </MGroup>
-      <Table highlightOnHover>
-        <TableThead>
+
+      <MGroup mt="lg">
+        {events.map((event, index) => {
+          const handleChange = (responses: string | string[]) => {
+            const updatedFilter = Array.isArray(responses) ? responses : [responses];
+
+            setEventRsvpFilters((current) => ({
+              ...current,
+              [event.event_id]: updatedFilter as RsvpResponse[],
+            }));
+          };
+
+          return (
+            <div key={`event-${event.event_id}-rsvpFilters`}>
+              <Text ta="center">{event.title}</Text>
+              <Chip.Group
+                multiple
+                value={eventRsvpFilters?.[event.event_id] ?? []}
+                onChange={handleChange}
+              >
+                <Flex gap="xs" pb="md">
+                  <Chip
+                    key={`event-${event.event_id}.accepted`}
+                    size="sm"
+                    value={RsvpResponse.ACCEPTED}
+                  >
+                    ✅ Accepted
+                  </Chip>
+                  <Chip
+                    key={`event-${event.event_id}.declined`}
+                    size="sm"
+                    value={RsvpResponse.DECLINED}
+                  >
+                    ❌ Declined
+                  </Chip>
+                  <Chip
+                    key={`event-${event.event_id}.noResponse`}
+                    size="sm"
+                    value={RsvpResponse.NO_RESPONSE}
+                  >
+                    🤷 No Response
+                  </Chip>
+
+                  {index !== events.length - 1 && <Divider orientation="vertical" />}
+                </Flex>
+              </Chip.Group>
+            </div>
+          );
+        })}
+      </MGroup>
+
+      <Table miw={700} highlightOnHover stickyHeader stickyHeaderOffset={100}>
+        <Table.Thead bg="sage-green" c="white">
           <TableTr>
-            <TableTh>
-              <Checkbox
-                checked={selectedRows.length === groups?.length}
-                onChange={(e) => {
-                  if (e.currentTarget.checked) {
-                    setSelectedRows(groups.map(({ group_id }) => group_id));
-                  } else {
-                    setSelectedRows([]);
-                  }
-                }}
-              />
-            </TableTh>
             <Th onSort={updateSortedGroups}>Name</Th>
             <TableTh>Email</TableTh>
             <TableTh>Mailing Address</TableTh>
-            {showRsvpStatus && <TableTh>RSVP Status</TableTh>}
-            <TableTh>Save the Date Sent?</TableTh>
+            <TableTh>Dietary Restrictions</TableTh>
+            <>
+              {events.map((event) => (
+                <TableTh key={`${event.event_id}_table_header`}>
+                  {event.title} {event.emoji}
+                </TableTh>
+              ))}
+            </>
+
             <TableTh />
           </TableTr>
-        </TableThead>
+        </Table.Thead>
         <TableTbody>
-          <TableRows
-            groups={filteredGroups}
-            showRsvpStatus={showRsvpStatus}
-            selectedGroups={selectedRows}
-            openModal={openModal}
-            toggleGroupSelected={({ group_id }) => {
-              if (selectedRows.includes(group_id)) {
-                setSelectedRows(selectedRows.filter((id) => group_id !== id));
-              } else {
-                setSelectedRows([...selectedRows, group_id]);
-              }
-            }}
-          />
+          <TableRows groups={filteredGroups} events={events} openModal={openModal} />
         </TableTbody>
       </Table>
       <Modal opened={opened} onClose={close} title="Edit Guest" size="lg">
@@ -180,15 +259,6 @@ const GuestListTable = (): JSX.Element => {
               close();
               setSelectedGroup(undefined);
             }}
-            events={events ?? []}
-          />
-        )}
-
-        {selectedGroup === undefined && (
-          <BulkEditGroups
-            groups={
-              groups?.filter(({ group_id }) => selectedRows.includes(group_id)) ?? []
-            }
             events={events ?? []}
           />
         )}

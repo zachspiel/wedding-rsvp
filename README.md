@@ -1,6 +1,7 @@
 # Spielberger Wedding Website 💍
 
 [![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
+![Mantine](https://img.shields.io/badge/Mantine-ffffff?style=for-the-badge&logo=Mantine&logoColor=339af0)
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
@@ -8,7 +9,9 @@
 
 Welcome to our Wedding RSVP application! This project is built using Next.js, TypeScript, and Supabase to streamline the RSVP process for our upcoming wedding. Guests can easily confirm their attendance and provide additional details.
 
-This project also includes an admin page for managing the guest list, RSVP status updates, and content modification on the homepage.
+Admin users can also manage the guest list, update RSVP statuses, events, and modify content on the homepage.
+
+The latest published version of the website can be found at [https://www.zachandsedona.com](https://www.zachandsedona.com)
 
 ## Getting Started
 
@@ -57,8 +60,16 @@ yarn dev
 
 ## Testing
 
+This project uses [vitest](https://vitest.dev) to test various operations on the database (add guests, modify RSVPs, view events, etc.).
+
 ```bash
 yarn test
+```
+
+A coverage report can also be generated with the following command.
+
+```bash
+yarn coverage
 ```
 
 ## Project Structure
@@ -84,6 +95,14 @@ The structure for this project is based off of [Bulletproof React](https://githu
     ├── hooks
     └── types
 ```
+
+## Database Schema
+
+The current database schema can be found below. This current design allows groups to have any number of guests who can individually RSVP to multiple events.
+
+The other tables (guestbook, faq, gallery) allow admin users to dynamically modify content on the homepage without having to redeploy the project.
+
+![Database Schema](./images/database-schema.png)
 
 ## License
 

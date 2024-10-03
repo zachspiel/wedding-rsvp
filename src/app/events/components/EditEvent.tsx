@@ -15,6 +15,7 @@ import {
   TextInput,
   useCombobox,
 } from "@mantine/core";
+import { DatePickerInput } from "@mantine/dates";
 import "@mantine/dates/styles.css";
 import { isNotEmpty, useForm } from "@mantine/form";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
@@ -50,6 +51,8 @@ type EditEventForm = Event & {
 
 const EditEvent = ({ event, groups }: Props) => {
   const [search, setSearch] = useState("");
+  const [date, setDate] = useState<Date | null>(new Date(event.date));
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
@@ -88,12 +91,8 @@ const EditEvent = ({ event, groups }: Props) => {
 
     const responsesToRemove = getGuestsForEvent(event, allGuests)
       .filter((guest) => !guests.includes(guest.guest_id))
-      .flatMap(
-        (guest) =>
-          guest.event_responses.find(
-            (response) => response.eventId === event.event_id
-          ) as EventResponse
-      );
+      .flatMap((guest) => guest.responseMap[event.event_id].response_id);
+
     const newEventResponses: EventResponse[] = guests
       .filter((guest) => !guestsForEvent.includes(guest))
       .map((guestId) => ({
@@ -103,13 +102,12 @@ const EditEvent = ({ event, groups }: Props) => {
         rsvp: RsvpResponse.NO_RESPONSE,
       }));
 
-    const updateEventResult = isEventUnmodified
-      ? updatedEvent
-      : await updateEvent(updatedEvent);
+    const updateEventResult =
+      isEventUnmodified && date?.toISOString() == event.date
+        ? updatedEvent
+        : await updateEvent({ ...updatedEvent, date: date?.toISOString() ?? event.date });
 
-    const removedResponses = await deleteEventResponses(
-      responsesToRemove.map((response) => response.response_id)
-    );
+    const removedResponses = await deleteEventResponses(responsesToRemove);
     const newResponses = await createEventResponses(newEventResponses);
 
     if (updateEventResult && removedResponses !== null && newResponses !== null) {
@@ -157,6 +155,13 @@ const EditEvent = ({ event, groups }: Props) => {
           />
         </Grid.Col>
       </Grid>
+
+      <DatePickerInput
+        label="Date"
+        placeholder="Pick date"
+        value={date}
+        onChange={setDate}
+      />
 
       <TextInput
         label="Time"
