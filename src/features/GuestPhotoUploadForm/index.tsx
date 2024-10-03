@@ -111,7 +111,6 @@ const GuestUpload = () => {
       files
     ).map(([id, file]) => {
       return {
-        //file_id: uuid(),
         first_name: form.values.firstName,
         last_name: form.values.lastName,
         file_name: id,

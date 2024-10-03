@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Alert, Button } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
 import { createClient } from "@spiel-wedding/database/server";
 import FAQ from "@spiel-wedding/features/FAQ";
@@ -15,7 +15,7 @@ import { getFAQs } from "@spiel-wedding/hooks/faq";
 import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
 import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
 import { getPlaceholderImage } from "@spiel-wedding/util/generateBlurPlaceholder";
-import { IconExternalLink } from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 async function getProps() {
   const supabase = createClient();
@@ -67,18 +67,23 @@ export default async function Home() {
       <FAQ faqs={faqs} />
 
       <SectionContainer>
-        <SectionTitle id="weddingGallery" title="Upload Reception Photos" />
-
-        <div>
+        <SectionTitle id="weddingGallery" title="Upload Photos" />
+        <Alert
+          variant="light"
+          color="teal"
+          icon={<IconInfoCircle style={{ marginTop: "12px" }} />}
+        >
+          Please use the form to upload photos of the reception.{" "}
           <Button
             component="a"
             href="/weddingPhotos/gallery"
-            target="_blank"
-            rightSection={<IconExternalLink strokeWidth={1.5} />}
+            variant="transparent"
+            color="sage-green"
+            p={0}
           >
-            View reception gallery
+            Click here to view the gallery.
           </Button>
-        </div>
+        </Alert>
         <GuestUpload />
       </SectionContainer>
 

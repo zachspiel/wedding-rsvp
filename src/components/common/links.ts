@@ -13,4 +13,5 @@ export const links: MenuItem[] = [
   { label: "Gallery", link: "/#gallery" },
   { label: "RSVP", link: "/#rsvp" },
   { label: "Upload Photos", link: "/#weddingGallery" },
+  { label: "Reception Photo Gallery", link: "/weddingPhotos/gallery" },
 ];
