@@ -22,7 +22,6 @@ import GoogleDriveImage from "@spiel-wedding/components/guestUpload/GoogleDriveI
 import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
 import { GoogleDriveFile, UploadedPhotoGallery } from "@spiel-wedding/types/Photo";
 import { IconEye, IconShare, IconX } from "@tabler/icons-react";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import useSWR from "swr";
@@ -30,9 +29,10 @@ import classes from "../styles.module.css";
 
 interface Props {
   gallery: UploadedPhotoGallery;
+  searchParams: { [key: string]: string | undefined };
 }
 
-const GuestGallery = ({ gallery }: Props) => {
+const GuestGallery = ({ gallery, searchParams }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>([]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -40,16 +40,14 @@ const GuestGallery = ({ gallery }: Props) => {
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [embla, setEmbla] = useState<Embla | null>(null);
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
-  const searchParams = useSearchParams();
 
   const { data: guestUploadedImages } = useSWR("guestUploadedImages", getGuestImages, {
     fallbackData: [],
   });
 
   useEffect(() => {
-    if (searchParams && searchParams.get("activeIndex")) {
-      setScrollToIndex(parseInt(searchParams.get("activeIndex") ?? "0"));
-      open();
+    if (searchParams["activeIndex"]) {
+      setScrollToIndex(parseInt(searchParams["activeIndex"]));
     }
   }, []);
 

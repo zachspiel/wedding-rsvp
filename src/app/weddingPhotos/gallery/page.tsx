@@ -16,7 +16,11 @@ async function getProps() {
   return { gallery };
 }
 
-export default async function GalleryPage() {
+export default async function GalleryPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
   const { gallery } = await getProps();
 
   return (
@@ -29,7 +33,7 @@ export default async function GalleryPage() {
         </SimpleGrid>
       </Container>
 
-      <GuestGallery gallery={gallery} />
+      <GuestGallery gallery={gallery} searchParams={searchParams} />
     </>
   );
 }
