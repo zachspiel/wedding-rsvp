@@ -7,7 +7,7 @@ import { IconGripVertical } from "@tabler/icons-react";
 import { Button, Modal, rem, Text } from "@mantine/core";
 import cx from "clsx";
 import classes from "../faq.module.css";
-import { updateFAQ, updateFAQs } from "@spiel-wedding/hooks/faq";
+import { updateFAQs } from "@spiel-wedding/hooks/faq";
 import {
   showFailureNotification,
   showSuccessNotification,
@@ -48,7 +48,7 @@ const ModifyFaqOrder = ({ faqs }: Props) => {
 
   const saveFaqs = async () => {
     const updatedFaqs = await updateFAQs(
-      state.map((item, index) => ({ ...item, position: index }))
+      state.map((item, index) => ({ ...item, position: index })),
     );
 
     if (updatedFaqs) {

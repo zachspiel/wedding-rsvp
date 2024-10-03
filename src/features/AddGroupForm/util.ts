@@ -1,7 +1,6 @@
 import { UseFormReturnType } from "@mantine/form";
 import {
   Event,
-  EventResponse,
   Group,
   Guest,
   GuestAffiliation,
@@ -80,7 +79,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): vo
       ...newGuest,
       relationshipType: RelationshipType.PARTNER,
     },
-    1
+    1,
   );
 };
 
@@ -93,17 +92,4 @@ const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void
   });
 };
 
-const createDefaultEventResponse = (): EventResponse => ({
-  response_id: uuid(),
-  guestId: "",
-  eventId: uuid(),
-  rsvp: RsvpResponse.NO_RESPONSE,
-});
-
-export {
-  addChildToGuests,
-  addPartnerToGuests,
-  createDefaultEventResponse,
-  createDefaultGroup,
-  createGuest,
-};
+export { addChildToGuests, addPartnerToGuests, createDefaultGroup, createGuest };

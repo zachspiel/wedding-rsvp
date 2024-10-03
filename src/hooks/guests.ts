@@ -1,5 +1,5 @@
 import { createClient } from "@spiel-wedding/database/client";
-import { Event, Group, Guest, RsvpModification } from "@spiel-wedding/types/Guest";
+import { Event, Group, Guest } from "@spiel-wedding/types/Guest";
 import { TablesUpdate } from "@spiel-wedding/types/supabase.types";
 import { createNewResponse } from "@spiel-wedding/util";
 import { v4 as uuid } from "uuid";
@@ -21,21 +21,6 @@ export const getGroups = async (): Promise<Group[]> => {
   }
 
   return data ?? [];
-};
-
-export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from(GROUP_TABLE)
-    .select("*, guests(*, event_responses(*))")
-    .eq("group_id", groupId)
-    .single();
-
-  if (error) {
-    return;
-  }
-
-  return data;
 };
 
 export const createGroup = async (
@@ -192,13 +177,4 @@ export const deleteGuests = async (
     .select();
 
   return data ?? [];
-};
-
-export const addEntryToRsvpModifications = async (
-  groupId: string
-): Promise<RsvpModification | undefined> => {
-  const supabase = createClient();
-  const { data } = await supabase.from(RSVP_TABLE).insert({ groupId }).select();
-
-  return data?.[0];
 };

@@ -20,12 +20,6 @@ const dimmedParagraph = {
   marginBottom: "0.625rem",
 };
 
-const iconStyles: CSSProperties = {
-  width: rem(18),
-  height: rem(18),
-  marginRight: rem(5),
-};
-
 const tableRow = {
   borderBottom: "0.0625rem solid #dee2e6",
 };
@@ -75,7 +69,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                 "Address",
                 `${event.address1} ${event.address2 || ""} ${event.city}, ${
                   event.state
-                } ${event.postal}`
+                } ${event.postal}`,
               )}
 
               <Section style={{ marginBottom: "1rem" }} key={event.event_id}>
@@ -89,8 +83,8 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                     {createColumn(`${guest.firstName} ${guest.lastName}`)}
                     {createColumn(
                       guest.event_responses.find(
-                        (response) => response.eventId === event.event_id
-                      )?.rsvp ?? "No Response"
+                        (response) => response.eventId === event.event_id,
+                      )?.rsvp ?? "No Response",
                     )}
                   </Row>
                 ))}

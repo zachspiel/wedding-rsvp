@@ -6,14 +6,31 @@ export interface Photo {
   blurDataUrl?: string;
 }
 
-export interface GuestPhotoUploadResult {
-  docId?: string | null;
-  success: boolean;
+/**
+ * Data returned from Google Drive API
+ */
+export interface UploadedPhotoGallery {
+  files: GoogleDriveFile[];
 }
 
-export interface UploadedPhotoGallery {
-  files: {
-    id?: string | null;
-    name?: string | null;
-  }[];
+export interface GoogleDriveFile {
+  id?: string | null;
+  name?: string | null;
+  mimeType?: string | null;
+}
+
+export interface GuestUploadedImage {
+  file_id: string;
+  first_name: string;
+  last_name: string;
+  file_name: string;
+}
+
+export type GuestImageWithLikes = GuestUploadedImage & {
+  guest_image_likes: GuestImageLikes[];
+};
+
+export interface GuestImageLikes {
+  guest_like_id: string;
+  file_id: string;
 }

@@ -1,0 +1,53 @@
+.wrapper {
+  position: relative;
+  margin-bottom: rem(30px);
+}
+
+.dropzone {
+  border-width: rem(1px);
+  padding-bottom: rem(50px);
+  border-style: dashed;
+}
+
+.icon {
+  color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+}
+
+.control {
+  position: absolute;
+  width: rem(250px);
+  left: calc(50% - rem(125px));
+  bottom: rem(-20px);
+}
+
+.uploadButton {
+  outline-width: 1px;
+  outline-offset: 0;
+  outline-color: var(--mantine-color-sage-green-2);
+  outline-style: solid;
+  animation: animateOutline 4s ease infinite;
+}
+
+@keyframes animateOutline {
+  0% {
+    outline-width: 1px;
+    outline-offset: 0;
+    outline-color: rgba(0, 130, 206, 0);
+  }
+
+  10% {
+    outline-color: rgba(24, 102, 40, 0.75);
+  }
+
+  50% {
+    outline-width: 7px;
+    outline-offset: 4px;
+    outline-color: rgba(0, 130, 206, 0);
+  }
+
+  100% {
+    outline-width: 7px;
+    outline-offset: 4px;
+    outline-color: rgba(102, 102, 102, 0);
+  }
+}
