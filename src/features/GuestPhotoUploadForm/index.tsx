@@ -17,7 +17,10 @@ import { FileWithPath } from "@mantine/dropzone";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import { saveGuestUploadedImages } from "@spiel-wedding/hooks/guestUploadedImages";
+import {
+  saveGuestUploadedImages,
+  uploadFileToGuestGallery,
+} from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconCloudUpload, IconExternalLink } from "@tabler/icons-react";
 import { useState } from "react";
@@ -26,7 +29,10 @@ import ImagePreview from "./components/ImagePreview";
 import classes from "./guestUpload.module.css";
 
 interface DownloadProgress {
-  [file: string]: number;
+  [file: string]: {
+    progress: number;
+    completed: boolean;
+  };
 }
 
 const GuestUpload = () => {
@@ -61,85 +67,42 @@ const GuestUpload = () => {
       message: "Now uploading...",
     });
 
-    await Promise.all(
-      Object.entries(files).map(async ([id, file]) => {
-        const formData = new FormData();
-
-        formData.set("file", file);
-        formData.set("size", `${file.size}`);
-        formData.set("mime", file.type);
-        formData.set("fileName", id);
-
-        setDownloadProgress((curr) => ({ ...curr, [id]: 0 }));
-
-        const response = await fetch("/api/upload", { method: "POST", body: formData });
-
-        if (!response.ok || !response.body) {
-          showNotification({
-            color: "red",
-            message: " Error getting response from upload",
-          });
-
-          return;
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) {
-            break;
-          }
-          const decodedChunk = decoder.decode(value, { stream: true });
-
-          // If two messages were sent at same time
-          if (decodedChunk.includes("}{")) {
-            const chunks = decodedChunk
-              .split("}{")
-              .filter((chunk) => chunk.length > 0)
-              .map((chunk) => (!chunk.startsWith("{") ? "{" + chunk : chunk));
-
-            chunks.forEach(updateDownloadProgress);
-          } else {
-            updateDownloadProgress(decodedChunk);
-          }
-        }
+    await Promise.allSettled(
+      Object.entries(files).map(([id, file]) => {
+        uploadFileToGuestGallery(file, id, (progress) =>
+          setDownloadProgress((current) => ({
+            ...current,
+            [id]: { progress, completed: progress === 100 },
+          }))
+        ).catch((error) => {
+          setDownloadProgress((current) => ({
+            ...current,
+            [id]: { progress: current[id].progress, completed: true },
+          }));
+        });
       })
-    );
-
-    const successfulUploads: Omit<GuestUploadedImage, "file_id">[] = Object.entries(
-      files
-    ).map(([id, file]) => {
-      return {
-        first_name: form.values.firstName,
-        last_name: form.values.lastName,
-        file_name: id,
-      };
-    });
-
-    open();
-
-    await saveGuestUploadedImages(successfulUploads);
-  };
-
-  const updateDownloadProgress = (decodedChunk: string) => {
-    try {
-      const data = JSON.parse(decodedChunk);
-
-      if (data.progress) {
-        setDownloadProgress((curr) => ({
-          ...curr,
-          [data.progress.file]: data.progress.progress,
-        }));
-      } else if (data.success) {
-      } else if (data.success !== undefined && !data.success) {
+    )
+      .catch((error) => {
         showNotification({
           color: "red",
-          message: "An error occurred. Please try again later.",
+          message: "Error while uploading file. Please try again later.",
         });
-      }
-    } catch (exception) {}
+      })
+      .then(async () => {
+        const successfulUploads: Omit<GuestUploadedImage, "file_id">[] = Object.entries(
+          files
+        ).map(([id, file]) => {
+          return {
+            first_name: form.values.firstName,
+            last_name: form.values.lastName,
+            file_name: id,
+            mime_type: file.type,
+          };
+        });
+
+        await saveGuestUploadedImages(successfulUploads);
+      })
+      .then(() => open());
   };
 
   const removeFile = (id: string) => {
@@ -183,7 +146,7 @@ const GuestUpload = () => {
 
         {filesAreNotEmpty && (
           <div>
-            <Title order={4}>Uploaded Files</Title>
+            <Title order={4}>Uploaded Files ({Object.keys(files).length})</Title>
             <ScrollArea.Autosize
               px="sm"
               mah={250}
@@ -192,7 +155,9 @@ const GuestUpload = () => {
               {Object.entries(files).map(([id, file], index) => {
                 return (
                   <>
-                    {index === 0 ? <Space dir="vertical" mt="sm" /> : null}
+                    {index === 0 ? (
+                      <Space dir="vertical" mt="sm" key={`${id}-spacer`} />
+                    ) : null}
 
                     <ImagePreview
                       key={id}
@@ -200,7 +165,7 @@ const GuestUpload = () => {
                       file={file}
                       onDelete={removeFile}
                       showDivider={index !== Object.values(files).length - 1}
-                      downloadProgress={downloadProgress?.[id]}
+                      downloadProgress={downloadProgress?.[id]?.progress}
                     />
                   </>
                 );
@@ -224,23 +189,31 @@ const GuestUpload = () => {
       </form>
 
       <Modal opened={opened} withCloseButton={false} onClose={close}>
-        {Object.entries(downloadProgress).every(([id, progress]) => {
-          return progress === 100;
+        {Object.entries(downloadProgress).every(([id, download]) => {
+          return download.progress === 100;
         }) ? (
           <Alert color="green" title="Success">
             All files uploaded successfully!
           </Alert>
         ) : (
           <>
-            <Title order={3}>An error occurred while uploading the following files</Title>
+            {Object.values(downloadProgress).every((download) => download.completed) && (
+              <>
+                <Title order={3}>
+                  An error occurred while uploading the following files
+                </Title>
 
-            {Object.entries(downloadProgress)
-              .filter(([id, progress]) => progress !== 100)
-              .map(([id, file]) => (
-                <Text mb="md" key={id}>
-                  {files[id].name}
-                </Text>
-              ))}
+                <ScrollArea.Autosize mah={300}>
+                  {Object.entries(downloadProgress)
+                    .filter(([id, download]) => download.progress !== 100)
+                    .map(([id, file]) => (
+                      <Text mb="md" key={id}>
+                        {files[id].name}
+                      </Text>
+                    ))}
+                </ScrollArea.Autosize>
+              </>
+            )}
           </>
         )}
 

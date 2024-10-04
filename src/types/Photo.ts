@@ -24,6 +24,7 @@ export interface GuestUploadedImage {
   first_name: string;
   last_name: string;
   file_name: string;
+  mime_type: string;
 }
 
 export type GuestImageWithLikes = GuestUploadedImage & {

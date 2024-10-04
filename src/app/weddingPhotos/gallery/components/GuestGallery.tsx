@@ -12,27 +12,26 @@ import {
   MultiSelect,
   rem,
   SimpleGrid,
+  Skeleton,
   Stack,
   Text,
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications";
-import GoogleDriveImage from "@spiel-wedding/components/guestUpload/GoogleDriveImage";
+import { createClient } from "@spiel-wedding/database/client";
 import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
-import { GoogleDriveFile, UploadedPhotoGallery } from "@spiel-wedding/types/Photo";
-import { IconEye, IconShare, IconX } from "@tabler/icons-react";
+import { GuestImageWithLikes } from "@spiel-wedding/types/Photo";
+import { IconEye, IconX } from "@tabler/icons-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
 import useSWR from "swr";
 import classes from "../styles.module.css";
 
 interface Props {
-  gallery: UploadedPhotoGallery;
   searchParams: { [key: string]: string | undefined };
 }
 
-const GuestGallery = ({ gallery, searchParams }: Props) => {
+const GuestGallery = ({ searchParams }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>([]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -41,15 +40,9 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
   const [embla, setEmbla] = useState<Embla | null>(null);
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
 
-  const { data: guestUploadedImages } = useSWR("guestUploadedImages", getGuestImages, {
+  const { data: gallery, isLoading } = useSWR("guest_gallery", getGuestImages, {
     fallbackData: [],
   });
-
-  useEffect(() => {
-    if (searchParams["activeIndex"]) {
-      setScrollToIndex(parseInt(searchParams["activeIndex"]));
-    }
-  }, []);
 
   useEffect(() => {
     if (!opened) {
@@ -61,22 +54,16 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
     }
   }, [opened, embla]);
 
-  const matchingImagesForFilters = gallery.files
+  const matchingImagesForFilters = gallery
     .filter((file) => {
       if (!mimeFilter || mimeFilter.length === 0) {
         return true;
       }
 
-      return mimeFilter.some((filter) => file.mimeType?.includes(filter));
+      return mimeFilter.some((filter) => file.mime_type.includes(filter));
     })
     .filter((file) => {
-      const matchingGuestPhoto = guestUploadedImages.find(
-        (image) => image.file_name === file.name
-      );
-
-      const name = matchingGuestPhoto
-        ? `${matchingGuestPhoto?.first_name} ${matchingGuestPhoto?.last_name}`
-        : "";
+      const name = file.first_name + " " + file.last_name;
 
       if (namesFilter && namesFilter?.length > 0) {
         return namesFilter.includes(name);
@@ -86,29 +73,34 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
     });
 
   const createImageCard = (
-    file: GoogleDriveFile,
+    file: GuestImageWithLikes,
     index: number,
     height?: string | number
   ) => {
-    const matchingGuestPhoto = guestUploadedImages.find(
-      (image) => image.file_name === file.name
-    );
-
-    const name = matchingGuestPhoto
-      ? `${matchingGuestPhoto?.first_name} ${matchingGuestPhoto?.last_name}`
-      : "";
-
-    const url = `http://localhost:3000/weddingPhotos/gallery?activeIndex=${index}`;
+    const supabase = createClient();
+    const name = file.first_name + " " + file.last_name;
+    const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
-      <Stack key={file.id} gap={0} w="100%" id={file.name || undefined}>
+      <Stack key={file.file_id} gap={0} w="100%" id={file.file_name || undefined}>
         <Card p={0} radius={0} className={classes.card} h={height}>
-          <GoogleDriveImage
-            id={file?.id ?? ""}
-            key={file?.id}
-            mimeType={file?.mimeType || ""}
-            guestUploadedImages={guestUploadedImages}
-          />
+          {file.mime_type.includes("video") ? (
+            <video height="100%" controls>
+              <source src={data.publicUrl} type={file.mime_type} />
+            </video>
+          ) : (
+            <Image
+              src={data.publicUrl}
+              fill
+              style={{
+                objectFit: "fill",
+                objectPosition: "top",
+                transform: "translate3d(0, 0, 0)",
+              }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+              alt={file.file_id}
+            />
+          )}
         </Card>
         <Flex justify="space-between" className={classes.footer} w="100%" p="xs">
           <Center>
@@ -132,23 +124,6 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
                 />
               </ActionIcon>
             )}
-
-            <CopyToClipboard
-              text={url}
-              onCopy={() => {
-                showNotification({
-                  color: "blue",
-                  message: "Image link copied",
-                });
-              }}
-            >
-              <ActionIcon className={classes.action}>
-                <IconShare
-                  style={{ width: rem(16), height: rem(16) }}
-                  color={theme.colors.blue[6]}
-                />
-              </ActionIcon>
-            </CopyToClipboard>
           </Group>
         </Flex>
       </Stack>
@@ -163,8 +138,8 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
         </Text>
 
         <Text>
-          Showing <b>{matchingImagesForFilters.length}</b> of{" "}
-          <b>{gallery.files.length}</b> items
+          Showing <b>{matchingImagesForFilters.length}</b> of <b>{gallery.length}</b>{" "}
+          items
         </Text>
       </Flex>
 
@@ -178,15 +153,14 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
 
         <MultiSelect
           data={Array.from(
-            new Set(
-              guestUploadedImages.map((image) => `${image.first_name} ${image.last_name}`)
-            )
+            new Set(gallery.map((image) => `${image.first_name} ${image.last_name}`))
           )}
           value={namesFilter}
           onChange={setNameFilter}
           placeholder="Filter by guest"
         />
       </Flex>
+
       <SimpleGrid
         mx="md"
         spacing="xs"
@@ -203,6 +177,16 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
         {matchingImagesForFilters.map((file, index) => {
           return createImageCard(file, index, 300);
         })}
+
+        {isLoading && (
+          <>
+            <Skeleton width={300} height={300} />
+            <Skeleton width={300} height={300} />
+            <Skeleton width={300} height={300} />
+            <Skeleton width={300} height={300} />
+            <Skeleton width={300} height={300} />
+          </>
+        )}
       </SimpleGrid>
 
       <Modal
@@ -231,7 +215,7 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
         >
           {matchingImagesForFilters.map((file, index) => {
             return (
-              <Carousel.Slide key={file.id + "slide"}>
+              <Carousel.Slide key={file.file_id + "slide"}>
                 {createImageCard(file, index, "80vh")}
               </Carousel.Slide>
             );

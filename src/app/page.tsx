@@ -67,7 +67,7 @@ export default async function Home() {
       <FAQ faqs={faqs} />
 
       <SectionContainer>
-        <SectionTitle id="weddingGallery" title="Upload Photos" />
+        <SectionTitle id="uploadPhotos" title="Upload Photos" />
         <Alert
           variant="light"
           color="teal"
@@ -80,7 +80,7 @@ export default async function Home() {
             component="a"
             href="/weddingPhotos/gallery"
             variant="transparent"
-            color="sage-green"
+            color="blue"
             p={0}
           >
             Click here to view the gallery.

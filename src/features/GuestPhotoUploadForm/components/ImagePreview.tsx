@@ -1,6 +1,6 @@
 import { ActionIcon, Divider, Flex, Image, Progress, Space } from "@mantine/core";
 import { FileWithPath } from "@mantine/dropzone";
-import { IconTrash, IconVideo } from "@tabler/icons-react";
+import { IconTrash } from "@tabler/icons-react";
 
 interface Props {
   id: string;
@@ -12,11 +12,18 @@ interface Props {
 }
 const ImagePreview = ({ id, file, downloadProgress, showDivider, onDelete }: Props) => {
   const getPreview = () => {
-    if (file.type.includes("video")) {
-      return <IconVideo width={50} height={50} strokeWidth={1.5} />;
-    }
-
     const imageUrl = URL.createObjectURL(file);
+    if (file.type.includes("video")) {
+      return (
+        <video width="300" height="200" controls>
+          <source
+            src={imageUrl}
+            onLoad={() => URL.revokeObjectURL(imageUrl)}
+            type={file.type}
+          />
+        </video>
+      );
+    }
 
     return (
       <Image
@@ -31,11 +38,11 @@ const ImagePreview = ({ id, file, downloadProgress, showDivider, onDelete }: Pro
 
   return (
     <div style={{ position: "relative", width: "100%" }}>
-      <Flex justify="space-between">
+      <Flex justify="space-between" align="center">
         {getPreview()}
 
         {!downloadProgress && (
-          <ActionIcon color="red" onClick={() => onDelete(id)}>
+          <ActionIcon color="red" onClick={() => onDelete(id)} mr="lg">
             <IconTrash strokeWidth={1.5} />
           </ActionIcon>
         )}

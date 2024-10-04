@@ -1,28 +1,11 @@
 import { Container, SimpleGrid, Title } from "@mantine/core";
-import { getDriveServive } from "@spiel-wedding/hooks/googleDrive";
-import { UploadedPhotoGallery } from "@spiel-wedding/types/Photo";
 import GuestGallery from "./components/GuestGallery";
-
-async function getProps() {
-  const driveService = getDriveServive();
-
-  const response = await driveService.files.list({
-    q: `'${process.env.PARENT_FOLDER}' in parents`,
-    fields: "nextPageToken, files(id, name, mimeType)",
-  });
-
-  const gallery: UploadedPhotoGallery = { files: response.data.files ?? [] };
-
-  return { gallery };
-}
 
 export default async function GalleryPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const { gallery } = await getProps();
-
   return (
     <>
       <Container>
@@ -33,7 +16,7 @@ export default async function GalleryPage({
         </SimpleGrid>
       </Container>
 
-      <GuestGallery gallery={gallery} searchParams={searchParams} />
+      <GuestGallery searchParams={searchParams} />
     </>
   );
 }
