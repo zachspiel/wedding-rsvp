@@ -11,6 +11,7 @@ const GoogleDriveImage = ({ id, mimeType }: Props) => {
   if (mimeType.includes("video")) {
     return (
       <iframe
+        allowFullScreen
         src={`https://drive.google.com/file/d/${id}/preview`}
         style={{ flexGrow: 1, border: 0, margin: 0, padding: 0 }}
       />

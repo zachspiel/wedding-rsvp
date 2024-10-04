@@ -157,7 +157,7 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
 
   return (
     <>
-      <Flex justify="space-between" mx="lg" mt="lg">
+      <Flex justify="space-between" mx="lg" mt="lg" wrap="wrap">
         <Text fw="bolder" ml="lg" size="lg">
           Filters
         </Text>
@@ -168,7 +168,7 @@ const GuestGallery = ({ gallery, searchParams }: Props) => {
         </Text>
       </Flex>
 
-      <Flex ml="lg" w="100%" gap="md">
+      <Flex ml="lg" w="100%" gap="md" wrap="wrap">
         <Chip.Group multiple value={mimeFilter} onChange={setMimeFilter}>
           <Group justify="center">
             <Chip value="image">Images</Chip>

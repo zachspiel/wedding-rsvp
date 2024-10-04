@@ -1,4 +1,4 @@
-import { Alert, Button } from "@mantine/core";
+import { Alert, Button, Text } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
 import { createClient } from "@spiel-wedding/database/server";
 import FAQ from "@spiel-wedding/features/FAQ";
@@ -73,7 +73,9 @@ export default async function Home() {
           color="teal"
           icon={<IconInfoCircle style={{ marginTop: "12px" }} />}
         >
-          Please use the form to upload photos of the reception.{" "}
+          <Text size="sm" inline>
+            Please use the form to upload photos of the reception.
+          </Text>
           <Button
             component="a"
             href="/weddingPhotos/gallery"

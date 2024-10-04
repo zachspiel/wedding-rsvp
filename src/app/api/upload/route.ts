@@ -74,6 +74,8 @@ export async function POST(request: Request) {
       await writer.close();
     })
     .catch(async (error) => {
+      console.log(error);
+
       await writer.write(
         encoder.encode(
           JSON.stringify({

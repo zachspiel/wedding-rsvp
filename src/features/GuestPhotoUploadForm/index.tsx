@@ -7,6 +7,7 @@ import {
   Group,
   Modal,
   ScrollArea,
+  SimpleGrid,
   Space,
   Text,
   TextInput,
@@ -160,7 +161,7 @@ const GuestUpload = () => {
   return (
     <>
       <form onSubmit={form.onSubmit(handleUpload)}>
-        <Flex>
+        <SimpleGrid cols={{ base: 1, md: 2 }}>
           <TextInput
             {...form.getInputProps("firstName")}
             placeholder="Enter your first name"
@@ -176,7 +177,7 @@ const GuestUpload = () => {
             error={form.errors.lastName}
             mb="md"
           />
-        </Flex>
+        </SimpleGrid>
 
         <ImageDropzone files={files} setFiles={setFiles} />
 
