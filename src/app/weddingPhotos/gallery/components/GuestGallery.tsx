@@ -13,7 +13,6 @@ import {
   rem,
   SimpleGrid,
   Skeleton,
-  Stack,
   Text,
   useMantineTheme,
 } from "@mantine/core";
@@ -82,10 +81,10 @@ const GuestGallery = ({ searchParams }: Props) => {
     const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
-      <Stack key={file.file_id} gap={0} w="100%" id={file.file_name || undefined}>
+      <div key={file.file_id} id={file.file_name || undefined}>
         <Card p={0} radius={0} className={classes.card} h={height}>
           {file.mime_type.includes("video") ? (
-            <video height="100%" controls>
+            <video controls height="100%" width="100%">
               <source src={data.publicUrl} type={file.mime_type} />
             </video>
           ) : (
@@ -126,7 +125,7 @@ const GuestGallery = ({ searchParams }: Props) => {
             )}
           </Group>
         </Flex>
-      </Stack>
+      </div>
     );
   };
 
@@ -199,10 +198,10 @@ const GuestGallery = ({ searchParams }: Props) => {
         closeButtonProps={{
           icon: <IconX color="#ffffff" />,
           bg: "#717769",
-          size: isMobile ? "lg" : "",
           c: "white",
-          p: "sm",
-          children: "close",
+          mr: "md",
+          w: "fit-content",
+          children: <Text>Close</Text>,
         }}
         classNames={classes}
       >
@@ -210,6 +209,7 @@ const GuestGallery = ({ searchParams }: Props) => {
           slideSize={{ base: "100%", lg: "50%" }}
           slideGap={"sm"}
           loop
+          withIndicators
           classNames={classes}
           getEmblaApi={setEmbla}
         >

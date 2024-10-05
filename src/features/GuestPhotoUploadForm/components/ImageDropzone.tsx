@@ -18,7 +18,8 @@ const ImageDropzone = ({ files, setFiles }: Props) => {
   return (
     <div className={classes.wrapper}>
       <Dropzone
-        mt="lg"
+        mt="md"
+        maxSize={5 * 1024 ** 9}
         openRef={openRef}
         onDrop={(newFiles) => {
           setFiles((curr) => {
@@ -65,11 +66,11 @@ const ImageDropzone = ({ files, setFiles }: Props) => {
             </Dropzone.Idle>
 
             <div>
-              <Text size="xl" ta="center" inline>
-                Drag images and videos here or click to select files
+              <Text size="xl" ta="center" inline px={{ base: "sm", md: "" }}>
+                Drag files here or click to select files
               </Text>
               <Text size="sm" c="dimmed" ta="center" inline mt={7}>
-                Attach as many files as you like, each file should not exceed 30mb.
+                Attach as many files as you like, each file should not exceed 5GB.
               </Text>
             </div>
           </Group>
@@ -78,7 +79,7 @@ const ImageDropzone = ({ files, setFiles }: Props) => {
 
       <Button
         className={classes.control}
-        size="md"
+        size="sm"
         radius="xl"
         onClick={() => openRef.current?.()}
         leftSection={<IconFolderOpen strokeWidth={1.5} />}

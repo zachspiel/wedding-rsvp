@@ -9,7 +9,6 @@ import {
   ScrollArea,
   SimpleGrid,
   Space,
-  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -21,7 +20,6 @@ import {
   saveGuestUploadedImages,
   uploadFileToGuestGallery,
 } from "@spiel-wedding/hooks/guestUploadedImages";
-import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconCloudUpload, IconExternalLink } from "@tabler/icons-react";
 import { useState } from "react";
 import ImageDropzone from "./components/ImageDropzone";
@@ -67,7 +65,7 @@ const GuestUpload = () => {
       message: "Now uploading...",
     });
 
-    await Promise.allSettled(
+    await Promise.all(
       Object.entries(files).map(([id, file]) => {
         uploadFileToGuestGallery(file, id, (progress) =>
           setDownloadProgress((current) => ({
@@ -82,27 +80,24 @@ const GuestUpload = () => {
         });
       })
     )
+      .then(() => saveImagePathsToDatabase())
       .catch((error) => {
         showNotification({
           color: "red",
           message: "Error while uploading file. Please try again later.",
         });
-      })
-      .then(async () => {
-        const successfulUploads: Omit<GuestUploadedImage, "file_id">[] = Object.entries(
-          files
-        ).map(([id, file]) => {
-          return {
-            first_name: form.values.firstName,
-            last_name: form.values.lastName,
-            file_name: id,
-            mime_type: file.type,
-          };
-        });
+      });
+  };
 
-        await saveGuestUploadedImages(successfulUploads);
-      })
-      .then(() => open());
+  const saveImagePathsToDatabase = async () => {
+    const successfulUploads = Object.entries(files).map(([id, file]) => ({
+      first_name: form.values.firstName,
+      last_name: form.values.lastName,
+      file_name: id,
+      mime_type: file.type,
+    }));
+
+    await saveGuestUploadedImages(successfulUploads).then(() => open());
   };
 
   const removeFile = (id: string) => {
@@ -114,13 +109,6 @@ const GuestUpload = () => {
     }
   };
 
-  const closeModal = () => {
-    form.reset();
-    setDownloadProgress({});
-    close();
-    setFiles({});
-  };
-
   return (
     <>
       <form onSubmit={form.onSubmit(handleUpload)}>
@@ -130,7 +118,7 @@ const GuestUpload = () => {
             placeholder="Enter your first name"
             label="First Name"
             error={form.errors.firstName}
-            mb="md"
+            mb={{ base: 0, md: "md" }}
             mr="md"
           />
           <TextInput
@@ -146,12 +134,18 @@ const GuestUpload = () => {
 
         {filesAreNotEmpty && (
           <div>
-            <Title order={4}>Uploaded Files ({Object.keys(files).length})</Title>
-            <ScrollArea.Autosize
-              px="sm"
-              mah={250}
-              style={{ border: "1px solid var(--mantine-color-gray-2)" }}
-            >
+            <Flex justify="space-between" mb="md" align="center">
+              <Title order={4}>Uploaded Files ({Object.keys(files).length})</Title>
+              <Button
+                leftSection={<IconCloudUpload strokeWidth={1.5} />}
+                type="submit"
+                className={filesAreNotEmpty ? classes.uploadButton : undefined}
+              >
+                Save photos to gallery
+              </Button>
+            </Flex>
+
+            <ScrollArea.Autosize mah={350} type="always" bg="gray-3">
               {Object.entries(files).map(([id, file], index) => {
                 return (
                   <>
@@ -173,19 +167,6 @@ const GuestUpload = () => {
             </ScrollArea.Autosize>
           </div>
         )}
-
-        {filesAreNotEmpty && (
-          <Flex justify="end">
-            <Button
-              mt="md"
-              leftSection={<IconCloudUpload strokeWidth={1.5} />}
-              type="submit"
-              className={filesAreNotEmpty ? classes.uploadButton : undefined}
-            >
-              Save photos to gallery
-            </Button>
-          </Flex>
-        )}
       </form>
 
       <Modal opened={opened} withCloseButton={false} onClose={close}>
@@ -206,10 +187,16 @@ const GuestUpload = () => {
                 <ScrollArea.Autosize mah={300}>
                   {Object.entries(downloadProgress)
                     .filter(([id, download]) => download.progress !== 100)
-                    .map(([id, file]) => (
-                      <Text mb="md" key={id}>
-                        {files[id].name}
-                      </Text>
+                    .map(([id, file], index) => (
+                      <ImagePreview
+                        key={id}
+                        id={id}
+                        file={files[id]}
+                        failedToDownload
+                        onDelete={() => {}}
+                        showDivider={index !== Object.values(files).length - 1}
+                        downloadProgress={downloadProgress?.[id]?.progress}
+                      />
                     ))}
                 </ScrollArea.Autosize>
               </>
@@ -218,7 +205,15 @@ const GuestUpload = () => {
         )}
 
         <Group justify="end" mt="lg">
-          <Button variant="outline" onClick={closeModal}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              form.reset();
+              setDownloadProgress({});
+              close();
+              setFiles({});
+            }}
+          >
             Close
           </Button>
           <Button
