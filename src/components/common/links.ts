@@ -12,4 +12,6 @@ export const links: MenuItem[] = [
   { label: "FAQ", link: "/#faq" },
   { label: "Gallery", link: "/#gallery" },
   { label: "RSVP", link: "/#rsvp" },
+  { label: "Upload Photos", link: "/#uploadPhotos" },
+  { label: "Reception Photo Gallery", link: "/weddingPhotos/gallery" },
 ];

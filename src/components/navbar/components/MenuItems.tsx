@@ -54,7 +54,7 @@ const MenuItems = ({ onClick }: Props): JSX.Element => {
           className={cx(
             classes.link,
             link.className,
-            link.label === "RSVP" ? classes.highlightedLink : undefined
+            link.label === "Upload Photos" ? classes.highlightedLink : undefined
           )}
         >
           {link.label}
