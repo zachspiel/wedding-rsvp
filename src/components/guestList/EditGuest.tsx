@@ -7,6 +7,7 @@ import {
   Group as MGroup,
   Radio,
   Tabs,
+  TextInput,
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -91,6 +92,9 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
               />
             );
           })}
+
+          <TextInput label="Table" {...form.getInputProps("table")} />
+
           <GuestAffiliationSelection form={form} />
 
           <Radio.Group
