@@ -14,28 +14,31 @@ import {
   Skeleton,
   Text,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { createClient } from "@spiel-wedding/database/client";
 import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
-import { GuestImageWithLikes } from "@spiel-wedding/types/Photo";
+import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconVideo, IconX } from "@tabler/icons-react";
+import cx from "clsx";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import classes from "../styles.module.css";
+import DownloadButton from "./DownloadButton";
+import LikeButton from "./LikeButton";
 
-interface Props {
-  searchParams: { [key: string]: string | undefined };
-}
-
-const GuestGallery = ({ searchParams }: Props) => {
+const GuestGallery = () => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>([]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [embla, setEmbla] = useState<Embla | null>(null);
   const [thumbnail, setThumbnail] = useState<Embla | null>(null);
-
+  const [activeSlide, setActiveSlide] = useState(0);
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
+  const [likes, setLikes] = useLocalStorage<string[]>({
+    key: "liked_images",
+    defaultValue: [],
+  });
 
   const { data: gallery, isLoading } = useSWR("guest_gallery", getGuestImages, {
     fallbackData: [],
@@ -69,17 +72,12 @@ const GuestGallery = ({ searchParams }: Props) => {
       return true;
     });
 
-  const createImageCard = (file: GuestImageWithLikes, index: number) => {
+  const createImageCard = (file: GuestUploadedImage, index: number) => {
     const supabase = createClient();
     const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
-      <div
-        onClick={() => {
-          setScrollToIndex(index);
-          open();
-        }}
-      >
+      <div style={{ position: "relative", overflow: "hidden" }}>
         {file.mime_type.includes("video") ? (
           <video controls width="100%">
             <source src={data.publicUrl} type={file.mime_type} />
@@ -88,12 +86,17 @@ const GuestGallery = ({ searchParams }: Props) => {
           <Image
             src={data.publicUrl}
             className={classes.galleryImage}
+            onClick={() => {
+              setScrollToIndex(index);
+              open();
+            }}
             style={{
               objectPosition: "50% 50%",
               transform: "translate3d(0, 0, 0)",
-              borderRadius: "0.5rem",
+              borderTopLeftRadius: "0.5rem",
+              borderTopRightRadius: "0.5rem",
             }}
-            objectFit="cover"
+            objectFit="contain"
             width={720}
             height={480}
             layout="responsive"
@@ -102,6 +105,10 @@ const GuestGallery = ({ searchParams }: Props) => {
             unoptimized={file.mime_type.includes("gif")}
           />
         )}
+        <Group bg="sage-green.9" pos="absolute" bottom={0} left={0} w="100%">
+          <LikeButton file={file} savedLikes={likes} setLikes={setLikes} />
+          <DownloadButton file={file} />
+        </Group>
       </div>
     );
   };
@@ -112,6 +119,8 @@ const GuestGallery = ({ searchParams }: Props) => {
 
       embla.scrollTo(index);
       thumbnail.scrollTo(index);
+
+      setActiveSlide(index);
     },
     [embla, thumbnail]
   );
@@ -172,7 +181,6 @@ const GuestGallery = ({ searchParams }: Props) => {
         spacing={"xs"}
         mt="lg"
         style={{ overflow: "hidden" }}
-        bg="sage-green"
         cols={{
           lg: 4,
           md: 4,
@@ -198,8 +206,9 @@ const GuestGallery = ({ searchParams }: Props) => {
       <Modal
         opened={opened}
         onClose={close}
-        centered
         fullScreen
+        radius={0}
+        transitionProps={{ transition: "fade", duration: 200 }}
         size="calc(100vw - 3rem)"
         closeButtonProps={{
           icon: <IconX color="#ffffff" />,
@@ -213,13 +222,44 @@ const GuestGallery = ({ searchParams }: Props) => {
         }}
         classNames={classes}
       >
+        {matchingImagesForFilters?.[activeSlide] && (
+          <Group gap="sm" c="white" p="sm">
+            <Avatar color="white" size="lg" />
+            <div style={{ flex: 1 }}>
+              <Text size="lg" fw={500}>
+                {matchingImagesForFilters[activeSlide].first_name}{" "}
+                {matchingImagesForFilters[activeSlide].last_name}
+              </Text>
+
+              {matchingImagesForFilters[activeSlide].created_at && (
+                <Text c="dimmed" size="lg">
+                  {formatDate(new Date(matchingImagesForFilters[activeSlide].created_at))}
+                </Text>
+              )}
+            </div>
+
+            <Group ml="auto">
+              <LikeButton
+                file={matchingImagesForFilters[activeSlide]}
+                savedLikes={likes}
+                setLikes={setLikes}
+              />
+
+              <DownloadButton file={matchingImagesForFilters[activeSlide]} />
+            </Group>
+          </Group>
+        )}
+
         <Carousel
-          height="85vh"
-          slideSize={{ base: "100%", lg: "50%" }}
+          height="75vh"
+          slideSize={{ base: "100%" }}
           slideGap="lg"
           loop
           classNames={classes}
-          onSlideChange={(index) => thumbnail?.scrollTo(index)}
+          onSlideChange={(index) => {
+            thumbnail?.scrollTo(index);
+            setActiveSlide(index);
+          }}
           getEmblaApi={setEmbla}
         >
           {matchingImagesForFilters.map((file) => {
@@ -235,19 +275,14 @@ const GuestGallery = ({ searchParams }: Props) => {
                 style={{ marginBottom: "0.5rem" }}
                 title={name}
               >
-                <Group gap="sm" bg="sage-green.9" c="white" p="sm">
-                  <Avatar color="white" />
-                  <Text size="sm" fw={500} ml="sm">
-                    {name}
-                  </Text>
-
-                  {file.created_at && (
-                    <Text ml="auto">{formatDate(new Date(file.created_at))}</Text>
-                  )}
-                </Group>
-
                 {file.mime_type.includes("video") ? (
-                  <video controls width="100%" style={{ objectFit: "contain" }}>
+                  <video
+                    controls
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: "contain" }}
+                    controlsList="nofullscreen"
+                  >
                     <source src={data.publicUrl} type={file.mime_type} />
                   </video>
                 ) : (
@@ -279,7 +314,6 @@ const GuestGallery = ({ searchParams }: Props) => {
           slideGap={"sm"}
           loop
           slideSize="100px"
-          initialSlide={scrollToIndex ?? 0}
           getEmblaApi={setThumbnail}
         >
           {matchingImagesForFilters.map((file, index) => {
@@ -294,14 +328,24 @@ const GuestGallery = ({ searchParams }: Props) => {
                 onClick={() => onThumbClick(index)}
               >
                 {file.mime_type.includes("video") ? (
-                  <Box h={60} w={60} className={classes.imageThumbnail}>
+                  <Box
+                    h={60}
+                    w={60}
+                    className={cx(
+                      classes.imageThumbnail,
+                      index === activeSlide ? classes.activeSlide : undefined
+                    )}
+                  >
                     <Center mt="md">
-                      <IconVideo strokeWidth={1.5} />
+                      <IconVideo strokeWidth={1.5} color="white" />
                     </Center>
                   </Box>
                 ) : (
                   <Image
-                    className={classes.imageThumbnail}
+                    className={cx(
+                      classes.imageThumbnail,
+                      index === activeSlide ? classes.activeSlide : undefined
+                    )}
                     src={data.publicUrl}
                     objectFit="contain"
                     height={60}

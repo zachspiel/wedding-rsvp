@@ -16,7 +16,7 @@ export default async function GalleryPage({
         </SimpleGrid>
       </Container>
 
-      <GuestGallery searchParams={searchParams} />
+      <GuestGallery />
     </>
   );
 }
