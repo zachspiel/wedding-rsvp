@@ -35,6 +35,7 @@ import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons
 import { ChangeEvent, useEffect, useState } from "react";
 import useSWR from "swr";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
+import DownloadGuestList from "./components/DownloadGuestList";
 import RsvpGraph from "./components/RsvpGraph";
 import classes from "./styles.module.css";
 
@@ -121,6 +122,7 @@ const GuestListTable = (): JSX.Element => {
 
       <MGroup justify="end" mx="xl" mb="md">
         <AddGroupForm events={events} />
+        <DownloadGuestList groups={filteredGroups} />
       </MGroup>
 
       <MGroup>

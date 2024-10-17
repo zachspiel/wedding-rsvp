@@ -28,3 +28,8 @@ html {
 p {
   letter-spacing: 0.2px;
 }
+
+.uppy-StatusBar,
+.uppy-DashboardContent-bar {
+  z-index: 2 !important;
+}

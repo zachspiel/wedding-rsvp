@@ -2,27 +2,25 @@
 
 import { Carousel, Embla } from "@mantine/carousel";
 import {
-  ActionIcon,
-  Card,
+  Avatar,
+  Box,
   Center,
   Chip,
   Flex,
   Group,
   Modal,
   MultiSelect,
-  rem,
   SimpleGrid,
   Skeleton,
   Text,
-  useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { createClient } from "@spiel-wedding/database/client";
 import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestImageWithLikes } from "@spiel-wedding/types/Photo";
-import { IconEye, IconX } from "@tabler/icons-react";
+import { IconVideo, IconX } from "@tabler/icons-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import classes from "../styles.module.css";
 
@@ -34,9 +32,9 @@ const GuestGallery = ({ searchParams }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>([]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery("(max-width: 50em)");
   const [embla, setEmbla] = useState<Embla | null>(null);
+  const [thumbnail, setThumbnail] = useState<Embla | null>(null);
+
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
 
   const { data: gallery, isLoading } = useSWR("guest_gallery", getGuestImages, {
@@ -71,63 +69,72 @@ const GuestGallery = ({ searchParams }: Props) => {
       return true;
     });
 
-  const createImageCard = (
-    file: GuestImageWithLikes,
-    index: number,
-    height?: string | number
-  ) => {
+  const createImageCard = (file: GuestImageWithLikes, index: number) => {
     const supabase = createClient();
-    const name = file.first_name + " " + file.last_name;
     const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
-      <div key={file.file_id} id={file.file_name || undefined}>
-        <Card p={0} radius={0} className={classes.card} h={height}>
-          {file.mime_type.includes("video") ? (
-            <video controls height="100%" width="100%">
-              <source src={data.publicUrl} type={file.mime_type} />
-            </video>
-          ) : (
-            <Image
-              src={data.publicUrl}
-              fill
-              style={{
-                objectFit: "fill",
-                objectPosition: "top",
-                transform: "translate3d(0, 0, 0)",
-              }}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-              alt={file.file_id}
-            />
-          )}
-        </Card>
-        <Flex justify="space-between" className={classes.footer} w="100%" p="xs">
-          <Center>
-            <Text fz="sm" inline c="white">
-              {name}
-            </Text>
-          </Center>
-
-          <Group gap={8} mr={0}>
-            {!opened && (
-              <ActionIcon
-                className={classes.action}
-                onClick={() => {
-                  setScrollToIndex(index);
-                  open();
-                }}
-              >
-                <IconEye
-                  style={{ width: rem(16), height: rem(16) }}
-                  color={theme.colors.blue[6]}
-                />
-              </ActionIcon>
-            )}
-          </Group>
-        </Flex>
+      <div
+        onClick={() => {
+          setScrollToIndex(index);
+          open();
+        }}
+      >
+        {file.mime_type.includes("video") ? (
+          <video controls width="100%">
+            <source src={data.publicUrl} type={file.mime_type} />
+          </video>
+        ) : (
+          <Image
+            src={data.publicUrl}
+            className={classes.galleryImage}
+            style={{
+              objectPosition: "50% 50%",
+              transform: "translate3d(0, 0, 0)",
+              borderRadius: "0.5rem",
+            }}
+            objectFit="cover"
+            width={720}
+            height={480}
+            layout="responsive"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            alt={file.file_id}
+            unoptimized={file.mime_type.includes("gif")}
+          />
+        )}
       </div>
     );
   };
+
+  const onThumbClick = useCallback(
+    (index: number) => {
+      if (!embla || !thumbnail) return;
+
+      embla.scrollTo(index);
+      thumbnail.scrollTo(index);
+    },
+    [embla, thumbnail]
+  );
+
+  function formatDate(date: Date) {
+    let hours = date.getHours();
+    let minutes: string | number = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      "/" +
+      date.getDate() +
+      "/" +
+      date.getFullYear() +
+      "  " +
+      strTime
+    );
+  }
 
   return (
     <>
@@ -161,20 +168,21 @@ const GuestGallery = ({ searchParams }: Props) => {
       </Flex>
 
       <SimpleGrid
-        mx="md"
-        spacing="xs"
+        p="md"
+        spacing={"xs"}
         mt="lg"
-        p="sm"
+        style={{ overflow: "hidden" }}
+        bg="sage-green"
         cols={{
           lg: 4,
           md: 4,
           sm: 2,
-          xs: 1,
+          base: 1,
         }}
       >
         {matchingImagesForFilters.length === 0 && <Text>No matching items found.</Text>}
         {matchingImagesForFilters.map((file, index) => {
-          return createImageCard(file, index, 300);
+          return createImageCard(file, index);
         })}
 
         {isLoading && (
@@ -187,36 +195,120 @@ const GuestGallery = ({ searchParams }: Props) => {
           </>
         )}
       </SimpleGrid>
-
       <Modal
         opened={opened}
         onClose={close}
-        transitionProps={{ transition: "slide-up", duration: 200 }}
         centered
         fullScreen
         size="calc(100vw - 3rem)"
         closeButtonProps={{
           icon: <IconX color="#ffffff" />,
-          bg: "#717769",
+          bg: "red",
           c: "white",
           mr: "md",
           w: "fit-content",
+          px: "md",
+          size: "xl",
           children: <Text>Close</Text>,
         }}
         classNames={classes}
       >
         <Carousel
+          height="85vh"
           slideSize={{ base: "100%", lg: "50%" }}
-          slideGap={"sm"}
+          slideGap="lg"
           loop
-          withIndicators
           classNames={classes}
+          onSlideChange={(index) => thumbnail?.scrollTo(index)}
           getEmblaApi={setEmbla}
         >
-          {matchingImagesForFilters.map((file, index) => {
+          {matchingImagesForFilters.map((file) => {
+            const supabase = createClient();
+            const name = file.first_name + " " + file.last_name;
+            const { data } = supabase.storage
+              .from("guest_gallery")
+              .getPublicUrl(file.file_name);
+
             return (
-              <Carousel.Slide key={file.file_id + "slide"}>
-                {createImageCard(file, index, "80vh")}
+              <Carousel.Slide
+                key={file.file_id + "slide"}
+                style={{ marginBottom: "0.5rem" }}
+                title={name}
+              >
+                <Group gap="sm" bg="sage-green" c="white" p="sm">
+                  <Avatar color="white" />
+                  <Text size="sm" fw={500} ml="sm">
+                    {name}
+                  </Text>
+
+                  {file.created_at && (
+                    <Text ml="auto">{formatDate(new Date(file.created_at))}</Text>
+                  )}
+                </Group>
+
+                {file.mime_type.includes("video") ? (
+                  <video controls width="100%" style={{ objectFit: "contain" }}>
+                    <source src={data.publicUrl} type={file.mime_type} />
+                  </video>
+                ) : (
+                  <div style={{ height: "90%", position: "relative" }}>
+                    <Image
+                      key={data.publicUrl}
+                      src={data.publicUrl}
+                      alt={file.file_id}
+                      className={classes.cardImage}
+                      fill
+                      style={{
+                        zIndex: 0,
+                        transform: "translate3d(0, 0, 0)",
+                      }}
+                      objectFit="contain"
+                      quality={80}
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </Carousel.Slide>
+            );
+          })}
+        </Carousel>
+
+        <Carousel
+          height="100px"
+          slideGap={"sm"}
+          loop
+          slideSize="100px"
+          initialSlide={scrollToIndex ?? 0}
+          getEmblaApi={setThumbnail}
+        >
+          {matchingImagesForFilters.map((file, index) => {
+            const supabase = createClient();
+            const { data } = supabase.storage
+              .from("guest_gallery")
+              .getPublicUrl(file.file_name);
+
+            return (
+              <Carousel.Slide
+                key={`${file.file_id}-thumbnail`}
+                onClick={() => onThumbClick(index)}
+              >
+                {file.mime_type.includes("video") ? (
+                  <Box h={60} w={60} className={classes.imageThumbnail}>
+                    <Center mt="md">
+                      <IconVideo strokeWidth={1.5} />
+                    </Center>
+                  </Box>
+                ) : (
+                  <Image
+                    className={classes.imageThumbnail}
+                    src={data.publicUrl}
+                    objectFit="contain"
+                    height={60}
+                    width={60}
+                    alt={file.file_id}
+                    unoptimized={file.mime_type.includes("gif")}
+                  />
+                )}
               </Carousel.Slide>
             );
           })}

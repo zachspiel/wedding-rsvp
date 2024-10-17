@@ -1,44 +1,69 @@
 "use client";
 
-import {
-  Alert,
-  Button,
-  Flex,
-  Group,
-  Modal,
-  ScrollArea,
-  SimpleGrid,
-  Space,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { FileWithPath } from "@mantine/dropzone";
+import { Button, Flex, Group, Modal, SimpleGrid, Text, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import {
-  saveGuestUploadedImages,
-  uploadFileToGuestGallery,
-} from "@spiel-wedding/hooks/guestUploadedImages";
-import { IconCloudUpload, IconExternalLink } from "@tabler/icons-react";
+import { saveGuestUploadedImages } from "@spiel-wedding/hooks/guestUploadedImages";
+import Compressor from "@uppy/compressor";
+import Uppy, { Meta, UploadResult } from "@uppy/core";
+import "@uppy/core/dist/style.min.css";
+import "@uppy/dashboard/dist/style.min.css";
+import { Dashboard as UppyDashboard } from "@uppy/react";
+import Tus from "@uppy/tus";
 import { useState } from "react";
-import ImageDropzone from "./components/ImageDropzone";
-import ImagePreview from "./components/ImagePreview";
-import classes from "./guestUpload.module.css";
-
-interface DownloadProgress {
-  [file: string]: {
-    progress: number;
-    completed: boolean;
-  };
-}
+import GalleryBanner from "./components/GalleryBanner";
 
 const GuestUpload = () => {
-  const [files, setFiles] = useState<Record<string, FileWithPath>>({});
-  const [downloadProgress, setDownloadProgress] = useState<DownloadProgress>({});
   const [opened, { open, close }] = useDisclosure(false);
+  const [uppy] = useState(initializeUppy);
 
-  const filesAreNotEmpty = Object.values(files).length > 0;
+  function initializeUppy() {
+    const BEARER_TOKEN = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    const supabaseUploadURL = `https://qaobgjglyovmcaiiagyx.supabase.co/storage/v1/upload/resumable`;
+
+    const uppyInstance = new Uppy();
+
+    uppyInstance
+      .use(Tus, {
+        endpoint: supabaseUploadURL,
+        headers: {
+          authorization: `Bearer ${BEARER_TOKEN}`,
+        },
+        chunkSize: 6 * 1024 * 1024,
+        allowedMetaFields: ["bucketName", "objectName", "contentType", "cacheControl"],
+      })
+      .use(Compressor);
+
+    uppyInstance.on("file-added", (file) => {
+      if (!form.isValid()) {
+        open();
+      }
+
+      file.meta = {
+        ...file.meta,
+        bucketName: "guest_gallery",
+        objectName: file.name,
+        contentType: file.type,
+      };
+    });
+
+    uppyInstance.on("complete", (result) => {
+      const successfulUploads = result.successful?.map((uploadResult) => ({
+        first_name: form.values.firstName,
+        last_name: form.values.lastName,
+        file_name: uploadResult.meta.objectName as string,
+        mime_type: uploadResult.type,
+      }));
+
+      if (successfulUploads !== undefined) {
+        saveGuestUploadedImages(successfulUploads);
+      }
+    });
+
+    return uppyInstance;
+  }
 
   const form = useForm({
     initialValues: {
@@ -52,35 +77,9 @@ const GuestUpload = () => {
   });
 
   const handleUpload = async () => {
-    if (!filesAreNotEmpty) {
-      showNotification({
-        color: "red",
-        message: "Please select a file before uploading",
-      });
-      return;
-    }
-
-    showNotification({
-      color: "blue",
-      message: "Now uploading...",
-    });
-
-    await Promise.all(
-      Object.entries(files).map(([id, file]) => {
-        uploadFileToGuestGallery(file, id, (progress) =>
-          setDownloadProgress((current) => ({
-            ...current,
-            [id]: { progress, completed: progress === 100 },
-          }))
-        ).catch((error) => {
-          setDownloadProgress((current) => ({
-            ...current,
-            [id]: { progress: current[id].progress, completed: true },
-          }));
-        });
-      })
-    )
-      .then(() => saveImagePathsToDatabase())
+    await uppy
+      .upload()
+      .then((uploadResult) => saveImagePathsToDatabase(uploadResult))
       .catch((error) => {
         showNotification({
           color: "red",
@@ -89,29 +88,51 @@ const GuestUpload = () => {
       });
   };
 
-  const saveImagePathsToDatabase = async () => {
-    const successfulUploads = Object.entries(files).map(([id, file]) => ({
-      first_name: form.values.firstName,
-      last_name: form.values.lastName,
-      file_name: id,
-      mime_type: file.type,
-    }));
+  const saveImagePathsToDatabase = async (
+    uploadResult?: UploadResult<Meta, Record<string, unknown>>
+  ) => {
+    if (!uploadResult || !uploadResult.successful) {
+      return;
+    }
+
+    const successfulUploads = uploadResult.successful.map((file) => {
+      return {
+        first_name: form.values.firstName,
+        last_name: form.values.lastName,
+        file_name: file.name ?? file.id,
+        mime_type: file.type,
+      };
+    });
 
     await saveGuestUploadedImages(successfulUploads).then(() => open());
   };
 
-  const removeFile = (id: string) => {
-    if (files[id]) {
-      setFiles((curr) => {
-        const { [id]: _, ...rest } = curr;
-        return rest;
-      });
-    }
-  };
-
   return (
     <>
+      <GalleryBanner />
+
       <form onSubmit={form.onSubmit(handleUpload)}>
+        <Flex justify="center">
+          <UppyDashboard uppy={uppy} showProgressDetails />
+        </Flex>
+      </form>
+
+      <Modal
+        opened={opened}
+        withCloseButton={false}
+        onClose={close}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        centered
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <Text c="dimmed" mb="md">
+          Please enter your first and last name below to continue adding files.
+        </Text>
+
         <SimpleGrid cols={{ base: 1, md: 2 }}>
           <TextInput
             {...form.getInputProps("firstName")}
@@ -130,99 +151,8 @@ const GuestUpload = () => {
           />
         </SimpleGrid>
 
-        <ImageDropzone files={files} setFiles={setFiles} />
-
-        {filesAreNotEmpty && (
-          <div>
-            <Flex justify="space-between" mb="md" align="center">
-              <Title order={4}>Uploaded Files ({Object.keys(files).length})</Title>
-              <Button
-                leftSection={<IconCloudUpload strokeWidth={1.5} />}
-                type="submit"
-                className={filesAreNotEmpty ? classes.uploadButton : undefined}
-              >
-                Save photos to gallery
-              </Button>
-            </Flex>
-
-            <ScrollArea.Autosize mah={350} type="always" bg="gray-3">
-              {Object.entries(files).map(([id, file], index) => {
-                return (
-                  <>
-                    {index === 0 ? (
-                      <Space dir="vertical" mt="sm" key={`${id}-spacer`} />
-                    ) : null}
-
-                    <ImagePreview
-                      key={id}
-                      id={id}
-                      file={file}
-                      onDelete={removeFile}
-                      showDivider={index !== Object.values(files).length - 1}
-                      downloadProgress={downloadProgress?.[id]?.progress}
-                    />
-                  </>
-                );
-              })}
-            </ScrollArea.Autosize>
-          </div>
-        )}
-      </form>
-
-      <Modal opened={opened} withCloseButton={false} onClose={close}>
-        {Object.entries(downloadProgress).every(([id, download]) => {
-          return download.progress === 100;
-        }) ? (
-          <Alert color="green" title="Success">
-            All files uploaded successfully!
-          </Alert>
-        ) : (
-          <>
-            {Object.values(downloadProgress).every((download) => download.completed) && (
-              <>
-                <Title order={3}>
-                  An error occurred while uploading the following files
-                </Title>
-
-                <ScrollArea.Autosize mah={300}>
-                  {Object.entries(downloadProgress)
-                    .filter(([id, download]) => download.progress !== 100)
-                    .map(([id, file], index) => (
-                      <ImagePreview
-                        key={id}
-                        id={id}
-                        file={files[id]}
-                        failedToDownload
-                        onDelete={() => {}}
-                        showDivider={index !== Object.values(files).length - 1}
-                        downloadProgress={downloadProgress?.[id]?.progress}
-                      />
-                    ))}
-                </ScrollArea.Autosize>
-              </>
-            )}
-          </>
-        )}
-
         <Group justify="end" mt="lg">
-          <Button
-            variant="outline"
-            onClick={() => {
-              form.reset();
-              setDownloadProgress({});
-              close();
-              setFiles({});
-            }}
-          >
-            Close
-          </Button>
-          <Button
-            component="a"
-            href="/weddingPhotos/gallery"
-            rightSection={<IconExternalLink strokeWidth={1.5} />}
-          >
-            Go to gallery
-          </Button>
+          <Button onClick={close}>Save</Button>
         </Group>
       </Modal>
     </>

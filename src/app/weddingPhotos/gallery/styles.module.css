@@ -44,3 +44,18 @@
 .control {
   background-color: var(--mantine-color-white);
 }
+
+.galleryImage {
+  @mixin hover {
+    cursor: pointer;
+  }
+}
+
+.imageThumbnail {
+  @mixin hover {
+    cursor: pointer;
+  }
+
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+}

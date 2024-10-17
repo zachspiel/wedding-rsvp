@@ -25,6 +25,14 @@ export interface GuestUploadedImage {
   last_name: string;
   file_name: string;
   mime_type: string;
+  created_at: string | null;
+}
+
+export interface UploadImageFormData {
+  first_name: string;
+  last_name: string;
+  file_name: string;
+  mime_type: string;
 }
 
 export type GuestImageWithLikes = GuestUploadedImage & {
