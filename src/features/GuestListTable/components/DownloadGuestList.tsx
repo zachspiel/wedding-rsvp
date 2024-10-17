@@ -15,7 +15,6 @@ const DownloadGuestList = ({ groups }: { groups: Group[] }) => {
           let formattedRow: Record<string, string> = {};
           formattedRow["First Name"] = guest.firstName;
           formattedRow["Last Name"] = guest.lastName;
-          formattedRow["Table"] = group.table;
           return formattedRow;
         });
       })

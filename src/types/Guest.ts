@@ -16,7 +16,6 @@ export interface Group {
   guests: Guest[];
   edited_at?: string;
   created_at?: string;
-  table: string;
 }
 
 export interface Guest {
