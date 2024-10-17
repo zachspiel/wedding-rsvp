@@ -3,6 +3,10 @@
   border-radius: var(--mantine-radius-md);
   background: var(--mantine-color-sage-green-2);
   padding-right: calc(var(--mantine-spacing-xl) * 3);
+
+  @media (max-width: $mantine-breakpoint-md) {
+    padding-right: 0;
+  }
 }
 
 .inner {
@@ -10,6 +14,12 @@
   justify-content: space-between;
   padding-top: calc(var(--mantine-spacing-xl) * 3);
   padding-bottom: calc(var(--mantine-spacing-xl) * 3);
+
+  @media (max-width: $mantine-breakpoint-md) {
+    flex-direction: column;
+    padding-top: calc(var(--mantine-spacing-xl));
+    padding-bottom: calc(var(--mantine-spacing-xl));
+  }
 }
 
 .content {
@@ -42,8 +52,9 @@
   width: rem(376px);
   height: rem(356px);
 
-  @media (max-width: $mantine-breakpoint-md) {
-    display: none;
+  @media (max-width: $mantine-breakpoint-xs) {
+    width: 100%;
+    margin-top: var(--mantine-spacing-md);
   }
 }
 

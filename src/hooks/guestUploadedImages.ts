@@ -20,6 +20,8 @@ export const getGuestImages = async (): Promise<GuestImageWithLikes[]> => {
 export const saveGuestUploadedImages = async (
   guestUploadedImage: UploadImageFormData[]
 ): Promise<GuestUploadedImage[]> => {
+  console.log(guestUploadedImage);
+
   const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_IMAGES_TABLE)

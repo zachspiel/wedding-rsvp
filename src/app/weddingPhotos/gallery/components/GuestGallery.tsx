@@ -235,7 +235,7 @@ const GuestGallery = ({ searchParams }: Props) => {
                 style={{ marginBottom: "0.5rem" }}
                 title={name}
               >
-                <Group gap="sm" bg="sage-green" c="white" p="sm">
+                <Group gap="sm" bg="sage-green.9" c="white" p="sm">
                   <Avatar color="white" />
                   <Text size="sm" fw={500} ml="sm">
                     {name}
@@ -259,6 +259,7 @@ const GuestGallery = ({ searchParams }: Props) => {
                       className={classes.cardImage}
                       fill
                       style={{
+                        objectPosition: "top",
                         zIndex: 0,
                         transform: "translate3d(0, 0, 0)",
                       }}

@@ -29,7 +29,18 @@ p {
   letter-spacing: 0.2px;
 }
 
+.uppy-Container {
+  @media (max-width: $mantine-breakpoint-md) {
+    width: 100%;
+  }
+}
+
 .uppy-StatusBar,
-.uppy-DashboardContent-bar {
+.uppy-DashboardContent-bar,
+.uppy-Dashboard-Item-action {
   z-index: 2 !important;
+}
+
+.uppy-Dashboard-Item-previewInnerWrap {
+  z-index: 3;
 }
