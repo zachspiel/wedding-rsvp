@@ -55,7 +55,7 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
   };
 
   return (
-    <SectionContainer>
+    <SectionContainer greenBackground>
       <SectionTitle id="gallery" title="Gallery" />
       <UploadImages />
 

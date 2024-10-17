@@ -78,7 +78,7 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): vo
       ...newGuest,
       relationshipType: RelationshipType.PARTNER,
     },
-    1
+    1,
   );
 };
 

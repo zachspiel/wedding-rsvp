@@ -15,6 +15,7 @@ const AdminViewProvider = ({ children }: Props): JSX.Element => {
   const supabase = createClient();
   const [user, setUser] = useState<User>();
   const [isAdminViewEnabled, setIsAdminViewEnabled] = useState(false);
+  const [lastViewedPhoto, setLastViewedPhoto] = useState<string>();
 
   const toggleIsAdminViewEnabled = (): void => {
     setIsAdminViewEnabled(!isAdminViewEnabled);
@@ -36,7 +37,14 @@ const AdminViewProvider = ({ children }: Props): JSX.Element => {
 
   return (
     <AdminViewContext.Provider
-      value={{ isAdminViewEnabled, user, setUser, toggleIsAdminViewEnabled }}
+      value={{
+        isAdminViewEnabled,
+        user,
+        lastViewedPhoto,
+        setUser,
+        toggleIsAdminViewEnabled,
+        setLastViewedPhoto,
+      }}
     >
       {children}
     </AdminViewContext.Provider>
