@@ -2,33 +2,39 @@
 
 import { Carousel, Embla } from "@mantine/carousel";
 import {
+  ActionIcon,
   Avatar,
   Box,
   Center,
   Chip,
+  Container,
+  Divider,
   Flex,
   Group,
   Modal,
   MultiSelect,
   SimpleGrid,
   Skeleton,
+  Stack,
   Text,
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { createClient } from "@spiel-wedding/database/client";
 import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
-import { IconVideo, IconX } from "@tabler/icons-react";
+import { formatDate } from "@spiel-wedding/util";
+import { IconMessage, IconVideo, IconX } from "@tabler/icons-react";
 import cx from "clsx";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
 import classes from "../styles.module.css";
+import CommentDrawer from "./CommentDrawer";
 import DownloadButton from "./DownloadButton";
 import LikeButton from "./LikeButton";
 
 const GuestGallery = () => {
-  const [mimeFilter, setMimeFilter] = useState<string[] | undefined>([]);
+  const [mimeFilter, setMimeFilter] = useState<string[] | undefined>(["image", "video"]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [embla, setEmbla] = useState<Embla | null>(null);
@@ -39,6 +45,8 @@ const GuestGallery = () => {
     key: "liked_images",
     defaultValue: [],
   });
+  const [drawerOpened, { open: openDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [selectedFile, setSelectedFile] = useState<GuestUploadedImage | null>();
 
   const { data: gallery, isLoading } = useSWR("guest_gallery", getGuestImages, {
     fallbackData: [],
@@ -77,9 +85,9 @@ const GuestGallery = () => {
     const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
-      <div style={{ position: "relative", overflow: "hidden" }}>
+      <Stack gap={0} pos="relative">
         {file.mime_type.includes("video") ? (
-          <video controls width="100%">
+          <video controls width="100%" height="80%">
             <source src={data.publicUrl} type={file.mime_type} />
           </video>
         ) : (
@@ -91,10 +99,8 @@ const GuestGallery = () => {
               open();
             }}
             style={{
-              objectPosition: "50% 50%",
+              objectPosition: "top",
               transform: "translate3d(0, 0, 0)",
-              borderTopLeftRadius: "0.5rem",
-              borderTopRightRadius: "0.5rem",
             }}
             objectFit="contain"
             width={720}
@@ -105,11 +111,35 @@ const GuestGallery = () => {
             unoptimized={file.mime_type.includes("gif")}
           />
         )}
-        <Group bg="sage-green.9" pos="absolute" bottom={0} left={0} w="100%">
-          <LikeButton file={file} savedLikes={likes} setLikes={setLikes} />
+        <Group bg="sage-green.9" w="100%" mt="auto">
+          <LikeButton
+            id={file.file_id}
+            likes={file.likes}
+            rpc="likes"
+            swrKey="guest_gallery"
+            savedLikes={likes}
+            setLikes={setLikes}
+            color="white"
+          />
           <DownloadButton file={file} />
+
+          <Group gap="xs">
+            <ActionIcon
+              variant="transparent"
+              c="white"
+              size="xl"
+              title="download"
+              onClick={() => {
+                setSelectedFile(file);
+                openDrawer();
+              }}
+            >
+              <IconMessage style={{ width: "70%", height: "70%" }} stroke={1.5} />
+            </ActionIcon>
+            <Text c="dimmed">{file?.guest_image_comments?.length ?? 0}</Text>
+          </Group>
         </Group>
-      </div>
+      </Stack>
     );
   };
 
@@ -124,26 +154,6 @@ const GuestGallery = () => {
     },
     [embla, thumbnail]
   );
-
-  function formatDate(date: Date) {
-    let hours = date.getHours();
-    let minutes: string | number = date.getMinutes();
-    var ampm = hours >= 12 ? "pm" : "am";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    var strTime = hours + ":" + minutes + " " + ampm;
-    return (
-      date.getMonth() +
-      1 +
-      "/" +
-      date.getDate() +
-      "/" +
-      date.getFullYear() +
-      "  " +
-      strTime
-    );
-  }
 
   return (
     <>
@@ -176,33 +186,35 @@ const GuestGallery = () => {
         />
       </Flex>
 
-      <SimpleGrid
-        p="md"
-        spacing={"xs"}
-        mt="lg"
-        style={{ overflow: "hidden" }}
-        cols={{
-          lg: 4,
-          md: 4,
-          sm: 2,
-          base: 1,
-        }}
-      >
-        {matchingImagesForFilters.length === 0 && <Text>No matching items found.</Text>}
-        {matchingImagesForFilters.map((file, index) => {
-          return createImageCard(file, index);
-        })}
+      <Container>
+        <Divider my="md" />
+        <SimpleGrid
+          p="md"
+          spacing={"xs"}
+          mt="lg"
+          style={{ overflow: "hidden" }}
+          cols={{
+            md: 3,
+            sm: 2,
+            base: 1,
+          }}
+        >
+          {matchingImagesForFilters.length === 0 && <Text>No matching items found.</Text>}
+          {matchingImagesForFilters.map((file, index) => {
+            return createImageCard(file, index);
+          })}
 
-        {isLoading && (
-          <>
-            <Skeleton width={300} height={300} />
-            <Skeleton width={300} height={300} />
-            <Skeleton width={300} height={300} />
-            <Skeleton width={300} height={300} />
-            <Skeleton width={300} height={300} />
-          </>
-        )}
-      </SimpleGrid>
+          {isLoading && (
+            <>
+              <Skeleton width={300} height={300} />
+              <Skeleton width={300} height={300} />
+              <Skeleton width={300} height={300} />
+              <Skeleton width={300} height={300} />
+              <Skeleton width={300} height={300} />
+            </>
+          )}
+        </SimpleGrid>
+      </Container>
       <Modal
         opened={opened}
         onClose={close}
@@ -231,18 +243,27 @@ const GuestGallery = () => {
                 {matchingImagesForFilters[activeSlide].last_name}
               </Text>
 
-              {matchingImagesForFilters[activeSlide].created_at && (
+              {matchingImagesForFilters[activeSlide].created_at !== null && (
                 <Text c="dimmed" size="lg">
-                  {formatDate(new Date(matchingImagesForFilters[activeSlide].created_at))}
+                  {formatDate(
+                    new Date(
+                      matchingImagesForFilters[activeSlide].created_at ??
+                        new Date().toString()
+                    )
+                  )}
                 </Text>
               )}
             </div>
 
             <Group ml="auto">
               <LikeButton
-                file={matchingImagesForFilters[activeSlide]}
+                id={matchingImagesForFilters[activeSlide].file_id}
+                likes={matchingImagesForFilters[activeSlide].likes}
+                rpc="likes"
+                swrKey="guest_gallery"
                 savedLikes={likes}
                 setLikes={setLikes}
+                color="white"
               />
 
               <DownloadButton file={matchingImagesForFilters[activeSlide]} />
@@ -359,6 +380,12 @@ const GuestGallery = () => {
           })}
         </Carousel>
       </Modal>
+
+      <CommentDrawer
+        opened={drawerOpened}
+        close={closeDrawer}
+        file={selectedFile as GuestUploadedImage}
+      />
     </>
   );
 };

@@ -68,3 +68,15 @@
 .activeSlide {
   border: 3px solid var(--mantine-color-blue-5);
 }
+
+.drawerBody {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerFooter {
+  border-top: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  padding-top: var(--mantine-spacing-md);
+}

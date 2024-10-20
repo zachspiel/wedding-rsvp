@@ -11,13 +11,38 @@ import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
 import { Dashboard as UppyDashboard } from "@uppy/react";
 import Tus from "@uppy/tus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GalleryBanner from "./components/GalleryBanner";
 
 const GuestUpload = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [uppy] = useState(initializeUppy);
   const isMobile = useMediaQuery("(max-width: 50em)");
+
+  const form = useForm({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+    },
+    validate: {
+      firstName: isNotEmpty("Please enter your first name"),
+      lastName: isNotEmpty("Please enter your first name"),
+    },
+    onValuesChange: (values) => {
+      window.localStorage.setItem("guest-name", JSON.stringify(values));
+    },
+  });
+
+  useEffect(() => {
+    const storedValue = window.localStorage.getItem("guest-name");
+    if (storedValue) {
+      try {
+        form.setValues(JSON.parse(window.localStorage.getItem("guest-name")!));
+      } catch (e) {
+        console.log("Failed to parse stored value");
+      }
+    }
+  }, []);
 
   function initializeUppy() {
     const BEARER_TOKEN = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -69,18 +94,6 @@ const GuestUpload = () => {
 
     return uppyInstance;
   }
-
-  const form = useForm({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-    },
-    validate: {
-      firstName: isNotEmpty("Please enter your first name"),
-      lastName: isNotEmpty("Please enter your first name"),
-    },
-  });
-
   const handleUpload = async () => {
     await uppy.upload().catch((error) => {
       showNotification({
