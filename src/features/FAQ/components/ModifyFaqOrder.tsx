@@ -48,7 +48,7 @@ const ModifyFaqOrder = ({ faqs }: Props) => {
 
   const saveFaqs = async () => {
     const updatedFaqs = await updateFAQs(
-      state.map((item, index) => ({ ...item, position: index }))
+      state.map((item, index) => ({ ...item, position: index })),
     );
 
     if (updatedFaqs) {
