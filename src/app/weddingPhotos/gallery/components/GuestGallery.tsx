@@ -199,7 +199,9 @@ const GuestGallery = () => {
             base: 1,
           }}
         >
-          {matchingImagesForFilters.length === 0 && <Text>No matching items found.</Text>}
+          {matchingImagesForFilters.length === 0 && !isLoading && (
+            <Text>No matching items found.</Text>
+          )}
           {matchingImagesForFilters.map((file, index) => {
             return createImageCard(file, index);
           })}
@@ -383,7 +385,10 @@ const GuestGallery = () => {
 
       <CommentDrawer
         opened={drawerOpened}
-        close={closeDrawer}
+        close={() => {
+          closeDrawer();
+          setSelectedFile(null);
+        }}
         file={selectedFile as GuestUploadedImage}
       />
     </>

@@ -43,7 +43,7 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
     isLoading,
     mutate,
   } = useSWR(
-    () => (file == null ? null : "comments_for_file"),
+    file == null ? null : "comments_for_file",
     (key) => getCommentsForImage(file.file_id),
     {
       fallbackData: [],
@@ -133,6 +133,7 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
   if (!file) {
     return <></>;
   }
+
   return (
     <Drawer radius="md" opened={opened} onClose={close} title="Comments">
       <Stack gap={0}>
@@ -163,7 +164,7 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
         <ScrollArea style={{ flex: 1 }} display="flex">
           {comments.map(createContainerForComment)}
 
-          {comments.length === 0 && (
+          {comments.length === 0 && !isLoading && (
             <Alert variant="light" color="blue" my="md">
               No comments added. Be the first!
             </Alert>
