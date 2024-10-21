@@ -7,49 +7,29 @@ import {
   Group,
   ScrollArea,
   Skeleton,
-  Stack,
   Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { useLocalStorage } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import {
-  addCommentToImage,
-  getCommentsForImage,
-} from "@spiel-wedding/hooks/guestUploadedImages";
+import { addCommentToImage } from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestImageComment, GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { formatDate } from "@spiel-wedding/util";
-import { IconClock, IconUser } from "@tabler/icons-react";
+import { IconCalendar, IconUser } from "@tabler/icons-react";
 import { useEffect } from "react";
-import useSWR from "swr";
+import { mutate } from "swr";
 import classes from "../styles.module.css";
 
 interface Props {
   file: GuestUploadedImage;
+  comments: GuestImageComment[];
+  isLoading: boolean;
   opened: boolean;
   close: () => void;
 }
 
-const CommentDrawer = ({ file, opened, close }: Props) => {
-  const [likedComments, setLikedComments] = useLocalStorage<string[]>({
-    key: "liked_comments",
-    defaultValue: [],
-  });
-
-  const {
-    data: comments,
-    isLoading,
-    mutate,
-  } = useSWR(
-    file == null ? null : "comments_for_file",
-    (key) => getCommentsForImage(file.file_id),
-    {
-      fallbackData: [],
-    }
-  );
-
+const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -93,15 +73,16 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
           </Group>
         </Group>
         <Text
-          pl={54}
+          pl={45}
+          pr={20}
           size="sm"
-          mb="sm"
-          lineClamp={3}
+          lineClamp={5}
           component="div"
           style={{ wordBreak: "break-all" }}
         >
-          <p>{comment.message}</p>
+          <p style={{ marginTop: 5 }}>{comment.message}</p>
         </Text>
+        <Divider mb="xs" />
       </div>
     );
   };
@@ -115,7 +96,7 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
         message: "Added comment!",
       });
 
-      await mutate();
+      await mutate("comments_for_file");
     } else {
       showNotification({
         color: "red",
@@ -135,72 +116,91 @@ const CommentDrawer = ({ file, opened, close }: Props) => {
   }
 
   return (
-    <Drawer radius="md" opened={opened} onClose={close} title="Comments">
-      <Stack gap={0}>
-        {isLoading && (
-          <>
-            <Skeleton w={100} h={200} />
-            <Skeleton w={100} h={200} />
-            <Skeleton w={100} h={200} />
-          </>
-        )}
+    <Drawer
+      radius="md"
+      opened={opened}
+      onClose={close}
+      title="Comments"
+      offset={8}
+      styles={{
+        body: {
+          maxHeight: "95%",
+          height: "100%",
+          display: "flex",
+          flexFlow: "column",
+        },
+      }}
+    >
+      {isLoading && (
+        <>
+          <Skeleton w={100} h={200} />
+          <Skeleton w={100} h={200} />
+          <Skeleton w={100} h={200} />
+        </>
+      )}
 
+      <div>
         <Group gap="md">
-          <IconUser strokeWidth={1.5} />
-          <Text size="sm" c="dimmed">
+          <IconUser strokeWidth={1.5} color="var(--mantine-color-dimmed)" />
+          <Text size="sm">
             {file.first_name} {file.last_name}
           </Text>
         </Group>
-
         <Group gap="md" mt="sm">
-          <IconClock strokeWidth={1.5} />
-          <Text fw="normal" size="sm" c="dimmed">
+          <IconCalendar strokeWidth={1.5} color="var(--mantine-color-dimmed)" />
+          <Text fw="normal" size="sm">
             {formatDate(new Date(file.created_at ?? new Date().toString()))}
           </Text>
         </Group>
 
         <Divider my="md" />
+      </div>
 
-        <ScrollArea style={{ flex: 1 }} display="flex">
-          {comments.map(createContainerForComment)}
+      <ScrollArea className={classes.commentsContainer}>
+        {!isLoading && file !== null && (
+          <>
+            {comments.map(createContainerForComment)}
 
-          {comments.length === 0 && !isLoading && (
-            <Alert variant="light" color="blue" my="md">
-              No comments added. Be the first!
-            </Alert>
-          )}
-        </ScrollArea>
+            {comments.length === 0 && !isLoading && (
+              <Alert variant="light" color="blue" my="md">
+                No comments added. Be the first!
+              </Alert>
+            )}
+          </>
+        )}
+      </ScrollArea>
 
-        <div className={classes.drawerFooter}>
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Group mb="md">
-              <TextInput
-                {...form.getInputProps("firstName")}
-                placeholder="Enter your first name"
-                label="First Name"
-                error={form.errors.firstName}
-                mr="md"
-              />
-              <TextInput
-                {...form.getInputProps("lastName")}
-                placeholder="Enter your last name"
-                label="Last Name"
-                error={form.errors.lastName}
-              />
-            </Group>
-            <Textarea
-              {...form.getInputProps("comment")}
-              placeholder="Add a comment"
-              label="Message"
-              error={form.errors.comment}
-              mb="md"
-              minRows={2}
-              maxRows={4}
+      <div className={classes.drawerFooter}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Group mb="md">
+            <TextInput
+              {...form.getInputProps("firstName")}
+              placeholder="Enter your first name"
+              label="First Name"
+              error={form.errors.firstName}
+              mr="md"
             />
-            <Button type="submit">Post</Button>
-          </form>
-        </div>
-      </Stack>
+            <TextInput
+              {...form.getInputProps("lastName")}
+              placeholder="Enter your last name"
+              label="Last Name"
+              error={form.errors.lastName}
+            />
+          </Group>
+          <Textarea
+            {...form.getInputProps("comment")}
+            placeholder="Add a comment"
+            label="Message"
+            error={form.errors.comment}
+            mb="md"
+            minRows={2}
+            maxRows={4}
+          />
+          <Button type="submit" disabled={isLoading}>
+            Post
+          </Button>
+        </form>
+      </div>
     </Drawer>
   );
 };

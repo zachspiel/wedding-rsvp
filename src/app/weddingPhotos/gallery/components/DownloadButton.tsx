@@ -9,9 +9,10 @@ import { mutate } from "swr";
 
 interface Props {
   file: GuestUploadedImage;
+  mr?: string;
 }
 
-const DownloadButton = ({ file }: Props) => {
+const DownloadButton = ({ file, mr }: Props) => {
   const downloadFile = async () => {
     const supabase = createClient();
     const { data, error } = await supabase.storage
@@ -47,7 +48,7 @@ const DownloadButton = ({ file }: Props) => {
   };
 
   return (
-    <Group gap="xs" mr="lg">
+    <Group gap="xs" mr={mr ?? "lg"}>
       <ActionIcon
         variant="transparent"
         c="white"

@@ -20,7 +20,10 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { createClient } from "@spiel-wedding/database/client";
-import { getGuestImages } from "@spiel-wedding/hooks/guestUploadedImages";
+import {
+  getCommentsForImage,
+  getGuestImages,
+} from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { formatDate } from "@spiel-wedding/util";
 import { IconMessage, IconVideo, IconX } from "@tabler/icons-react";
@@ -51,6 +54,18 @@ const GuestGallery = () => {
   const { data: gallery, isLoading } = useSWR("guest_gallery", getGuestImages, {
     fallbackData: [],
   });
+
+  const {
+    data: comments,
+    isLoading: commentsAreLoading,
+    mutate,
+  } = useSWR(
+    selectedFile == null ? null : "comments_for_file",
+    (key) => getCommentsForImage(selectedFile?.file_id as string),
+    {
+      fallbackData: [],
+    }
+  );
 
   useEffect(() => {
     if (!opened) {
@@ -131,6 +146,7 @@ const GuestGallery = () => {
               title="download"
               onClick={() => {
                 setSelectedFile(file);
+                mutate();
                 openDrawer();
               }}
             >
@@ -266,9 +282,10 @@ const GuestGallery = () => {
                 savedLikes={likes}
                 setLikes={setLikes}
                 color="white"
+                mr="md"
               />
 
-              <DownloadButton file={matchingImagesForFilters[activeSlide]} />
+              <DownloadButton file={matchingImagesForFilters[activeSlide]} mr="md" />
             </Group>
           </Group>
         )}
@@ -384,6 +401,8 @@ const GuestGallery = () => {
       </Modal>
 
       <CommentDrawer
+        comments={comments}
+        isLoading={commentsAreLoading}
         opened={drawerOpened}
         close={() => {
           closeDrawer();

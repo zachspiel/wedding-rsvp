@@ -12,10 +12,20 @@ interface Props {
   swrKey: string;
   savedLikes: string[];
   color: string;
+  mr?: string;
   setLikes: (val: string[]) => void;
 }
 
-const LikeButton = ({ id, likes, rpc, savedLikes, swrKey, color, setLikes }: Props) => {
+const LikeButton = ({
+  id,
+  likes,
+  rpc,
+  savedLikes,
+  swrKey,
+  color,
+  mr,
+  setLikes,
+}: Props) => {
   const isSaved = savedLikes.includes(id);
 
   const toggleLike = async () => {
@@ -32,7 +42,7 @@ const LikeButton = ({ id, likes, rpc, savedLikes, swrKey, color, setLikes }: Pro
   };
 
   return (
-    <Group gap="xs" mr="md">
+    <Group gap="xs" mr={mr ?? "md"}>
       <ActionIcon
         variant="transparent"
         c={isSaved ? "red" : color}
