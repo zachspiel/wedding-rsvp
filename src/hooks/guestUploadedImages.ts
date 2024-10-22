@@ -12,14 +12,13 @@ export const getGuestImages = async (): Promise<GuestUploadedImage[]> => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from(GUEST_IMAGES_TABLE)
-    .select("*, guest_image_comments(comment_id)")
-    .order("created_at", { ascending: false });
+    .select("*, guest_image_comments(comment_id)");
 
   if (data === null || error) {
     return [];
   }
 
-  return data ?? [];
+  return data.sort();
 };
 
 export const saveGuestUploadedImages = async (

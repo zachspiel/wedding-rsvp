@@ -5,7 +5,6 @@ import { notifications } from "@mantine/notifications";
 import { createClient } from "@spiel-wedding/database/client";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconDownload } from "@tabler/icons-react";
-import { mutate } from "swr";
 
 interface Props {
   file: GuestUploadedImage;
@@ -38,13 +37,12 @@ const DownloadButton = ({ file, mr }: Props) => {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
 
-    await incrementDownload(file.file_id);
+    await incrementDownload();
   };
 
-  const incrementDownload = async (fileId: string) => {
+  const incrementDownload = async () => {
     const supabase = createClient();
-    await supabase.rpc("increment_downloads", { x: 1, row_id: fileId });
-    await mutate("guest_gallery");
+    await supabase.rpc("increment_downloads", { x: 1, row_id: file.file_id });
   };
 
   return (
