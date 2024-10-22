@@ -1,10 +1,12 @@
 "use client";
 
 import { ActionIcon, Group, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { createClient } from "@spiel-wedding/database/client";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconDownload } from "@tabler/icons-react";
+import JsFileDownloader from "js-file-downloader";
+import { mutate } from "swr";
 
 interface Props {
   file: GuestUploadedImage;
@@ -14,28 +16,15 @@ interface Props {
 const DownloadButton = ({ file, mr }: Props) => {
   const downloadFile = async () => {
     const supabase = createClient();
-    const { data, error } = await supabase.storage
+    const { data } = await supabase.storage
       .from("guest_gallery")
-      .download(file.file_name);
+      .getPublicUrl(file.file_name);
 
-    if (data === null || error !== null) {
-      notifications.show({
-        color: "red",
-        message: "An error occurred while downloading.",
-      });
-      return;
-    }
-
-    const url = window.URL.createObjectURL(data);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = file.file_name;
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    new JsFileDownloader({
+      url: data.publicUrl,
+    }).catch(function (error) {
+      showCustomFailureNotification("An error occurred. Please try again later.");
+    });
 
     await incrementDownload();
   };
@@ -43,6 +32,7 @@ const DownloadButton = ({ file, mr }: Props) => {
   const incrementDownload = async () => {
     const supabase = createClient();
     await supabase.rpc("increment_downloads", { x: 1, row_id: file.file_id });
+    await mutate("guest_gallery");
   };
 
   return (

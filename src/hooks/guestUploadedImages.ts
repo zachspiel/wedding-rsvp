@@ -12,7 +12,8 @@ export const getGuestImages = async (): Promise<GuestUploadedImage[]> => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from(GUEST_IMAGES_TABLE)
-    .select("*, guest_image_comments(comment_id)");
+    .select("*, guest_image_comments(comment_id)")
+    .order("file_id", { ascending: false });
 
   if (data === null || error) {
     return [];

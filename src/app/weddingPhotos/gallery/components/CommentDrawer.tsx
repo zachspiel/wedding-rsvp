@@ -16,7 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { addCommentToImage } from "@spiel-wedding/hooks/guestUploadedImages";
 import { GuestImageComment, GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { formatDate } from "@spiel-wedding/util";
-import { IconCalendar, IconUser } from "@tabler/icons-react";
+import { IconCalendarEvent, IconUser } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { mutate } from "swr";
 import classes from "../styles.module.css";
@@ -147,7 +147,7 @@ const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
           </Text>
         </Group>
         <Group gap="md" mt="sm">
-          <IconCalendar strokeWidth={1.5} color="var(--mantine-color-dimmed)" />
+          <IconCalendarEvent strokeWidth={1.5} color="var(--mantine-color-dimmed)" />
           <Text fw="normal" size="sm">
             {formatDate(new Date(file.created_at ?? new Date().toString()))}
           </Text>
@@ -156,7 +156,7 @@ const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
         <Divider my="md" />
       </div>
 
-      <ScrollArea className={classes.commentsContainer}>
+      <ScrollArea className={classes.commentsContainer} type="always">
         {!isLoading && file !== null && (
           <>
             {comments.map(createContainerForComment)}
