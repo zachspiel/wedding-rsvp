@@ -1,7 +1,9 @@
+import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
 import { createClient } from "@spiel-wedding/database/server";
 import FAQ from "@spiel-wedding/features/FAQ";
 import Gallery from "@spiel-wedding/features/Gallery";
 import GuestBook from "@spiel-wedding/features/GuestBook";
+import GuestUpload from "@spiel-wedding/features/GuestPhotoUploadForm";
 import Jumbotron from "@spiel-wedding/features/Jumbotron";
 import RSVP from "@spiel-wedding/features/RSVP";
 import Registry from "@spiel-wedding/features/Registry";
@@ -59,7 +61,15 @@ export default async function Home() {
       <RSVP events={events} alertMessage={alertMessage} />
       <GuestBook guestMessages={guestMessages} />
       <Registry />
+
       <FAQ faqs={faqs} />
+
+      <SectionContainer>
+        <SectionTitle id="uploadPhotos" title="Upload Photos" />
+
+        <GuestUpload />
+      </SectionContainer>
+
       <Gallery gallery={gallery} />
     </main>
   );
