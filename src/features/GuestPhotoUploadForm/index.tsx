@@ -1,10 +1,20 @@
 "use client";
 
-import { Button, Flex, Group, Modal, SimpleGrid, Text, TextInput } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Flex,
+  Group,
+  Modal,
+  SimpleGrid,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { saveGuestUploadedImages } from "@spiel-wedding/hooks/guestUploadedImages";
+import { IconPhoto } from "@tabler/icons-react";
 import Compressor from "@uppy/compressor";
 import Uppy from "@uppy/core";
 import "@uppy/core/dist/style.min.css";
@@ -105,11 +115,21 @@ const GuestUpload = () => {
 
   return (
     <>
-      <GalleryBanner />
+      <Alert color="grape" icon={<IconPhoto strokeWidth={1.5} />}>
+        Please use the form below to upload photos and videos of the reception. Thank you
+        so much for participating!
+      </Alert>
+
+      <GalleryBanner displayText="GALLERY" />
 
       <form onSubmit={form.onSubmit(handleUpload)}>
         <Flex justify="center">
-          <UppyDashboard uppy={uppy} showProgressDetails width={isMobile ? "100%" : ""} />
+          <UppyDashboard
+            uppy={uppy}
+            showProgressDetails
+            width={isMobile ? "100%" : ""}
+            note="Feel free to upload as many photos as you like, but please try to keep videos relatively short. Thank you!"
+          />
         </Flex>
       </form>
 

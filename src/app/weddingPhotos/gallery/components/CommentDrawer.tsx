@@ -7,6 +7,7 @@ import {
   Group,
   ScrollArea,
   Skeleton,
+  Stack,
   Text,
   Textarea,
   TextInput,
@@ -132,11 +133,11 @@ const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
       }}
     >
       {isLoading && (
-        <>
+        <Stack gap="md">
           <Skeleton w={100} h={200} />
           <Skeleton w={100} h={200} />
           <Skeleton w={100} h={200} />
-        </>
+        </Stack>
       )}
 
       <div>

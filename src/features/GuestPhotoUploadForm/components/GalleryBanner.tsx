@@ -3,19 +3,35 @@ import { IconExternalLink } from "@tabler/icons-react";
 import classes from "../guestUpload.module.css";
 import image from "./weddingBanner.svg";
 
-const GalleryBanner = () => {
+interface Props {
+  displayText: "UPLOAD" | "GALLERY";
+}
+
+const GalleryBanner = ({ displayText }: Props) => {
+  const uploadText = {
+    title: "Want to upload photos?",
+    link: "/#uploadPhotos",
+    buttonText: "Upload photos",
+  };
+
+  const galleryText = {
+    title: "Looking for the reception photo gallery?",
+    link: "/weddingPhotos/gallery",
+    buttonText: " View gallery",
+  };
+
+  const textProps = displayText === "UPLOAD" ? uploadText : galleryText;
+
   return (
     <Container size="md" className={classes.container}>
       <div className={classes.inner}>
         <div className={classes.content}>
-          <Title className={classes.title}>
-            Looking for the reception photo gallery?
-          </Title>
+          <Title className={classes.title}>{textProps.title}</Title>
 
           <Text c="dimmed" mt="md">
             Please navigate to{" "}
-            <Anchor href="/weddingPhotos/gallery" c="blue">
-              /weddingPhotos/gallery
+            <Anchor href={textProps.link} c="blue">
+              {textProps.link}
             </Anchor>{" "}
             or use the button below.
           </Text>
@@ -23,13 +39,13 @@ const GalleryBanner = () => {
           <Group mt={30}>
             <Button
               component="a"
-              href="/weddingPhotos/gallery"
+              href={textProps.link}
               radius="xl"
               size="md"
               className={classes.control}
               rightSection={<IconExternalLink />}
             >
-              View gallery
+              {textProps.buttonText}
             </Button>
           </Group>
         </div>
