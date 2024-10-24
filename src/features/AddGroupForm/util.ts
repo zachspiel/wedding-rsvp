@@ -41,6 +41,7 @@ const createDefaultGroup = (events: Event[]): Group => {
     inviteSent: false,
     saveTheDateSent: false,
     dietaryRestrictions: "",
+    table: "",
   };
 };
 
