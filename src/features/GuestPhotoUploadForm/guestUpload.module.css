@@ -50,7 +50,7 @@
 
 .image {
   width: rem(376px);
-  height: rem(356px);
+  height: rem(300px);
 
   @media (max-width: $mantine-breakpoint-xs) {
     width: 100%;

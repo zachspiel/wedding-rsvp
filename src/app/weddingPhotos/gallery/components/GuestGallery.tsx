@@ -5,6 +5,7 @@ import {
   ActionIcon,
   Avatar,
   Box,
+  Card,
   Center,
   Chip,
   Container,
@@ -184,7 +185,7 @@ const GuestGallery = () => {
         </Text>
       </Flex>
 
-      <Flex ml="lg" w="100%" gap="md" wrap="wrap">
+      <Flex ml="lg" gap="md" wrap="wrap">
         <Chip.Group multiple value={mimeFilter} onChange={setMimeFilter}>
           <Group justify="center">
             <Chip value="image">Images</Chip>
@@ -205,7 +206,6 @@ const GuestGallery = () => {
       <Container>
         <Divider my="md" />
         <SimpleGrid
-          p="md"
           spacing={"xs"}
           mt="lg"
           style={{ overflow: "hidden" }}
@@ -216,7 +216,9 @@ const GuestGallery = () => {
           }}
         >
           {matchingImagesForFilters.length === 0 && !isLoading && (
-            <Text>No matching items found.</Text>
+            <Card withBorder h={200} w="100%" mb="lg">
+              <Text>No matching items found.</Text>
+            </Card>
           )}
           {matchingImagesForFilters.map((file, index) => {
             return createImageCard(file, index);
