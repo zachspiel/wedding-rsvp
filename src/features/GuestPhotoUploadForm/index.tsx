@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { saveGuestUploadedImages } from "@spiel-wedding/hooks/guestUploadedImages";
 import { IconPhoto } from "@tabler/icons-react";
@@ -21,6 +22,7 @@ import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
 import { Dashboard as UppyDashboard } from "@uppy/react";
 import Tus from "@uppy/tus";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import GalleryBanner from "./components/GalleryBanner";
 
@@ -28,6 +30,7 @@ const GuestUpload = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [uppy] = useState(initializeUppy);
   const isMobile = useMediaQuery("(max-width: 50em)");
+  const router = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -99,6 +102,19 @@ const GuestUpload = () => {
 
       if (successfulUploads !== undefined) {
         saveGuestUploadedImages(successfulUploads);
+
+        modals.openConfirmModal({
+          title: "Thank you for uploading!",
+          children: (
+            <Text size="sm">
+              To view the gallery, please use the button below or close this window to
+              keep adding more images.
+            </Text>
+          ),
+          labels: { confirm: "Go to gallery", cancel: "Add more images" },
+          onCancel: () => modals.closeAll(),
+          onConfirm: () => router.push("/weddingPhotos/gallery"),
+        });
       }
     });
 
@@ -120,8 +136,6 @@ const GuestUpload = () => {
         so much for participating!
       </Alert>
 
-      <GalleryBanner displayText="GALLERY" />
-
       <form onSubmit={form.onSubmit(handleUpload)}>
         <Flex justify="center">
           <UppyDashboard
@@ -132,6 +146,8 @@ const GuestUpload = () => {
           />
         </Flex>
       </form>
+
+      <GalleryBanner displayText="GALLERY" />
 
       <Modal
         opened={opened}
