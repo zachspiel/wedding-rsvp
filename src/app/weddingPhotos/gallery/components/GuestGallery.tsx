@@ -131,7 +131,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
             loading="lazy"
             unoptimized={file.mime_type.includes("gif")}
             blurDataURL={placeHolderImages[index]}
-            placeholder="blur"
+            placeholder={placeHolderImages[index] ? "blur" : undefined}
           />
         )}
         <Group bg="sage-green.9" w="100%" mt="auto">
@@ -351,7 +351,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                       quality={80}
                       loading="lazy"
                       blurDataURL={placeHolderImages[index]}
-                      placeholder="blur"
+                      placeholder={placeHolderImages[index] ? "blur" : undefined}
                     />
                   </div>
                 )}
@@ -404,8 +404,11 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                     alt={file.file_id}
                     unoptimized={file.mime_type.includes("gif")}
                     blurDataURL={placeHolderImages[index]}
-                    placeholder="blur"
+                    placeholder={placeHolderImages[index] ? "blur" : undefined}
                     loading="lazy"
+                    onError={() => {
+                      console.log(data.publicUrl);
+                    }}
                   />
                 )}
               </Carousel.Slide>

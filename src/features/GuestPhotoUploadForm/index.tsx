@@ -97,8 +97,8 @@ const GuestUpload = () => {
       const { firstName, lastName } = form.getValues();
 
       const successfulUploads = result.successful?.map((uploadResult) => ({
-        first_name: firstName,
-        last_name: lastName,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
         file_name: uploadResult.meta.objectName as string,
         mime_type: uploadResult.type,
       }));
@@ -127,6 +127,15 @@ const GuestUpload = () => {
           };
 
           sendEmailForUploadedImages(emailProps);
+        });
+      }
+
+      if (result.failed && result.failed.length > 0) {
+        showNotification({
+          message:
+            result.failed.length +
+            " images failed to upload. Please try again or let Zach know!",
+          color: "red",
         });
       }
     });
