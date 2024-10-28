@@ -37,7 +37,11 @@ import CommentDrawer from "./CommentDrawer";
 import DownloadButton from "./DownloadButton";
 import LikeButton from "./LikeButton";
 
-const GuestGallery = () => {
+interface Props {
+  placeHolderImages: string[];
+}
+
+const GuestGallery = ({ placeHolderImages }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>(["image", "video"]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -124,7 +128,10 @@ const GuestGallery = () => {
             layout="responsive"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             alt={file.file_id}
+            loading="lazy"
             unoptimized={file.mime_type.includes("gif")}
+            blurDataURL={placeHolderImages[index]}
+            placeholder="blur"
           />
         )}
         <Group bg="sage-green.9" w="100%" mt="auto">
@@ -304,7 +311,7 @@ const GuestGallery = () => {
           }}
           getEmblaApi={setEmbla}
         >
-          {matchingImagesForFilters.map((file) => {
+          {matchingImagesForFilters.map((file, index) => {
             const supabase = createClient();
             const name = file.first_name + " " + file.last_name;
             const { data } = supabase.storage
@@ -343,6 +350,8 @@ const GuestGallery = () => {
                       objectFit="contain"
                       quality={80}
                       loading="lazy"
+                      blurDataURL={placeHolderImages[index]}
+                      placeholder="blur"
                     />
                   </div>
                 )}
@@ -394,6 +403,9 @@ const GuestGallery = () => {
                     width={60}
                     alt={file.file_id}
                     unoptimized={file.mime_type.includes("gif")}
+                    blurDataURL={placeHolderImages[index]}
+                    placeholder="blur"
+                    loading="lazy"
                   />
                 )}
               </Carousel.Slide>

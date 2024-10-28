@@ -1,11 +1,10 @@
 "use client";
 
 import { ActionIcon, Group, Text } from "@mantine/core";
-import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { createClient } from "@spiel-wedding/database/client";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { IconDownload } from "@tabler/icons-react";
-import JsFileDownloader from "js-file-downloader";
+import { saveAs } from "file-saver";
 import { mutate } from "swr";
 
 interface Props {
@@ -20,11 +19,7 @@ const DownloadButton = ({ file, mr }: Props) => {
       .from("guest_gallery")
       .getPublicUrl(file.file_name);
 
-    new JsFileDownloader({
-      url: data.publicUrl,
-    }).catch(function (error) {
-      showCustomFailureNotification("An error occurred. Please try again later.");
-    });
+    saveAs(data.publicUrl, file.file_name);
 
     await incrementDownload();
   };
