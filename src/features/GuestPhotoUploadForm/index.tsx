@@ -25,6 +25,7 @@ import Tus from "@uppy/tus";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import GalleryBanner from "./components/GalleryBanner";
+import { sendEmailForUploadedImages } from "./sendEmailAction";
 
 const GuestUpload = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -93,15 +94,17 @@ const GuestUpload = () => {
     });
 
     uppyInstance.on("complete", (result) => {
+      const { firstName, lastName } = form.getValues();
+
       const successfulUploads = result.successful?.map((uploadResult) => ({
-        first_name: form.getValues().firstName,
-        last_name: form.getValues().lastName,
+        first_name: firstName,
+        last_name: lastName,
         file_name: uploadResult.meta.objectName as string,
         mime_type: uploadResult.type,
       }));
 
       if (successfulUploads !== undefined) {
-        saveGuestUploadedImages(successfulUploads);
+        const result = saveGuestUploadedImages(successfulUploads);
 
         modals.openConfirmModal({
           title: "Thank you for uploading!",
@@ -114,6 +117,16 @@ const GuestUpload = () => {
           labels: { confirm: "Go to gallery", cancel: "Add more images" },
           onCancel: () => modals.closeAll(),
           onConfirm: () => router.push("/weddingPhotos/gallery"),
+        });
+
+        result.then((uploadedImages) => {
+          const emailProps = {
+            firstName,
+            lastName,
+            uploadedImages,
+          };
+
+          sendEmailForUploadedImages(emailProps);
         });
       }
     });

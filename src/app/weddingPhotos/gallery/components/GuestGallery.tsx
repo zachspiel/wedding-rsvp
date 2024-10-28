@@ -262,7 +262,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
         classNames={classes}
       >
         {matchingImagesForFilters?.[activeSlide] && (
-          <Group gap="sm" c="white" p="sm">
+          <Group gap="sm" c="white" p="xs">
             <Avatar color="white" size="lg" />
             <div style={{ flex: 1 }}>
               <Text size="lg" fw={500}>
@@ -300,7 +300,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
         )}
 
         <Carousel
-          height="75vh"
+          height="70vh"
           slideSize={{ base: "100%" }}
           slideGap="lg"
           loop
