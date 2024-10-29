@@ -11,9 +11,14 @@ function bufferToBase64(buffer: Buffer): string {
 interface PlaceholderOptions {
   imagePath: string;
   bucket: string;
+  mimeType: string;
 }
 
 export async function generatePlaceholder(options: PlaceholderOptions) {
+  if (options.mimeType.includes("video")) {
+    return undefined;
+  }
+
   const supabase = createClient();
   const { data } = supabase.storage.from(options.bucket).getPublicUrl(options.imagePath, {
     transform: {

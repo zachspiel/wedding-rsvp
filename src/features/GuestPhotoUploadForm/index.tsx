@@ -103,7 +103,7 @@ const GuestUpload = () => {
         mime_type: uploadResult.type,
       }));
 
-      if (successfulUploads !== undefined) {
+      if (successfulUploads !== undefined && successfulUploads.length > 0) {
         const result = saveGuestUploadedImages(successfulUploads);
 
         modals.openConfirmModal({

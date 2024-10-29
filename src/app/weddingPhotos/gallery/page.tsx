@@ -7,11 +7,21 @@ import GuestGallery from "./components/GuestGallery";
 async function getProps() {
   const guestUploadedImages = await getGuestImages();
 
-  return await Promise.all(
-    guestUploadedImages.map(async (image) =>
-      generatePlaceholder({ imagePath: image.file_name, bucket: "guest_gallery" })
-    )
+  const placeHolders: Record<string, string | undefined> = {};
+
+  await Promise.all(
+    guestUploadedImages.map(async (image) => {
+      const placeholder = await generatePlaceholder({
+        imagePath: image.file_name,
+        bucket: "guest_gallery",
+        mimeType: image.mime_type,
+      });
+
+      placeHolders[image.file_id] = placeholder;
+    })
   );
+
+  return placeHolders;
 }
 
 export default async function GalleryPage({

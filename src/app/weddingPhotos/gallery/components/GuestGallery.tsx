@@ -31,6 +31,8 @@ import { IconMessage, IconVideo, IconX } from "@tabler/icons-react";
 import cx from "clsx";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 import useSWR from "swr";
 import classes from "../styles.module.css";
 import CommentDrawer from "./CommentDrawer";
@@ -38,7 +40,7 @@ import DownloadButton from "./DownloadButton";
 import LikeButton from "./LikeButton";
 
 interface Props {
-  placeHolderImages: string[];
+  placeHolderImages: Record<string, string | undefined>;
 }
 
 const GuestGallery = ({ placeHolderImages }: Props) => {
@@ -130,8 +132,8 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
             alt={file.file_id}
             loading="lazy"
             unoptimized={file.mime_type.includes("gif")}
-            blurDataURL={placeHolderImages[index]}
-            placeholder={placeHolderImages[index] ? "blur" : undefined}
+            blurDataURL={placeHolderImages?.[file.file_id]}
+            placeholder={placeHolderImages[file.file_id] ? "blur" : undefined}
           />
         )}
         <Group bg="sage-green.9" w="100%" mt="auto">
@@ -311,7 +313,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
           }}
           getEmblaApi={setEmbla}
         >
-          {matchingImagesForFilters.map((file, index) => {
+          {matchingImagesForFilters.map((file) => {
             const supabase = createClient();
             const name = file.first_name + " " + file.last_name;
             const { data } = supabase.storage
@@ -336,23 +338,25 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                   </video>
                 ) : (
                   <div style={{ height: "90%", position: "relative" }}>
-                    <Image
-                      key={data.publicUrl}
-                      src={data.publicUrl}
-                      alt={file.file_id}
-                      className={classes.cardImage}
-                      fill
-                      style={{
-                        objectPosition: "top",
-                        zIndex: 0,
-                        transform: "translate3d(0, 0, 0)",
-                      }}
-                      objectFit="contain"
-                      quality={80}
-                      loading="lazy"
-                      blurDataURL={placeHolderImages[index]}
-                      placeholder={placeHolderImages[index] ? "blur" : undefined}
-                    />
+                    <Zoom>
+                      <Image
+                        key={data.publicUrl}
+                        src={data.publicUrl}
+                        alt={file.file_id}
+                        className={classes.cardImage}
+                        fill
+                        style={{
+                          objectPosition: "top",
+                          zIndex: 0,
+                          transform: "translate3d(0, 0, 0)",
+                        }}
+                        objectFit="contain"
+                        quality={80}
+                        loading="lazy"
+                        blurDataURL={placeHolderImages[file.file_id]}
+                        placeholder={placeHolderImages[file.file_id] ? "blur" : undefined}
+                      />
+                    </Zoom>
                   </div>
                 )}
               </Carousel.Slide>
@@ -371,8 +375,12 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
             const supabase = createClient();
             const { data } = supabase.storage
               .from("guest_gallery")
-              .getPublicUrl(file.file_name);
-
+              .getPublicUrl(file.file_name, {
+                transform: {
+                  width: 60,
+                  height: 60,
+                },
+              });
             return (
               <Carousel.Slide
                 key={`${file.file_id}-thumbnail`}
@@ -403,8 +411,8 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                     width={60}
                     alt={file.file_id}
                     unoptimized={file.mime_type.includes("gif")}
-                    blurDataURL={placeHolderImages[index]}
-                    placeholder={placeHolderImages[index] ? "blur" : undefined}
+                    blurDataURL={placeHolderImages?.[file.file_id]}
+                    placeholder={placeHolderImages?.[file.file_id] ? "blur" : undefined}
                     loading="lazy"
                     onError={() => {
                       console.log(data.publicUrl);
