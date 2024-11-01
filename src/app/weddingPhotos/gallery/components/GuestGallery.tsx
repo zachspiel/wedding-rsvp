@@ -90,6 +90,12 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
         return true;
       }
 
+      if (file?.image_tag === "photobooth" && !mimeFilter.includes("photobooth")) {
+        return false;
+      } else if (file?.image_tag === "photobooth" && mimeFilter.includes("photobooth")) {
+        return true;
+      }
+
       return mimeFilter.some((filter) => file.mime_type.includes(filter));
     })
     .filter((file) => {
@@ -199,6 +205,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
           <Group justify="center">
             <Chip value="image">Images</Chip>
             <Chip value="video">Videos</Chip>
+            <Chip value="photobooth">Photobooth</Chip>
           </Group>
         </Chip.Group>
 
