@@ -6,19 +6,6 @@ export interface Photo {
   blurDataUrl?: string;
 }
 
-/**
- * Data returned from Google Drive API
- */
-export interface UploadedPhotoGallery {
-  files: GoogleDriveFile[];
-}
-
-export interface GoogleDriveFile {
-  id?: string | null;
-  name?: string | null;
-  mimeType?: string | null;
-}
-
 export interface GuestUploadedImage {
   file_id: string;
   first_name: string;
@@ -28,6 +15,7 @@ export interface GuestUploadedImage {
   downloads: number;
   likes: number;
   created_at: string | null;
+  image_tag?: string | null;
   guest_image_comments?: GuestImageComment[];
 }
 
