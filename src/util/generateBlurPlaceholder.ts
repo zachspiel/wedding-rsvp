@@ -51,6 +51,10 @@ export async function getPlaceholderImage(photo: Photo): Promise<Photo> {
     Buffer.from(await res.arrayBuffer())
   );
 
-  const resizedBuffer = await sharp(buffer).resize(20).toBuffer();
-  return { ...photo, blurDataUrl: bufferToBase64(resizedBuffer) };
+  try {
+    const resizedBuffer = await sharp(buffer).resize(20).toBuffer();
+    return { ...photo, blurDataUrl: bufferToBase64(resizedBuffer) };
+  } catch (e) {
+    return photo;
+  }
 }
