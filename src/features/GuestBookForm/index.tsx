@@ -117,7 +117,7 @@ const GuestBookForm = ({
           withAsterisk={isMessageRequred}
           {...form.getInputProps("name")}
           error={form.errors["name"]}
-          disabled={isSaving}
+          disabled
         />
         <TextInput
           label="Email"
@@ -126,7 +126,7 @@ const GuestBookForm = ({
           withAsterisk={isMessageRequred}
           {...form.getInputProps("email")}
           error={form.errors["email"]}
-          disabled={isSaving}
+          disabled
         />
       </SimpleGrid>
 
@@ -141,7 +141,7 @@ const GuestBookForm = ({
         withAsterisk={isMessageRequred}
         {...form.getInputProps("message")}
         error={form.errors["message"]}
-        disabled={isSaving}
+        disabled
       />
 
       {customButtonLabel && (
@@ -153,7 +153,7 @@ const GuestBookForm = ({
       )}
 
       {!customButtonLabel && (
-        <Button type="submit" size="md" mt="md">
+        <Button type="submit" size="md" mt="md" disabled>
           Sign guest book
         </Button>
       )}
