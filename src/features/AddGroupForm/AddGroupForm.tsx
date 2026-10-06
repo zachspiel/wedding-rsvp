@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   GuestAffiliationSelection,
   GuestInput,
@@ -20,10 +19,11 @@ import {
   showCustomFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { createGroup } from "@spiel-wedding/hooks/guests";
+import { createGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { useEffect, useState } from "react";
 import { addChildToGuests, addPartnerToGuests, createDefaultGroup } from "./util";
+import { mutate } from "swr";
 
 interface Props {
   events: Event[];
@@ -88,9 +88,10 @@ const AddGroupForm = ({ events }: Props) => {
     try {
       await createGroup(form.values, events);
       showSuccessNotification(
-        `Successfully added ${form.values.guests.length} guests 🎉!`
+        `Successfully added ${form.values.guests.length} guests 🎉!`,
       );
-      await revalidatePage("/guestList");
+
+      await mutate(GROUP_SWR_KEY);
     } catch (error) {
       showCustomFailureNotification(`${error}`);
     }

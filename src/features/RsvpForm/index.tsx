@@ -12,7 +12,6 @@ import {
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import EventCard from "@spiel-wedding/components/eventCard";
 import MailingAddressForm from "@spiel-wedding/components/form/MailingAddressForm";
 import { getGroupById, updateGroup } from "@spiel-wedding/hooks/guests";
@@ -24,6 +23,7 @@ import GuestBookForm from "../GuestBookForm";
 import { sendMail } from "./action";
 import RsvpModal from "./components/RsvpModal";
 import classes from "./rsvpFormStyles.module.css";
+import { useRouter } from "next/navigation";
 
 interface Props {
   events: Event[];
@@ -36,6 +36,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [error, setError] = useState<string | null>();
+  const router = useRouter();
 
   const getInitialValues = () => {
     const formattedGuests = selectedGroup.guests.map((guest) => {
@@ -93,7 +94,8 @@ const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
 
       if (groupWithUpdatedResponses) {
         await sendMail({ group: groupWithUpdatedResponses, events });
-        await revalidatePage("/");
+
+        router.refresh();
       }
     }
   };

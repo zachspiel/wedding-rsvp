@@ -2,7 +2,6 @@
 
 import { ActionIcon, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
@@ -22,7 +21,6 @@ const DeleteMessageButton = ({ message }: Props): ReactElement => {
 
     if (removedMessage) {
       showSuccessNotification("Successfully deleted the message!");
-      await revalidatePage("/");
     } else {
       showCustomFailureNotification(
         "An error occurred while deleting the message. Please try again later.",

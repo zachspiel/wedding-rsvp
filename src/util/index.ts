@@ -10,7 +10,7 @@ export const addEventResponseMapToGuest = (guests: Guest[]): Guest[] => {
     const responseMap: Record<string, EventResponse> = {};
 
     guest.event_responses.forEach(
-      (response) => (responseMap[response.eventId] = response)
+      (response) => (responseMap[response.eventId] = response),
     );
 
     return { ...guest, responseMap };

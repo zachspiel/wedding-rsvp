@@ -4,8 +4,6 @@ import { getEvents } from "@spiel-wedding/hooks/events";
 import { getGroups } from "@spiel-wedding/hooks/guests";
 import EventSummary from "./components/EventSummary";
 
-export const revalidate = 0;
-
 async function getProps() {
   const [groups, events] = await Promise.all([getGroups(), getEvents()]);
   return { groups, events };

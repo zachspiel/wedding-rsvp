@@ -3,7 +3,6 @@
 import { Card, Group, rem, Text, useMantineTheme } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   showCustomFailureNotification,
   showFailureNotification,
@@ -38,7 +37,6 @@ const UploadImages = () => {
           .then(async (newImage) => {
             if (newImage) {
               showSuccessNotification("Successfully uploaded image.");
-              await revalidatePage("/");
             } else {
               showFailureNotification();
             }
@@ -63,8 +61,8 @@ const UploadImages = () => {
       onReject={(files) =>
         files.map((file) =>
           showCustomFailureNotification(
-            file.errors.map((error) => error.message).join(", ")
-          )
+            file.errors.map((error) => error.message).join(", "),
+          ),
         )
       }
       accept={IMAGE_MIME_TYPE}

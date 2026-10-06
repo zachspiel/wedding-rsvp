@@ -16,6 +16,7 @@ import { showCustomFailureNotification } from "@spiel-wedding/components/notific
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { ReactElement, useState } from "react";
 import { saveGuestMessage, sendEmailForNewComment } from "./action";
+import { useRouter } from "next/navigation";
 
 interface Props {
   name?: string;
@@ -38,6 +39,7 @@ const GuestBookForm = ({
     defaultValue: [],
   });
   const [progress, setProgress] = useState(0);
+  const router = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -86,7 +88,7 @@ const GuestBookForm = ({
         await sendEmailForNewComment(guestMessage);
         setProgress(80);
 
-        await revalidatePage("/");
+        router.refresh();
         setProgress(100);
 
         form.reset();

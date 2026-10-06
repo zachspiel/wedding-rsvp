@@ -2,7 +2,6 @@
 
 import { Button, Group, Textarea } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import {
   showCustomFailureNotification,
   showSuccessNotification,
@@ -10,6 +9,7 @@ import {
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { ReactElement } from "react";
 import { updateGuestMessage } from "../actions";
+import { useRouter } from "next/navigation";
 
 interface Props {
   message: PublicGuestMessage;
@@ -32,7 +32,6 @@ const EditMessage = ({ message, closeEditor }: Props): ReactElement => {
 
     if (guestMessage.length > 0) {
       showSuccessNotification("Successfully updated message in guest book!");
-      await revalidatePage("/");
     } else {
       showCustomFailureNotification(
         "An error occurred while updating the message. Please try again later.",

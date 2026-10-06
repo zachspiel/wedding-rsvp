@@ -1,7 +1,6 @@
 "use client";
 
 import { ActionIcon } from "@mantine/core";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { createClient } from "@spiel-wedding/database/client";
 import { User } from "@supabase/supabase-js";
 import { IconLogout } from "@tabler/icons-react";
@@ -24,7 +23,7 @@ const SignOutButton = ({ user }: Props): ReactElement => {
       showFailureNotification();
     } else {
       router.push("/");
-      await revalidatePage("/");
+      router.refresh();
     }
   };
 

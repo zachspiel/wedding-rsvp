@@ -12,25 +12,14 @@ import { isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { Event, Group } from "@spiel-wedding/types/Guest";
 import { IconArrowRight, IconSearch } from "@tabler/icons-react";
-import { ReactElement, useState } from "react";
-import useSWR from "swr";
+import { ReactElement, useState, useTransition } from "react";
 import RsvpForm from "../RsvpForm";
 import SearchResults from "./components/SearchResults";
+import { getSearchResults } from "./action";
 
 interface SearchForm {
   name: string;
 }
-
-const getMatchingGuests = async (name: string): Promise<Group[]> => {
-  const response = await fetch(`/api/searchResult?name=${name}`);
-  const result = await response.json();
-
-  if (response.status !== 200) {
-    throw result;
-  }
-
-  return result;
-};
 
 interface Props {
   events: Event[];
@@ -38,14 +27,11 @@ interface Props {
 
 const RsvpSearchbar = ({ events }: Props): ReactElement => {
   const [selectedGroup, setSelectedGroup] = useState<Group>();
-  const [searchForm, setSearchForm] = useState<SearchForm>();
+  const [searchResults, setSearchResults] = useState<Group[] | null>(null);
   const isMobile = useMediaQuery("(max-width: 50em)");
+  const [isPending, startTransition] = useTransition();
 
-  const { data, error, isLoading, mutate } = useSWR(
-    searchForm ? ["searchResults", searchForm] : null,
-    ([url, params]) => getMatchingGuests(params.name),
-    { fallbackData: [] },
-  );
+  const hasResults = searchResults && searchResults.length > 0;
 
   const form = useForm({
     initialValues: {
@@ -56,10 +42,18 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
     },
   });
 
-  const handleSubmit = (values: SearchForm) => {
+  const handleSubmit = async ({ name }: SearchForm) => {
     setSelectedGroup(undefined);
-    setSearchForm(values);
-    mutate();
+    setSearchResults(null);
+    try {
+      const results = await getSearchResults(name);
+      startTransition(() => {
+        setSearchResults(results);
+      });
+    } catch (error: unknown) {
+      console.error(error);
+      setSearchResults([]);
+    }
   };
 
   const selectGroup = (group: Group) => {
@@ -77,8 +71,8 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
             w={isMobile ? "100%" : "75%"}
             placeholder="Enter your first and last name"
             rightSectionWidth={42}
+            key={form.key("name")}
             {...form.getInputProps("name")}
-            error={form.errors.name}
             leftSection={
               <IconSearch style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
             }
@@ -90,6 +84,7 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
                 component="button"
                 type="submit"
                 aria-label="Submit search"
+                loading={isPending}
               >
                 <IconArrowRight
                   style={{ width: rem(18), height: rem(18) }}
@@ -101,13 +96,7 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
         </MGroup>
       </form>
 
-      {error && (
-        <Text c="red" fz="sm" ta="center">
-          {error.info}
-        </Text>
-      )}
-
-      {isLoading && (
+      {isPending && (
         <>
           <Skeleton w="100%" h={25} />
 
@@ -117,14 +106,21 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
         </>
       )}
 
-      {!selectedGroup && data.length > 0 && (
+      {searchResults && !isPending && searchResults.length === 0 && (
+        <Text ta="center" c="dimmed">
+          Hm... we can't find your name. Make sure you enter your name exactly as it
+          appears on your invitation.
+        </Text>
+      )}
+
+      {!selectedGroup && hasResults && (
         <>
           <Text>Select your party below or try searching again.</Text>
           <Text>
             If none of these are you, please reach out to Sedona and Zach to see exactly
             how they entered your details.
           </Text>
-          <SearchResults searchResults={data} setSelectedGroup={selectGroup} />
+          <SearchResults searchResults={searchResults} setSelectedGroup={selectGroup} />
         </>
       )}
 

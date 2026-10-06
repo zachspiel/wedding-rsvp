@@ -18,7 +18,6 @@ import {
 import { DatePickerInput } from "@mantine/dates";
 import "@mantine/dates/styles.css";
 import { isNotEmpty, useForm } from "@mantine/form";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { STATES } from "@spiel-wedding/components/form/states";
 import {
   showFailureNotification,
@@ -37,6 +36,7 @@ import {
 } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import isEqual from "lodash.isequal";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -52,6 +52,7 @@ type EditEventForm = Event & {
 const EditEvent = ({ event, groups }: Props) => {
   const [search, setSearch] = useState("");
   const [date, setDate] = useState<string | null>(new Date(event.date).toISOString());
+  const router = useRouter();
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -112,7 +113,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     if (updateEventResult && removedResponses !== null && newResponses !== null) {
       showSuccessNotification("Updated event");
-      await revalidatePage("/events");
+      router.refresh();
     } else {
       showFailureNotification();
     }
