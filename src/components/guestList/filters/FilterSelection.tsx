@@ -1,8 +1,8 @@
 "use client";
 
-import { ComboboxItem, ComboboxItemGroup, MultiSelect } from "@mantine/core";
+import { ComboboxData, ComboboxItem, MultiSelect } from "@mantine/core";
 import { Event, Group, GuestAffiliation } from "@spiel-wedding/types/Guest";
-import React from "react";
+import React, { ReactElement } from "react";
 import {
   filterGroupByAffiliation,
   getMissingValueTotals,
@@ -16,20 +16,20 @@ interface Props {
   setFilters: (filters: string[]) => void;
 }
 
-const FilterSelection = (props: Props): JSX.Element => {
+const FilterSelection = (props: Props): ReactElement => {
   const { groups, filters, setFilters } = props;
-  const [selectItems, setSelectItems] = React.useState<ComboboxItemGroup[]>([]);
+  const [selectItems, setSelectItems] = React.useState<ComboboxData<string>>([]);
   const totalGuests = React.useMemo(
     () =>
       groups
         .map((group) => group.guests.length)
         .reduce((total, current) => total + current, 0),
-    [groups]
+    [groups],
   );
 
   React.useEffect(() => {
     const missingValueTotals = getMissingValueTotals(groups);
-    const newSelectItems: ComboboxItemGroup[] = [];
+    const newSelectItems = [];
 
     const missingItemOptions = Object.entries(missingValueTotals)
       .filter(([key, value]) => value > 0)

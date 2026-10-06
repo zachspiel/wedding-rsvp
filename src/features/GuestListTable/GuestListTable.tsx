@@ -32,7 +32,7 @@ import { getEvents } from "@spiel-wedding/hooks/events";
 import { GROUP_SWR_KEY, getGroups } from "@spiel-wedding/hooks/guests";
 import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { IconChevronDown, IconChevronUp, IconSearch, IconX } from "@tabler/icons-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import useSWR from "swr";
 import AddGroupForm from "../AddGroupForm/AddGroupForm";
 import DownloadGuestList from "./components/DownloadGuestList";
@@ -44,7 +44,7 @@ interface ThProps {
   onSort(): void;
 }
 
-const GuestListTable = (): JSX.Element => {
+const GuestListTable = (): ReactElement => {
   const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups, { fallbackData: [] });
   const { data: events } = useSWR("events", getEvents, { fallbackData: [] });
 
@@ -73,7 +73,7 @@ const GuestListTable = (): JSX.Element => {
     sortGroups(groups, reverseSortDirection),
     search,
     filters,
-    eventRsvpFilters
+    eventRsvpFilters,
   );
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -161,8 +161,8 @@ const GuestListTable = (): JSX.Element => {
                   isEventFilterEmpty()
                     ? true
                     : Object.entries(eventRsvpFilters ?? {}).some(([key, filters]) =>
-                        filters.includes(guest.responseMap?.[key]?.rsvp)
-                      )
+                        filters.includes(guest.responseMap?.[key]?.rsvp),
+                      ),
                 ).length
             }
           </b>{" "}

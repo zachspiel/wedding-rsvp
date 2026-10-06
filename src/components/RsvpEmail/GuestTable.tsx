@@ -1,7 +1,7 @@
 import { Column, Heading, Row, Section, Text } from "@react-email/components";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
-import { CSSProperties } from "react";
+import { CSSProperties, ReactElement } from "react";
 
 const paragraph = {
   fontSize: "18px",
@@ -29,7 +29,7 @@ interface Props {
   events: Event[];
 }
 
-const GuestTable = ({ guests, events }: Props): JSX.Element => {
+const GuestTable = ({ guests, events }: Props): ReactElement => {
   const createColumn = (text: string, style?: CSSProperties) => {
     return (
       <Column style={{ padding: "0.4375rem", width: "50%" }}>
@@ -69,7 +69,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                 "Address",
                 `${event.address1} ${event.address2 || ""} ${event.city}, ${
                   event.state
-                } ${event.postal}`
+                } ${event.postal}`,
               )}
 
               <Section style={{ marginBottom: "1rem" }} key={event.event_id}>
@@ -82,7 +82,7 @@ const GuestTable = ({ guests, events }: Props): JSX.Element => {
                   <Row key={guest.guest_id} style={tableRow}>
                     {createColumn(`${guest.firstName} ${guest.lastName}`)}
                     {createColumn(
-                      guest.responseMap[event.event_id]?.rsvp ?? "No Response"
+                      guest.responseMap[event.event_id]?.rsvp ?? "No Response",
                     )}
                   </Row>
                 ))}

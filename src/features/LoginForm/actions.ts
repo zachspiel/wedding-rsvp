@@ -4,7 +4,7 @@ import { createClient } from "@spiel-wedding/database/server";
 import { LoginFormData } from "./types";
 
 export async function login(formData: LoginFormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error, data } = await supabase.auth.signInWithPassword(formData);
 

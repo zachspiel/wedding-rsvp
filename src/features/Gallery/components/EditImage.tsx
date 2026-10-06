@@ -1,22 +1,22 @@
 "use client";
 
-import { Modal, TextInput, Group, Button, ActionIcon, Switch } from "@mantine/core";
+import { ActionIcon, Button, Group, Modal, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
-import { Photo } from "@spiel-wedding/types/Photo";
-import { useState } from "react";
-import { useSWRConfig } from "swr";
 import { GALLERY_SWR_KEY, removeImage, updatePhoto } from "@spiel-wedding/hooks/gallery";
+import { Photo } from "@spiel-wedding/types/Photo";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { ReactElement, useState } from "react";
+import { useSWRConfig } from "swr";
 
 interface Props {
   image: Photo;
 }
 
-const EditImage = ({ image }: Props): JSX.Element => {
+const EditImage = ({ image }: Props): ReactElement => {
   const [opened, setOpened] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const { mutate } = useSWRConfig();

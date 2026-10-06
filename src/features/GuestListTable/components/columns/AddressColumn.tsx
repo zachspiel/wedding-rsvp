@@ -1,11 +1,12 @@
 import { Text } from "@mantine/core";
 import { Group } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 
 interface Props {
   group: Group;
 }
 
-const AddressColumn = (props: Props): JSX.Element => {
+const AddressColumn = (props: Props): ReactElement => {
   const { group } = props;
 
   if (group.address1?.length === 0) {

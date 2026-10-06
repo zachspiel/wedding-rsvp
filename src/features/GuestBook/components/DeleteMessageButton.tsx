@@ -9,13 +9,14 @@ import {
 } from "@spiel-wedding/components/notifications/notifications";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { IconTrash } from "@tabler/icons-react";
+import { ReactElement } from "react";
 import { deleteGuestMessage } from "../actions";
 
 interface Props {
   message: PublicGuestMessage;
 }
 
-const DeleteMessageButton = ({ message }: Props): JSX.Element => {
+const DeleteMessageButton = ({ message }: Props): ReactElement => {
   const deleteMessage = async () => {
     const removedMessage = await deleteGuestMessage(message.id);
 
@@ -24,7 +25,7 @@ const DeleteMessageButton = ({ message }: Props): JSX.Element => {
       await revalidatePage("/");
     } else {
       showCustomFailureNotification(
-        "An error occurred while deleting the message. Please try again later."
+        "An error occurred while deleting the message. Please try again later.",
       );
     }
   };

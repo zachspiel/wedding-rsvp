@@ -30,7 +30,7 @@ import {
 } from "@tabler/icons-react";
 import { saveAs } from "file-saver";
 import Image from "next/image";
-import { CSSProperties } from "react";
+import { CSSProperties, ReactElement } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput";
 
@@ -56,10 +56,10 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
   };
 
   const createDetailSection = (
-    icon: JSX.Element,
+    icon: ReactElement,
     label: string,
-    detail: JSX.Element,
-    withBorder?: boolean
+    detail: ReactElement,
+    withBorder?: boolean,
   ) => {
     return (
       <Card.Section mt="xs" withBorder={withBorder}>
@@ -134,28 +134,28 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
           "Location",
           event.imageUrl
             ? createPreviewElement(event.location, event.imageUrl)
-            : createDefaultDetailElement(event.location)
+            : createDefaultDetailElement(event.location),
         )}
 
         {createDetailSection(
           <IconMapPin style={iconStyles} stroke={1.5} />,
           "Address",
-          createCopyElement(createFormattedURL())
+          createCopyElement(createFormattedURL()),
         )}
 
         {createDetailSection(
           <IconCalendarHeart style={iconStyles} stroke={1.5} />,
           "Date & Time",
           createDefaultDetailElement(
-            `${new Date(event.date).toDateString()} • ${event.time}`
-          )
+            `${new Date(event.date).toDateString()} • ${event.time}`,
+          ),
         )}
 
         {createDetailSection(
           <IconHanger style={iconStyles} stroke={1.5} />,
           "Attire",
           createDefaultDetailElement(event.attire),
-          form !== undefined
+          form !== undefined,
         )}
 
         {form === undefined
@@ -163,9 +163,9 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
               <IconUsers style={iconStyles} stroke={1.5} />,
               "Invited Guests",
               createDefaultDetailElement(
-                getGuestsForEvent(event, guests).length.toString()
+                getGuestsForEvent(event, guests).length.toString(),
               ),
-              true
+              true,
             )
           : null}
 
@@ -188,7 +188,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
                 {guests.map((guest, guestIndex) => {
                   const eventResponse = guest.responseMap[event.event_id];
                   const eventIndex = guest.event_responses.findIndex(
-                    (response) => response.response_id === eventResponse?.response_id
+                    (response) => response.response_id === eventResponse?.response_id,
                   );
 
                   return (

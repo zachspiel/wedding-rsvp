@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { ReactElement } from "react";
 
-const Logo = (): JSX.Element => {
+const Logo = (): ReactElement => {
   return (
     <Image
       src="/assets/images/The-Spielbergers-Wedding-Logo-Variant.webp"

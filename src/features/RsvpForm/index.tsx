@@ -19,7 +19,7 @@ import { getGroupById, updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import GuestBookForm from "../GuestBookForm";
 import { sendMail } from "./action";
 import RsvpModal from "./components/RsvpModal";
@@ -32,7 +32,7 @@ interface Props {
 
 const TOTAL_STEPS = 4;
 
-const RsvpForm = ({ events, selectedGroup }: Props): JSX.Element => {
+const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
   const [currentStep, setCurrentStep] = useState(0);
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [error, setError] = useState<string | null>();

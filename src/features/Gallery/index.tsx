@@ -1,12 +1,13 @@
 "use client";
 
-import { Carousel, Embla } from "@mantine/carousel";
+import { Carousel } from "@mantine/carousel";
 import { Modal } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { IconX } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { EmblaCarouselType } from "embla-carousel";
+import { ReactElement, useEffect, useState } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import GalleryImage from "./components/GalleryImage";
 import UploadImages from "./components/UploadImages";
@@ -16,11 +17,11 @@ interface Props {
   gallery: Photo[];
 }
 
-const Gallery = ({ gallery }: Props): JSX.Element => {
+const Gallery = ({ gallery }: Props): ReactElement => {
   const { isAdminViewEnabled } = useAdminView();
   const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 50em)");
-  const [embla, setEmbla] = useState<Embla | null>(null);
+  const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
 
   useEffect(() => {
@@ -35,7 +36,8 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
 
   const createSlides = (objectFit: "cover" | "contain", updateOrderedPhotos = false) => {
     return gallery
-      .filter((image) => (!isAdminViewEnabled ? image.isVisible : true))
+      .filter((image) => (!isAdminViewEnabled && image ? image.isVisible : true))
+      .filter((image) => image)
       .map((photo, index) => (
         <Carousel.Slide key={photo.gallery_id}>
           <GalleryImage
@@ -62,11 +64,13 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
       <Carousel
         slideSize={{ base: "100%", sm: "60%" }}
         slideGap="md"
-        loop
         withIndicators
         classNames={classes}
         previousControlProps={{ "aria-label": "Previous Image" }}
         nextControlProps={{ "aria-label": "Next Image" }}
+        emblaOptions={{
+          loop: true,
+        }}
       >
         {createSlides("cover", true)}
       </Carousel>
@@ -88,9 +92,11 @@ const Gallery = ({ gallery }: Props): JSX.Element => {
         <Carousel
           slideSize={{ base: "100%", lg: "50%" }}
           slideGap={"sm"}
-          loop
           withIndicators
           classNames={classes}
+          emblaOptions={{
+            loop: true,
+          }}
           getEmblaApi={setEmbla}
         >
           {createSlides("contain")}

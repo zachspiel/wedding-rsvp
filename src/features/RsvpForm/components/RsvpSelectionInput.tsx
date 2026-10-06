@@ -2,7 +2,8 @@
 
 import { Group as MGroup, Radio } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { RsvpResponse, Group } from "@spiel-wedding/types/Guest";
+import { Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 
 interface Props {
   form: UseFormReturnType<Group>;
@@ -10,7 +11,7 @@ interface Props {
   responseIndex: number;
 }
 
-const RsvpSelection = ({ form, guestIndex, responseIndex }: Props): JSX.Element => {
+const RsvpSelection = ({ form, guestIndex, responseIndex }: Props): ReactElement => {
   const resetUnknownGuest = (index: number): void => {
     const guest = form.values.guests[index];
     if (guest.nameUnknown) {
@@ -22,7 +23,7 @@ const RsvpSelection = ({ form, guestIndex, responseIndex }: Props): JSX.Element 
   return (
     <Radio.Group
       {...form.getInputProps(
-        `guests.${guestIndex}.event_responses.${responseIndex}.rsvp`
+        `guests.${guestIndex}.event_responses.${responseIndex}.rsvp`,
       )}
     >
       <MGroup mt="xs">

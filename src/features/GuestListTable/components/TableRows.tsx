@@ -1,5 +1,6 @@
 import { TableTd, TableTr, Text } from "@mantine/core";
 import { Event, Group } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 import ActionColumn from "./columns/ActionColumn";
 import AddressColumn from "./columns/AddressColumn";
 import GuestsColumn from "./columns/GuestsColumn";
@@ -11,7 +12,7 @@ interface Props {
   openModal: (group: Group) => void;
 }
 
-const TableRows = (props: Props): JSX.Element => {
+const TableRows = (props: Props): ReactElement => {
   return (
     <>
       {props.groups.map((group) => (

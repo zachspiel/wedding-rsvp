@@ -23,12 +23,15 @@ export const updateEvent = async (event: Event): Promise<Event | undefined> => {
     .eq("event_id", event.event_id)
     .select();
 
-  console.error(error);
+  if (error) {
+    console.error(`Error while updating event: ${error}`);
+  }
+
   return data?.[0];
 };
 
 export const bulkUpsertEventResponse = async (
-  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][]
+  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
 ): Promise<EventResponse[] | null> => {
   if (eventResponses.length === 0) {
     return [];
@@ -40,13 +43,15 @@ export const bulkUpsertEventResponse = async (
     .upsert(eventResponses)
     .select();
 
-  console.error(error);
+  if (error) {
+    console.error(`Error while bulk upserting event: ${error}`);
+  }
 
   return data;
 };
 
 export const createEventResponses = async (
-  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][]
+  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
 ): Promise<EventResponse[] | null> => {
   const supabase = createClient();
   const { data } = await supabase
@@ -58,7 +63,7 @@ export const createEventResponses = async (
 };
 
 export const deleteEventResponse = async (
-  responseId: string
+  responseId: string,
 ): Promise<EventResponse | null> => {
   const supabase = createClient();
   const { data } = await supabase
@@ -71,7 +76,7 @@ export const deleteEventResponse = async (
 };
 
 export const deleteEventResponses = async (
-  responseIds: string[]
+  responseIds: string[],
 ): Promise<EventResponse[] | null> => {
   const supabase = createClient();
   const { data } = await supabase

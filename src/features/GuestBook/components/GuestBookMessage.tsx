@@ -4,7 +4,7 @@ import { ActionIcon, Card, Flex, Group, Text } from "@mantine/core";
 import { readLocalStorageValue } from "@mantine/hooks";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
 import { IconPencil } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import classes from "../guestbook.module.css";
 import DeleteMessageButton from "./DeleteMessageButton";
 import EditMessage from "./EditMessage";
@@ -13,7 +13,7 @@ interface Props {
   message: PublicGuestMessage;
 }
 
-const GuestBookMessage = ({ message }: Props): JSX.Element => {
+const GuestBookMessage = ({ message }: Props): ReactElement => {
   const [canModify, setCanModify] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [date, setDate] = useState<string>("");

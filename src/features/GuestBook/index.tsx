@@ -4,7 +4,7 @@ import { Pagination } from "@mantine/core";
 import { showSuccessNotification } from "@spiel-wedding/components/notifications/notifications";
 import GuestBookForm from "@spiel-wedding/features/GuestBookForm";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import GuestBookMessage from "./components/GuestBookMessage";
 
@@ -24,7 +24,7 @@ function chunk(array: PublicGuestMessage[]): PublicGuestMessage[][] {
   return [head, ...chunk(tail)];
 }
 
-const GuestBook = ({ guestMessages }: Props): JSX.Element => {
+const GuestBook = ({ guestMessages }: Props): ReactElement => {
   const [activePage, setPage] = useState(1);
 
   const saveMessage = async (messages: PublicGuestMessage[]): Promise<void> => {

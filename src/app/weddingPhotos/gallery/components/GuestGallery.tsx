@@ -1,6 +1,6 @@
 "use client";
 
-import { Carousel, Embla } from "@mantine/carousel";
+import { Carousel } from "@mantine/carousel";
 import {
   ActionIcon,
   Avatar,
@@ -29,6 +29,7 @@ import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 import { formatDate } from "@spiel-wedding/util";
 import { IconMessage, IconVideo, IconX } from "@tabler/icons-react";
 import cx from "clsx";
+import { EmblaCarouselType } from "embla-carousel";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import Zoom from "react-medium-image-zoom";
@@ -47,8 +48,8 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>(["image", "video"]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
   const [opened, { open, close }] = useDisclosure(false);
-  const [embla, setEmbla] = useState<Embla | null>(null);
-  const [thumbnail, setThumbnail] = useState<Embla | null>(null);
+  const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
+  const [thumbnail, setThumbnail] = useState<EmblaCarouselType | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [scrollToIndex, setScrollToIndex] = useState<number | null>();
   const [likes, setLikes] = useLocalStorage<string[]>({
@@ -71,7 +72,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
     (key) => getCommentsForImage(selectedFile?.file_id as string),
     {
       fallbackData: [],
-    }
+    },
   );
 
   useEffect(() => {
@@ -184,7 +185,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
 
       setActiveSlide(index);
     },
-    [embla, thumbnail]
+    [embla, thumbnail],
   );
 
   return (
@@ -211,7 +212,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
 
         <MultiSelect
           data={Array.from(
-            new Set(gallery.map((image) => `${image.first_name} ${image.last_name}`))
+            new Set(gallery.map((image) => `${image.first_name} ${image.last_name}`)),
           )}
           value={namesFilter}
           onChange={setNameFilter}
@@ -284,8 +285,8 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                   {formatDate(
                     new Date(
                       matchingImagesForFilters[activeSlide].created_at ??
-                        new Date().toString()
-                    )
+                        new Date().toString(),
+                    ),
                   )}
                 </Text>
               )}
@@ -312,11 +313,13 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
           height="70vh"
           slideSize={{ base: "100%" }}
           slideGap="lg"
-          loop
           classNames={classes}
           onSlideChange={(index) => {
             thumbnail?.scrollTo(index);
             setActiveSlide(index);
+          }}
+          emblaOptions={{
+            loop: true,
           }}
           getEmblaApi={setEmbla}
         >
@@ -374,9 +377,11 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
         <Carousel
           height="100px"
           slideGap={"sm"}
-          loop
           slideSize="100px"
           getEmblaApi={setThumbnail}
+          emblaOptions={{
+            loop: true,
+          }}
         >
           {matchingImagesForFilters.map((file, index) => {
             const supabase = createClient();
@@ -399,7 +404,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                     w={60}
                     className={cx(
                       classes.imageThumbnail,
-                      index === activeSlide ? classes.activeSlide : undefined
+                      index === activeSlide ? classes.activeSlide : undefined,
                     )}
                   >
                     <Center mt="md">
@@ -410,7 +415,7 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                   <Image
                     className={cx(
                       classes.imageThumbnail,
-                      index === activeSlide ? classes.activeSlide : undefined
+                      index === activeSlide ? classes.activeSlide : undefined,
                     )}
                     src={data.publicUrl}
                     objectFit="contain"

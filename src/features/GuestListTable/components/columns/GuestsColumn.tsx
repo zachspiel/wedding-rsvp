@@ -1,12 +1,13 @@
 import { Badge, Text } from "@mantine/core";
 import { Guest, GuestAffiliation } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 
 interface Props {
   guests: Guest[];
   affiliation?: GuestAffiliation;
 }
 
-const GuestsColumn = (props: Props): JSX.Element => {
+const GuestsColumn = (props: Props): ReactElement => {
   const { guests, affiliation } = props;
 
   return (

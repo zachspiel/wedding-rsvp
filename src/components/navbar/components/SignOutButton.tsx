@@ -1,18 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { showFailureNotification } from "../../notifications/notifications";
 import { ActionIcon } from "@mantine/core";
-import { User } from "@supabase/supabase-js";
-import { IconLogout } from "@tabler/icons-react";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { createClient } from "@spiel-wedding/database/client";
+import { User } from "@supabase/supabase-js";
+import { IconLogout } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { ReactElement } from "react";
+import { showFailureNotification } from "../../notifications/notifications";
 
 interface Props {
   user?: User;
 }
 
-const SignOutButton = ({ user }: Props): JSX.Element => {
+const SignOutButton = ({ user }: Props): ReactElement => {
   const supabase = createClient();
   const router = useRouter();
 

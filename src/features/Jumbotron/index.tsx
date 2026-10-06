@@ -1,8 +1,9 @@
 import Image from "next/image";
+import { ReactElement } from "react";
 import engagementPhoto from "./engagement-photo.webp";
 import classes from "./jumbotron.module.css";
 
-const Jumbotron = (): JSX.Element => {
+const Jumbotron = (): ReactElement => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.inner}>

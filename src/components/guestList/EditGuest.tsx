@@ -24,7 +24,7 @@ import { createEventResponses, deleteEventResponse } from "@spiel-wedding/hooks/
 import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useSWRConfig } from "swr";
 import RsvpStatus from "./RsvpStatus";
 
@@ -34,9 +34,9 @@ interface Props {
   close: () => void;
 }
 
-const EditGuest = ({ group, events, close }: Props): JSX.Element => {
+const EditGuest = ({ group, events, close }: Props): ReactElement => {
   const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe"
+    group.invited ? "definitely" : "maybe",
   );
   const { mutate } = useSWRConfig();
 
@@ -152,7 +152,7 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
               </Title>
               {guest.event_responses.map((eventResponse, responseIndex) => {
                 const matchingEvent = events.filter(
-                  (event) => event.event_id === eventResponse.eventId
+                  (event) => event.event_id === eventResponse.eventId,
                 )[0];
 
                 return (
@@ -182,7 +182,7 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
                               } else {
                                 showFailureNotification();
                               }
-                            }
+                            },
                           );
                         }}
                       >
@@ -199,7 +199,7 @@ const EditGuest = ({ group, events, close }: Props): JSX.Element => {
                     (event) =>
                       !guest.event_responses
                         .map((response) => response.eventId)
-                        .includes(event.event_id)
+                        .includes(event.event_id),
                   )
                   .map((event) => {
                     return (

@@ -1,13 +1,14 @@
 import { List } from "@mantine/core";
 import { Event, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
+import { ReactElement } from "react";
 
 interface Props {
   guests: Guest[];
   event: Event;
 }
 
-const RsvpStatusColumn = ({ guests, event }: Props): JSX.Element => {
+const RsvpStatusColumn = ({ guests, event }: Props): ReactElement => {
   return (
     <List listStyleType="none" withPadding size="lg">
       {getGuestsForEvent(event, guests).map((guest) => {

@@ -3,9 +3,10 @@
 import { ActionIcon } from "@mantine/core";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { ReactElement } from "react";
 import classes from "./common.module.css";
 
-const AdminViewToggle = (): JSX.Element => {
+const AdminViewToggle = (): ReactElement => {
   const { isAdminViewEnabled, user, toggleIsAdminViewEnabled } = useAdminView();
 
   const icon = isAdminViewEnabled ? <IconEye /> : <IconEyeOff />;

@@ -51,7 +51,7 @@ type EditEventForm = Event & {
 
 const EditEvent = ({ event, groups }: Props) => {
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState<Date | null>(new Date(event.date));
+  const [date, setDate] = useState<string | null>(new Date(event.date).toISOString());
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -61,7 +61,7 @@ const EditEvent = ({ event, groups }: Props) => {
   const getInitialValues = (): EditEventForm => {
     const guests = groups.flatMap((group) => group.guests);
     const guestsInvitedToEvent = getGuestsForEvent(event, guests).map(
-      ({ guest_id }) => guest_id
+      ({ guest_id }) => guest_id,
     );
 
     return {
@@ -86,7 +86,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     const allGuests = groups.flatMap((group) => group.guests);
     const guestsForEvent = getGuestsForEvent(event, allGuests).map(
-      (guest) => guest.guest_id
+      (guest) => guest.guest_id,
     );
 
     const responsesToRemove = getGuestsForEvent(event, allGuests)
@@ -103,9 +103,9 @@ const EditEvent = ({ event, groups }: Props) => {
       }));
 
     const updateEventResult =
-      isEventUnmodified && date?.toISOString() == event.date
+      isEventUnmodified && date == event.date
         ? updatedEvent
-        : await updateEvent({ ...updatedEvent, date: date?.toISOString() ?? event.date });
+        : await updateEvent({ ...updatedEvent, date: date ?? event.date });
 
     const removedResponses = await deleteEventResponses(responsesToRemove);
     const newResponses = await createEventResponses(newEventResponses);
@@ -159,6 +159,7 @@ const EditEvent = ({ event, groups }: Props) => {
       <DatePickerInput
         label="Date"
         placeholder="Pick date"
+        valueFormat="YYYY-MM-DD"
         value={date}
         onChange={setDate}
       />
@@ -266,12 +267,12 @@ const EditEvent = ({ event, groups }: Props) => {
                   group.guests.some((guest) =>
                     `${guest.firstName} ${guest.lastName}`
                       .toLowerCase()
-                      .includes(search.toLowerCase())
-                  )
+                      .includes(search.toLowerCase()),
+                  ),
                 )
                 .map((group) => {
                   const isSelected = group.guests.some((guest) =>
-                    form.values.guests.includes(guest.guest_id)
+                    form.values.guests.includes(guest.guest_id),
                   );
                   return (
                     <Combobox.Option

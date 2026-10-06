@@ -14,7 +14,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { saveGuestMessage, sendEmailForNewComment } from "./action";
 
 interface Props {
@@ -31,7 +31,7 @@ const GuestBookForm = ({
   handleSubmit,
   customButtonLabel,
   isMessageRequred,
-}: Props): JSX.Element => {
+}: Props): ReactElement => {
   const [isSaving, setIsSaving] = useState(false);
   const [localMessages, setLocalMessages] = useLocalStorage<string[]>({
     key: "guestMessages",
@@ -56,7 +56,7 @@ const GuestBookForm = ({
   });
 
   const saveMessage = async (
-    newGuestMessage: Omit<GuestMessage, "id">
+    newGuestMessage: Omit<GuestMessage, "id">,
   ): Promise<void> => {
     if (isSaving) {
       return;
@@ -72,7 +72,7 @@ const GuestBookForm = ({
 
       if (!guestMessage) {
         showCustomFailureNotification(
-          "An error occurred while signing the guest book. Please try again later!"
+          "An error occurred while signing the guest book. Please try again later!",
         );
 
         setProgress(100);

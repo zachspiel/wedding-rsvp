@@ -12,21 +12,22 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
-import { v4 as uuid } from "uuid";
-import { addFAQ, updateFAQ } from "@spiel-wedding/hooks/faq";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
+import { addFAQ, updateFAQ } from "@spiel-wedding/hooks/faq";
+import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
+import { ReactElement } from "react";
 import { mutate } from "swr";
+import { v4 as uuid } from "uuid";
 import classes from "../faq.module.css";
 import FaqPanel from "./FaqPanel";
 
 interface Props {
   initialValues?: FrequentlyAskedQuestion;
   label: string;
-  icon: JSX.Element;
+  icon: ReactElement;
 }
 
 const createDefaultFAQ = () => ({

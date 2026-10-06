@@ -1,11 +1,12 @@
 import { Anchor, Flex } from "@mantine/core";
 import { MAP_URL } from "@spiel-wedding/components/common/constants";
+import { ReactElement } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import WeddingCountdown from "./components/Countdown";
 import DetailTitle from "./components/DetailTitle";
 import classes from "./styles.module.css";
 
-const WhenAndWhere = (): JSX.Element => {
+const WhenAndWhere = (): ReactElement => {
   return (
     <SectionContainer greenBackground>
       <SectionTitle title="When & Where" id="whenAndWhere" />

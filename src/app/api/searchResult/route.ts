@@ -21,14 +21,14 @@ const createCantFindGuestErrorMessage = () => {
     {
       info: `Hm... we can't find your name. Make sure you enter your name exactly as it appears on your invitation.`,
     },
-    { status: 400 }
+    { status: 400 },
   );
 };
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const name = searchParams.get("name");
-  const supabase = createClient();
+  const supabase = await createClient();
 
   if (!name) {
     return createCantFindGuestErrorMessage();
@@ -44,13 +44,13 @@ export async function GET(request: NextRequest) {
   }
 
   const matchingResults = data.filter(
-    (group) => group.guests.filter((guest) => guestMatchesSearch(name, guest)).length > 0
+    (group) => group.guests.filter((guest) => guestMatchesSearch(name, guest)).length > 0,
   );
 
   return NextResponse.json(
     matchingResults.map((group) => ({
       ...group,
       guests: addEventResponseMapToGuest(group.guests),
-    }))
+    })),
   );
 }

@@ -3,6 +3,7 @@
 import { Accordion, Alert, Grid, Select, TextInput } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Group } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 import { STATES } from "./states";
 
 interface Props {
@@ -17,7 +18,7 @@ const MailingAddressForm = ({
   openTabsByDefault,
   showEmailTooltip,
   emailRequired,
-}: Props): JSX.Element => {
+}: Props): ReactElement => {
   const openAllTabs = openTabsByDefault ?? false;
   const defaultValue = openAllTabs
     ? ["guestNames", "mailing", "contact"]

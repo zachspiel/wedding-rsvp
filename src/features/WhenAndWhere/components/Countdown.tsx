@@ -2,7 +2,7 @@
 
 import { Container, Flex, Text } from "@mantine/core";
 import MotionContainer from "@spiel-wedding/components/common/MotionContainer";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import classes from "../styles.module.css";
 
 interface CountdownTimeLeft {
@@ -47,8 +47,8 @@ const WeddingCountdown = () => {
     title: string,
     value: number,
     index: number,
-    className?: string
-  ): JSX.Element => {
+    className?: string,
+  ): ReactElement => {
     return (
       <MotionContainer
         motionProps={{

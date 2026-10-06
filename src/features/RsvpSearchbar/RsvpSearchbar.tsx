@@ -12,7 +12,7 @@ import { isNotEmpty, useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { Event, Group } from "@spiel-wedding/types/Guest";
 import { IconArrowRight, IconSearch } from "@tabler/icons-react";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import useSWR from "swr";
 import RsvpForm from "../RsvpForm";
 import SearchResults from "./components/SearchResults";
@@ -36,7 +36,7 @@ interface Props {
   events: Event[];
 }
 
-const RsvpSearchbar = ({ events }: Props): JSX.Element => {
+const RsvpSearchbar = ({ events }: Props): ReactElement => {
   const [selectedGroup, setSelectedGroup] = useState<Group>();
   const [searchForm, setSearchForm] = useState<SearchForm>();
   const isMobile = useMediaQuery("(max-width: 50em)");
@@ -44,7 +44,7 @@ const RsvpSearchbar = ({ events }: Props): JSX.Element => {
   const { data, error, isLoading, mutate } = useSWR(
     searchForm ? ["searchResults", searchForm] : null,
     ([url, params]) => getMatchingGuests(params.name),
-    { fallbackData: [] }
+    { fallbackData: [] },
   );
 
   const form = useForm({

@@ -8,11 +8,12 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { UseFormReturnType } from "@mantine/form";
+import { Event, Group, RelationshipType } from "@spiel-wedding/types/Guest";
 import { IconX } from "@tabler/icons-react";
-import { addChildToGuests, addPartnerToGuests } from "../../features/AddGroupForm/util";
 import findLastIndex from "lodash.findlastindex";
+import { ReactElement } from "react";
+import { addChildToGuests, addPartnerToGuests } from "../../features/AddGroupForm/util";
 
 interface Props {
   form: UseFormReturnType<Group>;
@@ -23,17 +24,17 @@ interface Props {
 
 const { CHILD, PARTNER, PRIMARY } = RelationshipType;
 
-const GuestInput = ({ form, index, groupType, events }: Props): JSX.Element => {
+const GuestInput = ({ form, index, groupType, events }: Props): ReactElement => {
   const { guests } = form.values;
   const guest = guests[index];
 
   const firstChildInGroupIndex = guests.findIndex(
-    (guest) => guest.relationshipType === CHILD
+    (guest) => guest.relationshipType === CHILD,
   );
 
   const lastAdultIndex = findLastIndex(
     guests,
-    (guest) => guest.relationshipType !== CHILD
+    (guest) => guest.relationshipType !== CHILD,
   );
 
   const showAddPlusOneButton =

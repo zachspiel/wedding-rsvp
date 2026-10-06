@@ -3,7 +3,7 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { AdminContextType } from "@spiel-wedding/types/AdminContextType";
 import { User } from "@supabase/supabase-js";
-import { createContext, useEffect, useState } from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 
 export const AdminViewContext = createContext<AdminContextType | undefined>(undefined);
 
@@ -11,7 +11,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const AdminViewProvider = ({ children }: Props): JSX.Element => {
+const AdminViewProvider = ({ children }: Props): ReactElement => {
   const supabase = createClient();
   const [user, setUser] = useState<User>();
   const [isAdminViewEnabled, setIsAdminViewEnabled] = useState(false);

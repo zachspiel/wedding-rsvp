@@ -3,7 +3,7 @@ import { LoginForm } from "@spiel-wedding/features/LoginForm";
 import { redirect } from "next/navigation";
 
 const checkLoginStatus = async () => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 
   if (data?.user) {

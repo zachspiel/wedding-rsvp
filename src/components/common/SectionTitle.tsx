@@ -4,6 +4,7 @@ import { Flex, Title } from "@mantine/core";
 import cx from "clsx";
 import { m } from "framer-motion";
 import Image from "next/image";
+import { ReactElement } from "react";
 import classes from "./common.module.css";
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   id?: string;
 }
 
-const SectionTitle = ({ title, hideFlowers, id }: Props): JSX.Element => {
+const SectionTitle = ({ title, hideFlowers, id }: Props): ReactElement => {
   return (
     <Flex
       justify="center"

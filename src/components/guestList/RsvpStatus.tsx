@@ -1,6 +1,7 @@
 import { Group as MGroup, Select, Text } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 
 interface Props {
   guest: Guest;
@@ -9,7 +10,7 @@ interface Props {
   form: UseFormReturnType<Group>;
 }
 
-const RsvpStatus = ({ form, guest, index, responseIndex }: Props): JSX.Element => {
+const RsvpStatus = ({ form, guest, index, responseIndex }: Props): ReactElement => {
   const dropdownItems = Object.values(RsvpResponse).map((response) => {
     return { value: response, label: response };
   });

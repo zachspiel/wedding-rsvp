@@ -1,12 +1,13 @@
 import { ActionIcon, Button, Group as MGroup, Modal, Text } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { Group } from "@spiel-wedding/types/Guest";
 import { useDisclosure } from "@mantine/hooks";
 import {
   showFailureNotification,
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { deleteGroup, GROUP_SWR_KEY } from "@spiel-wedding/hooks/guests";
+import { Group } from "@spiel-wedding/types/Guest";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { ReactElement } from "react";
 import { useSWRConfig } from "swr";
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
   onEdit: () => void;
 }
 
-const ActionColumn = ({ group, onEdit }: Props): JSX.Element => {
+const ActionColumn = ({ group, onEdit }: Props): ReactElement => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate } = useSWRConfig();
 

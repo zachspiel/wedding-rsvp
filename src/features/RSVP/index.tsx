@@ -3,6 +3,7 @@ import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
 import { Event } from "@spiel-wedding/types/Guest";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { ReactElement } from "react";
 
 interface Props {
   events: Event[];
@@ -13,7 +14,7 @@ interface Props {
   };
 }
 
-const RSVP = ({ events, alertMessage }: Props): JSX.Element => {
+const RSVP = ({ events, alertMessage }: Props): ReactElement => {
   return (
     <SectionContainer>
       <SectionTitle title="RSVP" id="rsvp" />
@@ -38,7 +39,7 @@ const RSVP = ({ events, alertMessage }: Props): JSX.Element => {
         {alertMessage.info}
       </Alert>
 
-      {!alertMessage.hideSearch && <RsvpSearchbar events={events} />}
+      <RsvpSearchbar events={events} />
     </SectionContainer>
   );
 };

@@ -1,6 +1,7 @@
 import { Container, SimpleGrid } from "@mantine/core";
 import cx from "clsx";
 import Image from "next/image";
+import { ReactElement } from "react";
 import classes from "./common.module.css";
 
 interface Props {
@@ -13,7 +14,7 @@ const SectionContainer = ({
   children,
   greenBackground,
   flowerImages,
-}: Props): JSX.Element => {
+}: Props): ReactElement => {
   return (
     <Container
       className={greenBackground ? classes.sectionContainerGreenBackground : ""}

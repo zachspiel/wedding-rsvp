@@ -45,7 +45,10 @@ const createDefaultGroup = (events: Event[]): Group => {
   };
 };
 
-const createGuest = (groupId: string, events: Event[]): Partial<Guest> => {
+const createGuest = (
+  groupId: string,
+  events: Event[],
+): Omit<Guest, "title" | "responseMap"> => {
   const id = uuid();
 
   return {
@@ -77,9 +80,11 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): vo
     "guests",
     {
       ...newGuest,
+      title: "",
+      responseMap: {},
       relationshipType: RelationshipType.PARTNER,
     },
-    1
+    1,
   );
 };
 
@@ -88,6 +93,8 @@ const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void
 
   form.insertListItem("guests", {
     ...newGuest,
+    title: "",
+    responseMap: {},
     relationshipType: RelationshipType.CHILD,
   });
 };

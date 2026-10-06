@@ -13,10 +13,21 @@ import { getEvents } from "@spiel-wedding/hooks/events";
 import { getFAQs } from "@spiel-wedding/hooks/faq";
 import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
 import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
+import { Photo } from "@spiel-wedding/types/Photo";
 import { getPlaceholderImage } from "@spiel-wedding/util/generateBlurPlaceholder";
 
+async function chunkRequestsForGallery(gallery: Photo[]): Promise<Photo[]> {
+  const results: Photo[] = [];
+  for (let i = 0; i < gallery.length; i += 5) {
+    const chunk = gallery.slice(i, i + 5);
+    const chunkedImageResults = await Promise.all(chunk.map(getPlaceholderImage));
+    results.push(...chunkedImageResults);
+  }
+  return results;
+}
+
 async function getProps() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: user } = await supabase.auth.getUser();
 
   const [events, gallery, guestMessages, faqs] = await Promise.all([
@@ -27,8 +38,7 @@ async function getProps() {
   ]);
 
   const filteredGallery = user ? gallery : gallery.filter((item) => item.isVisible);
-  const blurImagePromises = filteredGallery.map((image) => getPlaceholderImage(image));
-  const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
+  const imagesWithBlurDataUrls = await chunkRequestsForGallery(filteredGallery);
 
   const deadline = new Date("9/26/2024");
   const currentDate = new Date();

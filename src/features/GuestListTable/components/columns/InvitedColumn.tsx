@@ -1,16 +1,17 @@
 import { Group as MGroup, Radio } from "@mantine/core";
-import { Group } from "@spiel-wedding/types/Guest";
 import {
-  showSuccessNotification,
   showFailureNotification,
+  showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { updateGroup } from "@spiel-wedding/hooks/guests";
+import { Group } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 
 interface Props {
   group: Group;
 }
 
-const InvitedColumn = ({ group }: Props): JSX.Element => {
+const InvitedColumn = ({ group }: Props): ReactElement => {
   const handleChange = async (value: string) => {
     const updatedGroup = [group].map((group) => group)[0];
     updatedGroup.invited = value === "definitely";

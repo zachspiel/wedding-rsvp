@@ -1,4 +1,5 @@
 import { Anchor, Container, Group, rem } from "@mantine/core";
+import { ReactElement } from "react";
 import { AdminViewToggle } from "../common";
 import BurgerMenu from "./components/BurgerMenu";
 import Logo from "./components/Logo";
@@ -7,7 +8,7 @@ import classes from "./navbar.module.css";
 
 export const HEADER_HEIGHT = rem(100);
 
-const Navbar = (): JSX.Element => {
+const Navbar = (): ReactElement => {
   return (
     <header style={{ height: HEADER_HEIGHT }} className={classes.root}>
       <Container className={classes.header} style={{ maxWidth: "100%" }}>

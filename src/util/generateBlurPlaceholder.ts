@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@spiel-wedding/database/client";
+import { createClient } from "@spiel-wedding/database/server";
 import { Photo } from "@spiel-wedding/types/Photo";
 import sharp from "sharp";
 
@@ -11,46 +11,40 @@ function bufferToBase64(buffer: Buffer): string {
 interface PlaceholderOptions {
   imagePath: string;
   bucket: string;
-  mimeType: string;
+  mimeType?: string;
 }
 
 export async function generatePlaceholder(options: PlaceholderOptions) {
-  if (options.mimeType.includes("video")) {
+  if (options.mimeType?.includes("video")) {
     return undefined;
   }
 
-  const supabase = createClient();
-  const { data } = supabase.storage.from(options.bucket).getPublicUrl(options.imagePath, {
-    transform: {
-      quality: 50,
-      width: 48,
-      height: 48,
-    },
-  });
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage
+    .from(options.bucket)
+    .download(options.imagePath);
 
-  const buffer = await fetch(data.publicUrl).then(async (res) =>
-    Buffer.from(await res.arrayBuffer())
-  );
+  if (!data || error) {
+    console.log(`Error while retrieving placeholder: ${error}`);
+    return undefined;
+  }
 
-  const resizedBuffer = await sharp(buffer).resize(20).toBuffer();
-  return bufferToBase64(resizedBuffer);
+  try {
+    const buffer = Buffer.from(await data.arrayBuffer());
+    const resizedBuffer = await sharp(buffer).resize(48).toFormat("png").toBuffer();
+
+    return bufferToBase64(resizedBuffer);
+  } catch (err) {
+    console.error("Error while generating placeholder:", err);
+    return undefined;
+  }
 }
 
 export async function getPlaceholderImage(photo: Photo): Promise<Photo> {
-  const supabase = createClient();
-
-  const { data } = supabase.storage.from("gallery").getPublicUrl(photo.imagePath, {
-    transform: {
-      quality: 50,
-      width: 48,
-      height: 48,
-    },
+  const blurDataUrl = await generatePlaceholder({
+    imagePath: photo.imagePath,
+    bucket: "gallery",
   });
 
-  const buffer = await fetch(data.publicUrl).then(async (res) =>
-    Buffer.from(await res.arrayBuffer())
-  );
-
-  const resizedBuffer = await sharp(buffer).resize(20).toBuffer();
-  return { ...photo, blurDataUrl: bufferToBase64(resizedBuffer) };
+  return blurDataUrl ? { ...photo, blurDataUrl } : photo;
 }

@@ -4,6 +4,7 @@ import { Center, Menu } from "@mantine/core";
 import useAdminView from "@spiel-wedding/hooks/adminView";
 import { IconChevronDown } from "@tabler/icons-react";
 import cx from "clsx";
+import { ReactElement } from "react";
 import { MenuItem, links } from "../../common";
 import classes from "../navbar.module.css";
 import SignOutButton from "./SignOutButton";
@@ -12,7 +13,7 @@ interface Props {
   onClick?: () => void;
 }
 
-const MenuItems = ({ onClick }: Props): JSX.Element => {
+const MenuItems = ({ onClick }: Props): ReactElement => {
   const { user } = useAdminView();
 
   const createMenuLinks = (items: MenuItem[]) => {
@@ -54,7 +55,7 @@ const MenuItems = ({ onClick }: Props): JSX.Element => {
           className={cx(
             classes.link,
             link.className,
-            link.label === "Upload Photos" ? classes.highlightedLink : undefined
+            link.label === "Upload Photos" ? classes.highlightedLink : undefined,
           )}
         >
           {link.label}

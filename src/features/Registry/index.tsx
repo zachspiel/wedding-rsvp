@@ -1,10 +1,11 @@
 import { Anchor, Button, Card, Flex, Text } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
 import Image from "next/image";
+import { ReactElement } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import classes from "./registry.module.css";
 
-const Registry = (): JSX.Element => {
+const Registry = (): ReactElement => {
   return (
     <SectionContainer>
       <SectionTitle title="Registry" id="registry" />

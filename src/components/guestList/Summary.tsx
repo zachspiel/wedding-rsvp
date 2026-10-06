@@ -3,16 +3,16 @@
 import { Group as MGroup, Text } from "@mantine/core";
 import { Event, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
-import { useMemo } from "react";
+import { ReactElement, useMemo } from "react";
 
 interface Props {
   groups: Group[];
   event: Event;
 }
 
-const Summary = ({ groups, event }: Props): JSX.Element => {
+const Summary = ({ groups, event }: Props): ReactElement => {
   const groupGuestLengths = groups.map(
-    (group) => getGuestsForEvent(event, group.guests).length
+    (group) => getGuestsForEvent(event, group.guests).length,
   );
 
   const totalInvited = useMemo(() => {
@@ -43,8 +43,8 @@ const Summary = ({ groups, event }: Props): JSX.Element => {
   const createSummaryItem = (
     title: string,
     total: number,
-    color: string
-  ): JSX.Element => {
+    color: string,
+  ): ReactElement => {
     return (
       <div>
         <Text ta="center" fw="bold">

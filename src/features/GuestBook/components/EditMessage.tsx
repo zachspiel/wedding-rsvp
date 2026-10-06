@@ -8,6 +8,7 @@ import {
   showSuccessNotification,
 } from "@spiel-wedding/components/notifications/notifications";
 import { PublicGuestMessage } from "@spiel-wedding/types/Guest";
+import { ReactElement } from "react";
 import { updateGuestMessage } from "../actions";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
   closeEditor: () => void;
 }
 
-const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
+const EditMessage = ({ message, closeEditor }: Props): ReactElement => {
   const form = useForm({
     initialValues: message,
     validate: {
@@ -26,7 +27,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
   const updateMessage = async (updatedEntry: PublicGuestMessage) => {
     const guestMessage = await updateGuestMessage(
       updatedEntry.id,
-      updatedEntry.message.trim()
+      updatedEntry.message.trim(),
     );
 
     if (guestMessage.length > 0) {
@@ -34,7 +35,7 @@ const EditMessage = ({ message, closeEditor }: Props): JSX.Element => {
       await revalidatePage("/");
     } else {
       showCustomFailureNotification(
-        "An error occurred while updating the message. Please try again later."
+        "An error occurred while updating the message. Please try again later.",
       );
     }
 

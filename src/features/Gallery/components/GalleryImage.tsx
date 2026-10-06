@@ -5,6 +5,7 @@ import { createClient } from "@spiel-wedding/database/client";
 import { Photo } from "@spiel-wedding/types/Photo";
 import cx from "clsx";
 import Image from "next/image";
+import { ReactElement } from "react";
 import classes from "../gallery.module.css";
 import EditImage from "./EditImage";
 import ImageVisibilityToggle from "./ImageVisibilityToggle";
@@ -23,7 +24,7 @@ const GalleryImage = ({
   isOpen,
   objectFit,
   openImage,
-}: Props): JSX.Element => {
+}: Props): ReactElement => {
   const supabase = createClient();
   const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
 
