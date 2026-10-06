@@ -39,7 +39,7 @@ const RSVP = ({ events, alertMessage }: Props): ReactElement => {
         {alertMessage.info}
       </Alert>
 
-      <RsvpSearchbar events={events} />
+      {!alertMessage.hideSearch && <RsvpSearchbar events={events} />}
     </SectionContainer>
   );
 };
