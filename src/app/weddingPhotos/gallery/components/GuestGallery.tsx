@@ -44,6 +44,8 @@ interface Props {
   placeHolderImages: Record<string, string | undefined>;
 }
 
+const supabase = createClient();
+
 const GuestGallery = ({ placeHolderImages }: Props) => {
   const [mimeFilter, setMimeFilter] = useState<string[] | undefined>(["image", "video"]);
   const [namesFilter, setNameFilter] = useState<string[] | undefined>([]);
@@ -110,7 +112,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
     });
 
   const createImageCard = (file: GuestUploadedImage, index: number) => {
-    const supabase = createClient();
     const { data } = supabase.storage.from("guest_gallery").getPublicUrl(file.file_name);
 
     return (
@@ -129,7 +130,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
             }}
             style={{
               objectPosition: "top",
-              transform: "translate3d(0, 0, 0)",
             }}
             objectFit="contain"
             width={720}
@@ -324,7 +324,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
           getEmblaApi={setEmbla}
         >
           {matchingImagesForFilters.map((file) => {
-            const supabase = createClient();
             const name = file.first_name + " " + file.last_name;
             const { data } = supabase.storage
               .from("guest_gallery")
@@ -358,7 +357,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                         style={{
                           objectPosition: "top",
                           zIndex: 0,
-                          transform: "translate3d(0, 0, 0)",
                         }}
                         objectFit="contain"
                         quality={80}
@@ -384,7 +382,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
           }}
         >
           {matchingImagesForFilters.map((file, index) => {
-            const supabase = createClient();
             const { data } = supabase.storage
               .from("guest_gallery")
               .getPublicUrl(file.file_name, {

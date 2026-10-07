@@ -3,22 +3,23 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { AdminContextType } from "@spiel-wedding/types/AdminContextType";
 import { User } from "@supabase/supabase-js";
-import { createContext, ReactElement, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 export const AdminViewContext = createContext<AdminContextType | undefined>(undefined);
 
+const supabase = createClient();
+
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AdminViewProvider = ({ children }: Props): ReactElement => {
-  const supabase = createClient();
-  const [user, setUser] = useState<User>();
+const AdminViewProvider = ({ children }: Props) => {
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [isAdminViewEnabled, setIsAdminViewEnabled] = useState(false);
-  const [lastViewedPhoto, setLastViewedPhoto] = useState<string>();
+  const [lastViewedPhoto, setLastViewedPhoto] = useState<string | undefined>(undefined);
 
-  const toggleIsAdminViewEnabled = (): void => {
-    setIsAdminViewEnabled(!isAdminViewEnabled);
+  const toggleIsAdminViewEnabled = () => {
+    setIsAdminViewEnabled((prev) => !prev);
   };
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const AdminViewProvider = ({ children }: Props): ReactElement => {
   }, []);
 
   return (
-    <AdminViewContext.Provider
+    <AdminViewContext
       value={{
         isAdminViewEnabled,
         user,
@@ -47,7 +48,7 @@ const AdminViewProvider = ({ children }: Props): ReactElement => {
       }}
     >
       {children}
-    </AdminViewContext.Provider>
+    </AdminViewContext>
   );
 };
 

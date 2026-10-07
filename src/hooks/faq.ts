@@ -1,8 +1,9 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
 
+const supabase = createClient();
+
 export const getFAQs = async (): Promise<FrequentlyAskedQuestion[]> => {
-  const supabase = createClient();
   const { data } = await supabase.from("faq").select();
 
   return data ?? [];
@@ -11,7 +12,6 @@ export const getFAQs = async (): Promise<FrequentlyAskedQuestion[]> => {
 export const updateFAQ = async (
   faq: FrequentlyAskedQuestion,
 ): Promise<FrequentlyAskedQuestion | null> => {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from("faq")
     .update(faq)
@@ -28,7 +28,6 @@ export const updateFAQ = async (
 export const updateFAQs = async (
   faqs: FrequentlyAskedQuestion[],
 ): Promise<FrequentlyAskedQuestion[] | null> => {
-  const supabase = createClient();
   const { data, error } = await supabase.from("faq").upsert(faqs).select();
 
   if (error) {
@@ -41,7 +40,6 @@ export const updateFAQs = async (
 export const addFAQ = async (
   faq: FrequentlyAskedQuestion,
 ): Promise<FrequentlyAskedQuestion | null> => {
-  const supabase = createClient();
   const { data, error } = await supabase.from("faq").insert(faq).select();
 
   if (error) {
@@ -52,7 +50,6 @@ export const addFAQ = async (
 };
 
 export const removeFAQ = async (id: string): Promise<FrequentlyAskedQuestion | null> => {
-  const supabase = createClient();
   const { data, error } = await supabase.from("faq").delete().eq("faq_id", id).select();
 
   if (error) {

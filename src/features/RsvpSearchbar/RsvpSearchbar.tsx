@@ -16,6 +16,7 @@ import { ReactElement, useState, useTransition } from "react";
 import RsvpForm from "../RsvpForm";
 import SearchResults from "./components/SearchResults";
 import { getSearchResults } from "./action";
+import { BRIDE_NAME, GROOM_NAME } from "@spiel-wedding/constants";
 
 interface SearchForm {
   name: string;
@@ -117,8 +118,8 @@ const RsvpSearchbar = ({ events }: Props): ReactElement => {
         <>
           <Text>Select your party below or try searching again.</Text>
           <Text>
-            If none of these are you, please reach out to Sedona and Zach to see exactly
-            how they entered your details.
+            If none of these are you, please reach out to {BRIDE_NAME} and {GROOM_NAME} to
+            see exactly how they entered your details.
           </Text>
           <SearchResults searchResults={searchResults} setSelectedGroup={selectGroup} />
         </>

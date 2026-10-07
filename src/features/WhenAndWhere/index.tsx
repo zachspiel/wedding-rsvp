@@ -1,5 +1,5 @@
 import { Anchor, Flex } from "@mantine/core";
-import { MAP_URL } from "@spiel-wedding/components/common/constants";
+import { MAP_URL } from "@spiel-wedding/constants";
 import { ReactElement } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import WeddingCountdown from "./components/Countdown";

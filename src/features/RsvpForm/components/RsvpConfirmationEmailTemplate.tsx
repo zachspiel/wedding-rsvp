@@ -2,7 +2,8 @@ import { Body, Container, Head, Link, Preview, Text } from "@react-email/compone
 import { Html } from "@react-email/html";
 import { Img } from "@react-email/img";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
-import { MAP_URL } from "@spiel-wedding/components/common/constants";
+import { MAP_URL } from "@spiel-wedding/constants";
+import { BRIDE_NAME, GROOM_NAME } from "@spiel-wedding/constants";
 import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
 
 const main = {
@@ -36,7 +37,7 @@ interface Props {
 
 const RsvpConfirmationEmailTemplate = ({ group, events }: Props) => {
   const anyGuestAccepted = group.guests.some((guest) =>
-    guest.event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED)
+    guest.event_responses.some((response) => response.rsvp === RsvpResponse.ACCEPTED),
   );
 
   const previewText = anyGuestAccepted
@@ -67,7 +68,9 @@ const RsvpConfirmationEmailTemplate = ({ group, events }: Props) => {
           <GuestTable guests={group.guests} events={events} />
 
           <Text style={paragraph}>Thank you,</Text>
-          <Text style={paragraph}>Sedona & Zach</Text>
+          <Text style={paragraph}>
+            {BRIDE_NAME} & {GROOM_NAME}
+          </Text>
 
           <Img
             src="https://www.zachandsedona.com/assets/images/The-Spielbergers.webp"

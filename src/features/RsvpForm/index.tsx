@@ -24,6 +24,7 @@ import { sendMail } from "./action";
 import RsvpModal from "./components/RsvpModal";
 import classes from "./rsvpFormStyles.module.css";
 import { useRouter } from "next/navigation";
+import { BRIDE_NAME, GROOM_NICKNAME } from "@spiel-wedding/constants";
 
 interface Props {
   events: Event[];
@@ -172,7 +173,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
 
         <Stepper.Step label="Leave a note">
           <Title order={4} fw="normal" ta="center">
-            Leave a note for Sedona and Zach
+            Leave a note for {BRIDE_NAME} and {GROOM_NICKNAME}
           </Title>
 
           <Alert color="blue" my="md" w="fit-content">

@@ -14,7 +14,7 @@ const Jumbotron = (): ReactElement => {
           placeholder="blur"
           quality={80}
           fill
-          style={{ objectFit: "cover", transform: "translate3d(0, 0, 0)" }}
+          style={{ objectFit: "cover" }}
         />
       </div>
     </div>

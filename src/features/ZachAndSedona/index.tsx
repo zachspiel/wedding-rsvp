@@ -3,6 +3,7 @@ import { SectionContainer } from "@spiel-wedding/components/common";
 import MotionContainer from "@spiel-wedding/components/common/MotionContainer";
 import cx from "clsx";
 import classes from "./styles.module.css";
+import { BRIDE_FULL_NAME, GROOM_FULL_NAME } from "@spiel-wedding/constants";
 
 const ZachAndSedona = () => {
   return (
@@ -42,7 +43,7 @@ const ZachAndSedona = () => {
               }}
             >
               <Title size="xl" className={classes.titleElement}>
-                Sedona Rannells
+                {BRIDE_FULL_NAME}
               </Title>
             </MotionContainer>
 
@@ -82,7 +83,7 @@ const ZachAndSedona = () => {
               }}
             >
               <Title size="xl" className={classes.titleElement}>
-                Zachary Spielberger
+                {GROOM_FULL_NAME}
               </Title>
             </MotionContainer>
           </Flex>

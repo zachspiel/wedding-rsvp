@@ -12,8 +12,9 @@ interface Props {
   user?: User;
 }
 
+const supabase = createClient();
+
 const SignOutButton = ({ user }: Props): ReactElement => {
-  const supabase = createClient();
   const router = useRouter();
 
   const signOut = async () => {

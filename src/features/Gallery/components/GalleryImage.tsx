@@ -1,7 +1,6 @@
 "use client";
 
 import { Flex, Paper, Title } from "@mantine/core";
-import { createClient } from "@spiel-wedding/database/client";
 import { Photo } from "@spiel-wedding/types/Photo";
 import cx from "clsx";
 import Image from "next/image";
@@ -9,6 +8,7 @@ import { ReactElement } from "react";
 import classes from "../gallery.module.css";
 import EditImage from "./EditImage";
 import ImageVisibilityToggle from "./ImageVisibilityToggle";
+import { GALLERY_STORAGE_BUCKET } from "@spiel-wedding/constants";
 
 interface Props {
   image: Photo;
@@ -18,6 +18,11 @@ interface Props {
   openImage?: () => void;
 }
 
+const getPublicImageUrl = (path: string) => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return `${supabaseUrl}/storage/v1/object/public/${GALLERY_STORAGE_BUCKET}/${path}`;
+};
+
 const GalleryImage = ({
   image,
   displayAdminView,
@@ -25,8 +30,7 @@ const GalleryImage = ({
   objectFit,
   openImage,
 }: Props): ReactElement => {
-  const supabase = createClient();
-  const { data } = supabase.storage.from("gallery").getPublicUrl(image.imagePath);
+  const publicUrl = getPublicImageUrl(image.imagePath);
 
   return (
     <Paper
@@ -37,8 +41,7 @@ const GalleryImage = ({
       onClick={openImage}
     >
       <Image
-        key={data.publicUrl}
-        src={data.publicUrl}
+        src={publicUrl}
         alt={image.caption ?? image.gallery_id}
         className={cx(classes.cardImage, !isOpen ? classes.cardWithHover : "")}
         fill
@@ -46,7 +49,6 @@ const GalleryImage = ({
         style={{
           objectFit,
           zIndex: 0,
-          transform: "translate3d(0, 0, 0)",
         }}
         quality={80}
         loading="lazy"

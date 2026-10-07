@@ -12,9 +12,10 @@ interface Props {
   mr?: string;
 }
 
+const supabase = createClient();
+
 const DownloadButton = ({ file, mr }: Props) => {
   const downloadFile = async () => {
-    const supabase = createClient();
     const { data } = await supabase.storage
       .from("guest_gallery")
       .getPublicUrl(file.file_name);
@@ -25,7 +26,6 @@ const DownloadButton = ({ file, mr }: Props) => {
   };
 
   const incrementDownload = async () => {
-    const supabase = createClient();
     await supabase.rpc("increment_downloads", { x: 1, row_id: file.file_id });
     await mutate("guest_gallery");
   };

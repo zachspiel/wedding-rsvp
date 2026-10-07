@@ -1,6 +1,8 @@
+import { BRIDE_NAME, GROOM_NAME } from "@spiel-wedding/constants";
+
 const weddingDateString = `
 ----------------------------------------------------------
-                                 _      Zach and Sedona
+                                 _      ${GROOM_NAME} and ${BRIDE_NAME}
           ___            {@}   _|=|_
          /___\\          /(")\\   (")
        .---'-'---.     /((~))\\ /<x>\\        _   .-.
@@ -13,10 +15,10 @@ const weddingDateString = `
 const displayEasterEggs = () => {
   console.log(weddingDateString);
   console.log(
-    "Hello! Hopefully you won't find too much down here, but for more information regarding the tech stack please go here: https://github.com/zachspiel/wedding-rsvp"
+    "Hello! Hopefully you won't find too much down here, but for more information regarding the tech stack please go here: https://github.com/zachspiel/wedding-rsvp",
   );
   console.log(
-    "If you notice a 🐛, please report it to the GitHub repo above. Thank you!"
+    "If you notice a 🐛, please report it to the GitHub repo above. Thank you!",
   );
 };
 

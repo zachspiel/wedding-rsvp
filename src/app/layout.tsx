@@ -18,6 +18,7 @@ import "@mantine/carousel/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/notifications/styles.css";
 import "./globals.css";
+import { BRIDE_FULL_NAME, GROOM_FULL_NAME } from "@spiel-wedding/constants";
 
 const playfair = Playfair_Display({
   display: "swap",
@@ -35,7 +36,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Spielberger Wedding 2024",
   metadataBase: new URL("https://zachandsedona.com"),
-  description: "We're getting married! Sedona Rannells and Zachary Spielberger 2024.",
+  description: `We're getting married! ${BRIDE_FULL_NAME} and  ${GROOM_FULL_NAME} 2024.`,
   creator: "Zachary Spielberger",
   keywords: ["The Spielbergers 2024"],
   openGraph: {
@@ -64,11 +65,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {...mantineHtmlProps}
     >
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme="light" />
         <meta name="robots" content="all" />
       </head>
       <body>
-        <Providers poppins={poppins}>
+        <Providers>
           <AppShell header={{ height: rem(100) }}>
             <AppShellHeader>
               <Navbar />

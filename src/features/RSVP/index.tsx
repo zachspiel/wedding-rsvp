@@ -1,5 +1,6 @@
 import { Alert, Text } from "@mantine/core";
 import { SectionContainer, SectionTitle } from "@spiel-wedding/components/common";
+import { BRIDE_NAME, GROOM_NICKNAME } from "@spiel-wedding/constants";
 import RsvpSearchbar from "@spiel-wedding/features/RsvpSearchbar/RsvpSearchbar";
 import { Event } from "@spiel-wedding/types/Guest";
 import { IconInfoCircle } from "@tabler/icons-react";
@@ -31,8 +32,8 @@ const RSVP = ({ events, alertMessage }: Props): ReactElement => {
       </Text>
 
       <Text>
-        Please reach out to Sedona or Zach if you have any questions about guest
-        attendance.
+        Please reach out to {BRIDE_NAME} or {GROOM_NICKNAME} if you have any questions
+        about guest attendance.
       </Text>
 
       <Alert variant="light" color={alertMessage.color} icon={<IconInfoCircle />}>

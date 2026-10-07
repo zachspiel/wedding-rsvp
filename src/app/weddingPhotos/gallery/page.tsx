@@ -18,17 +18,13 @@ async function getProps() {
       });
 
       placeHolders[image.file_id] = placeholder;
-    })
+    }),
   );
 
   return placeHolders;
 }
 
-export default async function GalleryPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) {
+export default async function GalleryPage() {
   const placeHolderImages = await getProps();
 
   return (

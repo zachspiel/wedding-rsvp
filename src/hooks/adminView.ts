@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import { use } from "react";
 import { AdminViewContext } from "@spiel-wedding/context/AdminView";
 import { AdminContextType } from "@spiel-wedding/types/AdminContextType";
 
 const useAdminView = (): AdminContextType => {
-  const adminContext = useContext(AdminViewContext) as AdminContextType;
+  const adminContext = use(AdminViewContext);
 
-  return { ...adminContext };
+  if (!adminContext) {
+    throw new Error("Admin Context is not initialized");
+  }
+
+  return adminContext;
 };
 
 export default useAdminView;

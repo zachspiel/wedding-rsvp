@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ReactElement } from "react";
 import { SectionContainer, SectionTitle } from "../../components/common";
 import classes from "./registry.module.css";
+import { BRIDE_NAME, GROOM_NICKNAME } from "@spiel-wedding/constants";
 
 const Registry = (): ReactElement => {
   return (
@@ -35,8 +36,9 @@ const Registry = (): ReactElement => {
         </Text>
         <Text mb="sm">
           Please note that if you would like to purchase a physical item, you will need to
-          ship it to yourself and bring it to the reception or reach out to Sedona and
-          Zach for their address.
+          ship it to yourself and bring it to the reception or reach out to {BRIDE_NAME}{" "}
+          and
+          {GROOM_NICKNAME} for their address.
         </Text>
         <Text>Thanks for visiting and we can&#39;t wait to see you on our big day!</Text>
 

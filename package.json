@@ -17,7 +17,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@hello-pangea/dnd": "^16.6.0",
+    "@hello-pangea/dnd": "^18.0.1",
     "@mantine/carousel": "^9.7.1",
     "@mantine/charts": "^9.7.1",
     "@mantine/core": "^9.7.1",

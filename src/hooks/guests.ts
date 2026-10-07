@@ -9,12 +9,13 @@ export const GROUP_SWR_KEY = "group";
 export const GROUP_TABLE = "group";
 export const GUEST_TABLE = "guests";
 
+const supabase = createClient();
+
 export const getGroups = async (): Promise<Group[]> => {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .select("*, guests(*, event_responses(*))")
-    .returns<Group[]>();
+    .overrideTypes<Group[]>();
 
   if (error) {
     return [];
@@ -29,7 +30,6 @@ export const getGroups = async (): Promise<Group[]> => {
 };
 
 export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .select("*, guests(*, event_responses(*))")
@@ -48,9 +48,8 @@ export const getGroupById = async (groupId: string): Promise<Group | undefined> 
 
 export const createGroup = async (
   group: Group,
-  events: Event[]
+  events: Event[],
 ): Promise<Group | undefined> => {
-  const supabase = createClient();
   const { group_id, guests, ...groupData } = group;
 
   const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
@@ -66,16 +65,14 @@ export const createGroup = async (
 };
 
 export const bulkUpdateGroups = async (groups: TablesUpdate<"group">[]) => {
-  const supabase = createClient();
   const { data } = await supabase.from(GROUP_TABLE).upsert(groups).select();
   return data;
 };
 
 export const updateGroup = async (
   group: Group,
-  originalGroup: Group
+  originalGroup: Group,
 ): Promise<Group | undefined> => {
-  const supabase = createClient();
   const { guests, ...updatedGroup } = group;
   const updatedGuests = await updateGuests(guests, group.group_id, originalGroup);
 
@@ -117,7 +114,7 @@ const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Gro
 
   const removedGuests = originalGroup.guests.filter(
     (guest) =>
-      !updatedGuests.some((updatedGuest) => updatedGuest.guest_id === guest.guest_id)
+      !updatedGuests.some((updatedGuest) => updatedGuest.guest_id === guest.guest_id),
   );
 
   if (removedGuests.length > 0) {
@@ -134,7 +131,6 @@ const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Gro
 };
 
 export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
-  const supabase = createClient();
   const { data } = await supabase
     .from(GROUP_TABLE)
     .delete()
@@ -148,9 +144,8 @@ export const deleteGroup = async (groupId: string): Promise<Group | undefined> =
 export const createGuests = async (
   guests: Guest[],
   groupId: string,
-  events: Event[]
+  events: Event[],
 ): Promise<Guest[] | undefined> => {
-  const supabase = createClient();
   const formattedGuests = guests.map((guest) => {
     const { guest_id, event_responses, responseMap, ...values } = guest;
 
@@ -161,7 +156,7 @@ export const createGuests = async (
     .from(GUEST_TABLE)
     .insert(formattedGuests)
     .select()
-    .returns<Guest[]>();
+    .overrideTypes<Guest[]>();
 
   if (error) {
     throw new Error(error.message);
@@ -171,7 +166,7 @@ export const createGuests = async (
     const eventResponses = events
       .filter((event) => event.auto_invite)
       .flatMap((event) =>
-        newGuests.map((guest) => createNewResponse(guest.guest_id, event.event_id))
+        newGuests.map((guest) => createNewResponse(guest.guest_id, event.event_id)),
       );
 
     await createEventResponses(eventResponses);
@@ -181,24 +176,22 @@ export const createGuests = async (
 };
 
 export const upsertGuests = async (
-  guests: TablesUpdate<"guests">[]
+  guests: TablesUpdate<"guests">[],
 ): Promise<Guest[]> => {
-  const supabase = createClient();
   const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
 
   return data ?? [];
 };
 
 export const deleteGuests = async (
-  guests: TablesUpdate<"guests">[]
+  guests: TablesUpdate<"guests">[],
 ): Promise<Guest[]> => {
-  const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_TABLE)
     .delete()
     .in(
       "guest_id",
-      guests.map((guest) => guest.guest_id)
+      guests.map((guest) => guest.guest_id),
     )
     .select();
 
