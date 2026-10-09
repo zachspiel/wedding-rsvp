@@ -1,5 +1,4 @@
-import { Html } from "@react-email/html";
-import { Body, Head, Preview, Text } from "@react-email/components";
+import { Body, Head, Html, Preview, Text } from "react-email";
 import { Event, Group } from "@spiel-wedding/types/Guest";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
 

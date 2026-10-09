@@ -18,9 +18,9 @@ import { saveGuestUploadedImages } from "@spiel-wedding/hooks/guestUploadedImage
 import { IconPhoto } from "@tabler/icons-react";
 import Compressor from "@uppy/compressor";
 import Uppy from "@uppy/core";
-import "@uppy/core/dist/style.min.css";
-import "@uppy/dashboard/dist/style.min.css";
-import { Dashboard as UppyDashboard } from "@uppy/react";
+import "@uppy/react/css/style.css";
+import "@uppy/dashboard/css/style.css";
+import UppyDashboard from "@uppy/react/dashboard";
 import Tus from "@uppy/tus";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ const GuestUpload = () => {
     if (storedValue) {
       try {
         form.setValues(JSON.parse(window.localStorage.getItem("guest-name")!));
-      } catch (e) {
+      } catch {
         console.log("Failed to parse stored value");
       }
     }
@@ -143,7 +143,7 @@ const GuestUpload = () => {
     return uppyInstance;
   }
   const handleUpload = async () => {
-    await uppy.upload().catch((error) => {
+    await uppy.upload().catch(() => {
       showNotification({
         color: "red",
         message: "Error while uploading file. Please try again later.",
@@ -162,7 +162,6 @@ const GuestUpload = () => {
         <Flex justify="center">
           <UppyDashboard
             uppy={uppy}
-            showProgressDetails
             width={isMobile ? "100%" : ""}
             note="Feel free to upload as many photos as you like, but please try to keep videos relatively short. Thank you!"
           />

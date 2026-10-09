@@ -1,5 +1,4 @@
-import { Body, Container, Head, Preview, Text } from "@react-email/components";
-import { Html } from "@react-email/html";
+import { Body, Container, Head, Html, Preview, Text } from "react-email";
 
 const main = {
   backgroundColor: "#ffffff",

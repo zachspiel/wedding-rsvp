@@ -1,8 +1,8 @@
 "use server";
 
-import { render } from "@react-email/components";
+import { render } from "react-email";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
-import * as nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
 import EmailTemplate from "./components/EmailTemplate";
 
 interface Props {
@@ -16,7 +16,7 @@ export async function sendEmailForUploadedImages({
   lastName,
   uploadedImages,
 }: Props) {
-  const contactEmail = nodemailer.createTransport({
+  const contactEmail = createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL,
@@ -24,11 +24,12 @@ export async function sendEmailForUploadedImages({
     },
   });
 
+  const html = await render(EmailTemplate({ firstName, lastName, uploadedImages }));
   const mail = {
     from: process.env.EMAIL_RECIPIENTS,
     to: process.env.EMAIL,
     subject: `${firstName} ${lastName} uploaded images`,
-    html: render(EmailTemplate({ firstName, lastName, uploadedImages })),
+    html,
   };
 
   await contactEmail.sendMail(mail);

@@ -1,5 +1,4 @@
-import { Body, Container, Head, Link, Preview, Text } from "@react-email/components";
-import { Html } from "@react-email/html";
+import { Body, Container, Head, Html, Link, Preview, Text } from "react-email";
 import { GuestUploadedImage } from "@spiel-wedding/types/Photo";
 
 const main = {

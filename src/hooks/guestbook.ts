@@ -1,5 +1,6 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
+import { TablesInsert } from "@spiel-wedding/types/supabase.types";
 
 const TABLE = "guestbook";
 
@@ -14,7 +15,7 @@ export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]>
 };
 
 export const addMessageToGuestBook = async (
-  message: Omit<GuestMessage, "id">,
+  message: TablesInsert<"guestbook">,
 ): Promise<GuestMessage> => {
   const supabase = createClient();
   const { data } = await supabase.from(TABLE).insert(message).select().single();

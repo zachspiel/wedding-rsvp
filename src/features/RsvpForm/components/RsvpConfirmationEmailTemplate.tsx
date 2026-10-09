@@ -1,6 +1,4 @@
-import { Body, Container, Head, Link, Preview, Text } from "@react-email/components";
-import { Html } from "@react-email/html";
-import { Img } from "@react-email/img";
+import { Body, Container, Head, Html, Img, Link, Preview, Text } from "react-email";
 import GuestTable from "@spiel-wedding/components/RsvpEmail/GuestTable";
 import { MAP_URL } from "@spiel-wedding/constants";
 import { BRIDE_NAME, GROOM_NAME } from "@spiel-wedding/constants";

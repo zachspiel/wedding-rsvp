@@ -31,7 +31,6 @@ interface Props {
 
 const AddGroupForm = ({ events }: Props) => {
   const [groupType, setGroupType] = useState("single");
-  const [isInvited, setIsInvited] = useState("definitely");
   const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm<Group>({
@@ -69,10 +68,6 @@ const AddGroupForm = ({ events }: Props) => {
       addChildToGuests(form, events);
     }
   }, [groupType]);
-
-  useEffect(() => {
-    form.setFieldValue("invited", isInvited === "definitely");
-  }, [isInvited]);
 
   const removeGuestsFromGroup = (filters: RelationshipType[]): void => {
     const totalGuests = form.values.guests.length - 1;
@@ -134,8 +129,8 @@ const AddGroupForm = ({ events }: Props) => {
             name="invited"
             label="Invited?"
             mt="lg"
-            value={isInvited}
-            onChange={setIsInvited}
+            value={form.values.invited ? "definitely" : "maybe"}
+            onChange={(val) => form.setFieldValue("invited", val === "definitely")}
           >
             <MGroup>
               <Radio value="definitely" label="Definitely" />

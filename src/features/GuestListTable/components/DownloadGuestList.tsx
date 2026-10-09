@@ -8,11 +8,11 @@ import Papa from "papaparse";
 
 const DownloadGuestList = ({ groups }: { groups: Group[] }) => {
   const handleDownload = () => {
-    let columns: string[] = ["First Name", "Last Name", "Table"];
+    const columns: string[] = ["First Name", "Last Name", "Table"];
     const formattedRows = groups
       .flatMap((group) => {
         return group.guests.map((guest) => {
-          let formattedRow: Record<string, string> = {};
+          const formattedRow: Record<string, string> = {};
           formattedRow["First Name"] = guest.firstName;
           formattedRow["Last Name"] = guest.lastName;
           return formattedRow;

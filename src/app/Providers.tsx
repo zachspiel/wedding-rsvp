@@ -5,7 +5,6 @@ import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { displayEasterEggs } from "@spiel-wedding/components/easterEggs";
 import { LazyMotion } from "framer-motion";
-import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 import { ReactNode, useEffect } from "react";
 import AdminViewProvider from "../context/AdminView";
 

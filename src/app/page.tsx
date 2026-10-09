@@ -16,7 +16,6 @@ import { getPhotoGallery } from "@spiel-wedding/hooks/gallery";
 import { getGuestMessages } from "@spiel-wedding/hooks/guestbook";
 import { Photo } from "@spiel-wedding/types/Photo";
 import { generatePlaceholder } from "@spiel-wedding/util/generateBlurPlaceholder";
-import { SupabaseClient } from "@supabase/supabase-js";
 
 async function chunkRequestsForGallery(gallery: Photo[]): Promise<Photo[]> {
   const results: Photo[] = [];

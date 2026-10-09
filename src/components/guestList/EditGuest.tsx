@@ -22,9 +22,15 @@ import {
 } from "@spiel-wedding/components/notifications/notifications";
 import { createEventResponses, deleteEventResponse } from "@spiel-wedding/hooks/events";
 import { GROUP_SWR_KEY, updateGroup } from "@spiel-wedding/hooks/guests";
-import { Event, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import {
+  Event,
+  EventResponse,
+  Group,
+  Guest,
+  RsvpResponse,
+} from "@spiel-wedding/types/Guest";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { useSWRConfig } from "swr";
 import RsvpStatus from "./RsvpStatus";
 
@@ -35,9 +41,6 @@ interface Props {
 }
 
 const EditGuest = ({ group, events, close }: Props): ReactElement => {
-  const [isInvited, setIsInvited] = React.useState(
-    group.invited ? "definitely" : "maybe",
-  );
   const { mutate } = useSWRConfig();
 
   const form = useForm<Group>({
@@ -49,11 +52,6 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
       },
     },
   });
-
-  const handleInvitedChange = (value: string): void => {
-    setIsInvited(value);
-    form.setFieldValue("invited", value === "definitely");
-  };
 
   const handleSubmit = async () => {
     const updatedGroup = await updateGroup(form.getTransformedValues(), group);
@@ -71,8 +69,36 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
     close();
   };
 
+  const addGuestToEvent = async (guest: Guest, event: Event) => {
+    const removedEvent = await createEventResponses([
+      {
+        eventId: event.event_id,
+        guestId: guest.guest_id,
+        rsvp: RsvpResponse.NO_RESPONSE,
+      },
+    ]);
+
+    if (removedEvent) {
+      await mutate("events");
+      showSuccessNotification("Guest added to event");
+    } else {
+      showFailureNotification();
+    }
+  };
+
+  const removeGuestFromEvent = async (eventResponse: EventResponse) => {
+    const result = await deleteEventResponse(eventResponse.response_id);
+
+    if (result) {
+      await mutate("events");
+      showSuccessNotification("Guest removed from event");
+    } else {
+      showFailureNotification();
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Tabs defaultValue="guestInfo">
         <Tabs.List>
           <Tabs.Tab value="guestInfo">Guest Info</Tabs.Tab>
@@ -101,8 +127,8 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
             name="invited"
             label="Invited?"
             mt="lg"
-            value={isInvited}
-            onChange={handleInvitedChange}
+            value={form.values.invited ? "definitely" : "maybe"}
+            onChange={(val) => form.setFieldValue("invited", val === "definitely")}
           >
             <MGroup>
               <Radio value="definitely" label="Definitely" />
@@ -173,18 +199,7 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
                       <Button
                         color="red"
                         leftSection={<IconTrash />}
-                        onClick={async () => {
-                          await deleteEventResponse(eventResponse.response_id).then(
-                            async (result) => {
-                              if (result) {
-                                await mutate("events");
-                                showSuccessNotification("Guest removed from event");
-                              } else {
-                                showFailureNotification();
-                              }
-                            },
-                          );
-                        }}
+                        onClick={() => removeGuestFromEvent(eventResponse)}
                       >
                         Remove guest
                       </Button>
@@ -207,24 +222,9 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
                         <Button
                           leftSection={<IconPlus />}
                           mt="md"
-                          onClick={async () => {
-                            await createEventResponses([
-                              {
-                                eventId: event.event_id,
-                                guestId: guest.guest_id,
-                                rsvp: RsvpResponse.NO_RESPONSE,
-                              },
-                            ]).then(async (result) => {
-                              if (result) {
-                                await mutate("events");
-                                showSuccessNotification("Guest added to event");
-                              } else {
-                                showFailureNotification();
-                              }
-                            });
-                          }}
+                          onClick={() => addGuestToEvent(guest, event)}
                         >
-                          {`Add to ${event.title}`}
+                          Add to {event.title}
                         </Button>
                       </div>
                     );
@@ -239,14 +239,18 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
         <Button
           variant="outline"
           mr="md"
-          onClick={handleSubmit}
+          type="submit"
           size="md"
           disabled={!form.isDirty()}
         >
           Save
         </Button>
 
-        <Button onClick={submitAndClose} size="md" disabled={!form.isDirty()}>
+        <Button
+          onClick={() => form.onSubmit(() => submitAndClose())()}
+          size="md"
+          disabled={!form.isDirty()}
+        >
           Save & Close
         </Button>
       </MGroup>

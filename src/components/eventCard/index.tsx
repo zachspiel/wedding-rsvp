@@ -81,7 +81,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
     return <Text size="sm">{detail}</Text>;
   };
 
-  const createPreviewElement = (detail: string, url: string) => {
+  const createPreviewElement = (detail: string) => {
     return (
       <Group gap="xs" align="center" justify="space-between">
         <Text size="sm">{detail}</Text>
@@ -133,7 +133,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
           <IconBuildingCastle style={iconStyles} stroke={1.5} />,
           "Location",
           event.imageUrl
-            ? createPreviewElement(event.location, event.imageUrl)
+            ? createPreviewElement(event.location)
             : createDefaultDetailElement(event.location),
         )}
 

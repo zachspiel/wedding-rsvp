@@ -13,6 +13,19 @@ interface CountdownTimeLeft {
 
 const WEDDING_DATE = new Date("10/26/2024");
 
+function calculateTimeLeft(): CountdownTimeLeft | undefined {
+  const currentDate = new Date();
+  const difference = WEDDING_DATE.getTime() - currentDate.getTime();
+
+  if (difference > 0) {
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+    };
+  }
+}
+
 const WeddingCountdown = () => {
   const [timeLeft, setTimeLeft] = useState<CountdownTimeLeft | undefined>({
     days: 0,
@@ -29,19 +42,6 @@ const WeddingCountdown = () => {
 
     return () => clearInterval(timer);
   }, []);
-
-  function calculateTimeLeft(): CountdownTimeLeft | undefined {
-    const currentDate = new Date();
-    const difference = WEDDING_DATE.getTime() - currentDate.getTime();
-
-    if (difference > 0) {
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-      };
-    }
-  }
 
   const getCountdownBox = (
     title: string,

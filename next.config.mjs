@@ -7,6 +7,7 @@ const bundleAnalyzer = withBundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  reactCompiler: true,
   images: {
     remotePatterns: [
       {
@@ -24,7 +25,7 @@ const nextConfig = {
       "@mantine/carousel",
       "@mantine/core",
       "@mantine/hooks",
-      "@react-email/components",
+      "react-email",
       "@supabase/ssr",
       "@supabase/supabase-js",
       "dayjs",

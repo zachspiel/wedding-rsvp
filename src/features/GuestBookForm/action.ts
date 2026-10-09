@@ -1,19 +1,20 @@
 "use server";
 
-import { render } from "@react-email/components";
+import { render } from "react-email";
 import { addMessageToGuestBook } from "@spiel-wedding/hooks/guestbook";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
-import * as nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
 import GuestBookMessageTemplate from "./GuestBookEmailTemplate";
+import { TablesInsert } from "@spiel-wedding/types/supabase.types";
 
 export async function saveGuestMessage(
-  guestMessage: Omit<GuestMessage, "id">
+  guestMessage: TablesInsert<"guestbook">,
 ): Promise<GuestMessage> {
   return addMessageToGuestBook(guestMessage);
 }
 
 export async function sendEmailForNewComment({ name, message }: GuestMessage) {
-  const contactEmail = nodemailer.createTransport({
+  const contactEmail = createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL,
@@ -21,11 +22,12 @@ export async function sendEmailForNewComment({ name, message }: GuestMessage) {
     },
   });
 
+  const html = await render(GuestBookMessageTemplate({ guestName: name, message }));
   const mail = {
     from: process.env.EMAIL_RECIPIENTS,
     to: process.env.EMAIL,
     subject: "New message added to guest book!",
-    html: render(GuestBookMessageTemplate({ guestName: name, message })),
+    html,
   };
 
   await contactEmail.sendMail(mail);

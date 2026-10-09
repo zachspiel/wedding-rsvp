@@ -35,7 +35,6 @@ import {
   RsvpResponse,
 } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
-import isEqual from "lodash.isequal";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -51,7 +50,6 @@ type EditEventForm = Event & {
 
 const EditEvent = ({ event, groups }: Props) => {
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState<string | null>(new Date(event.date).toISOString());
   const router = useRouter();
 
   const combobox = useCombobox({
@@ -67,6 +65,7 @@ const EditEvent = ({ event, groups }: Props) => {
 
     return {
       ...event,
+      date: event.date ? new Date(event.date).toISOString() : new Date().toISOString(),
       imageUrl: event.imageUrl || "",
       attire: event.attire || "",
       guests: guestsInvitedToEvent,
@@ -83,7 +82,6 @@ const EditEvent = ({ event, groups }: Props) => {
 
   const handleSubmit = async (formValues: EditEventForm) => {
     const { guests, ...updatedEvent } = formValues;
-    const isEventUnmodified = isEqual(updatedEvent, event);
 
     const allGuests = groups.flatMap((group) => group.guests);
     const guestsForEvent = getGuestsForEvent(event, allGuests).map(
@@ -103,11 +101,7 @@ const EditEvent = ({ event, groups }: Props) => {
         rsvp: RsvpResponse.NO_RESPONSE,
       }));
 
-    const updateEventResult =
-      isEventUnmodified && date == event.date
-        ? updatedEvent
-        : await updateEvent({ ...updatedEvent, date: date ?? event.date });
-
+    const updateEventResult = await updateEvent(updatedEvent);
     const removedResponses = await deleteEventResponses(responsesToRemove);
     const newResponses = await createEventResponses(newEventResponses);
 
@@ -125,15 +119,11 @@ const EditEvent = ({ event, groups }: Props) => {
     const guestIds = val.split(",");
 
     form.setFieldValue("guests", (current) => {
-      const updatedValue = current.filter((id) => !guestIds.includes(id));
-
-      guestIds.forEach((guestId) => {
-        if (!current.includes(guestId)) {
-          updatedValue.push(guestId);
-        }
-      });
-
-      return updatedValue;
+      const currentIds = new Set(current);
+      guestIds.forEach((id) =>
+        currentIds.has(id) ? currentIds.delete(id) : currentIds.add(id),
+      );
+      return Array.from(currentIds);
     });
   };
 
@@ -161,8 +151,8 @@ const EditEvent = ({ event, groups }: Props) => {
         label="Date"
         placeholder="Pick date"
         valueFormat="YYYY-MM-DD"
-        value={date}
-        onChange={setDate}
+        {...form.getInputProps("date")}
+        key={form.key("date")}
       />
 
       <TextInput
@@ -308,7 +298,9 @@ const EditEvent = ({ event, groups }: Props) => {
       </Combobox>
 
       <Group justify="flex-end" style={{ zIndex: 1 }}>
-        <Button type="submit">Save</Button>
+        <Button type="submit" disabled={!form.isDirty()}>
+          Save
+        </Button>
       </Group>
     </form>
   );

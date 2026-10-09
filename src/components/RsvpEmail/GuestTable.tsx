@@ -1,4 +1,4 @@
-import { Column, Heading, Row, Section, Text } from "@react-email/components";
+import { Column, Heading, Row, Section, Text } from "react-email";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
 import { getGuestsForEvent } from "@spiel-wedding/util";
 import { CSSProperties, ReactElement } from "react";

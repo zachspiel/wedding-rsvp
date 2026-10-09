@@ -45,7 +45,7 @@ const UploadImages = () => {
             showFailureNotification();
           });
       },
-      error(err) {
+      error() {
         showFailureNotification();
       },
     });
