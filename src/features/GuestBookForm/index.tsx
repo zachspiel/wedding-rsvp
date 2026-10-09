@@ -11,7 +11,6 @@ import {
 } from "@mantine/core";
 import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useLocalStorage } from "@mantine/hooks";
-import revalidatePage from "@spiel-wedding/actions/revalidatePage";
 import { showCustomFailureNotification } from "@spiel-wedding/components/notifications/notifications";
 import { GuestMessage } from "@spiel-wedding/types/Guest";
 import { ReactElement, useState } from "react";
@@ -21,7 +20,7 @@ import { useRouter } from "next/navigation";
 interface Props {
   name?: string;
   email?: string;
-  handleSubmit: (message: GuestMessage[]) => void;
+  handleSubmit: () => void;
   customButtonLabel?: string;
   isMessageRequred?: boolean;
 }
@@ -67,7 +66,7 @@ const GuestBookForm = ({
     setIsSaving(true);
     if (!isMessageRequred && isAnyFieldEmpty(newGuestMessage)) {
       setProgress(100);
-      handleSubmit([]);
+      handleSubmit();
     } else {
       const guestMessage = await saveGuestMessage(newGuestMessage);
       setProgress(33);
@@ -83,7 +82,7 @@ const GuestBookForm = ({
 
         setProgress(66);
 
-        handleSubmit([guestMessage]);
+        handleSubmit();
 
         await sendEmailForNewComment(guestMessage);
         setProgress(80);
@@ -117,8 +116,8 @@ const GuestBookForm = ({
           placeholder="Your name"
           name="name"
           withAsterisk={isMessageRequred}
+          key={form.key("name")}
           {...form.getInputProps("name")}
-          error={form.errors["name"]}
           disabled={isSaving}
         />
         <TextInput
@@ -126,8 +125,8 @@ const GuestBookForm = ({
           placeholder="Your email"
           name="email"
           withAsterisk={isMessageRequred}
+          key={form.key("email")}
           {...form.getInputProps("email")}
-          error={form.errors["email"]}
           disabled={isSaving}
         />
       </SimpleGrid>
@@ -141,8 +140,8 @@ const GuestBookForm = ({
         name="message"
         mt="md"
         withAsterisk={isMessageRequred}
+        key={form.key("message")}
         {...form.getInputProps("message")}
-        error={form.errors["message"]}
         disabled={isSaving}
       />
 

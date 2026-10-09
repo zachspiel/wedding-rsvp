@@ -8,9 +8,8 @@ import {
 const GUEST_IMAGES_TABLE = "guest_uploaded_images";
 const GUEST_IMAGE_COMMENTS_TABLE = "guest_image_comments";
 
-const supabase = createClient();
-
 export const getGuestImages = async (): Promise<GuestUploadedImage[]> => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(GUEST_IMAGES_TABLE)
     .select("*, guest_image_comments(comment_id)")
@@ -26,6 +25,7 @@ export const getGuestImages = async (): Promise<GuestUploadedImage[]> => {
 export const saveGuestUploadedImages = async (
   guestUploadedImage: UploadImageFormData[],
 ): Promise<GuestUploadedImage[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_IMAGES_TABLE)
     .insert(guestUploadedImage)
@@ -38,6 +38,7 @@ export const saveGuestUploadedImages = async (
 export const getCommentsForImage = async (
   fileId: string,
 ): Promise<GuestImageComment[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_IMAGE_COMMENTS_TABLE)
     .select("*")
@@ -53,6 +54,7 @@ export const addCommentToImage = async (
   firstName: string,
   lastName: string,
 ): Promise<GuestImageComment[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_IMAGE_COMMENTS_TABLE)
     .insert({

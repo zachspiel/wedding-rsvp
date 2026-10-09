@@ -27,7 +27,7 @@ function chunk(array: PublicGuestMessage[]): PublicGuestMessage[][] {
 const GuestBook = ({ guestMessages }: Props): ReactElement => {
   const [activePage, setPage] = useState(1);
 
-  const saveMessage = async (messages: PublicGuestMessage[]): Promise<void> => {
+  const saveMessage = async (): Promise<void> => {
     showSuccessNotification("Successfully signed guest book!");
   };
 

@@ -423,9 +423,6 @@ const GuestGallery = ({ placeHolderImages }: Props) => {
                     blurDataURL={placeHolderImages?.[file.file_id]}
                     placeholder={placeHolderImages?.[file.file_id] ? "blur" : undefined}
                     loading="lazy"
-                    onError={() => {
-                      console.log(data.publicUrl);
-                    }}
                   />
                 )}
               </Carousel.Slide>

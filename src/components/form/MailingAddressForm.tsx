@@ -19,10 +19,10 @@ const MailingAddressForm = ({
   showEmailTooltip,
   emailRequired,
 }: Props): ReactElement => {
-  const openAllTabs = openTabsByDefault ?? false;
-  const defaultValue = openAllTabs
-    ? ["guestNames", "mailing", "contact"]
-    : ["guestNames", "mailing"];
+  const defaultValue =
+    (openTabsByDefault ?? false)
+      ? ["guestNames", "mailing", "contact"]
+      : ["guestNames", "mailing"];
 
   return (
     <Accordion defaultValue={defaultValue} variant="separated" mt="xl" multiple>

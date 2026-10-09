@@ -190,18 +190,18 @@ const GuestUpload = () => {
         <SimpleGrid cols={{ base: 1, md: 2 }}>
           <form>
             <TextInput
+              key={form.key("firstName")}
               {...form.getInputProps("firstName")}
               placeholder="Enter your first name"
               label="First Name"
-              error={form.errors.firstName}
               mb={{ base: 0, md: "md" }}
               mr="md"
             />
             <TextInput
+              key={form.key("lastName")}
               {...form.getInputProps("lastName")}
               placeholder="Enter your last name"
               label="Last Name"
-              error={form.errors.lastName}
               mb="md"
             />
           </form>

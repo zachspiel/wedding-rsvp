@@ -1,9 +1,8 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { FrequentlyAskedQuestion } from "@spiel-wedding/types/FAQ";
 
-const supabase = createClient();
-
 export const getFAQs = async (): Promise<FrequentlyAskedQuestion[]> => {
+  const supabase = createClient();
   const { data } = await supabase.from("faq").select();
 
   return data ?? [];
@@ -12,22 +11,25 @@ export const getFAQs = async (): Promise<FrequentlyAskedQuestion[]> => {
 export const updateFAQ = async (
   faq: FrequentlyAskedQuestion,
 ): Promise<FrequentlyAskedQuestion | null> => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from("faq")
     .update(faq)
     .eq("faq_id", faq.faq_id)
-    .select();
+    .select()
+    .maybeSingle();
 
   if (error) {
     console.error(`Error while updating FAQ: ${error}`);
   }
 
-  return data?.[0];
+  return data;
 };
 
 export const updateFAQs = async (
   faqs: FrequentlyAskedQuestion[],
 ): Promise<FrequentlyAskedQuestion[] | null> => {
+  const supabase = createClient();
   const { data, error } = await supabase.from("faq").upsert(faqs).select();
 
   if (error) {
@@ -40,21 +42,28 @@ export const updateFAQs = async (
 export const addFAQ = async (
   faq: FrequentlyAskedQuestion,
 ): Promise<FrequentlyAskedQuestion | null> => {
-  const { data, error } = await supabase.from("faq").insert(faq).select();
+  const supabase = createClient();
+  const { data, error } = await supabase.from("faq").insert(faq).select().maybeSingle();
 
   if (error) {
-    console.error(`Error while bulk adding FAQ: ${error}`);
+    console.error(`Error while adding FAQ: ${error}`);
   }
 
-  return data?.[0];
+  return data;
 };
 
 export const removeFAQ = async (id: string): Promise<FrequentlyAskedQuestion | null> => {
-  const { data, error } = await supabase.from("faq").delete().eq("faq_id", id).select();
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("faq")
+    .delete()
+    .eq("faq_id", id)
+    .select()
+    .maybeSingle();
 
   if (error) {
     console.error(`Error while removing FAQ: ${error}`);
   }
 
-  return data?.[0];
+  return data;
 };

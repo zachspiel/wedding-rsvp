@@ -9,9 +9,8 @@ export const GROUP_SWR_KEY = "group";
 export const GROUP_TABLE = "group";
 export const GUEST_TABLE = "guests";
 
-const supabase = createClient();
-
 export const getGroups = async (): Promise<Group[]> => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .select("*, guests(*, event_responses(*))")
@@ -30,6 +29,7 @@ export const getGroups = async (): Promise<Group[]> => {
 };
 
 export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(GROUP_TABLE)
     .select("*, guests(*, event_responses(*))")
@@ -50,21 +50,30 @@ export const createGroup = async (
   group: Group,
   events: Event[],
 ): Promise<Group | undefined> => {
+  const supabase = createClient();
   const { group_id, guests, ...groupData } = group;
 
-  const { data, error } = await supabase.from(GROUP_TABLE).insert(groupData).select();
+  const { data: newGroup, error } = await supabase
+    .from(GROUP_TABLE)
+    .insert(groupData)
+    .select()
+    .maybeSingle();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  const newGroup = data?.[0] ?? ({} as Group);
+  if (newGroup) {
+    return undefined;
+  }
+
   const newGuests = await createGuests(guests, newGroup.group_id, events);
 
   return { ...newGroup, guests: newGuests };
 };
 
 export const bulkUpdateGroups = async (groups: TablesUpdate<"group">[]) => {
+  const supabase = createClient();
   const { data } = await supabase.from(GROUP_TABLE).upsert(groups).select();
   return data;
 };
@@ -73,6 +82,7 @@ export const updateGroup = async (
   group: Group,
   originalGroup: Group,
 ): Promise<Group | undefined> => {
+  const supabase = createClient();
   const { guests, ...updatedGroup } = group;
   const updatedGuests = await updateGuests(guests, group.group_id, originalGroup);
 
@@ -131,6 +141,7 @@ const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Gro
 };
 
 export const deleteGroup = async (groupId: string): Promise<Group | undefined> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(GROUP_TABLE)
     .delete()
@@ -146,6 +157,7 @@ export const createGuests = async (
   groupId: string,
   events: Event[],
 ): Promise<Guest[] | undefined> => {
+  const supabase = createClient();
   const formattedGuests = guests.map((guest) => {
     const { guest_id, event_responses, responseMap, ...values } = guest;
 
@@ -178,6 +190,7 @@ export const createGuests = async (
 export const upsertGuests = async (
   guests: TablesUpdate<"guests">[],
 ): Promise<Guest[]> => {
+  const supabase = createClient();
   const { data } = await supabase.from(GUEST_TABLE).upsert(guests).select();
 
   return data ?? [];
@@ -186,6 +199,7 @@ export const upsertGuests = async (
 export const deleteGuests = async (
   guests: TablesUpdate<"guests">[],
 ): Promise<Guest[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(GUEST_TABLE)
     .delete()

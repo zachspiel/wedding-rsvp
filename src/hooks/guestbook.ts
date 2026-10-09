@@ -3,9 +3,8 @@ import { GuestMessage } from "@spiel-wedding/types/Guest";
 
 const TABLE = "guestbook";
 
-const supabase = createClient();
-
 export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(TABLE)
     .select("id,name,message,isVisible,createdAt,editedAt")
@@ -17,6 +16,7 @@ export const getGuestMessages = async (): Promise<Omit<GuestMessage, "email">[]>
 export const addMessageToGuestBook = async (
   message: Omit<GuestMessage, "id">,
 ): Promise<GuestMessage> => {
+  const supabase = createClient();
   const { data } = await supabase.from(TABLE).insert(message).select().single();
 
   return data;
@@ -26,6 +26,7 @@ export const updateGuestBookMessage = async (
   id: string,
   message: string,
 ): Promise<GuestMessage[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(TABLE)
     .update({ message, editedAt: new Date().toISOString() })
@@ -38,6 +39,7 @@ export const updateGuestBookMessage = async (
 export const removeGuestBookMessage = async (
   id: string,
 ): Promise<GuestMessage | null> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(TABLE)
     .update({ isVisible: false })

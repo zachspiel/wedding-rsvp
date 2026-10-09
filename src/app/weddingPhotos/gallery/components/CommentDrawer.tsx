@@ -107,7 +107,7 @@ const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
 
     window.localStorage.setItem(
       "guest-name",
-      JSON.stringify({ firstName, lastName, comment: "" })
+      JSON.stringify({ firstName, lastName, comment: "" }),
     );
     form.setFieldValue("comment", "");
   };
@@ -175,24 +175,24 @@ const CommentDrawer = ({ file, comments, isLoading, opened, close }: Props) => {
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Group mb="md">
             <TextInput
+              key={form.key("firstName")}
               {...form.getInputProps("firstName")}
               placeholder="Enter your first name"
               label="First Name"
-              error={form.errors.firstName}
               mr="md"
             />
             <TextInput
+              key={form.key("lastName")}
               {...form.getInputProps("lastName")}
               placeholder="Enter your last name"
               label="Last Name"
-              error={form.errors.lastName}
             />
           </Group>
           <Textarea
+            key={form.key("comment")}
             {...form.getInputProps("comment")}
             placeholder="Add a comment"
             label="Message"
-            error={form.errors.comment}
             mb="md"
             minRows={2}
             maxRows={4}

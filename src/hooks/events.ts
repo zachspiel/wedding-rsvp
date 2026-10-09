@@ -5,9 +5,8 @@ import { Database } from "@spiel-wedding/types/supabase.types";
 const EVENT_TABLE = "event";
 const EVENT_RESPONSE_TABLE = "event_responses";
 
-const supabase = createClient();
-
 export const getEvents = async (): Promise<Event[]> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(EVENT_TABLE)
     .select("*")
@@ -16,23 +15,26 @@ export const getEvents = async (): Promise<Event[]> => {
   return data ?? [];
 };
 
-export const updateEvent = async (event: Event): Promise<Event | undefined> => {
+export const updateEvent = async (event: Event): Promise<Event | null> => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(EVENT_TABLE)
     .update({ ...event })
     .eq("event_id", event.event_id)
-    .select();
+    .select()
+    .maybeSingle();
 
   if (error) {
     console.error(`Error while updating event: ${error}`);
   }
 
-  return data?.[0];
+  return data;
 };
 
 export const bulkUpsertEventResponse = async (
   eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
 ): Promise<EventResponse[] | null> => {
+  const supabase = createClient();
   if (eventResponses.length === 0) {
     return [];
   }
@@ -52,6 +54,7 @@ export const bulkUpsertEventResponse = async (
 export const createEventResponses = async (
   eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
 ): Promise<EventResponse[] | null> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(EVENT_RESPONSE_TABLE)
     .insert(eventResponses)
@@ -63,18 +66,21 @@ export const createEventResponses = async (
 export const deleteEventResponse = async (
   responseId: string,
 ): Promise<EventResponse | null> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(EVENT_RESPONSE_TABLE)
     .delete()
     .eq("response_id", responseId)
-    .select();
+    .select()
+    .maybeSingle();
 
-  return data?.[0];
+  return data;
 };
 
 export const deleteEventResponses = async (
   responseIds: string[],
 ): Promise<EventResponse[] | null> => {
+  const supabase = createClient();
   const { data } = await supabase
     .from(EVENT_RESPONSE_TABLE)
     .delete()
