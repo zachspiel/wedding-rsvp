@@ -1,6 +1,6 @@
 import { Column, Heading, Row, Section, Text } from "react-email";
 import { Event, Guest } from "@spiel-wedding/types/Guest";
-import { getGuestsForEvent } from "@spiel-wedding/util";
+import { getGuestResponseForEvent, getGuestsForEvent } from "@spiel-wedding/util";
 import { CSSProperties, ReactElement } from "react";
 
 const paragraph = {
@@ -82,7 +82,7 @@ const GuestTable = ({ guests, events }: Props): ReactElement => {
                   <Row key={guest.guest_id} style={tableRow}>
                     {createColumn(`${guest.firstName} ${guest.lastName}`)}
                     {createColumn(
-                      guest.responseMap[event.event_id]?.rsvp ?? "No Response",
+                      getGuestResponseForEvent(event, guest)?.rsvp ?? "No response",
                     )}
                   </Row>
                 ))}

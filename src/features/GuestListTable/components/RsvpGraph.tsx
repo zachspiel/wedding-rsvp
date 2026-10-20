@@ -19,25 +19,38 @@ const RsvpGraph = ({ groups, events }: Props) => {
         {events.map((event) => {
           const guests = getGuestsForEvent(event, allGuests);
 
-          const rsvpMatchesFilter = (rsvpResponse: RsvpResponse) =>
-            guests.filter(
-              ({ responseMap }) => responseMap[event.event_id].rsvp === rsvpResponse
-            ).length;
+          let totalAccepted = 0;
+          let totalDeclined = 0;
+          let totalMissingResponse = 0;
+
+          guests.forEach((guest) => {
+            const eventResponse = guest.event_responses.find(
+              (eventResponse) => eventResponse.eventId === event.event_id,
+            );
+
+            if (eventResponse?.rsvp === RsvpResponse.ACCEPTED) {
+              totalAccepted++;
+            } else if (eventResponse?.rsvp === RsvpResponse.DECLINED) {
+              totalDeclined++;
+            } else if (eventResponse?.rsvp === RsvpResponse.NO_RESPONSE) {
+              totalMissingResponse++;
+            }
+          });
 
           const data = [
             {
               name: "Accepted",
-              value: rsvpMatchesFilter(RsvpResponse.ACCEPTED),
+              value: totalAccepted,
               color: "teal.6",
             },
             {
               name: "Declined",
-              value: rsvpMatchesFilter(RsvpResponse.DECLINED),
+              value: totalDeclined,
               color: "red.6",
             },
             {
               name: "No Response",
-              value: rsvpMatchesFilter(RsvpResponse.NO_RESPONSE),
+              value: totalMissingResponse,
               color: "gray.4",
             },
           ];

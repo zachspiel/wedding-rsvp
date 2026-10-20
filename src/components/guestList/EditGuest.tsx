@@ -33,6 +33,7 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { ReactElement } from "react";
 import { useSWRConfig } from "swr";
 import RsvpStatus from "./RsvpStatus";
+import { getGuestResponseForEvent } from "@spiel-wedding/util";
 
 interface Props {
   group: Group;
@@ -210,12 +211,7 @@ const EditGuest = ({ group, events, close }: Props): ReactElement => {
 
               <Flex direction="column">
                 {events
-                  .filter(
-                    (event) =>
-                      !guest.event_responses
-                        .map((response) => response.eventId)
-                        .includes(event.event_id),
-                  )
+                  .filter((event) => getGuestResponseForEvent(event, guest) === undefined)
                   .map((event) => {
                     return (
                       <div key={`add=${guest.guest_id}-to-${event.event_id}`}>

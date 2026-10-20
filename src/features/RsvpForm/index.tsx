@@ -138,7 +138,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
               const guestsInvitedToEvent = getGuestsForEvent(event, form.values.guests);
 
               if (guestsInvitedToEvent.length === 0) {
-                return <></>;
+                return null;
               }
 
               return (
@@ -146,7 +146,7 @@ const RsvpForm = ({ events, selectedGroup }: Props): ReactElement => {
                   guests={guestsInvitedToEvent}
                   event={event}
                   form={form}
-                  key={`${event.event_id}`}
+                  key={`${event.event_id}-rsvp-form`}
                 />
               );
             })}

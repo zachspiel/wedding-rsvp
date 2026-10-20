@@ -2,7 +2,7 @@
 
 import { Group as MGroup, Text } from "@mantine/core";
 import { Event, Group, Guest, RsvpResponse } from "@spiel-wedding/types/Guest";
-import { getGuestsForEvent } from "@spiel-wedding/util";
+import { getGuestResponseForEvent, getGuestsForEvent } from "@spiel-wedding/util";
 import { ReactElement, useMemo } from "react";
 
 interface Props {
@@ -27,7 +27,7 @@ const Summary = ({ groups, event }: Props): ReactElement => {
       return undefined;
     }
 
-    return guest.responseMap[event.event_id]?.rsvp;
+    return getGuestResponseForEvent(event, guest)?.rsvp;
   };
 
   const totalAccepted = groups

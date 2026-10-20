@@ -48,17 +48,14 @@ const RsvpConfirmationEmailTemplate = ({ group, events }: Props) => {
       <Preview>{previewText} </Preview>
       <Body style={main}>
         <Container style={container}>
-          {!anyGuestAccepted && <Text style={paragraph}>{previewText}</Text>}
+          <Text style={paragraph}>{previewText}</Text>
 
           {anyGuestAccepted && (
-            <>
-              <Text style={paragraph}>{previewText}</Text>
-              <Text style={paragraph}>
-                We can&#39;t wait to see you on Saturday, October 26th at 4:00 PM at the
-                Wright House in Mesa (
-                <Link href={MAP_URL}>636 W University Dr, Mesa, AZ 85201</Link>).
-              </Text>
-            </>
+            <Text style={paragraph}>
+              We can&#39;t wait to see you on Saturday, October 26th at 4:00 PM at the
+              Wright House in Mesa (
+              <Link href={MAP_URL}>636 W University Dr, Mesa, AZ 85201</Link>).
+            </Text>
           )}
 
           <Text style={paragraph}>A copy of your RSVP can be found below:</Text>

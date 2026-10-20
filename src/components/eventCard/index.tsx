@@ -6,7 +6,7 @@ import {
   Card,
   Drawer,
   Flex,
-  Group,
+  Group as MGroup,
   Stack,
   Table,
   Text,
@@ -16,8 +16,8 @@ import {
 import { UseFormReturnType } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import { Event, Guest, Group as Party } from "@spiel-wedding/types/Guest";
-import { getGuestsForEvent } from "@spiel-wedding/util";
+import { Event, Guest, Group } from "@spiel-wedding/types/Guest";
+import { getGuestResponseForEvent, getGuestsForEvent } from "@spiel-wedding/util";
 import {
   IconBuildingCastle,
   IconCalendarHeart,
@@ -37,7 +37,7 @@ import RsvpSelection from "../../features/RsvpForm/components/RsvpSelectionInput
 interface Props {
   event: Event;
   guests: Guest[];
-  form?: UseFormReturnType<Party>;
+  form?: UseFormReturnType<Group>;
   openUpdateModal?: () => void;
 }
 
@@ -63,7 +63,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
   ) => {
     return (
       <Card.Section mt="xs" withBorder={withBorder}>
-        <Group mx="md" gap="lg" mb={withBorder ? "xs" : ""}>
+        <MGroup mx="md" gap="lg" mb={withBorder ? "xs" : ""}>
           <Stack gap={0}>
             <Text size="sm" c="dimmed" display="flex" style={{ alignItems: "center" }}>
               {icon}
@@ -72,7 +72,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
             </Text>
             {detail}
           </Stack>
-        </Group>
+        </MGroup>
       </Card.Section>
     );
   };
@@ -83,18 +83,18 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
 
   const createPreviewElement = (detail: string) => {
     return (
-      <Group gap="xs" align="center" justify="space-between">
+      <MGroup gap="xs" align="center" justify="space-between">
         <Text size="sm">{detail}</Text>
         <ActionIcon variant="subtle" color="gray" onClick={open}>
           <IconEye style={iconStyles} stroke={1.5} />
         </ActionIcon>
-      </Group>
+      </MGroup>
     );
   };
 
   const createCopyElement = (detail: string) => {
     return (
-      <Group gap="xs" align="center" justify="space-between">
+      <MGroup gap="xs" align="center" justify="space-between">
         <Text size="sm">{detail}</Text>
 
         <CopyToClipboard
@@ -110,7 +110,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
             <IconCopy style={iconStyles} stroke={1.5} />
           </ActionIcon>
         </CopyToClipboard>
-      </Group>
+      </MGroup>
     );
   };
 
@@ -171,9 +171,9 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
 
         {!form && (
           <Card.Section>
-            <Group justify="flex-end" p="sm">
+            <MGroup justify="flex-end" p="sm">
               <Button onClick={openUpdateModal}>Edit</Button>
-            </Group>
+            </MGroup>
           </Card.Section>
         )}
         {form && (
@@ -186,7 +186,7 @@ const EventCard = ({ event, form, guests, openUpdateModal }: Props) => {
             >
               <Table.Tbody>
                 {guests.map((guest, guestIndex) => {
-                  const eventResponse = guest.responseMap[event.event_id];
+                  const eventResponse = getGuestResponseForEvent(event, guest);
                   const eventIndex = guest.event_responses.findIndex(
                     (response) => response.response_id === eventResponse?.response_id,
                   );

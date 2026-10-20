@@ -5,7 +5,7 @@ import {
   CheckIcon,
   Combobox,
   Grid,
-  Group,
+  Group as MGroup,
   Input,
   Pill,
   PillsInput,
@@ -28,20 +28,15 @@ import {
   deleteEventResponses,
   updateEvent,
 } from "@spiel-wedding/hooks/events";
-import {
-  Event,
-  EventResponse,
-  Group as Party,
-  RsvpResponse,
-} from "@spiel-wedding/types/Guest";
-import { getGuestsForEvent } from "@spiel-wedding/util";
+import { Event, EventResponse, Group, RsvpResponse } from "@spiel-wedding/types/Guest";
+import { getGuestResponseForEvent, getGuestsForEvent } from "@spiel-wedding/util";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
 interface Props {
   event: Event;
-  groups: Party[];
+  groups: Group[];
 }
 
 type EditEventForm = Event & {
@@ -84,16 +79,15 @@ const EditEvent = ({ event, groups }: Props) => {
     const { guests, ...updatedEvent } = formValues;
 
     const allGuests = groups.flatMap((group) => group.guests);
-    const guestsForEvent = getGuestsForEvent(event, allGuests).map(
-      (guest) => guest.guest_id,
-    );
+    const guestsInvitedToEvent = getGuestsForEvent(event, allGuests);
+    const guestsIdsInvitedToEvent = guestsInvitedToEvent.map((guest) => guest.guest_id);
 
-    const responsesToRemove = getGuestsForEvent(event, allGuests)
+    const responsesToRemove = guestsInvitedToEvent
       .filter((guest) => !guests.includes(guest.guest_id))
-      .flatMap((guest) => guest.responseMap[event.event_id].response_id);
+      .flatMap((guest) => getGuestResponseForEvent(event, guest)?.response_id ?? "");
 
     const newEventResponses: EventResponse[] = guests
-      .filter((guest) => !guestsForEvent.includes(guest))
+      .filter((guest) => !guestsIdsInvitedToEvent.includes(guest))
       .map((guestId) => ({
         response_id: uuid(),
         guestId,
@@ -271,12 +265,12 @@ const EditEvent = ({ event, groups }: Props) => {
                       key={`${group.group_id}-option`}
                       active={isSelected}
                     >
-                      <Group gap="sm">
+                      <MGroup gap="sm">
                         {isSelected ? <CheckIcon size={12} /> : null}
 
                         {group.guests.map((guest) => {
                           return (
-                            <Group gap={7} key={`${guest.guest_id}-row`}>
+                            <MGroup gap={7} key={`${guest.guest_id}-row`}>
                               {guest.nameUnknown && (
                                 <Text c="dimmed" size="sm">
                                   Guest
@@ -285,10 +279,10 @@ const EditEvent = ({ event, groups }: Props) => {
                               {!guest.nameUnknown && (
                                 <span>{`${guest.firstName} ${guest.lastName}`}</span>
                               )}
-                            </Group>
+                            </MGroup>
                           );
                         })}
-                      </Group>
+                      </MGroup>
                     </Combobox.Option>
                   );
                 })}
@@ -297,11 +291,11 @@ const EditEvent = ({ event, groups }: Props) => {
         </Combobox.Dropdown>
       </Combobox>
 
-      <Group justify="flex-end" style={{ zIndex: 1 }}>
+      <MGroup justify="flex-end" style={{ zIndex: 1 }}>
         <Button type="submit" disabled={!form.isDirty()}>
           Save
         </Button>
-      </Group>
+      </MGroup>
     </form>
   );
 };

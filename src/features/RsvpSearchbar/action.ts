@@ -3,7 +3,6 @@
 import { Group } from "@spiel-wedding/types/Guest";
 import { createClient } from "@spiel-wedding/database/server";
 import { GROUP_TABLE } from "@spiel-wedding/hooks/guests";
-import { addEventResponseMapToGuest } from "@spiel-wedding/util";
 
 export async function getSearchResults(name: string): Promise<Group[]> {
   const parts = name.trim().split(/\s+/);
@@ -43,8 +42,5 @@ export async function getSearchResults(name: string): Promise<Group[]> {
     return [];
   }
 
-  return data.map((group) => ({
-    ...group,
-    guests: addEventResponseMapToGuest(group.guests),
-  }));
+  return data;
 }

@@ -1,7 +1,7 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { Event, Group, Guest } from "@spiel-wedding/types/Guest";
 import { TablesUpdate } from "@spiel-wedding/types/supabase.types";
-import { addEventResponseMapToGuest, createNewResponse } from "@spiel-wedding/util";
+import { createNewResponse } from "@spiel-wedding/util";
 import { v4 as uuid } from "uuid";
 import { bulkUpsertEventResponse, createEventResponses } from "./events";
 
@@ -20,12 +20,7 @@ export const getGroups = async (): Promise<Group[]> => {
     return [];
   }
 
-  return (
-    data?.map((group) => ({
-      ...group,
-      guests: addEventResponseMapToGuest(group.guests),
-    })) ?? []
-  );
+  return data ?? [];
 };
 
 export const getGroupById = async (groupId: string): Promise<Group | undefined> => {
@@ -40,10 +35,7 @@ export const getGroupById = async (groupId: string): Promise<Group | undefined> 
     return;
   }
 
-  return {
-    ...data,
-    guests: addEventResponseMapToGuest(data.guests),
-  };
+  return data;
 };
 
 export const createGroup = async (
@@ -63,7 +55,7 @@ export const createGroup = async (
     throw new Error(error.message);
   }
 
-  if (newGroup) {
+  if (!newGroup) {
     return undefined;
   }
 
@@ -107,7 +99,7 @@ const updateGuests = async (guests: Guest[], groupId: string, originalGroup: Gro
 
   const updatedGuests =
     guests.map((guest) => {
-      const { event_responses, responseMap, ...values } = guest;
+      const { event_responses, ...values } = guest;
       const id = (guest?.guest_id?.length ?? 0) === 0 ? uuid() : guest.guest_id;
 
       if (guest.nameUnknown && guest.firstName.length > 0 && guest.lastName.length > 0) {
@@ -159,7 +151,7 @@ export const createGuests = async (
 ): Promise<Guest[] | undefined> => {
   const supabase = createClient();
   const formattedGuests = guests.map((guest) => {
-    const { guest_id, event_responses, responseMap, ...values } = guest;
+    const { guest_id, event_responses, ...values } = guest;
 
     return { ...values, groupId: groupId };
   });

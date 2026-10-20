@@ -26,7 +26,6 @@ const createDefaultGroup = (events: Event[]): Group => {
         nameUnknown: false,
         event_responses: getDefaultEventsForGuest(guestId, events),
         relationshipType: RelationshipType.PRIMARY,
-        responseMap: {},
       },
     ],
     affiliation: GuestAffiliation.NONE,
@@ -45,10 +44,7 @@ const createDefaultGroup = (events: Event[]): Group => {
   };
 };
 
-const createGuest = (
-  groupId: string,
-  events: Event[],
-): Omit<Guest, "title" | "responseMap"> => {
+const createGuest = (groupId: string, events: Event[]): Omit<Guest, "title"> => {
   const id = uuid();
 
   return {
@@ -81,7 +77,6 @@ const addPartnerToGuests = (form: UseFormReturnType<Group>, events: Event[]): vo
     {
       ...newGuest,
       title: "",
-      responseMap: {},
       relationshipType: RelationshipType.PARTNER,
     },
     1,
@@ -94,7 +89,6 @@ const addChildToGuests = (form: UseFormReturnType<Group>, events: Event[]): void
   form.insertListItem("guests", {
     ...newGuest,
     title: "",
-    responseMap: {},
     relationshipType: RelationshipType.CHILD,
   });
 };

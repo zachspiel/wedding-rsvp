@@ -1,6 +1,6 @@
 import { createClient } from "@spiel-wedding/database/client";
 import { Event, EventResponse } from "@spiel-wedding/types/Guest";
-import { Database } from "@spiel-wedding/types/supabase.types";
+import { TablesInsert } from "@spiel-wedding/types/supabase.types";
 
 const EVENT_TABLE = "event";
 const EVENT_RESPONSE_TABLE = "event_responses";
@@ -32,7 +32,7 @@ export const updateEvent = async (event: Event): Promise<Event | null> => {
 };
 
 export const bulkUpsertEventResponse = async (
-  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
+  eventResponses: TablesInsert<"event_responses">[],
 ): Promise<EventResponse[] | null> => {
   const supabase = createClient();
   if (eventResponses.length === 0) {
@@ -52,7 +52,7 @@ export const bulkUpsertEventResponse = async (
 };
 
 export const createEventResponses = async (
-  eventResponses: Database["public"]["Tables"]["event_responses"]["Insert"][],
+  eventResponses: TablesInsert<"event_responses">[],
 ): Promise<EventResponse[] | null> => {
   const supabase = createClient();
   const { data } = await supabase

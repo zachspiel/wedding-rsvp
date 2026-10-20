@@ -45,8 +45,8 @@ interface ThProps {
 }
 
 const GuestListTable = (): ReactElement => {
-  const { data: groups } = useSWR(GROUP_SWR_KEY, getGroups, { fallbackData: [] });
-  const { data: events } = useSWR("events", getEvents, { fallbackData: [] });
+  const { data: groups = [] } = useSWR(GROUP_SWR_KEY, getGroups);
+  const { data: events = [] } = useSWR("events", getEvents);
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
@@ -75,6 +75,7 @@ const GuestListTable = (): ReactElement => {
     filters,
     eventRsvpFilters,
   );
+  const allGuests = filteredGroups.flatMap((group) => group.guests);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget;
@@ -110,9 +111,9 @@ const GuestListTable = (): ReactElement => {
     );
   };
 
-  const isEventFilterEmpty = () => {
-    return Object.values(eventRsvpFilters ?? {}).every((filter) => filter.length === 0);
-  };
+  const isEventFilterEmpty = Object.values(eventRsvpFilters ?? {}).every(
+    (filter) => filter.length === 0,
+  );
 
   return (
     <>
@@ -154,17 +155,20 @@ const GuestListTable = (): ReactElement => {
         <span>
           Showing{" "}
           <b>
-            {
-              filteredGroups
-                .flatMap((group) => group.guests)
-                .filter((guest) =>
-                  isEventFilterEmpty()
-                    ? true
-                    : Object.entries(eventRsvpFilters ?? {}).some(([key, filters]) =>
-                        filters.includes(guest.responseMap?.[key]?.rsvp),
-                      ),
-                ).length
-            }
+            {isEventFilterEmpty
+              ? allGuests.length
+              : allGuests.filter((guest) =>
+                  Object.entries(eventRsvpFilters ?? {}).some(([eventId, filters]) => {
+                    const eventResponse = guest.event_responses.find(
+                      (response) => response.eventId === eventId,
+                    )?.rsvp;
+
+                    if (!eventResponse) {
+                      return false;
+                    }
+                    return filters.includes(eventResponse);
+                  }),
+                ).length}
           </b>{" "}
           of <b>{groups.flatMap((group) => group.guests).length}</b> Guests
         </span>
@@ -173,7 +177,7 @@ const GuestListTable = (): ReactElement => {
           variant="outline"
           size="sm"
           radius="xl"
-          display={isEventFilterEmpty() ? "none" : ""}
+          display={isEventFilterEmpty ? "none" : ""}
           leftSection={<IconX stroke={1.5} />}
           onClick={() => setEventRsvpFilters(undefined)}
         >
@@ -261,7 +265,7 @@ const GuestListTable = (): ReactElement => {
               close();
               setSelectedGroup(undefined);
             }}
-            events={events ?? []}
+            events={events}
           />
         )}
       </Modal>

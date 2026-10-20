@@ -30,7 +30,6 @@ export interface Guest {
   nameUnknown: boolean;
   event_responses: EventResponse[];
   relationshipType: RelationshipType;
-  responseMap: Record<string, EventResponse>;
 }
 
 export interface Event {

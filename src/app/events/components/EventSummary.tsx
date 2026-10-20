@@ -3,14 +3,14 @@
 import { Modal, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import EventCard from "@spiel-wedding/components/eventCard";
-import { Event, Group as Party } from "@spiel-wedding/types/Guest";
+import { Event, Group } from "@spiel-wedding/types/Guest";
 import { useState } from "react";
 import EditEvent from "./EditEvent";
 import classes from "./dashboard.module.css";
 
 interface Props {
   events: Event[];
-  groups: Party[];
+  groups: Group[];
 }
 
 const EventSummary = ({ events, groups }: Props) => {
